@@ -106,6 +106,7 @@ function AuthMenu() {
       await login(username.trim(), password)
       setShowLogin(false); setOpen(false)
       setUsername(''); setPassword('')
+      window.location.href = '/tenth'
     } catch (err) {
       setError(err.message || 'login failed')
     } finally { setBusy(false) }
@@ -6182,9 +6183,986 @@ function ch5RenderMath(text) {
 
 const CH5_AUTO_ADVANCE_MS = 5000
 
-// Spaced-repetition: when the student answers wrongly, the question is
-// re-inserted into the play sequence this many positions later.
-// CH5_RETRY_GAP removed: wrong answers now appended to end of playList (see SKILL.md rule #5)
+/* =====================================================================
+ *  BRIDGES — prerequisite drills between Gym and Chapter 5 lessons.
+ *
+ *  Lesson 1:  Gym → B1(ScaleUp) → B2(ScaleDown) → B3(CrossCheck) → L1
+ *  Lesson 2:  L1 → B4(HCFHunt) → B5(PeelOff) → L2
+ *  Lesson 3:  L2 → B6(Multiply) → B7(MixedConvert) → B8(MixedMultiply) → L3
+ * ===================================================================== */
+
+const BRIDGE_PROGRESS_KEY = 'tenali-bridge-progress-v1'
+const BRIDGE_QUESTIONS_PER_SESSION = 8
+const BRIDGE_PASS_RATIO = 0.75
+const BRIDGE_AUTO_ADVANCE_MS = CH5_AUTO_ADVANCE_MS
+
+function bridgeLoadProgress() {
+  try { const raw = localStorage.getItem(BRIDGE_PROGRESS_KEY); return raw ? (JSON.parse(raw) || {}) : {} }
+  catch (_e) { return {} }
+}
+function bridgeSaveProgress(p) {
+  try { localStorage.setItem(BRIDGE_PROGRESS_KEY, JSON.stringify(p)) } catch (_e) {}
+}
+function bridgeMarkResult(id, score, total) {
+  const p = bridgeLoadProgress()
+  const passed = total > 0 && (score / total) >= BRIDGE_PASS_RATIO
+  const wasCompleted = !!(p[id] && p[id].completed)
+  p[id] = { completed: wasCompleted || passed, lastScore: score, lastTotal: total, completedAt: Date.now() }
+  bridgeSaveProgress(p)
+  return p[id].completed
+}
+
+// Small RNG/maths helpers — local copies so the bridge code is self-contained.
+function bridge_gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b] } return a || 1 }
+function bridge_randInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)) }
+function bridge_pick(arr) { return arr[Math.floor(Math.random() * arr.length)] }
+function bridge_shuffleInPlace(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+function bridge_buildOptions(answer, candidates) {
+  const seen = new Set([answer])
+  const distractors = []
+  for (const c of candidates) {
+    if (!Number.isInteger(c) || c <= 0 || seen.has(c)) continue
+    seen.add(c); distractors.push(c)
+    if (distractors.length >= 3) break
+  }
+  let safety = 0
+  while (distractors.length < 3 && safety++ < 50) {
+    const sign = Math.random() < 0.5 ? 1 : -1
+    const x = answer + sign * bridge_randInt(1, Math.max(3, Math.floor(answer / 2) + 2))
+    if (Number.isInteger(x) && x > 0 && !seen.has(x)) { seen.add(x); distractors.push(x) }
+  }
+  const opts = bridge_shuffleInPlace([answer, ...distractors])
+  return { options: opts.map(String), correctIndex: opts.indexOf(answer) }
+}
+function bridge_pickSimplestFraction(qMax = 9) {
+  for (let tries = 0; tries < 30; tries++) {
+    const q = bridge_randInt(2, qMax)
+    const p = bridge_randInt(1, q - 1)
+    if (bridge_gcd(p, q) === 1) return { p, q }
+  }
+  return { p: 1, q: 3 }
+}
+function bridge_pickCoprimePair() {
+  for (let i = 0; i < 30; i++) {
+    const m = bridge_randInt(2, 13)
+    const n = bridge_randInt(2, 13)
+    if (m !== n && bridge_gcd(m, n) === 1) return [m, n]
+  }
+  return [2, 3]
+}
+function bridge_pickHCFForBridge4() {
+  const r = Math.random()
+  if (r < 0.20) return bridge_pick([2, 3])
+  if (r < 0.50) return bridge_pick([4, 5, 6])
+  if (r < 0.72) return bridge_pick([7, 8, 9, 10, 12])
+  if (r < 0.90) return bridge_pick([11, 13, 14, 15])
+  return bridge_pick([16, 18, 20, 24])
+}
+function bridge_primeFactors(num) {
+  const out = []
+  let n = num
+  for (const p of [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]) {
+    while (n % p === 0) { out.push(p); n /= p }
+  }
+  if (n > 1) out.push(n)
+  return out
+}
+// Build options where each option may be a segment array (for fractions).
+// answerKey is a string used to identify the correct option after shuffling.
+function bridge_buildSegOptions(answerSeg, answerKey, distractorPairs) {
+  const seen = new Set([answerKey])
+  const valid = []
+  for (const item of distractorPairs) {
+    if (seen.has(item.key)) continue
+    seen.add(item.key); valid.push(item)
+    if (valid.length >= 3) break
+  }
+  while (valid.length < 3) {
+    const n = bridge_randInt(1, 9), d = bridge_randInt(2, 15)
+    const k = `frac:${n}/${d}`
+    if (!seen.has(k)) { seen.add(k); valid.push({ seg: [{ frac: [n, d] }], key: k }) }
+  }
+  const all = bridge_shuffleInPlace([{ seg: answerSeg, key: answerKey }, ...valid.slice(0, 3)])
+  return { options: all.map(x => x.seg), correctIndex: all.findIndex(x => x.key === answerKey) }
+}
+
+// ─── Bridge 1 — Scale Up ──────────────────────────────────────────────
+function generateBridge1Question() {
+  const { p: a, q: b } = bridge_pickSimplestFraction(9)
+  const k = bridge_randInt(2, 5)
+  const newA = a * k, newB = b * k
+  const askNumerator = Math.random() < 0.5
+  const prompt = askNumerator
+    ? [{ frac: [a, b] }, '  =  ', { frac: ['?', newB] }]
+    : [{ frac: [a, b] }, '  =  ', { frac: [newA, '?'] }]
+  const answer = askNumerator ? newA : newB
+  const candidates = askNumerator
+    ? [a + k, a * (k + 1), a * (k - 1), newB, b * k - a, a * k + 1, a * k - 1]
+    : [b + k, b * (k + 1), b * (k - 1), newA, a * k + b, b * k + 1, b * k - 1]
+  const { options, correctIndex } = bridge_buildOptions(answer, candidates)
+  const explanation = askNumerator
+    ? `Denominator went ${b} → ${newB}, which is ×${k}. So the numerator must also be ×${k}: ${a}×${k} = ${newA}.`
+    : `Numerator went ${a} → ${newA}, which is ×${k}. So the denominator must also be ×${k}: ${b}×${k} = ${newB}.`
+  return { prompt, options, correctIndex, explanation }
+}
+
+// ─── Bridge 2 — Scale Down ────────────────────────────────────────────
+function generateBridge2Question() {
+  const { p, q } = bridge_pickSimplestFraction(7)
+  const k = bridge_randInt(2, 6)
+  const a = p * k, b = q * k
+  const variant = bridge_randInt(1, 3)
+  if (variant === 1) {
+    const prompt = [{ frac: [a, b] }, '  =  ', { frac: ['?', q] }]
+    const answer = p
+    const candidates = [k, p + 1, p * 2, a / 2, p - 1, a - q, q - p]
+    const { options, correctIndex } = bridge_buildOptions(answer, candidates)
+    return { prompt, options, correctIndex,
+             explanation: [`Both ${a} and ${b} divide by ${k}. ${a}÷${k} = ${p}, ${b}÷${k} = ${q}. So `,
+                           { frac: [a, b] }, ' = ', { frac: [p, q] }, '.'] }
+  } else if (variant === 2) {
+    const prompt = [{ frac: [a, b] }, '  =  ', { frac: [p, '?'] }]
+    const answer = q
+    const candidates = [k, q + 1, q * 2, b / 2, q - 1, b - p, p + q]
+    const { options, correctIndex } = bridge_buildOptions(answer, candidates)
+    return { prompt, options, correctIndex,
+             explanation: [`Both ${a} and ${b} divide by ${k}. ${a}÷${k} = ${p}, ${b}÷${k} = ${q}. So `,
+                           { frac: [a, b] }, ' = ', { frac: [p, q] }, '.'] }
+  } else {
+    const prompt = ['Simplify  ', { frac: [a, b] }]
+    const answerKey = `frac:${p}/${q}`
+    const dist = []
+    const tryAdd = (n, d) => {
+      if (!Number.isInteger(n) || !Number.isInteger(d) || n <= 0 || d <= 0) return
+      const k2 = `frac:${n}/${d}`
+      if (k2 === answerKey || dist.find(x => x.key === k2)) return
+      dist.push({ seg: [{ frac: [n, d] }], key: k2 })
+    }
+    tryAdd(a, b)
+    tryAdd(q, p)
+    if (k % 2 === 0) tryAdd(a / 2, b / 2)
+    if (k % 3 === 0) tryAdd(a / 3, b / 3)
+    if (p > 1) tryAdd(p - 1, q)
+    if (q - 1 > p) tryAdd(p, q - 1)
+    const { options, correctIndex } = bridge_buildSegOptions([{ frac: [p, q] }], answerKey, dist)
+    return { prompt, options, correctIndex,
+             explanation: [`HCF of ${a} and ${b} is ${k}. ${a}÷${k} = ${p}, ${b}÷${k} = ${q}. Simplest form: `,
+                           { frac: [p, q] }, '.'] }
+  }
+}
+
+// ─── Bridge 3 — Cross-Check ───────────────────────────────────────────
+function generateBridge3Question() {
+  const { p: a, q: b } = bridge_pickSimplestFraction(9)
+  const equivalent = Math.random() < 0.5
+  const k = bridge_randInt(2, 5)
+  let c = a * k, d = b * k
+  if (!equivalent) {
+    const tweakNum = Math.random() < 0.5
+    const delta = bridge_pick([1, -1, 2, -2, 1, -1])
+    if (tweakNum) c += delta; else d += delta
+    if (c <= 0 || d <= 0 || a * d === b * c) { c = a * k + 1; d = b * k }
+  }
+  const prompt = ['Are  ', { frac: [a, b] }, '  and  ', { frac: [c, d] }, '  equivalent?']
+  const isEqual = a * d === b * c
+  const options = ['Yes', 'No']
+  const correctIndex = isEqual ? 0 : 1
+  const explanation = isEqual
+    ? `Cross-multiply: ${a}×${d} = ${a * d}, ${b}×${c} = ${b * c}. Equal — so YES.`
+    : `Cross-multiply: ${a}×${d} = ${a * d}, ${b}×${c} = ${b * c}. Not equal — so NO.`
+  return { prompt, options, correctIndex, explanation }
+}
+
+// ─── Bridge 4 — HCF Hunt ──────────────────────────────────────────────
+function generateBridge4Question() {
+  const h = bridge_pickHCFForBridge4()
+  const [m, n] = bridge_pickCoprimePair()
+  const a = h * m, b = h * n
+  const candidates = []
+  if (h % 2 === 0 && h > 2) candidates.push(h / 2)
+  if (h % 3 === 0 && h > 3) candidates.push(h / 3)
+  if (h > 4) candidates.push(2)
+  if (h > 6) candidates.push(3)
+  candidates.push(m, n, h + 1, h - 1, h * 2)
+  const { options, correctIndex } = bridge_buildOptions(h, candidates)
+  const prompt = `Find  HCF(${a},  ${b})`
+  const factors = bridge_primeFactors(h)
+  const explanation = factors.length > 1
+    ? `${a} = ${h}×${m},  ${b} = ${h}×${n}.  ${m} and ${n} share no factor, so HCF = ${factors.join(' × ')} = ${h}.`
+    : `${a} = ${h}×${m},  ${b} = ${h}×${n}.  Since ${m} and ${n} share no factor, HCF = ${h}.`
+  return { prompt, options, correctIndex, explanation }
+}
+
+// ─── Bridge 5 — Peel-Off Simplify ─────────────────────────────────────
+function generateBridge5Question() {
+  const { p, q } = bridge_pickSimplestFraction(9)
+  const hPool = [7, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 24, 25, 28, 30, 35, 36, 40, 45, 50]
+  const h = bridge_pick(hPool)
+  const a = p * h, b = q * h
+  const prompt = ['Simplify  ', { frac: [a, b] }]
+  const answerKey = `frac:${p}/${q}`
+  const dist = []
+  const tryAdd = (n, d) => {
+    if (!Number.isInteger(n) || !Number.isInteger(d) || n <= 0 || d <= 0) return
+    const k = `frac:${n}/${d}`
+    if (k === answerKey || dist.find(x => x.key === k)) return
+    dist.push({ seg: [{ frac: [n, d] }], key: k })
+  }
+  const primes = bridge_primeFactors(h)
+  if (primes.length >= 1) tryAdd(a / primes[0], b / primes[0])
+  if (primes.length >= 2) tryAdd(a / (primes[0] * primes[1]), b / (primes[0] * primes[1]))
+  if (primes.length >= 3) tryAdd(a / (primes[0] * primes[1] * primes[2]), b / (primes[0] * primes[1] * primes[2]))
+  tryAdd(a, b)
+  tryAdd(q, p)
+  if (p > 1) tryAdd(p - 1, q)
+  const { options, correctIndex } = bridge_buildSegOptions([{ frac: [p, q] }], answerKey, dist)
+  const explanation = primes.length > 1
+    ? [`Peel off shared primes: ${primes.join(' × ')} = ${h}. Divide both by ${h}: `,
+       { frac: [a, b] }, ' = ', { frac: [p, q] }, '.']
+    : [`HCF = ${h}. Divide both by ${h}: `, { frac: [a, b] }, ' = ', { frac: [p, q] }, '.']
+  return { prompt, options, correctIndex, explanation }
+}
+
+// ─── Bridge 6 — Multiply Fractions ────────────────────────────────────
+// 70% fraction × fraction; 30% one side is a whole number.
+function generateBridge6Question() {
+  if (Math.random() < 0.7) {
+    const f1 = bridge_pickSimplestFraction(7)
+    const f2 = bridge_pickSimplestFraction(7)
+    const num = f1.p * f2.p
+    const den = f1.q * f2.q
+    const g = bridge_gcd(num, den)
+    const sn = num / g, sd = den / g
+    const prompt = [{ frac: [f1.p, f1.q] }, '  ×  ', { frac: [f2.p, f2.q] }]
+    const answerKey = `frac:${sn}/${sd}`
+    const dist = []
+    const tryAdd = (n, d) => {
+      if (!Number.isInteger(n) || !Number.isInteger(d) || n <= 0 || d <= 0) return
+      const k = `frac:${n}/${d}`
+      if (k === answerKey || dist.find(x => x.key === k)) return
+      dist.push({ seg: [{ frac: [n, d] }], key: k })
+    }
+    if (num !== sn || den !== sd) tryAdd(num, den)         // unsimplified
+    tryAdd(f1.p + f2.p, f1.q + f2.q)                        // added (classic mistake)
+    tryAdd(f1.p * f2.q, f1.q * f2.p)                        // cross-multiplied
+    tryAdd(sd, sn)                                          // flipped answer
+    const { options, correctIndex } = bridge_buildSegOptions([{ frac: [sn, sd] }], answerKey, dist)
+    const explanation = num !== sn
+      ? [`Multiply tops: ${f1.p}×${f2.p} = ${num}.  Multiply bottoms: ${f1.q}×${f2.q} = ${den}.  So `,
+         { frac: [num, den] }, ', which simplifies to ', { frac: [sn, sd] }, '.']
+      : [`Multiply tops: ${f1.p}×${f2.p} = ${num}.  Multiply bottoms: ${f1.q}×${f2.q} = ${den}.  Already in simplest form: `,
+         { frac: [sn, sd] }, '.']
+    return { prompt, options, correctIndex, explanation }
+  } else {
+    const f = bridge_pickSimplestFraction(7)
+    const w = bridge_randInt(2, 12)
+    const wholeFirst = Math.random() < 0.5
+    const num = f.p * w
+    const den = f.q
+    const g = bridge_gcd(num, den)
+    const sn = num / g, sd = den / g
+    const isWhole = sd === 1
+    const prompt = wholeFirst
+      ? [String(w), '  ×  ', { frac: [f.p, f.q] }]
+      : [{ frac: [f.p, f.q] }, '  ×  ', String(w)]
+    const answerSeg = isWhole ? [String(sn)] : [{ frac: [sn, sd] }]
+    const answerKey = isWhole ? `int:${sn}` : `frac:${sn}/${sd}`
+    const dist = []
+    const tryAddInt = (v) => {
+      if (!Number.isInteger(v) || v <= 0) return
+      const k = `int:${v}`
+      if (k === answerKey || dist.find(x => x.key === k)) return
+      dist.push({ seg: [String(v)], key: k })
+    }
+    const tryAddFrac = (n, d) => {
+      if (!Number.isInteger(n) || !Number.isInteger(d) || n <= 0 || d <= 0) return
+      const k = `frac:${n}/${d}`
+      if (k === answerKey || dist.find(x => x.key === k)) return
+      dist.push({ seg: [{ frac: [n, d] }], key: k })
+    }
+    if (!isWhole) tryAddFrac(num, den)
+    tryAddFrac(f.p, f.q * w)            // multiplied wrong slot
+    tryAddFrac(f.p + w, f.q)            // added instead
+    if (isWhole) { tryAddInt(sn + 1); tryAddInt(sn - 1) }
+    const { options, correctIndex } = bridge_buildSegOptions(answerSeg, answerKey, dist)
+    const explanation = isWhole
+      ? [`Treat ${w} as `, { frac: [w, 1] }, '.  Multiply tops: ', String(num), '.  Bottom stays ', String(den), '.  Result = ', { frac: [num, den] }, ' = ', String(sn), '.']
+      : [`Treat ${w} as `, { frac: [w, 1] }, '.  Multiply tops: ', String(num), '.  Bottom: ', String(den), '.  ',
+         num !== sn ? [{ frac: [num, den] }, ' simplifies to ', { frac: [sn, sd] }, '.'] : [{ frac: [sn, sd] }, '.']]
+    return { prompt, options, correctIndex, explanation }
+  }
+}
+
+// ─── Bridge 7 — Mixed ↔ Improper ──────────────────────────────────────
+// 50% mixed → improper; 50% improper → mixed.
+function generateBridge7Question() {
+  if (Math.random() < 0.5) {
+    // Mixed → improper:  w + p/q  →  (wq + p)/q
+    const w = bridge_randInt(1, 6)
+    const { p, q } = bridge_pickSimplestFraction(8)
+    const num = w * q + p
+    const prompt = ['Convert  ', w, { frac: [p, q] }, '  to an improper fraction']
+    const answerKey = `frac:${num}/${q}`
+    const dist = []
+    const tryAdd = (n, d) => {
+      if (!Number.isInteger(n) || !Number.isInteger(d) || n <= 0 || d <= 0) return
+      const k = `frac:${n}/${d}`
+      if (k === answerKey || dist.find(x => x.key === k)) return
+      dist.push({ seg: [{ frac: [n, d] }], key: k })
+    }
+    tryAdd(w + p, q)               // forgot to multiply
+    tryAdd(w * p, q)               // multiplied whole by num instead
+    tryAdd(w * q - p, q)           // sign flip
+    tryAdd(num + 1, q)
+    tryAdd(num, q + 1)
+    const { options, correctIndex } = bridge_buildSegOptions([{ frac: [num, q] }], answerKey, dist)
+    const explanation = [w, { frac: [p, q] }, ` = (${w}×${q} + ${p}) / ${q} = `, { frac: [num, q] }, '.']
+    return { prompt, options, correctIndex, explanation }
+  } else {
+    // Improper → mixed:  num/q  →  whole  +  rem/q
+    const w = bridge_randInt(1, 5)
+    const { p, q } = bridge_pickSimplestFraction(8)
+    const num = w * q + p
+    const prompt = ['Convert  ', { frac: [num, q] }, '  to a mixed number']
+    const answerSeg = [w, { frac: [p, q] }]
+    const answerKey = `mixed:${w}_${p}/${q}`
+    const dist = []
+    const tryAdd = (ww, np, nq, label) => {
+      if (!Number.isInteger(ww) || ww < 0 || !Number.isInteger(np) || np < 0 || !Number.isInteger(nq) || nq <= 0) return
+      const k = `mixed:${ww}_${np}/${nq}-${label || ''}`
+      if (dist.find(x => x.key === k)) return
+      const seg = ww === 0 ? [{ frac: [np, nq] }] : [ww, { frac: [np, nq] }]
+      dist.push({ seg, key: k })
+    }
+    tryAdd(w + 1, p, q, 'w+1')
+    tryAdd(w, p + 1, q, 'p+1')
+    tryAdd(w - 1, p, q, 'w-1')
+    tryAdd(p, w, q, 'swap')
+    if (q - p > 0) tryAdd(w, q - p, q, 'rem-flip')
+    const { options, correctIndex } = bridge_buildSegOptions(answerSeg, answerKey, dist)
+    const explanation = [`${num} ÷ ${q} = ${w} remainder ${p}.  So `, { frac: [num, q] }, ' = ', w, { frac: [p, q] }, '.']
+    return { prompt, options, correctIndex, explanation }
+  }
+}
+
+// ─── Bridge 8 — Mixed × Mixed ─────────────────────────────────────────
+// Multiply two mixed numbers.  Convert each to improper, multiply, simplify.
+function generateBridge8Question() {
+  const w1 = bridge_randInt(1, 4)
+  const f1 = bridge_pickSimplestFraction(5)
+  const w2 = bridge_randInt(1, 4)
+  const f2 = bridge_pickSimplestFraction(5)
+  const a = w1 * f1.q + f1.p
+  const b = f1.q
+  const c = w2 * f2.q + f2.p
+  const d = f2.q
+  const num = a * c
+  const den = b * d
+  const g = bridge_gcd(num, den)
+  const sn = num / g, sd = den / g
+  const prompt = [w1, { frac: [f1.p, f1.q] }, '  ×  ', w2, { frac: [f2.p, f2.q] }]
+  const answerKey = `frac:${sn}/${sd}`
+  const dist = []
+  const tryAdd = (n, dd) => {
+    if (!Number.isInteger(n) || !Number.isInteger(dd) || n <= 0 || dd <= 0) return
+    const k = `frac:${n}/${dd}`
+    if (k === answerKey || dist.find(x => x.key === k)) return
+    dist.push({ seg: [{ frac: [n, dd] }], key: k })
+  }
+  tryAdd(num, den)                              // unsimplified
+  tryAdd(w1 * w2, b * d)                        // multiplied wholes only
+  tryAdd((w1 + f1.p) * (w2 + f2.p), b * d)      // added whole+p instead of converting
+  tryAdd(a + c, b + d)                          // added improper instead of multiplying
+  const { options, correctIndex } = bridge_buildSegOptions([{ frac: [sn, sd] }], answerKey, dist)
+  const explanation = [
+    `Convert: `, w1, { frac: [f1.p, f1.q] }, ' = ', { frac: [a, b] },
+    `,  `, w2, { frac: [f2.p, f2.q] }, ' = ', { frac: [c, d] },
+    `.  Multiply: ${a}×${c} = ${num}, ${b}×${d} = ${den}.  ${num !== sn ? `Simplify by ${g}: ` : ''}`,
+    { frac: [sn, sd] }, '.',
+  ]
+  return { prompt, options, correctIndex, explanation }
+}
+
+// Helper: read whether a Chapter 5 lesson has been completed.
+function ch5LessonDone(lessonId) {
+  try {
+    const raw = localStorage.getItem('tenali-chapter5-progress')
+    const p = raw ? JSON.parse(raw) : {}
+    return !!(p && p[lessonId] && p[lessonId].completed)
+  } catch (_e) { return false }
+}
+
+// Stacked fraction component.
+function BridgeFrac({ n, d }) {
+  const cellStyle = { display: 'block', padding: '0 0.32em' }
+  return (
+    <span style={{
+      display: 'inline-block', verticalAlign: 'middle',
+      textAlign: 'center', margin: '0 0.18em', lineHeight: 1.1,
+      fontFamily: 'Source Serif 4, serif',
+    }}>
+      <span style={{ ...cellStyle, borderBottom: '1.2px solid currentColor' }}>{n}</span>
+      <span style={cellStyle}>{d}</span>
+    </span>
+  )
+}
+
+// Recursive renderer for math content (string | number | {frac:[n,d]} | array of any).
+function BridgeMath({ content }) {
+  if (content == null || content === false) return null
+  if (typeof content === 'string' || typeof content === 'number') return <>{content}</>
+  if (Array.isArray(content)) return <>{content.map((s, i) => <BridgeMath key={i} content={s} />)}</>
+  if (typeof content === 'object' && content.frac) return <BridgeFrac n={content.frac[0]} d={content.frac[1]} />
+  return null
+}
+
+// Shared progression-strip renderer (pill nodes connected by arrows).
+function renderProgressionStrip(label, nodes, current) {
+  const progress = bridgeLoadProgress()
+  return (
+    <div style={{
+      margin: '0 0 24px', padding: '14px 16px',
+      background: 'var(--clr-surface, #1c1c1f)',
+      border: '1px solid var(--clr-border, #444)', borderRadius: 12,
+      overflowX: 'auto',
+    }}>
+      <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.8px',
+                    opacity: 0.65, marginBottom: 10, fontWeight: 600 }}>
+        {label}
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'nowrap', minWidth: 'fit-content' }}>
+        {nodes.map((node, i) => {
+          const isCurrent = node.id === current
+          const isDone = node.done || (node.id.startsWith('bridge') && !!(progress[node.id] && progress[node.id].completed))
+          const accent = isCurrent ? '#6cf' : (isDone ? '#2ea043' : 'var(--clr-border, #555)')
+          const bg = isCurrent ? 'rgba(108,206,255,0.14)' : (isDone ? 'rgba(46,160,67,0.12)' : 'transparent')
+          return (
+            <div key={node.id} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <a href={node.href} style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+                padding: '8px 14px', borderRadius: 10, textDecoration: 'none',
+                color: 'var(--clr-text)', minWidth: 92,
+                border: `1.5px solid ${accent}`, background: bg,
+                fontWeight: isCurrent ? 700 : 500,
+                transition: 'transform 0.12s, border-color 0.12s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)' }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}>
+                <span style={{ fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {isDone && <span style={{ color: '#2ea043', fontWeight: 700 }}>✓</span>}
+                  {node.label}
+                </span>
+                <span style={{ fontSize: '0.72rem', opacity: 0.72 }}>{node.sub}</span>
+              </a>
+              {i < nodes.length - 1 && (
+                <span style={{ fontSize: '1.1rem', opacity: 0.55, padding: '0 2px' }}>→</span>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function Lesson1ProgressionStrip({ current }) {
+  const nodes = [
+    { id: 'gym',     label: 'Gym',      sub: 'Foundation',           href: '/gym' },
+    { id: 'bridge1', label: 'Bridge 1', sub: 'Scale Up',             href: '/bridge1' },
+    { id: 'bridge2', label: 'Bridge 2', sub: 'Scale Down',           href: '/bridge2' },
+    { id: 'bridge3', label: 'Bridge 3', sub: 'Cross-Check',          href: '/bridge3' },
+    { id: 'lesson1', label: 'Lesson 1', sub: 'Equivalent Fractions', href: '/chapter5' },
+  ]
+  return renderProgressionStrip('Lesson 1 — Prerequisite Path', nodes, current)
+}
+function Lesson2ProgressionStrip({ current }) {
+  const nodes = [
+    { id: 'lesson1', label: 'Lesson 1', sub: 'Equivalent Fractions', href: '/chapter5', done: ch5LessonDone('L1') },
+    { id: 'bridge4', label: 'Bridge 4', sub: 'HCF Hunt',             href: '/bridge4' },
+    { id: 'bridge5', label: 'Bridge 5', sub: 'Peel-Off Simplify',    href: '/bridge5' },
+    { id: 'lesson2', label: 'Lesson 2', sub: 'Simplest Form',        href: '/chapter5' },
+  ]
+  return renderProgressionStrip('Lesson 2 — Prerequisite Path', nodes, current)
+}
+function Lesson3ProgressionStrip({ current }) {
+  const nodes = [
+    { id: 'lesson2', label: 'Lesson 2', sub: 'Simplest Form',        href: '/chapter5', done: ch5LessonDone('L2') },
+    { id: 'bridge6', label: 'Bridge 6', sub: 'Multiply Fractions',   href: '/bridge6' },
+    { id: 'bridge7', label: 'Bridge 7', sub: 'Mixed ↔ Improper',     href: '/bridge7' },
+    { id: 'bridge8', label: 'Bridge 8', sub: 'Mixed × Mixed',        href: '/bridge8' },
+    { id: 'lesson3', label: 'Lesson 3', sub: 'Multiplying Fractions', href: '/chapter5' },
+  ]
+  return renderProgressionStrip('Lesson 3 — Prerequisite Path', nodes, current)
+}
+
+// Renders a teach panel with a rule and a worked example.
+function BridgeTeachPanel({ teach }) {
+  if (!teach) return null
+  return (
+    <div style={{
+      marginTop: 18, padding: '18px 20px', borderRadius: 12,
+      background: 'rgba(108,206,255,0.08)',
+      border: '1px solid rgba(108,206,255,0.35)',
+    }}>
+      <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.8px',
+                    fontWeight: 700, color: '#6cf', marginBottom: 10 }}>
+        How to solve it
+      </div>
+      <p style={{ margin: '0 0 14px', lineHeight: 1.6, fontSize: '1rem' }}>
+        <BridgeMath content={teach.rule} />
+      </p>
+      {teach.example && (
+        <div style={{
+          padding: '14px 16px', borderRadius: 8,
+          background: 'var(--clr-surface, #1c1c1f)',
+          border: '1px solid var(--clr-border, #444)',
+        }}>
+          <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.6px',
+                        fontWeight: 600, opacity: 0.7, marginBottom: 8 }}>
+            Worked example
+          </div>
+          <p style={{ margin: '0 0 10px', fontFamily: 'Source Serif 4, serif',
+                      fontSize: '1.15rem', fontWeight: 600 }}>
+            <BridgeMath content={teach.example.setup} />
+          </p>
+          <ol style={{ margin: '0 0 8px', paddingLeft: 22, lineHeight: 1.65 }}>
+            {teach.example.steps.map((s, i) => (
+              <li key={i} style={{ marginBottom: 4 }}><BridgeMath content={s} /></li>
+            ))}
+          </ol>
+          <p style={{ margin: 0, fontWeight: 600, color: '#2ea043' }}>
+            → <BridgeMath content={teach.example.answer} />
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Bridge component factory — drives all 8 bridge apps.
+function makeBridgeApp({ id, title, subtitle, intro, teach, generator, nextHref, nextLabel, currentNode, StripComponent = Lesson1ProgressionStrip }) {
+  return function BridgeApp({ onBack }) {
+    const [phase, setPhase] = useState('intro')
+    const [questions, setQuestions] = useState([])
+    const [qIdx, setQIdx] = useState(0)
+    const [selected, setSelected] = useState(null)
+    const [revealed, setRevealed] = useState(false)
+    const [isCorrect, setIsCorrect] = useState(false)
+    const [score, setScore] = useState(0)
+    const [results, setResults] = useState([])
+    const [showTeach, setShowTeach] = useState(false)
+    const [autoCountdown, setAutoCountdown] = useState(0)
+    const autoTimerRef = useRef(null)
+    const advanceRef = useRef(() => {})
+    const scoreRef = useRef(0)
+
+    const cancelAutoAdvance = () => {
+      if (autoTimerRef.current) { clearInterval(autoTimerRef.current); autoTimerRef.current = null }
+      setAutoCountdown(0)
+    }
+    useEffect(() => () => cancelAutoAdvance(), [])
+
+    const currentQ = questions[qIdx]
+    const passThreshold = Math.ceil(BRIDGE_QUESTIONS_PER_SESSION * BRIDGE_PASS_RATIO)
+
+    const advance = () => {
+      cancelAutoAdvance()
+      if (qIdx + 1 >= questions.length) {
+        bridgeMarkResult(id, scoreRef.current, questions.length)
+        setPhase('done')
+      } else {
+        setQIdx(qIdx + 1); setSelected(null); setRevealed(false); setIsCorrect(false)
+      }
+    }
+    advanceRef.current = advance
+
+    const start = () => {
+      const newQs = Array.from({ length: BRIDGE_QUESTIONS_PER_SESSION }, () => generator())
+      setQuestions(newQs)
+      setQIdx(0); setScore(0); scoreRef.current = 0; setResults([])
+      setSelected(null); setRevealed(false); setIsCorrect(false); setPhase('quiz')
+    }
+
+    const pick = (i) => {
+      if (revealed) return
+      const q = questions[qIdx]
+      const correct = i === q.correctIndex
+      if (correct) { scoreRef.current += 1; setScore(scoreRef.current) }
+      setSelected(i); setRevealed(true); setIsCorrect(correct)
+      setResults(r => [...r, {
+        prompt: q.prompt, correct, expected: q.options[q.correctIndex], chosen: q.options[i],
+      }])
+    }
+
+    useEffect(() => {
+      if (phase !== 'quiz' || !revealed) { cancelAutoAdvance(); return }
+      const total = Math.round(BRIDGE_AUTO_ADVANCE_MS / 1000)
+      setAutoCountdown(total)
+      autoTimerRef.current = setInterval(() => {
+        setAutoCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(autoTimerRef.current); autoTimerRef.current = null
+            advanceRef.current()
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+      return () => { if (autoTimerRef.current) { clearInterval(autoTimerRef.current); autoTimerRef.current = null } }
+    }, [phase, revealed, qIdx])
+
+    useEffect(() => {
+      if (phase !== 'quiz' || !currentQ) return
+      const onKey = (e) => {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return
+        if (revealed) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); advanceRef.current() }
+          return
+        }
+        const digit = parseInt(e.key, 10)
+        if (Number.isInteger(digit) && digit >= 1 && digit <= currentQ.options.length) {
+          e.preventDefault()
+          pick(digit - 1)
+        }
+      }
+      window.addEventListener('keydown', onKey)
+      return () => window.removeEventListener('keydown', onKey)
+    }, [phase, revealed, qIdx, currentQ])
+
+    if (phase === 'intro') {
+      return (
+        <div style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', color: 'var(--clr-text)' }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 16 }}>
+            <button className="back-button" onClick={onBack}>← Back</button>
+          </div>
+          <StripComponent current={currentNode} />
+          <h1 style={{ marginBottom: 4 }}>{title}</h1>
+          <p className="subtitle" style={{ marginTop: 0, opacity: 0.85 }}>{subtitle}</p>
+          {intro && <p style={{ lineHeight: 1.55, marginTop: 14, opacity: 0.92 }}>{intro}</p>}
+          <BridgeTeachPanel teach={teach} />
+          <p style={{ opacity: 0.78, fontSize: '0.92rem', marginTop: 18 }}>
+            {BRIDGE_QUESTIONS_PER_SESSION} questions. Get <strong>{passThreshold}+ right</strong> to clear the bridge and unlock the next step.
+          </p>
+          <button onClick={start} style={{
+            marginTop: 12, padding: '12px 22px', borderRadius: 10,
+            background: '#2ea043', color: '#fff', border: 'none', fontWeight: 600,
+            fontSize: '1rem', cursor: 'pointer',
+          }}>Got it — start drill →</button>
+        </div>
+      )
+    }
+
+    if (phase === 'done') {
+      const passed = score >= passThreshold
+      return (
+        <div style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', color: 'var(--clr-text)' }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 16 }}>
+            <button className="back-button" onClick={onBack}>← Back</button>
+          </div>
+          <StripComponent current={currentNode} />
+          <h1 style={{ marginBottom: 4 }}>
+            {passed ? '✓ Bridge cleared!' : 'Almost — try again'}
+          </h1>
+          <p style={{ marginTop: 0, opacity: 0.9, fontSize: '1.05rem' }}>
+            You got <strong>{score} of {questions.length}</strong> right
+            {passed
+              ? ` — that's above the ${passThreshold}/${questions.length} bar. Nice work.`
+              : ` — you need ${passThreshold}/${questions.length} to clear. Have another go.`}
+          </p>
+          <div style={{ display: 'flex', gap: 12, marginTop: 18, flexWrap: 'wrap' }}>
+            <button onClick={start} style={{
+              padding: '12px 22px', borderRadius: 10,
+              background: 'var(--clr-surface, #1c1c1f)', color: 'var(--clr-text)',
+              border: '1px solid var(--clr-border, #555)', fontWeight: 500,
+              fontSize: '0.95rem', cursor: 'pointer',
+            }}>↻ Try again</button>
+            {passed && nextHref && (
+              <a href={nextHref} style={{
+                padding: '12px 22px', borderRadius: 10,
+                background: '#2ea043', color: '#fff', textDecoration: 'none',
+                fontWeight: 600, fontSize: '0.95rem',
+              }}>{nextLabel} →</a>
+            )}
+          </div>
+          {results.length > 0 && (
+            <div style={{ marginTop: 28 }}>
+              <h3 style={{ fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.6px', opacity: 0.7 }}>Review</h3>
+              <ol style={{ paddingLeft: 20, lineHeight: 1.8 }}>
+                {results.map((r, i) => (
+                  <li key={i} style={{ marginBottom: 6, color: r.correct ? 'inherit' : '#e5534b' }}>
+                    <BridgeMath content={r.prompt} />
+                    {' → '}
+                    {r.correct ? <>✓ <BridgeMath content={r.expected} /></>
+                               : <>✗ chose <BridgeMath content={r.chosen} />, was <BridgeMath content={r.expected} /></>}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    return (
+      <div style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', color: 'var(--clr-text)' }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 16 }}>
+          <button className="back-button" onClick={onBack}>← Back</button>
+          {teach && (
+            <button className="back-button" onClick={() => setShowTeach(s => !s)}>
+              {showTeach ? '✕ Hide method' : '📖 Show method'}
+            </button>
+          )}
+        </div>
+        <StripComponent current={currentNode} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+          <h1 style={{ margin: 0 }}>{title}</h1>
+          <span style={{ opacity: 0.7, fontSize: '0.9rem' }}>
+            Question {qIdx + 1} / {questions.length} · score {score}
+          </span>
+        </div>
+        {showTeach && <BridgeTeachPanel teach={teach} />}
+        <div style={{ fontSize: '1.55rem', margin: '20px 0 18px', fontFamily: 'Source Serif 4, serif',
+                      padding: '28px 20px', borderRadius: 12,
+                      background: 'var(--clr-input)',
+                      border: '1px solid var(--clr-border)',
+                      textAlign: 'center', lineHeight: 1.4, color: 'var(--clr-text)' }}>
+          <BridgeMath content={currentQ?.prompt} />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 10 }}>
+          {currentQ?.options.map((opt, i) => {
+            const isCorrectOpt = revealed && i === currentQ.correctIndex
+            const isWrongPick = revealed && i === selected && i !== currentQ.correctIndex
+            return (
+              <button key={i} onClick={() => pick(i)} disabled={revealed} className="option-card" style={{
+                minHeight: 56, cursor: revealed ? 'default' : 'pointer',
+                borderColor: isCorrectOpt ? 'var(--clr-correct)' : isWrongPick ? 'var(--clr-wrong)' : undefined,
+                background: isCorrectOpt ? 'rgba(92,184,122,0.10)' : isWrongPick ? 'rgba(224,90,74,0.10)' : undefined,
+                fontFamily: 'Source Serif 4, serif', fontSize: '1.05rem',
+              }}>
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  width: 26, height: 26, borderRadius: 6,
+                  background: isCorrectOpt ? 'var(--clr-correct)' : isWrongPick ? 'var(--clr-wrong)' : 'var(--clr-hover)',
+                  color: (isCorrectOpt || isWrongPick) ? '#fff' : 'var(--clr-text-soft)',
+                  fontSize: '0.8rem', fontWeight: 700, fontFamily: 'DM Sans, sans-serif',
+                  flexShrink: 0, transition: 'background 0.15s, color 0.15s',
+                }}>{i + 1}</span>
+                <span style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <BridgeMath content={opt} />
+                </span>
+              </button>
+            )
+          })}
+        </div>
+        {!revealed && currentQ && (
+          <p style={{ marginTop: 10, fontSize: '0.82rem', opacity: 0.6, textAlign: 'center' }}>
+            Tip — press <kbd style={{ padding: '1px 6px', borderRadius: 4, border: '1px solid var(--clr-border, #555)', fontFamily: 'inherit' }}>1</kbd>
+            {currentQ.options.length > 1 && (<>–<kbd style={{ padding: '1px 6px', borderRadius: 4, border: '1px solid var(--clr-border, #555)', fontFamily: 'inherit', marginLeft: 2 }}>{currentQ.options.length}</kbd></>)}
+            {' '}to pick an option
+          </p>
+        )}
+        {revealed && currentQ && (
+          <>
+            <div style={{
+              marginTop: 16, padding: 16, borderRadius: 8,
+              background: isCorrect ? 'rgba(92,184,122,0.10)' : 'rgba(224,90,74,0.10)',
+              border: `1px solid ${isCorrect ? 'rgba(92,184,122,0.35)' : 'rgba(224,90,74,0.35)'}`,
+              fontSize: '0.98rem', lineHeight: 1.9,
+            }}>
+              <strong>{isCorrect ? '✅ Correct!' : '❌ Not quite.'}</strong>
+              <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
+                <strong>Answer:</strong>
+                <span><BridgeMath content={currentQ.options[currentQ.correctIndex]} /></span>
+              </div>
+              {currentQ.explanation && (
+                <div style={{ marginTop: 8, opacity: 0.9, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
+                  <strong>Working:</strong>
+                  <span><BridgeMath content={currentQ.explanation} /></span>
+                </div>
+              )}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 14, justifyContent: 'center' }}>
+              <button onClick={() => advanceRef.current()} style={{
+                padding: '12px 28px', borderRadius: 8, background: 'var(--clr-accent, #2ea043)',
+                color: 'white', border: 'none', cursor: 'pointer', fontSize: '1rem', fontWeight: 600,
+              }}>
+                {qIdx + 1 === questions.length ? 'Finish bridge →' : 'Next →'}
+              </button>
+              <span style={{ fontSize: '0.85rem', opacity: 0.65 }}>
+                auto-advance in {autoCountdown}s · or press <kbd style={{ padding: '1px 6px', border: '1px solid var(--clr-border, #555)', borderRadius: 4, fontSize: '0.78rem' }}>Enter</kbd>
+              </span>
+            </div>
+          </>
+        )}
+      </div>
+    )
+  }
+}
+
+const Bridge1App = makeBridgeApp({
+  id: 'bridge1', currentNode: 'bridge1',
+  title: 'Bridge 1 · Scale Up',
+  subtitle: 'Multiply top and bottom by the same number — the move that powers equivalent fractions.',
+  intro: 'You\'ll see a fraction with one slot missing — either the top or the bottom. Your job: figure out the scale factor and fill in the gap.',
+  teach: {
+    rule: 'If you multiply the BOTTOM of a fraction by some number k, you must multiply the TOP by the same k. The fraction\'s value stays the same.',
+    example: {
+      setup: ['Fill in the blank:   ', { frac: [2, 5] }, '  =  ', { frac: ['?', 20] }],
+      steps: [
+        'Look at the two denominators: 5 → 20.  5 × 4 = 20, so the scale factor is 4.',
+        'Apply the same × 4 to the numerator: 2 × 4 = 8.',
+      ],
+      answer: ['The missing number is 8.   So  ', { frac: [2, 5] }, ' = ', { frac: [8, 20] }, '.'],
+    },
+  },
+  generator: generateBridge1Question,
+  nextHref: '/bridge2', nextLabel: 'Continue to Bridge 2',
+})
+const Bridge2App = makeBridgeApp({
+  id: 'bridge2', currentNode: 'bridge2',
+  title: 'Bridge 2 · Scale Down',
+  subtitle: 'Spot a common factor in numerator and denominator, divide both by it.',
+  intro: 'Scaling in reverse. Find what divides BOTH top and bottom, then divide both by it to reach simplest form.',
+  teach: {
+    rule: 'Find a number that divides BOTH the top AND the bottom — call it k. Divide both by k. If you divide by the largest such number (the HCF), you reach simplest form in one step.',
+    example: {
+      setup: ['Simplify   ', { frac: [12, 18] }],
+      steps: [
+        'What divides both 12 and 18? Try 6 — yes, 12 = 6×2 and 18 = 6×3.',
+        'Divide both by 6: 12 ÷ 6 = 2,  18 ÷ 6 = 3.',
+      ],
+      answer: [{ frac: [12, 18] }, ' = ', { frac: [2, 3] }, '   (in simplest form).'],
+    },
+  },
+  generator: generateBridge2Question,
+  nextHref: '/bridge3', nextLabel: 'Continue to Bridge 3',
+})
+const Bridge3App = makeBridgeApp({
+  id: 'bridge3', currentNode: 'bridge3',
+  title: 'Bridge 3 · Cross-Check',
+  subtitle: 'Use cross-multiplication to test whether two fractions are equivalent.',
+  intro: 'Decide whether two fractions are equivalent — Yes or No.',
+  teach: {
+    rule: ['Two fractions ', { frac: ['a', 'b'] }, ' and ', { frac: ['c', 'd'] }, ' are EQUIVALENT exactly when  a × d  =  b × c.'],
+    example: {
+      setup: ['Are   ', { frac: [4, 6] }, '   and   ', { frac: [6, 9] }, '   equivalent?'],
+      steps: [
+        'Cross-multiply: 4 × 9 = 36.',
+        'Other way: 6 × 6 = 36.',
+        'Both give 36 — products match.',
+      ],
+      answer: ['YES, ', { frac: [4, 6] }, ' and ', { frac: [6, 9] }, ' are equivalent.'],
+    },
+  },
+  generator: generateBridge3Question,
+  nextHref: '/chapter5', nextLabel: 'On to Lesson 1',
+})
+const Bridge4App = makeBridgeApp({
+  id: 'bridge4', currentNode: 'bridge4', StripComponent: Lesson2ProgressionStrip,
+  title: 'Bridge 4 · HCF Hunt',
+  subtitle: 'Find the Highest Common Factor of two numbers.',
+  intro: 'A new concept: the HCF — the biggest number that divides BOTH given numbers cleanly.',
+  teach: {
+    rule: 'A FACTOR divides a number cleanly. The HIGHEST COMMON FACTOR (HCF) of two numbers is the BIGGEST number that is a factor of BOTH. Find it by peeling off small primes (2, 3, 5, 7, …) — keep dividing both numbers by each prime as long as it works, then multiply the peeled primes together.',
+    example: {
+      setup: 'Find  HCF(24, 60)',
+      steps: [
+        'Both even — divide by 2:  24÷2 = 12,  60÷2 = 30.  Peeled: 2.',
+        'Both still even — divide by 2 again:  12÷2 = 6,  30÷2 = 15.  Peeled: 2 × 2 = 4.',
+        '6 and 15 both divide by 3:  6÷3 = 2,  15÷3 = 5.  Peeled: 2 × 2 × 3 = 12.',
+        '2 and 5 share nothing more.',
+      ],
+      answer: 'HCF(24, 60) = 2 × 2 × 3 = 12.',
+    },
+  },
+  generator: generateBridge4Question,
+  nextHref: '/bridge5', nextLabel: 'Continue to Bridge 5',
+})
+const Bridge5App = makeBridgeApp({
+  id: 'bridge5', currentNode: 'bridge5', StripComponent: Lesson2ProgressionStrip,
+  title: 'Bridge 5 · Peel-Off Simplify',
+  subtitle: 'Simplify harder fractions by peeling off prime factors.',
+  intro: 'When the HCF isn\'t obvious, don\'t guess — peel off small primes one at a time.',
+  teach: {
+    rule: 'Divide top AND bottom by 2 as long as both are even. Then by 3, then 5, then 7… until top and bottom share no factor.',
+    example: {
+      setup: ['Simplify  ', { frac: [100, 360] }],
+      steps: [
+        [{ frac: [100, 360] }, '  both even.  ÷2 →  ', { frac: [50, 180] }, '  still even.  ÷2 →  ', { frac: [25, 90] }, '.'],
+        ['25 odd; try 5:  ', { frac: [25, 90] }, '  ÷5 →  ', { frac: [5, 18] }, '.'],
+        '5 and 18 share no factor. Done.',
+      ],
+      answer: ['So  ', { frac: [100, 360] }, ' = ', { frac: [5, 18] }, '.   (Total peeled: 2 × 2 × 5 = 20.)'],
+    },
+  },
+  generator: generateBridge5Question,
+  nextHref: '/chapter5', nextLabel: 'On to Lesson 2',
+})
+const Bridge6App = makeBridgeApp({
+  id: 'bridge6', currentNode: 'bridge6', StripComponent: Lesson3ProgressionStrip,
+  title: 'Bridge 6 · Multiply Fractions',
+  subtitle: 'Multiply the tops, multiply the bottoms.',
+  intro: 'The fundamental rule: top × top, bottom × bottom. Includes whole-number cases — treat any whole n as n/1.',
+  teach: {
+    rule: ['To multiply two fractions: ', { frac: ['a', 'b'] }, ' × ', { frac: ['c', 'd'] }, ' = ', { frac: ['a × c', 'b × d'] }, '.   For a whole number n, treat it as ', { frac: ['n', 1] }, '.   Simplify the result at the end.'],
+    example: {
+      setup: [{ frac: [2, 3] }, '  ×  ', { frac: [3, 4] }],
+      steps: [
+        'Multiply tops: 2 × 3 = 6.',
+        'Multiply bottoms: 3 × 4 = 12.',
+        ['Result: ', { frac: [6, 12] }, '.  Simplify (HCF = 6): ', { frac: [1, 2] }, '.'],
+      ],
+      answer: [{ frac: [2, 3] }, ' × ', { frac: [3, 4] }, ' = ', { frac: [1, 2] }, '.'],
+    },
+  },
+  generator: generateBridge6Question,
+  nextHref: '/bridge7', nextLabel: 'Continue to Bridge 7',
+})
+const Bridge7App = makeBridgeApp({
+  id: 'bridge7', currentNode: 'bridge7', StripComponent: Lesson3ProgressionStrip,
+  title: 'Bridge 7 · Mixed ↔ Improper',
+  subtitle: 'Convert between mixed numbers and improper fractions.',
+  intro: 'A mixed number combines a whole and a fraction. To multiply mixed numbers, you must convert them to improper fractions first.',
+  teach: {
+    rule: ['Mixed → improper:  w', { frac: ['p', 'q'] }, ' = ', { frac: ['w × q + p', 'q'] }, '.   Improper → mixed:  divide numerator by denominator; the quotient is the whole part, the remainder is the new top.'],
+    example: {
+      setup: ['Convert  1', { frac: [1, 4] }, '  to an improper fraction.'],
+      steps: [
+        'Multiply whole by denominator: 1 × 4 = 4.',
+        'Add numerator: 4 + 1 = 5.  Keep the same denominator.',
+      ],
+      answer: ['1', { frac: [1, 4] }, ' = ', { frac: [5, 4] }, '.'],
+    },
+  },
+  generator: generateBridge7Question,
+  nextHref: '/bridge8', nextLabel: 'Continue to Bridge 8',
+})
+const Bridge8App = makeBridgeApp({
+  id: 'bridge8', currentNode: 'bridge8', StripComponent: Lesson3ProgressionStrip,
+  title: 'Bridge 8 · Mixed × Mixed',
+  subtitle: 'Multiply two mixed numbers — convert, multiply, simplify.',
+  intro: 'Combines Bridge 6 and Bridge 7. First convert each mixed number to an improper fraction (B7), then multiply (B6), then simplify (B5).',
+  teach: {
+    rule: 'Three steps: (1) convert each mixed number to improper, (2) multiply tops and multiply bottoms, (3) simplify the result.',
+    example: {
+      setup: ['1', { frac: [1, 4] }, '  ×  1', { frac: [2, 3] }],
+      steps: [
+        ['Convert: 1', { frac: [1, 4] }, ' = ', { frac: [5, 4] }, ',  1', { frac: [2, 3] }, ' = ', { frac: [5, 3] }, '.'],
+        ['Multiply: 5 × 5 = 25,  4 × 3 = 12.  Result: ', { frac: [25, 12] }, '.'],
+        '25 and 12 share no factor — already simplest.',
+      ],
+      answer: ['1', { frac: [1, 4] }, ' × 1', { frac: [2, 3] }, ' = ', { frac: [25, 12] }, '.'],
+    },
+  },
+  generator: generateBridge8Question,
+  nextHref: '/chapter5', nextLabel: 'On to Lesson 3',
+})
 
 function Chapter5App({ onBack }) {
   const [progress, setProgress] = useState(ch5_loadProgress)
@@ -6436,6 +7414,9 @@ function Chapter5App({ onBack }) {
         <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
           <button className="back-button" onClick={backToOverview}>← Lessons</button>
         </div>
+        {activeId === 'L1' && <Lesson1ProgressionStrip current="lesson1" />}
+        {activeId === 'L2' && <Lesson2ProgressionStrip current="lesson2" />}
+        {activeId === 'L3' && <Lesson3ProgressionStrip current="lesson3" />}
         <h2 style={{ marginBottom: 4 }}>{ch5RenderMath(lesson.title)}</h2>
         <h3 style={{ color: 'var(--clr-accent, #6cf)', marginTop: 16 }}>{lesson.teach.heading}</h3>
         {lesson.teach.body.map((para, i) => (
@@ -6466,6 +7447,9 @@ function Chapter5App({ onBack }) {
         <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
           <button className="back-button" onClick={backToOverview}>← Lessons</button>
         </div>
+        {activeId === 'L1' && <Lesson1ProgressionStrip current="lesson1" />}
+        {activeId === 'L2' && <Lesson2ProgressionStrip current="lesson2" />}
+        {activeId === 'L3' && <Lesson3ProgressionStrip current="lesson3" />}
         <h2>🎉 Lesson complete</h2>
         <p>You finished <strong>{ch5RenderMath(lesson.title)}</strong>.</p>
         {next ? (
@@ -6498,6 +7482,9 @@ function Chapter5App({ onBack }) {
           )}
         </span>
       </div>
+      {activeId === 'L1' && <Lesson1ProgressionStrip current="lesson1" />}
+      {activeId === 'L2' && <Lesson2ProgressionStrip current="lesson2" />}
+      {activeId === 'L3' && <Lesson3ProgressionStrip current="lesson3" />}
       <h3 style={{ marginBottom: 8 }}>{ch5RenderMath(lesson.title)}</h3>
       {/* Question slider — drag to jump to any question in the play sequence */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
@@ -32977,11 +33964,41 @@ const TENTH_UNITS = [
 ]
 
 function TenthApp({ onBack }) {
+  const { user } = useAuth()
   return (
     <div style={{ maxWidth: 980, margin: '0 auto', padding: '1.5rem 1rem', color: 'var(--clr-text)' }}>
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 16 }}>
         <button className="back-button" onClick={onBack}>← Home</button>
       </div>
+      {user && (
+        <p style={{ margin: '0 0 12px', fontSize: '1.1rem', opacity: 0.85 }}>
+          Welcome, <strong>{user.username}</strong>!
+        </p>
+      )}
+
+      <a href="/gym" style={{
+        display: 'block', textDecoration: 'none', color: 'var(--clr-text)',
+        padding: '20px 24px', marginBottom: 28, borderRadius: 14,
+        background: 'linear-gradient(135deg, rgba(46,160,67,0.18), rgba(108,206,255,0.12))',
+        border: '1px solid #2ea043',
+        boxShadow: '0 4px 18px rgba(46,160,67,0.18)',
+        transition: 'transform 0.15s, box-shadow 0.15s',
+      }}
+      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(46,160,67,0.28)' }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 18px rgba(46,160,67,0.18)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 8, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: '1.8rem' }}>🏋️</span>
+          <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 700 }}>Daily Gym</h2>
+          <span style={{
+            marginLeft: 'auto', padding: '6px 14px', borderRadius: 999,
+            background: '#2ea043', color: '#fff', fontWeight: 600, fontSize: '0.85rem',
+          }}>Start workout →</span>
+        </div>
+        <p style={{ margin: 0, fontSize: '0.95rem', lineHeight: 1.55, opacity: 0.92 }}>
+          <strong>Hit the Gym every single day.</strong> Just like your body, your mind needs daily exercise — short, focused reps build the speed and accuracy that make every chapter below feel easy. Skip a day and you slip back; show up daily and the fundamentals become automatic. <em>Consistency beats intensity.</em>
+        </p>
+      </a>
+
       <h1 style={{ marginBottom: 4 }}>Tenth</h1>
       <p className="subtitle" style={{ marginTop: 0 }}>
         All 24 chapters, broken into bite-sized lessons with worked examples and ramped practice questions.
@@ -33156,6 +34173,23 @@ function App() {
       </>
     )
   }
+
+  if (pathname === '/gym') {
+    return (<>
+      <button className="theme-toggle" onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>{theme === 'dark' ? '☀️' : '🌙'}</button>
+      <div className="app-shell"><div className="card">
+        <GymApp onBack={() => { window.location.href = '/tenth' }} />
+      </div></div>
+    </>)
+  }
+  if (pathname === '/bridge1') return (<><button className="theme-toggle" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button><div className="app-shell"><div className="card"><AuthGate><Bridge1App onBack={() => { window.location.href = '/chapter5' }} /></AuthGate></div></div></>)
+  if (pathname === '/bridge2') return (<><button className="theme-toggle" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button><div className="app-shell"><div className="card"><AuthGate><Bridge2App onBack={() => { window.location.href = '/chapter5' }} /></AuthGate></div></div></>)
+  if (pathname === '/bridge3') return (<><button className="theme-toggle" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button><div className="app-shell"><div className="card"><AuthGate><Bridge3App onBack={() => { window.location.href = '/chapter5' }} /></AuthGate></div></div></>)
+  if (pathname === '/bridge4') return (<><button className="theme-toggle" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button><div className="app-shell"><div className="card"><AuthGate><Bridge4App onBack={() => { window.location.href = '/chapter5' }} /></AuthGate></div></div></>)
+  if (pathname === '/bridge5') return (<><button className="theme-toggle" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button><div className="app-shell"><div className="card"><AuthGate><Bridge5App onBack={() => { window.location.href = '/chapter5' }} /></AuthGate></div></div></>)
+  if (pathname === '/bridge6') return (<><button className="theme-toggle" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button><div className="app-shell"><div className="card"><AuthGate><Bridge6App onBack={() => { window.location.href = '/chapter5' }} /></AuthGate></div></div></>)
+  if (pathname === '/bridge7') return (<><button className="theme-toggle" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button><div className="app-shell"><div className="card"><AuthGate><Bridge7App onBack={() => { window.location.href = '/chapter5' }} /></AuthGate></div></div></>)
+  if (pathname === '/bridge8') return (<><button className="theme-toggle" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button><div className="app-shell"><div className="card"><AuthGate><Bridge8App onBack={() => { window.location.href = '/chapter5' }} /></AuthGate></div></div></>)
 
   // Route: /chapter1 → Cambridge IGCSE Chapter 1 (Reviewing Number Concepts)
   if (pathname === '/chapter1') {
