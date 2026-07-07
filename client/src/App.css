@@ -2518,3 +2518,188 @@ button:disabled {
     margin: 0 3px;
   }
 }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* FEATURE AC: LEARNING TRANSFER CHALLENGES STYLING        */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.transfer-header {
+  background: linear-gradient(135deg, #F7B731, #F5A623);
+  color: #fff;
+  padding: 16px;
+  border-radius: var(--radius-sm, 10px);
+  text-align: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.2);
+}
+
+.transfer-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.transfer-header p {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.transfer-progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  margin-top: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.transfer-progress-bar {
+  height: 100%;
+  background: #fff;
+  border-radius: 4px;
+  transition: width 0.4s ease-out;
+}
+
+.transfer-card {
+  border: 1px solid var(--clr-border, #444);
+  background: var(--clr-card, #1c1c1f);
+  border-radius: var(--radius-md, 12px);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s;
+}
+
+.transfer-context-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--clr-hover-strong, rgba(255,255,255,0.06));
+  border: 1px solid var(--clr-border, #444);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--clr-text-soft, #aaa);
+  margin-bottom: 16px;
+}
+
+.transfer-prompt {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  font-weight: 500;
+  color: var(--clr-text, #eee);
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.transfer-feedback-panel {
+  background: var(--clr-hover, rgba(255,255,255,0.03));
+  border-left: 4px solid var(--clr-accent, #2196f3);
+  padding: 16px;
+  border-radius: 0 var(--radius-sm, 10px) var(--radius-sm, 10px) 0;
+  margin: 16px 0;
+  text-align: left;
+}
+
+.transfer-feedback-explanation {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  color: var(--clr-text, #eee);
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+.transfer-mapping-panel {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: var(--clr-text-soft, #aaa);
+  border-top: 1px dashed var(--clr-border, #444);
+  padding-top: 10px;
+}
+
+.coin-pill {
+  position: fixed;
+  top: 16px;
+  right: 120px;
+  z-index: 100;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 20px;
+  border: 1px solid var(--clr-border, #444);
+  background: var(--clr-surface, #1c1c1f);
+  color: var(--clr-text, #eee);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: default;
+  transition: transform 0.2s;
+}
+
+.coin-pill:hover {
+  transform: translateY(-1px);
+}
+
+.gold-badge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 10px;
+}
+
+.gold-badge-shimmer {
+  font-size: 5rem;
+  position: relative;
+  animation: gold-bounce 1s infinite alternate ease-in-out, gold-shimmer 2s infinite linear;
+}
+
+.btn-transfer-cta {
+  background: linear-gradient(135deg, #F7B731, #F5A623);
+  border: none;
+  color: #fff !important;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm, 10px);
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(245, 166, 35, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.05rem;
+  margin-top: 12px;
+}
+
+.btn-transfer-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(245, 166, 35, 0.4);
+}
+
+.badge-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+@keyframes gold-bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-12px); }
+}
+
+@keyframes gold-shimmer {
+  0% { filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.4)); }
+  50% { filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.9)); }
+  100% { filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.4)); }
+}

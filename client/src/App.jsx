@@ -35462,6 +35462,95 @@ function App() {
   // Currently selected quiz mode (null = home menu, or key like 'gk', 'addition', etc.)
   const [mode, setMode] = useState(null)
 
+  const { user } = useAuth()
+  const [completedTopics, setCompletedTopics] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('tenali-completed-topics') || '[]') } catch { return [] }
+  })
+  const [goldMastery, setGoldMastery] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('tenali-gold-mastery') || '[]') } catch { return [] }
+  })
+  const [coins, setCoins] = useState(() => {
+    try { return parseInt(localStorage.getItem('tenali-coins') || '0', 10) } catch { return 0 }
+  })
+  const [transferTopic, setTransferTopic] = useState(null)
+
+  // Sync progress with backend on mount & whenever user changes
+  useEffect(() => {
+    const fetchProgress = async () => {
+      const token = localStorage.getItem('tenali-auth-token')
+      if (!token) return
+      try {
+        const r = await fetch(`${API}/api/progress`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        if (r.ok) {
+          const data = await r.json()
+          if (data) {
+            setCompletedTopics(data.completedTopics || [])
+            setGoldMastery(data.goldMastery || [])
+            setCoins(data.coins || 0)
+            localStorage.setItem('tenali-completed-topics', JSON.stringify(data.completedTopics || []))
+            localStorage.setItem('tenali-gold-mastery', JSON.stringify(data.goldMastery || []))
+            localStorage.setItem('tenali-coins', String(data.coins || 0))
+          }
+        }
+      } catch (e) {
+        console.error('Failed to sync progress with backend:', e)
+      }
+    }
+    fetchProgress()
+
+    const handleAuthChange = () => fetchProgress()
+    window.addEventListener('tenali-auth-change', handleAuthChange)
+    return () => window.removeEventListener('tenali-auth-change', handleAuthChange)
+  }, [user])
+
+  const syncProgressToServer = async (newCompleted, newGold, newCoins) => {
+    localStorage.setItem('tenali-completed-topics', JSON.stringify(newCompleted))
+    localStorage.setItem('tenali-gold-mastery', JSON.stringify(newGold))
+    localStorage.setItem('tenali-coins', String(newCoins))
+
+    const token = localStorage.getItem('tenali-auth-token')
+    if (!token) return
+
+    try {
+      await fetch(`${API}/api/progress`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          completedTopics: newCompleted,
+          goldMastery: newGold,
+          coins: newCoins
+        })
+      })
+    } catch (e) {
+      console.error('Failed to push progress to backend:', e)
+    }
+  }
+
+  const markTopicCompleted = (topicKey) => {
+    if (completedTopics.includes(topicKey)) return
+    const next = [...completedTopics, topicKey]
+    setCompletedTopics(next)
+    syncProgressToServer(next, goldMastery, coins)
+  }
+
+  const markGoldMastery = (topicKey) => {
+    if (goldMastery.includes(topicKey)) return
+    const next = [...goldMastery, topicKey]
+    setGoldMastery(next)
+    syncProgressToServer(completedTopics, next, coins)
+  }
+
+  const updateCoins = (amount) => {
+    const next = Math.max(0, coins + amount)
+    setCoins(next)
+    syncProgressToServer(completedTopics, goldMastery, next)
+  }
+
   // Current theme: 'dark' or 'light'
   // Initialized from localStorage with fallback to 'dark'
   const [theme, setTheme] = useState(() => {
@@ -36054,16 +36143,49 @@ function App() {
 
   return (
     <div className="app-shell">
+      <div className="coin-pill" title="Sun Coins">
+        🪙 {coins}
+      </div>
       <button className="theme-toggle" onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
         {theme === 'dark' ? '☀️' : '🌙'}
       </button>
       <div className="card">
         {!mode ? (
-          <Home onSelect={setMode} />
+          <Home 
+            onSelect={setMode} 
+            completedTopics={completedTopics}
+            goldMastery={goldMastery}
+            setTransferTopic={setTransferTopic}
+            coins={coins}
+          />
+        ) : mode === 'transfer' ? (
+          <TransferChallengeApp 
+            topicKey={transferTopic} 
+            onBack={() => { setMode(null); setTransferTopic(null); }} 
+            completedTopics={completedTopics}
+            goldMastery={goldMastery}
+            markGoldMastery={markGoldMastery}
+            updateCoins={updateCoins}
+          />
         ) : ActiveApp ? (
-          <ActiveApp onBack={() => setMode(null)} />
+          <ActiveApp 
+            onBack={() => setMode(null)} 
+            completedTopics={completedTopics}
+            goldMastery={goldMastery}
+            markTopicCompleted={markTopicCompleted}
+            markGoldMastery={markGoldMastery}
+            updateCoins={updateCoins}
+            setMode={setMode}
+            setTransferTopic={setTransferTopic}
+          />
         ) : (
-          <Home onSelect={setMode} />
+          <Home 
+            onSelect={setMode} 
+            completedTopics={completedTopics}
+            goldMastery={goldMastery}
+            setTransferTopic={setTransferTopic}
+            coins={coins}
+          />
         )}
       </div>
     </div>
@@ -36078,7 +36200,7 @@ function App() {
  * @param {Object} props
  * @param {Function} props.onSelect - Callback when user selects a quiz: receives mode key (e.g., 'gk')
  */
-function Home({ onSelect }) {
+function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0 }) {
   // Special featured apps (shown in highlighted first row)
   const featuredApps = [
     { key: 'randommix', name: 'Random Mix', subtitle: 'Adaptive cross-topic quiz', color: 'featured' },
@@ -36264,14 +36386,76 @@ function Home({ onSelect }) {
         />
       </div>
       <div className="menu-grid" ref={gridRef}>
-        {filteredRegular.map((app) => (
-          <button key={app.key} className={`menu-card ${app.color}`} onClick={() => onSelect(app.key)}>
-            <span className="menu-title">{app.name}</span>
-            <span className="menu-subtitle">{app.subtitle}</span>
-          </button>
-        ))}
+        {filteredRegular.map((app) => {
+          const isGold = goldMastery.includes(app.key)
+          const isCompleted = completedTopics.includes(app.key)
+          return (
+            <button key={app.key} className={`menu-card ${app.color}`} onClick={() => onSelect(app.key)}>
+              <span className="menu-title">
+                {app.name}
+                {isGold && <span className="badge-indicator">🥇</span>}
+                {!isGold && isCompleted && <span className="badge-indicator">✅</span>}
+              </span>
+              <span className="menu-subtitle">{app.subtitle}</span>
+            </button>
+          )
+        })}
       </div>
       <div className="grid-dimension">{rows} × {cols}</div>
+
+      {/* Developer Cheat / Debug Controls */}
+      <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px dashed var(--clr-border)', display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <span style={{ fontSize: '0.78rem', color: 'var(--clr-text-soft)', width: '100%', textAlign: 'center' }}>Developer Debug Controls:</span>
+        <button 
+          style={{ fontSize: '0.75rem', padding: '6px 12px', background: 'var(--clr-hover-strong)', border: '1px solid var(--clr-border)', color: 'var(--clr-text)', borderRadius: '6px', cursor: 'pointer' }}
+          onClick={() => {
+            const topic = prompt("Enter topic key to toggle Stage 3 Mastery (e.g. percent, ratio, fractionadd):");
+            if (topic) {
+              const cleaned = topic.trim().toLowerCase();
+              if (completedTopics.includes(cleaned)) {
+                const next = completedTopics.filter(t => t !== cleaned);
+                localStorage.setItem('tenali-completed-topics', JSON.stringify(next));
+                window.location.reload();
+              } else {
+                const next = [...completedTopics, cleaned];
+                localStorage.setItem('tenali-completed-topics', JSON.stringify(next));
+                window.location.reload();
+              }
+            }
+          }}
+        >
+          ⚙️ Toggle Stage 3 Mastery
+        </button>
+        <button 
+          style={{ fontSize: '0.75rem', padding: '6px 12px', background: 'var(--clr-hover-strong)', border: '1px solid var(--clr-border)', color: 'var(--clr-text)', borderRadius: '6px', cursor: 'pointer' }}
+          onClick={() => {
+            const nextCoins = prompt("Enter new coin amount:", String(coins));
+            if (nextCoins !== null) {
+              const amount = parseInt(nextCoins, 10);
+              if (!isNaN(amount)) {
+                localStorage.setItem('tenali-coins', String(amount));
+                window.location.reload();
+              }
+            }
+          }}
+        >
+          🪙 Set Coins
+        </button>
+        <button 
+          style={{ fontSize: '0.75rem', padding: '6px 12px', background: 'var(--clr-hover-strong)', border: '1px solid var(--clr-border)', color: 'var(--clr-text)', borderRadius: '6px', cursor: 'pointer' }}
+          onClick={() => {
+            localStorage.removeItem('tenali-completed-topics');
+            localStorage.removeItem('tenali-gold-mastery');
+            localStorage.removeItem('tenali-coins');
+            localStorage.removeItem('tenali-guest-transfer-correct-percent');
+            localStorage.removeItem('tenali-guest-transfer-correct-ratio');
+            localStorage.removeItem('tenali-guest-transfer-correct-fractionadd');
+            window.location.reload();
+          }}
+        >
+          🔄 Reset All Progress
+        </button>
+      </div>
     </>
   )
 }
@@ -39298,10 +39482,377 @@ function makeMCQuizApp({ title, subtitle, apiPath, diffLabels, tip, adaptiveOnly
   }
 }
 
+/**
+ * TransferChallengeApp Component (Feature AC: Learning Transfer Challenges)
+ * Presents untimed, contextual word problems to students who have achieved Stage 3 mastery.
+ * Complete 2 challenges to earn Gold Mastery badge and +75 Sun Coins.
+ */
+function TransferChallengeApp({ topicKey, onBack, completedTopics, goldMastery, updateCoins, markGoldMastery }) {
+  const [started, setStarted] = useState(false)
+  const [finished, setFinished] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [question, setQuestion] = useState(null)
+  const [answer, setAnswer] = useState('')
+  const [questionNumber, setQuestionNumber] = useState(0)
+  const [totalQ] = useState(2)
+  const [feedback, setFeedback] = useState('')
+  const [isCorrect, setIsCorrect] = useState(null)
+  const [revealed, setRevealed] = useState(false)
+  const [hintsUsed, setHintsUsed] = useState(0)
+  const [showHintLevel, setShowHintLevel] = useState(0)
+  const [explanation, setExplanation] = useState('')
+  const [transferMapping, setTransferMapping] = useState('')
+  const [results, setResults] = useState([])
+  const [goldMasteryEarned, setGoldMasteryEarned] = useState(false)
+  
+  const timer = useTimer()
+  const submittedRef = useRef(false)
+  const advancedRef = useRef(false)
+
+  const topicTitles = {
+    percent: 'Percentages',
+    ratio: 'Ratio & Proportion',
+    fractionadd: 'Fraction Addition'
+  }
+
+  const loadQuestion = async () => {
+    setLoading(true)
+    try {
+      const headers = {}
+      const token = localStorage.getItem('tenali-auth-token')
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+
+      const res = await fetch(`${API}/transfer-api/question?topic=${topicKey}`, { headers })
+      const data = await res.json()
+      
+      setQuestion(data)
+      setAnswer('')
+      setFeedback('')
+      setIsCorrect(null)
+      setRevealed(false)
+      setShowHintLevel(0)
+      setHintsUsed(0)
+      setExplanation('')
+      setTransferMapping('')
+      submittedRef.current = false
+      advancedRef.current = false
+      timer.start()
+    } catch (e) {
+      console.error('Failed to load transfer challenge question:', e)
+    }
+    setLoading(false)
+  }
+
+  const startChallenge = () => {
+    setQuestionNumber(1)
+    setResults([])
+    setStarted(true)
+    setFinished(false)
+    setGoldMasteryEarned(false)
+    submittedRef.current = false
+    advancedRef.current = false
+  }
+
+  useEffect(() => {
+    if (started && !finished && questionNumber > 0) {
+      loadQuestion()
+    }
+  }, [started, questionNumber])
+
+  const handleSubmit = async () => {
+    if (!question || revealed || !answer.trim()) return
+    if (submittedRef.current) return
+    submittedRef.current = true
+    const timeTaken = timer.stop()
+
+    const payload = {
+      topic: topicKey,
+      scenarioId: question.scenarioId,
+      variables: question.variables,
+      userAnswer: answer.trim(),
+      hintsUsed,
+      timeSpentSeconds: timeTaken
+    }
+
+    try {
+      const headers = { 'Content-Type': 'application/json' }
+      const token = localStorage.getItem('tenali-auth-token')
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+
+      const res = await fetch(`${API}/transfer-api/check`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload)
+      })
+      const data = await res.json()
+
+      setIsCorrect(data.correct)
+      setRevealed(true)
+      setExplanation(data.explanation || '')
+      setTransferMapping(data.transferMapping || '')
+      
+      if (data.correct) {
+        setFeedback(`Correct! Expected: ${data.answer}`)
+        setResults(prev => [...prev, {
+          prompt: question.prompt,
+          userAnswer: answer.trim(),
+          correctAnswer: data.answer,
+          correct: true,
+          time: timeTaken
+        }])
+        
+        const token = localStorage.getItem('tenali-auth-token')
+        if (!token) {
+          const guestCorrectCountKey = `tenali-guest-transfer-correct-${topicKey}`
+          const currentCount = parseInt(localStorage.getItem(guestCorrectCountKey) || '0', 10) + 1
+          localStorage.setItem(guestCorrectCountKey, String(currentCount))
+          
+          if (currentCount >= 2 && !goldMastery.includes(topicKey)) {
+            markGoldMastery(topicKey)
+            updateCoins(75)
+            setGoldMasteryEarned(true)
+          }
+        } else {
+          if (data.goldMasteryEarned) {
+            markGoldMastery(topicKey)
+            updateCoins(75)
+            setGoldMasteryEarned(true)
+          }
+        }
+      } else {
+        setFeedback(`Incorrect. Expected: ${data.answer}`)
+        setResults(prev => [...prev, {
+          prompt: question.prompt,
+          userAnswer: answer.trim(),
+          correctAnswer: data.answer,
+          correct: false,
+          time: timeTaken
+        }])
+      }
+    } catch (e) {
+      submittedRef.current = false
+      console.error('Failed to submit transfer challenge answer:', e)
+    }
+  }
+
+  const advance = () => {
+    if (advancedRef.current) return
+    advancedRef.current = true
+    if (questionNumber >= totalQ) {
+      setFinished(true)
+    } else {
+      setQuestionNumber(n => n + 1)
+    }
+  }
+
+  const getHint = () => {
+    if (showHintLevel >= 3) return
+    const nextLevel = showHintLevel + 1
+    setShowHintLevel(nextLevel)
+    
+    if (nextLevel > 1) {
+      setHintsUsed(prev => prev + 1)
+      updateCoins(-10)
+    }
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      if (!revealed) {
+        handleSubmit()
+      } else {
+        advance()
+      }
+    }
+  }
+
+  const contextIcons = {
+    shopping: '🛒',
+    sports: '🏏',
+    cooking: '🍕',
+    travel: '🚂',
+    pocketmoney: '🪙'
+  }
+
+  return (
+    <QuizLayout
+      title={`Transfer Challenge: ${topicTitles[topicKey] || topicKey}`}
+      subtitle="Apply your knowledge to real-world problems!"
+      onBack={onBack}
+      timer={started && !finished ? timer : null}
+    >
+      {!started && !finished && (
+        <div className="welcome-box">
+          <p className="welcome-text">
+            Test whether you can apply your math skills to real-world scenarios. 
+            Earn your <strong>Gold Mastery Badge 🥇</strong> and <strong>+75 Sun Coins! 🪙</strong>
+          </p>
+          <div className="transfer-header" style={{ maxWidth: '400px', margin: '0 auto 20px' }}>
+            <h2>Ready to transfer?</h2>
+            <p>Complete {totalQ} challenges with no time limit.</p>
+          </div>
+          <button className="btn-transfer-cta" onClick={startChallenge}>
+            Start Challenge 🥇
+          </button>
+        </div>
+      )}
+
+      {started && !finished && (
+        <>
+          <div className="transfer-header">
+            <h2>Challenge {questionNumber} of {totalQ}</h2>
+            <div className="transfer-progress-bar-container">
+              <div 
+                className="transfer-progress-bar" 
+                style={{ width: `${(questionNumber - 1) * 50}%` }}
+              />
+            </div>
+          </div>
+
+          {question && (
+            <div className="transfer-card">
+              <div className="transfer-context-badge">
+                <span>{contextIcons[question.context] || '💡'}</span>
+                <span>{question.context}</span>
+              </div>
+              <div className="transfer-prompt">{question.prompt}</div>
+
+              {!revealed && (
+                <div style={{ margin: '15px 0', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                  <button 
+                    onClick={getHint}
+                    disabled={showHintLevel >= 3}
+                    style={{
+                      background: 'transparent',
+                      border: '1.5px solid var(--clr-accent)',
+                      color: 'var(--clr-accent)',
+                      padding: '6px 14px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontSize: '0.85rem'
+                    }}
+                  >
+                    💡 Hint {showHintLevel === 0 ? '(Free)' : `Level ${showHintLevel + 1} (-10 coins)`}
+                  </button>
+                </div>
+              )}
+
+              {showHintLevel > 0 && question.hints && (
+                <div style={{
+                  background: 'var(--clr-hover, rgba(255,255,255,0.03))',
+                  border: '1px solid var(--clr-border)',
+                  padding: '12px 16px',
+                  borderRadius: '8px',
+                  margin: '12px 0',
+                  textAlign: 'left',
+                  fontSize: '0.9rem'
+                }}>
+                  <strong style={{ color: 'var(--clr-accent)' }}>Hint Level {showHintLevel}:</strong>
+                  <p style={{ margin: '6px 0 0' }}>
+                    {showHintLevel === 1 && (question.hints[0] || question.hints.level1)}
+                    {showHintLevel === 2 && (question.hints[1] || question.hints.level2)}
+                    {showHintLevel === 3 && (question.hints[2] || question.hints.level3)}
+                  </p>
+                </div>
+              )}
+
+              <input
+                className="answer-input"
+                type="text"
+                value={answer}
+                onChange={e => { if (!revealed) setAnswer(e.target.value) }}
+                disabled={revealed}
+                placeholder="Type your answer (e.g. 1500, 3/4)"
+                onKeyDown={handleKeyDown}
+                autoFocus
+              />
+            </div>
+          )}
+
+          {!question && loading && (
+            <div style={{ textAlign: 'center', padding: '24px', color: 'var(--clr-text-soft)' }}>
+              Loading scenario…
+            </div>
+          )}
+
+          {revealed && (
+            <div className="transfer-feedback-panel" style={{ borderLeftColor: isCorrect ? 'var(--clr-correct, #4caf50)' : 'var(--clr-wrong, #f44336)' }}>
+              <div style={{ fontWeight: 700, fontSize: '1.1rem', color: isCorrect ? 'var(--clr-correct)' : 'var(--clr-wrong)' }}>
+                {isCorrect ? '✅ Well done!' : '❌ Let\'s review this:'}
+              </div>
+              <div className="transfer-feedback-explanation">{explanation}</div>
+              <div className="transfer-mapping-panel">
+                <strong>Conceptual Link:</strong> {transferMapping}
+              </div>
+            </div>
+          )}
+
+          <div className="button-row">
+            {!revealed ? (
+              <button onClick={handleSubmit} disabled={loading || !answer.trim()}>
+                Submit Answer
+              </button>
+            ) : (
+              <button onClick={advance}>
+                {questionNumber >= totalQ ? 'Complete Challenge' : 'Next Challenge'}
+              </button>
+            )}
+          </div>
+        </>
+      )}
+
+      {finished && (
+        <div className="welcome-box">
+          {goldMasteryEarned ? (
+            <div className="gold-badge-container">
+              <div className="gold-badge-shimmer">🥇</div>
+              <h2 style={{ marginTop: '16px', color: '#F5A623' }}>Gold Mastery Achieved!</h2>
+              <p className="welcome-text" style={{ margin: '12px 0 24px' }}>
+                Awesome transfer! You successfully solved the real-world word problems and earned 
+                <strong> +75 Sun Coins! 🪙</strong>
+              </p>
+            </div>
+          ) : (
+            <>
+              <p className="welcome-text" style={{ fontSize: '1.2rem', fontWeight: 600 }}>
+                Challenge Completed!
+              </p>
+              <p className="welcome-text">
+                Verify your results below. If you already earned Gold Mastery, it remains saved!
+              </p>
+            </>
+          )}
+
+          <ResultsTable results={results} />
+          
+          <button className="btn-transfer-cta" onClick={onBack}>
+            Back to Dashboard
+          </button>
+        </div>
+      )}
+    </QuizLayout>
+  )
+}
+
 function makeQuizApp({ title, subtitle, apiPath, diffLabels, placeholders, tip, answerField }) {
-  return function GeneratedQuizApp({ onBack }) {
+  return function GeneratedQuizApp({ onBack, completedTopics = [], goldMastery = [], markTopicCompleted, markGoldMastery, updateCoins, setMode, setTransferTopic }) {
     const diffs = Object.keys(diffLabels)
     const [difficulty, setDifficulty] = useState(diffs[0])
+    const topicKey = apiPath.replace('-api', '')
+
+    useEffect(() => {
+      if (finished) {
+        const pass = score / totalQ >= 0.8
+        if (pass && markTopicCompleted) {
+          markTopicCompleted(topicKey)
+        }
+      }
+    }, [finished])
     const [isAdaptive, setIsAdaptive] = useState(false)
     const [adaptScore, setAdaptScore] = useState(0) // 0.0 (easy) → 3.0 (extrahard)
     const [reportAck, setReportAck] = useState('')
@@ -39484,6 +40035,23 @@ function makeQuizApp({ title, subtitle, apiPath, diffLabels, placeholders, tip, 
             <input className="answer-input question-count-input" type="text" value={numQuestions} onChange={e => { const v = e.target.value; if (v === '' || /^\d+$/.test(v)) setNumQuestions(v) }} />
           </div>
           <div className="button-row"><button onClick={startQuiz}>Start Quiz</button></div>
+          {completedTopics.includes(topicKey) && ['percent', 'ratio', 'fractionadd'].includes(topicKey) && (
+            <div className="transfer-cta-box" style={{ marginTop: '20px', padding: '16px', background: 'var(--clr-hover, rgba(255,255,255,0.03))', borderRadius: '10px', border: '1px solid var(--clr-border)', textAlign: 'center' }}>
+              <p style={{ margin: '0 0 12px', fontSize: '0.9rem', color: 'var(--clr-text-soft)', lineHeight: '1.4' }}>
+                🎉 You have completed Stage 3 Practice for this topic!
+              </p>
+              <button 
+                className="btn-transfer-cta" 
+                onClick={() => {
+                  if (setTransferTopic) setTransferTopic(topicKey)
+                  if (setMode) setMode('transfer')
+                }}
+                style={{ width: '100%', padding: '10px', background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#000', fontWeight: 'bold', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+              >
+                🚀 Start Transfer Challenge (Stage 4) 🥇
+              </button>
+            </div>
+          )}
         </div>}
         {started && !finished && <>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.3rem' }}>
@@ -42687,7 +43255,7 @@ function SequencesApp({ onBack }) {
 }
 
 /* ── Ratio & Proportion App ────────────────────────── */
-function RatioApp({ onBack }) {
+function RatioApp({ onBack, completedTopics = [], goldMastery = [], markTopicCompleted, markGoldMastery, updateCoins, setMode, setTransferTopic }) {
   const [difficulty, setDifficulty] = useState('easy')
   const [isAdaptive, setIsAdaptive] = useState(false)
   const [adaptScore, setAdaptScore] = useState(0)
@@ -42695,6 +43263,16 @@ function RatioApp({ onBack }) {
   const [numQuestions, setNumQuestions] = useState(String(DEFAULT_TOTAL))
   const [started, setStarted] = useState(false)
   const [finished, setFinished] = useState(false)
+
+  useEffect(() => {
+    if (finished) {
+      const pass = score / totalQ >= 0.8
+      if (pass && markTopicCompleted) {
+        markTopicCompleted('ratio')
+      }
+    }
+  }, [finished])
+
   const [question, setQuestion] = useState(null)
   const [answer, setAnswer] = useState('')
   const [score, setScore] = useState(0)
@@ -42824,6 +43402,23 @@ function RatioApp({ onBack }) {
           <input className="answer-input question-count-input" type="text" value={numQuestions} onChange={e => { const v = e.target.value; if (v === '' || /^\d+$/.test(v)) setNumQuestions(v) }} />
         </div>
         <div className="button-row"><button onClick={startQuiz}>Start Quiz</button></div>
+        {completedTopics.includes('ratio') && (
+          <div className="transfer-cta-box" style={{ marginTop: '20px', padding: '16px', background: 'var(--clr-hover, rgba(255,255,255,0.03))', borderRadius: '10px', border: '1px solid var(--clr-border)', textAlign: 'center' }}>
+            <p style={{ margin: '0 0 12px', fontSize: '0.9rem', color: 'var(--clr-text-soft)', lineHeight: '1.4' }}>
+              🎉 You have completed Stage 3 Practice for this topic!
+            </p>
+            <button 
+              className="btn-transfer-cta" 
+              onClick={() => {
+                if (setTransferTopic) setTransferTopic('ratio')
+                if (setMode) setMode('transfer')
+              }}
+              style={{ width: '100%', padding: '10px', background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#000', fontWeight: 'bold', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+            >
+              🚀 Start Transfer Challenge (Stage 4) 🥇
+            </button>
+          </div>
+        )}
       </div>}
       {started && !finished && <>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.3rem' }}>
@@ -42856,7 +43451,7 @@ function RatioApp({ onBack }) {
 }
 
 /* ── Percentages App ────────────────────────────────── */
-function PercentApp({ onBack }) {
+function PercentApp({ onBack, completedTopics = [], goldMastery = [], markTopicCompleted, markGoldMastery, updateCoins, setMode, setTransferTopic }) {
   const [difficulty, setDifficulty] = useState('easy')
   const [isAdaptive, setIsAdaptive] = useState(false)
   const [adaptScore, setAdaptScore] = useState(0)
@@ -42864,6 +43459,16 @@ function PercentApp({ onBack }) {
   const [numQuestions, setNumQuestions] = useState(String(DEFAULT_TOTAL))
   const [started, setStarted] = useState(false)
   const [finished, setFinished] = useState(false)
+
+  useEffect(() => {
+    if (finished) {
+      const pass = score / totalQ >= 0.8
+      if (pass && markTopicCompleted) {
+        markTopicCompleted('percent')
+      }
+    }
+  }, [finished])
+
   const [question, setQuestion] = useState(null)
   const [answer, setAnswer] = useState('')
   const [score, setScore] = useState(0)
@@ -42992,6 +43597,23 @@ function PercentApp({ onBack }) {
           <input className="answer-input question-count-input" type="text" value={numQuestions} onChange={e => { const v = e.target.value; if (v === '' || /^\d+$/.test(v)) setNumQuestions(v) }} />
         </div>
         <div className="button-row"><button onClick={startQuiz}>Start Quiz</button></div>
+        {completedTopics.includes('percent') && (
+          <div className="transfer-cta-box" style={{ marginTop: '20px', padding: '16px', background: 'var(--clr-hover, rgba(255,255,255,0.03))', borderRadius: '10px', border: '1px solid var(--clr-border)', textAlign: 'center' }}>
+            <p style={{ margin: '0 0 12px', fontSize: '0.9rem', color: 'var(--clr-text-soft)', lineHeight: '1.4' }}>
+              🎉 You have completed Stage 3 Practice for this topic!
+            </p>
+            <button 
+              className="btn-transfer-cta" 
+              onClick={() => {
+                if (setTransferTopic) setTransferTopic('percent')
+                if (setMode) setMode('transfer')
+              }}
+              style={{ width: '100%', padding: '10px', background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#000', fontWeight: 'bold', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+            >
+              🚀 Start Transfer Challenge (Stage 4) 🥇
+            </button>
+          </div>
+        )}
       </div>}
       {started && !finished && <>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.3rem' }}>
@@ -43499,7 +44121,7 @@ function SurdsApp({ onBack }) {
   )
 }
 
-function FractionAddApp({ onBack }) {
+function FractionAddApp({ onBack, completedTopics = [], goldMastery = [], markTopicCompleted, markGoldMastery, updateCoins, setMode, setTransferTopic }) {
   // ── State variables ──────────────────────────────────────────────────
   // Difficulty: 'easy' | 'medium' | 'hard' | 'extrahard'
   const [difficulty, setDifficulty] = useState('easy')
@@ -43513,6 +44135,15 @@ function FractionAddApp({ onBack }) {
   // Quiz phase flags
   const [started, setStarted] = useState(false)
   const [finished, setFinished] = useState(false)
+
+  useEffect(() => {
+    if (finished) {
+      const pass = score / totalQ >= 0.8
+      if (pass && markTopicCompleted) {
+        markTopicCompleted('fraction')
+      }
+    }
+  }, [finished])
   // Current question object from API
   const [question, setQuestion] = useState(null)
   // User's answer as a string: "3/4" or "2 3/4" for mixed numbers
@@ -43771,6 +44402,23 @@ function FractionAddApp({ onBack }) {
           <input className="answer-input question-count-input" type="text" value={numQuestions} onChange={e => { const v = e.target.value; if (v === '' || /^\d+$/.test(v)) setNumQuestions(v) }} />
         </div>
         <div className="button-row"><button onClick={startQuiz}>Start Quiz</button></div>
+        {completedTopics.includes('fraction') && (
+          <div className="transfer-cta-box" style={{ marginTop: '20px', padding: '16px', background: 'var(--clr-hover, rgba(255,255,255,0.03))', borderRadius: '10px', border: '1px solid var(--clr-border)', textAlign: 'center' }}>
+            <p style={{ margin: '0 0 12px', fontSize: '0.9rem', color: 'var(--clr-text-soft)', lineHeight: '1.4' }}>
+              🎉 You have completed Stage 3 Practice for this topic!
+            </p>
+            <button 
+              className="btn-transfer-cta" 
+              onClick={() => {
+                if (setTransferTopic) setTransferTopic('fraction')
+                if (setMode) setMode('transfer')
+              }}
+              style={{ width: '100%', padding: '10px', background: 'linear-gradient(135deg, #FFD700, #FFA500)', color: '#000', fontWeight: 'bold', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+            >
+              🚀 Start Transfer Challenge (Stage 4) 🥇
+            </button>
+          </div>
+        )}
       </div>}
 
       {/* ── Playing Phase ── */}

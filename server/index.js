@@ -66,6 +66,7 @@ app.use(express.static(clientDistPath));
 // MongoDB on startup. If Mongo is unreachable the rest of the server still
 // serves; only the auth endpoints will return 503.
 const auth = require('./auth');
+const transferScenarios = require('./transferScenarios');
 app.use('/api/auth', auth.router);
 auth.seedUsers().catch(() => {});  // always populate in-memory fallback
 auth.connectMongo()
@@ -8923,6 +8924,200 @@ app.get('/path', (_req, res) => {
 
 app.get('/enhanced', (_req, res) => {
   res.sendFile(path.join(__dirname, '..', 'enhanced', 'index.html'));
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// LEARNING TRANSFER CHALLENGES & PROGRESS SYNC API
+// ═══════════════════════════════════════════════════════════════════════════
+
+async function getUserFromReq(req) {
+  const authHeader = req.get('authorization') || '';
+  const m = /^Bearer\s+(.+)$/i.exec(authHeader);
+  if (!m) return null;
+  try {
+    const jwt = require('jsonwebtoken');
+    const JWT_SECRET = process.env.JWT_SECRET || 'tenali-dev-secret-change-me';
+    const payload = jwt.verify(m[1], JWT_SECRET);
+    if (payload && payload.sub) {
+      return await auth.User.findById(payload.sub);
+    }
+  } catch (e) {}
+  return null;
+}
+
+function compareAnswers(userStr, expected) {
+  if (expected === undefined || expected === null) return false;
+  
+  const cleanUser = String(userStr || '').replace(/\s+/g, '').replace(/[%₹$,]/g, '').replace(/−/g, '-');
+  
+  // If expected is a fraction string like "5/12"
+  if (typeof expected === 'string' && expected.includes('/')) {
+    const [eNum, eDen] = expected.split('/').map(Number);
+    const expectedVal = eNum / eDen;
+    
+    let userVal;
+    if (cleanUser.includes('/')) {
+      const [uNum, uDen] = cleanUser.split('/').map(Number);
+      userVal = uNum / uDen;
+    } else {
+      userVal = parseFloat(cleanUser);
+    }
+    
+    return !isNaN(userVal) && Math.abs(userVal - expectedVal) <= 0.01;
+  }
+  
+  // Standard numerical comparison
+  const expectedNum = parseFloat(expected);
+  const userNum = parseFloat(cleanUser);
+  if (isNaN(expectedNum) || isNaN(userNum)) {
+    // String fallback
+    return String(userStr).trim().toLowerCase() === String(expected).trim().toLowerCase();
+  }
+  
+  return Math.abs(userNum - expectedNum) <= 0.01;
+}
+
+// Progress sync endpoints
+app.get('/api/progress', async (req, res) => {
+  try {
+    const user = await getUserFromReq(req);
+    if (!user) {
+      return res.json({ completedTopics: [], goldMastery: [], coins: 0 });
+    }
+    res.json({
+      completedTopics: user.completedTopics || [],
+      goldMastery: user.goldMastery || [],
+      coins: user.coins || 0
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/progress', express.json(), async (req, res) => {
+  try {
+    const user = await getUserFromReq(req);
+    if (!user) {
+      return res.json({ success: true, guest: true });
+    }
+    const { completedTopics, goldMastery, coins } = req.body;
+    if (completedTopics) user.completedTopics = completedTopics;
+    if (goldMastery) user.goldMastery = goldMastery;
+    if (coins !== undefined) user.coins = coins;
+    await user.save();
+    res.json({
+      success: true,
+      completedTopics: user.completedTopics,
+      goldMastery: user.goldMastery,
+      coins: user.coins
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Transfer challenge API endpoints
+app.get('/transfer-api/question', async (req, res) => {
+  try {
+    const topic = String(req.query.topic || '').trim().toLowerCase();
+    if (!topic) {
+      return res.status(400).json({ error: 'Topic parameter is required' });
+    }
+
+    const scenarios = transferScenarios[topic];
+    if (!scenarios || !scenarios.length) {
+      return res.status(404).json({ error: `No transfer scenarios available for topic: ${topic}` });
+    }
+
+    // Pick a random scenario
+    const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+    const generated = scenario.generate();
+    
+    res.json({
+      scenarioId: generated.scenarioId,
+      context: generated.context,
+      prompt: generated.prompt,
+      hints: generated.hints,
+      variables: generated.variables,
+      icon: scenario.icon,
+      transferLevel: scenario.transferLevel,
+      topic: topic
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/transfer-api/check', express.json(), async (req, res) => {
+  try {
+    const { topic, scenarioId, variables, userAnswer, hintsUsed, timeSpentSeconds } = req.body;
+    if (!topic || !scenarioId || !variables) {
+      return res.status(400).json({ error: 'Missing required parameters (topic, scenarioId, variables)' });
+    }
+
+    const scenarios = transferScenarios[topic];
+    if (!scenarios) {
+      return res.status(404).json({ error: `Topic not found: ${topic}` });
+    }
+
+    const scenario = scenarios.find(s => s.scenarioId === scenarioId);
+    if (!scenario) {
+      return res.status(404).json({ error: `Scenario not found: ${scenarioId}` });
+    }
+
+    // Evaluate answer deterministically on the server using scenario evaluate function
+    const expectedAnswer = scenario.evaluate(variables);
+    const correct = compareAnswers(userAnswer, expectedAnswer);
+
+    let goldMasteryEarned = false;
+    const user = await getUserFromReq(req);
+    
+    // Log attempt if user is authenticated and DB is connected
+    if (user && auth.StudentAttemptLog) {
+      const promptText = scenario.generate().prompt;
+      await auth.StudentAttemptLog.create({
+        studentId: user._id,
+        topicKey: topic,
+        questionPrompt: promptText,
+        userInput: String(userAnswer || ''),
+        correct,
+        hintsClickedCount: hintsUsed || 0,
+        timeSpentSeconds: timeSpentSeconds || 0,
+        stageNumber: 3,
+        challengeType: 'transfer',
+        transferScenarioId: scenarioId,
+        transferContext: scenario.context
+      });
+
+      if (correct) {
+        // Query successful attempts for this topic
+        const correctCount = await auth.StudentAttemptLog.countDocuments({
+          studentId: user._id,
+          topicKey: topic,
+          challengeType: 'transfer',
+          correct: true
+        });
+
+        // 2+ correct answers triggers Gold Mastery
+        if (correctCount >= 2 && !user.goldMastery.includes(topic)) {
+          user.goldMastery.push(topic);
+          user.coins = (user.coins || 0) + 75;
+          await user.save();
+          goldMasteryEarned = true;
+        }
+      }
+    }
+
+    res.json({
+      correct,
+      answer: expectedAnswer,
+      explanation: scenario.explanation(variables),
+      transferMapping: scenario.transferMapping,
+      goldMasteryEarned
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 /**

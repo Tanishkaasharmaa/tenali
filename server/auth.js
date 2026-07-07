@@ -29,9 +29,32 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true, index: true, lowercase: true, trim: true },
   passwordHash: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
+  completedTopics: { type: [String], default: [] },
+  goldMastery: { type: [String], default: [] },
+  coins: { type: Number, default: 0 },
 });
 
 const User = mongoose.model('User', UserSchema);
+
+const StudentAttemptLogSchema = new mongoose.Schema({
+  studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
+  topicKey: { type: String, required: true, index: true },
+  timestamp: { type: Date, default: Date.now },
+  questionPrompt: { type: String, required: true },
+  userInput: { type: String, required: true },
+  correct: { type: Boolean, required: true },
+  hintsClickedCount: { type: Number, default: 0 },
+  timeSpentSeconds: { type: Number, default: 0 },
+  stageNumber: { type: Number, default: 3 },
+  challengeType: { type: String, enum: ['standard', 'transfer'], default: 'standard', index: true },
+  transferScenarioId: { type: String },
+  transferContext: { type: String },
+});
+
+// Compound index for querying transfer-specific results per student per topic
+StudentAttemptLogSchema.index({ studentId: 1, challengeType: 1, topicKey: 1 });
+
+const StudentAttemptLog = mongoose.model('StudentAttemptLog', StudentAttemptLogSchema);
 
 // ─── Connection + seeding ────────────────────────────────────────────────────
 
@@ -120,4 +143,4 @@ router.get('/me', requireAuth, (req, res) => {
   res.json({ user: req.user });
 });
 
-module.exports = { connectMongo, seedUsers, router, requireAuth, User };
+module.exports = { connectMongo, seedUsers, router, requireAuth, User, StudentAttemptLog };
