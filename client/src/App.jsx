@@ -22,6 +22,7 @@
  */
 
 import { useEffect, useState, useRef, useMemo } from 'react'
+import LinearAlgebraApp from './LinearAlgebraApp'
 import './App.css'
 
 // API base URL from environment variables (Vite)
@@ -35617,6 +35618,20 @@ function App() {
   if (pathname === '/bridge26') return (<><button className="theme-toggle" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button><div className="app-shell"><div className="card"><AuthGate><Bridge26App onBack={() => { window.location.href = '/chapter5' }} /></AuthGate></div></div></>)
   if (pathname === '/bridge27') return (<><button className="theme-toggle" onClick={toggleTheme}>{theme === 'dark' ? '☀️' : '🌙'}</button><div className="app-shell"><div className="card"><AuthGate><Bridge27App onBack={() => { window.location.href = '/chapter5' }} /></AuthGate></div></div></>)
 
+  // Route: /linearalgebra → Linear Algebra Module 1 (Interactive Learning)
+  if (pathname === '/linearalgebra' || pathname === '/la') {
+    return (
+      <>
+        <button className="theme-toggle" onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+        <div className="app-shell"><div className="card">
+          <LinearAlgebraApp onBack={() => { window.location.href = '/' }} />
+        </div></div>
+      </>
+    )
+  }
+
   // Route: /chapter1 → Cambridge IGCSE Chapter 1 (Reviewing Number Concepts)
   if (pathname === '/chapter1') {
     return (
@@ -35966,6 +35981,7 @@ function App() {
   // ========== ROUTING: MODE-BASED (HOME MENU + QUIZZES) ==========
   // Map quiz mode keys to their component classes
   const modeMap = {
+    linearalgebra: LinearAlgebraApp, // Linear Algebra Module 1
     gk: GKApp,                    // General Knowledge
     addition: AdditionApp,         // Basic addition
     quadratic: QuadraticApp,       // Quadratic substitution
@@ -36116,6 +36132,7 @@ function Home({ onSelect }) {
     { key: 'integ', name: 'Integration', subtitle: 'Reverse differentiation & areas', color: 'blue' },
     { key: 'invtrig', name: 'Inverse Trig', subtitle: 'arcsin, arccos, arctan', color: 'green' },
     { key: 'limits', name: 'Limits', subtitle: 'Evaluate limits', color: 'purple' },
+    { key: 'linearalgebra', name: 'Linear Algebra', subtitle: 'Interactive 14-mission module with GeoGebra', color: 'orange' },
     { key: 'lineareq', name: 'Linear Equations', subtitle: 'Solve for x in one variable', color: 'blue' },
     { key: 'lineq', name: 'Line Equation', subtitle: 'Find m and c from two points', color: 'green' },
     { key: 'linprog', name: 'Linear Programming', subtitle: 'Optimize objective functions', color: 'green' },

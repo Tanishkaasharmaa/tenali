@@ -8926,6 +8926,48 @@ app.get('/enhanced', (_req, res) => {
 });
 
 /**
+ * LINEAR ALGEBRA MODULE - Question/Check endpoints
+ * ═══════════════════════════════════════════════════════════════════════════
+ * Generate and check generated numeric problems for the Linear Algebra module.
+ */
+app.get('/linearalgebra-api/question', (_req, res) => {
+  const diff = parseInt(_req.query.difficulty) || 1;
+  // Generate a random cubic equation
+  const coeffs = [
+    Math.floor(Math.random() * 5) + 1,
+    Math.floor(Math.random() * 10) - 5,
+    Math.floor(Math.random() * 10) - 5,
+    Math.floor(Math.random() * 10) - 5
+  ];
+  const target = Math.floor(Math.random() * 20) - 10;
+  res.json({ type: 'cubic', coeffs, target, id: Date.now() });
+});
+
+app.post('/linearalgebra-api/check', (req, res) => {
+  const { missionId, answer, params } = req.body || {};
+  if (missionId === 6) {
+    const sol = { x: 1, y: 2 };
+    const eps = 0.01;
+    const [ax, ay] = (answer || '').split(',').map(parseFloat);
+    const correct = Math.abs(ax - sol.x) < eps && Math.abs(ay - sol.y) < eps;
+    return res.json({ correct, explanation: correct ? 'Perfect!' : 'Try x=1, y=2. Use Intersect in GeoGebra!' });
+  }
+  if (missionId === 10) {
+    const sols = [-4, 2, 3];
+    const nums = (answer || '').split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+    const correct = nums.length > 0 && nums.every(n => sols.some(s => Math.abs(n - s) < 0.01));
+    return res.json({ correct, explanation: correct ? 'Right! x = -4, 2, or 3' : 'Use Intersect tool on the cubic and y=-22' });
+  }
+  if (missionId === 14) {
+    const kw = ['2,-1', '(2,-1)', '-2,1', '(-2,1)', 'x=-2y', 't(2,-1)'];
+    const ans = (answer || '').toLowerCase().trim();
+    const correct = kw.some(k => ans.includes(k));
+    return res.json({ correct, explanation: correct ? 'Right! x=-2y, so (2,-1) maps to (0,0)' : 'Try M*v in GeoGebra with v = (2,-1)' });
+  }
+  res.json({ correct: false, explanation: 'Unknown mission' });
+});
+
+/**
  * CATCH-ALL ROUTE
  * ═══════════════════════════════════════════════════════════════════════════
  * Serves the React/Vue SPA index.html for all unmatched routes
