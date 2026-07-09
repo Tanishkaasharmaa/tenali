@@ -62,7 +62,7 @@
 .la-guidance { background: var(--la-surface); border-radius: var(--la-radius-sm); padding: 12px 16px; margin-bottom: 12px; font-size: 0.85rem; line-height: 1.6; border-left: 3px solid #5cb87a; }
 .la-guidance-toggle { background: none; border: none; color: var(--la-accent); cursor: pointer; font-size: 0.8rem; padding: 4px 0; margin-bottom: 8px; font-weight: 500; }
 .la-guidance-step { padding: 3px 0; }
-.la-guidance-step::before { content: "\u2192 "; color: var(--la-accent); font-weight: 600; }
+.la-guidance-step .step-num { color: var(--la-accent); font-weight: 700; margin-right: 4px; min-width: 20px; display: inline-block; }
 .la-guidance-hint { background: rgba(232,134,74,0.1); border-radius: 6px; padding: 8px 12px; margin: 6px 0; font-size: 0.82rem; }
 
 .la-action-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 12px; }

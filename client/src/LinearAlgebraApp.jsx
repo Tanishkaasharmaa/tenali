@@ -555,6 +555,24 @@ function LinearAlgebraApp({ onBack }) {
   const [selectedRL, setSelectedRL] = useState(null);
   const [rlAnswer, setRlAnswer] = useState('');
   const [rlFeedback, setRlFeedback] = useState(null);
+  const [shuffledQuiz, setShuffledQuiz] = useState([]);
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function shuffleQuiz(qs) {
+    return shuffle(qs).map(q => {
+      const opts = shuffle(q.options);
+      const correctText = q.options[q.correct];
+      return { ...q, options: opts, correct: opts.indexOf(correctText) };
+    });
+  }
 
   const mission = MISSIONS.find(m => m.id === currentMission) || MISSIONS[0];
   const isLastMission = currentMission >= 14;
@@ -601,12 +619,12 @@ function LinearAlgebraApp({ onBack }) {
     setSelectedRL(null); setRlAnswer(''); setRlFeedback(null);
     setQuizAnswers({}); setQuizSubmitted(false); setQuizPassed(false);
   };
-  const startQuiz = () => { setPhase('quiz'); setQuizAnswers({}); setQuizSubmitted(false); setQuizPassed(false); };
+  const startQuiz = () => { setPhase('quiz'); setQuizAnswers({}); setQuizSubmitted(false); setQuizPassed(false); setShuffledQuiz(shuffleQuiz(mission.quiz || [])); };
   const nextMission = () => { if (currentMission < 14) { setCurrentMission(c => c + 1); setPhase('intro'); } };
   const selectQuizOption = (qi, oi) => setQuizAnswers(prev => ({ ...prev, [qi]: oi }));
 
   const submitQuiz = () => {
-    const qs = mission.quiz || [];
+    const qs = shuffledQuiz;
     let allCorrect = qs.every((q, i) => quizAnswers[i] === q.correct);
     setQuizSubmitted(true);
     setQuizPassed(allCorrect);
@@ -624,7 +642,7 @@ function LinearAlgebraApp({ onBack }) {
         </button>
         {showSteps && mission.ggbSteps && (
           <div className="la-guidance">
-            {mission.ggbSteps.map((step, i) => <div key={i} className="la-guidance-step">{step}</div>)}
+            {mission.ggbSteps.map((step, i) => <div key={i} className="la-guidance-step"><span className="step-num">{i + 1}.</span> {step}</div>)}
           </div>
         )}
         {showHint && <div className="la-guidance-hint"><strong>Hint: </strong>{mission.ggbHint}</div>}
@@ -694,7 +712,7 @@ function LinearAlgebraApp({ onBack }) {
   };
 
   const quizSection = () => {
-    const qs = mission.quiz || [];
+    const qs = shuffledQuiz;
     const allAnswered = qs.every((_, i) => quizAnswers[i] !== undefined);
     return (
       <div className="la-quiz-section">
@@ -724,7 +742,7 @@ function LinearAlgebraApp({ onBack }) {
           <div>
             <div className={'la-quiz-result ' + (quizPassed ? 'pass' : 'fail')}>{quizPassed ? 'All correct!' : 'Some wrong. Try again!'}</div>
             {quizPassed && <button className="la-quiz-next-btn" onClick={nextMission}>{isLastMission ? 'Finish Module' : 'Next Mission'}</button>}
-            {!quizPassed && <button className="la-quiz-next-btn" onClick={() => { setQuizSubmitted(false); setQuizAnswers({}); }}>Retry Quiz</button>}
+            {!quizPassed && <button className="la-quiz-next-btn" onClick={() => { setQuizSubmitted(false); setQuizAnswers({}); setShuffledQuiz(shuffleQuiz(mission.quiz || [])); }}>Retry Quiz</button>}
           </div>
         )}
       </div>
