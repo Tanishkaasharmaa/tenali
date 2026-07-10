@@ -50165,7 +50165,7 @@ function MindReaderApp({ onBack }) {
     if (phase === 'setup') {
       return {
         expression: 'thinking',
-        text: "Psst! Got a math concept? Think of one below, keep it secret, and click Start!"
+        text: "Think of a mathematical concept from the grid below."
       };
     }
 
@@ -50175,41 +50175,24 @@ function MindReaderApp({ onBack }) {
       if (prediction) {
         return {
           expression: 'gamble',
-          text: `Boom! You are thinking of "${prediction.name}"! Right?`
+          text: `Is your concept "${prediction.name}"?`
         };
       }
       
+      let expr = 'thinking';
       if (royalChances === 1) {
-        return {
-          expression: 'distressed',
-          text: `Uh oh, my back is against the wall! Tell me: ${nextQuestion?.text}`
-        };
+        expr = 'distressed';
+      } else if (lastAnswer === 'dontknow') {
+        expr = 'bored';
+      } else if (confidence > 0.75) {
+        expr = 'smirk';
+      } else if (confidence > 0.4) {
+        expr = 'confident';
       }
 
-      if (lastAnswer === 'dontknow') {
-        return {
-          expression: 'bored',
-          text: `Uncertainty? Fine. Let's try this: ${nextQuestion?.text}`
-        };
-      }
-
-      if (confidence > 0.75) {
-        return {
-          expression: 'smirk',
-          text: `Oho, I see the path! Tell me: ${nextQuestion?.text}`
-        };
-      }
-      
-      if (confidence > 0.4) {
-        return {
-          expression: 'confident',
-          text: `I'm narrowing it down... ${nextQuestion?.text}`
-        };
-      }
-      
       return {
-        expression: 'thinking',
-        text: `Let's see... Is this true: ${nextQuestion?.text}`
+        expression: expr,
+        text: nextQuestion ? nextQuestion.text : ''
       };
     }
 
@@ -50217,7 +50200,7 @@ function MindReaderApp({ onBack }) {
       if (cheated) {
         return {
           expression: 'cheated',
-          text: `Aha! No trickery in my court. You said NO to "${actualConcept?.name || 'my guess'}!" 😉`
+          text: `You said NO to "${actualConcept?.name || 'my guess'}!" 😉`
         };
       }
       
@@ -50226,24 +50209,24 @@ function MindReaderApp({ onBack }) {
         if (!actualConcept) {
           return {
             expression: 'shocked',
-            text: "What?! My calculations failed? What math concept was it?!"
+            text: "What concept was it?!"
           };
         }
         return {
           expression: 'loss',
-          text: `Aha, "${actualConcept.name}"! Brilliant defense. I salute you!`
+          text: `Aha, "${actualConcept.name}"! I salute you!`
         };
       } else {
         return {
           expression: 'smirk',
-          text: `Victory! "${prediction?.name || 'Your concept'}" was no match for my royal brain!`
+          text: `Victory! "${prediction?.name || 'Your concept'}" was guessed!`
         };
       }
     }
 
     return {
       expression: 'thinking',
-      text: "Tenali is listening..."
+      text: ""
     };
   };
 
@@ -50280,8 +50263,8 @@ function MindReaderApp({ onBack }) {
           </button>
         </div>
 
-        {/* Character Hub */}
-        {(() => {
+        {/* Character Hub - only if not playing */}
+        {phase !== 'playing' && (() => {
           const stateObj = getTenaliState();
           return (
             <div className="character-hub" style={{ display: 'flex', gap: '20px', alignItems: 'center', background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: '16px', padding: '20px', marginBottom: '24px', flexWrap: 'wrap', boxShadow: '0 8px 32px rgba(0,0,0,0.08)', position: 'relative' }}>
@@ -50345,6 +50328,7 @@ function MindReaderApp({ onBack }) {
 
         {phase === 'playing' && (
           <div className="mr-card playing-card">
+            {/* 1. Chances & Confidence Meter */}
             <div className="game-hud">
               <div className="chances-display">
                 <span className="hud-label">Royal Chances:</span>
@@ -50372,7 +50356,29 @@ function MindReaderApp({ onBack }) {
               </div>
             </div>
 
-            {loading && <div className="loading-spinner">Tenali is thinking...</div>}
+            {/* 2. Tenali Raman (Character Hub) */}
+            {(() => {
+              const stateObj = getTenaliState();
+              return (
+                <div className="character-hub" style={{ display: 'flex', gap: '20px', alignItems: 'center', background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: '16px', padding: '20px', margin: '20px 0', flexWrap: 'wrap', boxShadow: '0 8px 32px rgba(0,0,0,0.08)', position: 'relative' }}>
+                  <TenaliAvatar expression={stateObj.expression} skin={equippedSkin} />
+                  <div className="dialogue-box" style={{ flex: 1, minWidth: '260px', position: 'relative' }}>
+                    <div className="avatar-header" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                      <span className="avatar-name" style={{ fontWeight: '700', color: 'var(--clr-accent)', fontSize: '1.1rem' }}>Tenali Raman</span>
+                      <span className="avatar-title-tag" style={{ background: 'rgba(74, 144, 226, 0.15)', color: 'var(--clr-accent)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.78rem', fontWeight: '600', border: '1px solid rgba(74, 144, 226, 0.3)' }}>
+                        {equippedTitle}
+                      </span>
+                    </div>
+                    <div className="dialogue-speech" style={{ fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic', position: 'relative', paddingLeft: '12px', borderLeft: '3px solid var(--clr-accent)' }}>
+                      "{stateObj.text}"
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* 3. Options to choose */}
+            {loading && <div className="loading-spinner" style={{ textAlign: 'center', margin: '15px 0' }}>Tenali is thinking...</div>}
 
             {!loading && prediction && (
               <div className="prediction-hub pulsing-gamble" style={{ padding: '10px 0' }}>
