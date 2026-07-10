@@ -94,7 +94,7 @@ export default function InteractiveLcmHcfApp({ onBack }) {
   const [quizScore, setQuizScore] = useState(0);
   const [quizFinished, setQuizFinished] = useState(false);
   const [quizHistory, setQuizHistory] = useState([]);
-  const [quizLoading, setQuizLoading] = useState(false);
+
 
   // --- Activity State Helpers ---
   const [activityState, setActivityState] = useState({});
@@ -1580,7 +1580,6 @@ export default function InteractiveLcmHcfApp({ onBack }) {
   const startQuiz = async (chosenConfidence) => {
     const activeConfidence = chosenConfidence || confidence || 'mod';
     setConfidence(activeConfidence);
-    setQuizLoading(true);
     setCurrentStep(10);
     setQuizQuestions([]);
     setQuizFinished(false);
@@ -1636,8 +1635,6 @@ export default function InteractiveLcmHcfApp({ onBack }) {
       console.error("Failed to load quiz from backend, generating client-side: ", e);
       const fallbackQs = diffs.map((diff) => generateClientQuestion(diff));
       setQuizQuestions(fallbackQs);
-    } finally {
-      setQuizLoading(false);
     }
   };
 
@@ -2382,12 +2379,9 @@ export default function InteractiveLcmHcfApp({ onBack }) {
   const renderCollectiblesBank = () => {
     const theme = COLLECTIBLE_THEMES[level];
     
-    // Count unlocked in current level (steps 1 to 8)
-    let unlockedCount = 0;
     const collectiblesList = theme.items.map((item, idx) => {
       const stepMapping = idx + 1; 
       const isUnlocked = !!unlockedCollectibles[`${level}_${stepMapping}`];
-      if (isUnlocked) unlockedCount++;
 
       return {
         ...item,
