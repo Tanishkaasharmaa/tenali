@@ -8911,6 +8911,359 @@ app.post('/diffeq-api/check', express.json(), (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
+// TENALI MIND READER (MVP API)
+// ═══════════════════════════════════════════════════════════════════════════
+const { QUESTIONS, CONCEPTS } = require('./mindReaderKB');
+
+app.post('/api/mindreader/next', express.json(), (req, res) => {
+  const history = req.body.history || []; // Array of { questionId, answer: 'yes' | 'no' | 'dontknow' }
+  const incorrectPredictions = req.body.incorrectPredictions || []; // Array of concept names
+
+  // 1. Initialize candidate pool
+  let activeConcepts = CONCEPTS.filter(c => !incorrectPredictions.includes(c.name));
+
+  if (activeConcepts.length === 0) {
+    return res.status(404).json({ error: 'No candidate concepts left' });
+  }
+
+  // 2. Perform Bayesian-like probability updates based on history
+  const probabilities = {};
+  activeConcepts.forEach(c => {
+    probabilities[c.id] = 1.0;
+  });
+
+  // Process history responses
+  history.forEach(h => {
+    const qId = h.questionId;
+    const ans = h.answer; // 'yes' | 'no' | 'dontknow'
+
+    activeConcepts.forEach(c => {
+      if (probabilities[c.id] === 0) return;
+
+      const expectedAnswer = c.answers[qId]; // true | false | null
+
+      if (ans === 'yes') {
+        if (expectedAnswer === true) {
+          probabilities[c.id] *= 0.98;
+        } else if (expectedAnswer === false) {
+          probabilities[c.id] = 0; // Strict elimination
+        } else {
+          probabilities[c.id] *= 0.5; // Muted update
+        }
+      } else if (ans === 'no') {
+        if (expectedAnswer === true) {
+          probabilities[c.id] = 0; // Strict elimination
+        } else if (expectedAnswer === false) {
+          probabilities[c.id] *= 0.98;
+        } else {
+          probabilities[c.id] *= 0.5; // Muted update
+        }
+      } else {
+        // 'dontknow' does not update probabilities (acts as 1.0)
+        probabilities[c.id] *= 1.0;
+      }
+    });
+  });
+
+  // Re-filter active concepts based on probabilities
+  activeConcepts = activeConcepts.filter(c => probabilities[c.id] > 0);
+
+  if (activeConcepts.length === 0) {
+    return res.status(409).json({ error: 'Inconsistent responses. No matching concepts found.' });
+  }
+
+  // Calculate sum of probabilities to re-normalize
+  let sum = 0;
+  activeConcepts.forEach(c => {
+    sum += probabilities[c.id];
+  });
+
+  // Re-normalize probabilities
+  activeConcepts.forEach(c => {
+    probabilities[c.id] /= sum;
+  });
+
+  // Sort concepts by probability descending
+  activeConcepts.sort((a, b) => probabilities[b.id] - probabilities[a.id]);
+
+  const maxProb = probabilities[activeConcepts[0].id];
+  const bestConcept = activeConcepts[0];
+
+  // 3. Check for prediction conditions (single candidate left or confidence >= 0.75)
+  if (activeConcepts.length === 1 || maxProb >= 0.75) {
+    return res.json({
+      prediction: {
+        id: bestConcept.id,
+        name: bestConcept.name,
+        description: bestConcept.description,
+        definingCharacteristics: bestConcept.definingCharacteristics,
+        recommendations: bestConcept.recommendations
+      },
+      confidence: maxProb,
+      remainingCount: activeConcepts.length
+    });
+  }
+
+  // 4. Select the next best question
+  const askedQIds = history.map(h => h.questionId);
+  const remainingQuestions = QUESTIONS.filter(q => !askedQIds.includes(q.id));
+
+  if (remainingQuestions.length === 0) {
+    // If no questions left, force prediction with top candidate
+    return res.json({
+      prediction: {
+        id: bestConcept.id,
+        name: bestConcept.name,
+        description: bestConcept.description,
+        definingCharacteristics: bestConcept.definingCharacteristics,
+        recommendations: bestConcept.recommendations
+      },
+      confidence: maxProb,
+      remainingCount: activeConcepts.length
+    });
+  }
+
+  // Find the question that splits the active concept pool closest to 50/50
+  let bestQ = null;
+  let minDiff = Infinity;
+
+  remainingQuestions.forEach(q => {
+    let yesWeight = 0;
+    let noWeight = 0;
+
+    activeConcepts.forEach(c => {
+      const cAns = c.answers[q.id];
+      if (cAns === true) {
+        yesWeight += probabilities[c.id];
+      } else if (cAns === false) {
+        noWeight += probabilities[c.id];
+      } else {
+        yesWeight += probabilities[c.id] * 0.5;
+        noWeight += probabilities[c.id] * 0.5;
+      }
+    });
+
+    const diff = Math.abs(yesWeight - noWeight);
+    if (diff < minDiff) {
+      minDiff = diff;
+      bestQ = q;
+    }
+  });
+
+  return res.json({
+    nextQuestion: bestQ,
+    confidence: maxProb,
+    remainingCount: activeConcepts.length,
+    isFinalQuestion: activeConcepts.length <= 2
+  });
+});
+
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'tenali-dev-secret-change-me';
+
+// In-memory profiles fallback when MongoDB is down
+const inMemoryProfiles = {}; // Keyed by username -> { username, mrr, mindReaderGamesToday, lastMindReaderGameDate, unlockedSkins }
+
+// Inline helper to authenticate optional users
+async function getOptionalUser(req) {
+  const authHeader = req.get('authorization') || '';
+  const match = /^Bearer\s+(.+)$/i.exec(authHeader);
+  if (!match) return null;
+  try {
+    const payload = jwt.verify(match[1], JWT_SECRET);
+    const username = payload.username;
+    if (!username) return null;
+
+    const mongoose = require('mongoose');
+    if (mongoose.connection.readyState === 1) {
+      const user = await auth.User.findById(payload.sub);
+      if (user) return user;
+    }
+
+    // Fall back to in-memory profile
+    const lowerName = username.toLowerCase();
+    if (!inMemoryProfiles[lowerName]) {
+      inMemoryProfiles[lowerName] = {
+        username: username,
+        mrr: 1000,
+        mindReaderGamesToday: 0,
+        lastMindReaderGameDate: new Date().toDateString(),
+        unlockedSkins: ["Classic Tenali"],
+        equippedSkin: 'classic',
+        equippedTitle: 'Novice Reader',
+        isInMemory: true
+      };
+    }
+    return inMemoryProfiles[lowerName];
+  } catch (_e) {
+    return null;
+  }
+}
+
+app.get('/api/mindreader/config', (req, res) => {
+  res.json({
+    dailyLimit: 999999,
+    confidenceThreshold: 0.75,
+    startingRoyalChances: 3,
+    maxQuestions: 20
+  });
+});
+
+app.get('/api/mindreader/profile', async (req, res) => {
+  try {
+    const user = await getOptionalUser(req);
+    const todayStr = new Date().toDateString();
+
+    if (user) {
+      let needsSave = false;
+      if (user.lastMindReaderGameDate !== todayStr) {
+        user.mindReaderGamesToday = 0;
+        user.lastMindReaderGameDate = todayStr;
+        needsSave = true;
+      }
+      if (needsSave && !user.isInMemory) {
+        await user.save();
+      }
+
+      return res.json({
+        mrr: user.mrr || 1000,
+        mindReaderGamesToday: user.mindReaderGamesToday || 0,
+        unlockedSkins: user.unlockedSkins || ["Classic Tenali"],
+        equippedSkin: user.equippedSkin || 'classic',
+        equippedTitle: user.equippedTitle || 'Novice Reader',
+        authenticated: true,
+        username: user.username
+      });
+    }
+
+    return res.json({
+      mrr: 1000,
+      mindReaderGamesToday: 0,
+      unlockedSkins: ["Classic Tenali"],
+      equippedSkin: 'classic',
+      equippedTitle: 'Novice Reader',
+      authenticated: false
+    });
+  } catch (err) {
+    console.error('[mindreader] profile error:', err);
+    return res.status(500).json({ error: 'Internal server error loading profile' });
+  }
+});
+
+app.post('/api/mindreader/equip', express.json(), async (req, res) => {
+  const { skin, title } = req.body;
+  try {
+    const user = await getOptionalUser(req);
+    if (user) {
+      if (skin) user.equippedSkin = skin;
+      if (title) user.equippedTitle = title;
+      
+      if (!user.isInMemory) {
+        await user.save();
+      } else {
+        inMemoryProfiles[user.username.toLowerCase()] = user;
+      }
+      return res.json({ success: true, equippedSkin: user.equippedSkin, equippedTitle: user.equippedTitle });
+    }
+    return res.json({ success: true, guest: true });
+  } catch (err) {
+    console.error('[mindreader] equip error:', err);
+    return res.status(500).json({ error: 'Internal server error saving equipment' });
+  }
+});
+
+app.post('/api/mindreader/end', express.json(), async (req, res) => {
+  const { outcome, concept, questionsCount, predictionsMade, scope } = req.body;
+
+  try {
+    const user = await getOptionalUser(req);
+    let finalMrr = 1000;
+    let finalGamesToday = 0;
+    let finalSkins = ["Classic Tenali"];
+    let authenticated = false;
+    let cheated = false;
+
+    if (predictionsMade && predictionsMade.includes(concept)) {
+      cheated = true;
+    }
+
+    if (user) {
+      authenticated = true;
+      const todayStr = new Date().toDateString();
+      
+      if (user.lastMindReaderGameDate !== todayStr) {
+        user.mindReaderGamesToday = 0;
+        user.lastMindReaderGameDate = todayStr;
+      }
+
+      if (cheated) {
+        // No rating change for trickery!
+        user.mrr = user.mrr || 1000;
+      } else if (outcome === 'win') {
+        user.mrr = (user.mrr || 1000) + 20;
+      } else {
+        user.mrr = Math.max(1000, (user.mrr || 1000) - 5);
+      }
+
+      user.mindReaderGamesToday += 1;
+      
+      if (!user.isInMemory) {
+        await user.save();
+      } else {
+        inMemoryProfiles[user.username.toLowerCase()] = user;
+      }
+
+      finalMrr = user.mrr;
+      finalGamesToday = user.mindReaderGamesToday;
+      finalSkins = user.unlockedSkins;
+    } else {
+      // Guest local calculation fallback base
+      const localMrr = 1000;
+      const diff = cheated ? 0 : (outcome === 'win' ? 20 : -5);
+      finalMrr = Math.max(1000, localMrr + diff);
+    }
+
+    const mongoose = require('mongoose');
+    if (mongoose.connection.readyState === 1) {
+      await auth.MindReaderAnalytic.create({
+        outcome: cheated ? 'loss' : outcome, // Log cheating as loss/discrepancy
+        concept: concept || 'Unknown',
+        questionsCount: questionsCount || 0,
+        scope: scope || 'curriculum',
+        predictionsMade: predictionsMade || []
+      }).catch(err => console.error('[mindreader] failed to save analytic:', err));
+    }
+
+    const { CONCEPTS } = require('./mindReaderKB');
+    const matchedConcept = CONCEPTS.find(c => c.name === concept || c.id === concept);
+    const recommendations = matchedConcept ? matchedConcept.recommendations : {
+      related: [],
+      prerequisites: [],
+      exercises: []
+    };
+
+    return res.json({
+      mrr: finalMrr,
+      mindReaderGamesToday: finalGamesToday,
+      unlockedSkins: finalSkins,
+      equippedSkin: user ? user.equippedSkin : 'classic',
+      equippedTitle: user ? user.equippedTitle : 'Novice Reader',
+      authenticated,
+      recommendations,
+      cheated
+    });
+
+  } catch (err) {
+    console.error('[mindreader] end game error:', err);
+    return res.status(500).json({ error: 'Internal server error ending game' });
+  }
+});
+
+app.get('/mindreader', (_req, res) => {
+  res.sendFile(path.join(clientDistPath, 'index.html'));
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
 // /graph — Prerequisite DAG visualisation
 // ═══════════════════════════════════════════════════════════════════════════
 app.get('/graph', (_req, res) => {

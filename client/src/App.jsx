@@ -35581,6 +35581,17 @@ function App() {
     )
   }
 
+  if (pathname === '/mindreader') {
+    return (
+      <>
+        <button className="theme-toggle" onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+        <AuthGate><MindReaderApp onBack={() => { window.location.href = '/' }} /></AuthGate>
+      </>
+    )
+  }
+
   if (pathname === '/gym') {
     return (<>
       <button className="theme-toggle" onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>{theme === 'dark' ? '☀️' : '🌙'}</button>
@@ -36038,6 +36049,7 @@ function App() {
     tatsavit: TatsavitApp,         // Tatsavit (progressive math drill)
     randommix: RandomMixApp,       // Random Mix (adaptive)
     custom: CustomApp,             // Custom lesson builder
+    mindreader: MindReaderApp,     // Tenali Mind Reader (Akinator game)
     gym: GymApp,                   // Unified adaptive Gym — bundles all 7 below
     guess: GuessNumberApp,         // Binary magic — guess a number 0–31
     gymdecimals: GymDecimalsApp,   // Gym Decimals — signed decimal multiplication (MCQ)
@@ -36084,6 +36096,7 @@ function Home({ onSelect }) {
     { key: 'randommix', name: 'Random Mix', subtitle: 'Adaptive cross-topic quiz', color: 'featured' },
     { key: 'custom', name: 'Custom Lesson', subtitle: 'Build your own mixed quiz', color: 'featured' },
     { key: 'gym', name: 'Gym', subtitle: 'Adaptive workout across all 7 gym puzzles', color: 'featured' },
+    { key: 'mindreader', name: 'Mind Reader', subtitle: 'Let Tenali read your mind!', color: 'featured' },
   ]
 
   // All regular quiz apps sorted alphabetically by name
@@ -49555,6 +49568,1007 @@ function TatsavitLineApp({ onBack }) {
  * @param {string} props.subtitle - Subtitle/description
  * @param {Function} props.onBack - Callback when back button is clicked
  * @param {React.ReactNode} props.children - Quiz content to display
+ */
+/**
+ * TenaliAvatar SVG Component
+ * Renders dynamically based on expression and equipped skin
+ */
+function TenaliAvatar({ expression, skin }) {
+  let turbanColor = '#e67e22'; // Orange default
+  let turbanAccent = '#d35400';
+  let robeColor = '#c0392b';
+  let jewelColor = null;
+
+  if (skin === 'royal') {
+    turbanColor = '#f1c40f'; // Golden
+    turbanAccent = '#f39c12';
+    robeColor = '#2980b9'; // Royal Blue
+    jewelColor = '#e74c3c'; // Ruby
+  } else if (skin === 'scholar') {
+    turbanColor = '#ecf0f1'; // Silver/White
+    turbanAccent = '#bdc3c7';
+    robeColor = '#7f8c8d'; // Slate grey robe
+    jewelColor = '#2ecc71'; // Emerald
+  }
+
+  let eyeLeft = <circle cx="40" cy="50" r="5" fill="#2c3e50" />;
+  let eyeRight = <circle cx="60" cy="50" r="5" fill="#2c3e50" />;
+  let eyebrows = (
+    <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+      <path d="M 33 42 Q 40 40 47 43" />
+      <path d="M 53 43 Q 60 40 67 42" />
+    </g>
+  );
+  let mouth = <path d="M 42 68 Q 50 72 58 68" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
+  let sweatDrop = null;
+
+  if (expression === 'thinking') {
+    eyeLeft = <ellipse cx="40" cy="50" rx="6" ry="3.5" fill="#2c3e50" />;
+    eyeRight = <ellipse cx="60" cy="50" rx="6" ry="3.5" fill="#2c3e50" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 33 43 Q 40 37 47 43" />
+        <path d="M 53 43 Q 60 43 67 43" />
+      </g>
+    );
+    mouth = <line x1="45" y1="67" x2="55" y2="67" stroke="#2c3e50" strokeWidth="3" strokeLinecap="round" />;
+  } else if (expression === 'confident') {
+    eyeLeft = <circle cx="40" cy="50" r="5.5" fill="#2c3e50" />;
+    eyeRight = <path d="M 55 50 Q 60 46 65 50" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 33 41 Q 40 38 47 42" />
+        <path d="M 53 38 Q 60 35 67 40" />
+      </g>
+    );
+    mouth = <path d="M 44 65 Q 52 70 59 62" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
+  } else if (expression === 'gamble') {
+    eyeLeft = (
+      <g>
+        <circle cx="40" cy="50" r="6" fill="#2c3e50" />
+        <circle cx="38" cy="48" r="2" fill="#ffffff" />
+      </g>
+    );
+    eyeRight = (
+      <g>
+        <circle cx="60" cy="50" r="6" fill="#2c3e50" />
+        <circle cx="58" cy="48" r="2" fill="#ffffff" />
+      </g>
+    );
+    mouth = <path d="M 40 64 Q 50 78 60 64" fill="#c0392b" stroke="#2c3e50" strokeWidth="3" strokeLinecap="round" />;
+  } else if (expression === 'victory') {
+    eyeLeft = <circle cx="40" cy="50" r="7" fill="#2c3e50" />;
+    eyeRight = <circle cx="60" cy="50" r="7" fill="#2c3e50" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 32 38 Q 40 34 48 38" />
+        <path d="M 52 38 Q 60 34 68 38" />
+      </g>
+    );
+    mouth = <ellipse cx="50" cy="69" rx="5" ry="7" fill="#2c3e50" />;
+    sweatDrop = <path d="M 72 45 C 72 45 76 52 72 55 C 69 57 67 53 72 45" fill="#3498db" className="sweat-drip-anim" />;
+  } else if (expression === 'loss') {
+    eyeLeft = <path d="M 34 52 Q 40 45 46 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
+    eyeRight = <path d="M 54 52 Q 60 45 66 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
+    mouth = <path d="M 38 62 Q 50 82 62 62 Z" fill="#2c3e50" />;
+  } else if (expression === 'cheated') {
+    eyeLeft = <ellipse cx="38" cy="50" rx="4" ry="5" fill="#2c3e50" />;
+    eyeRight = <ellipse cx="58" cy="50" rx="4" ry="5" fill="#2c3e50" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 33 45 Q 40 47 47 49" />
+        <path d="M 53 45 Q 60 43 67 41" />
+      </g>
+    );
+    mouth = <path d="M 42 66 Q 50 62 58 66" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
+  } else if (expression === 'smirk') {
+    eyeLeft = <circle cx="40" cy="50" r="5" fill="#2c3e50" />;
+    eyeRight = <ellipse cx="60" cy="50" rx="5" ry="3.2" fill="#2c3e50" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 33 42 Q 40 42 47 42" />
+        <path d="M 53 38 Q 60 32 67 36" />
+      </g>
+    );
+    mouth = <path d="M 44 68 Q 54 62 60 66" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
+  } else if (expression === 'shocked') {
+    eyeLeft = (
+      <g>
+        <circle cx="40" cy="50" r="7.5" fill="none" stroke="#2c3e50" strokeWidth="2" />
+        <circle cx="40" cy="50" r="2.5" fill="#2c3e50" />
+      </g>
+    );
+    eyeRight = (
+      <g>
+        <circle cx="60" cy="50" r="7.5" fill="none" stroke="#2c3e50" strokeWidth="2" />
+        <circle cx="60" cy="50" r="2.5" fill="#2c3e50" />
+      </g>
+    );
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 32 36 Q 40 32 48 36" />
+        <path d="M 52 36 Q 60 32 68 36" />
+      </g>
+    );
+    mouth = <ellipse cx="50" cy="72" rx="7" ry="10" fill="#2c3e50" />;
+    sweatDrop = <path d="M 72 45 C 72 45 76 52 72 55 C 69 57 67 53 72 45" fill="#3498db" className="sweat-drip-anim" />;
+  } else if (expression === 'bored') {
+    eyeLeft = <line x1="34" y1="50" x2="46" y2="50" stroke="#2c3e50" strokeWidth="3.5" strokeLinecap="round" />;
+    eyeRight = <line x1="54" y1="50" x2="66" y2="50" stroke="#2c3e50" strokeWidth="3.5" strokeLinecap="round" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2" strokeLinecap="round" fill="none">
+        <path d="M 33 45 Q 40 46 47 45" />
+        <path d="M 53 45 Q 60 46 67 45" />
+      </g>
+    );
+    mouth = <line x1="42" y1="68" x2="58" y2="68" stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" />;
+  } else if (expression === 'distressed') {
+    eyeLeft = <path d="M 35 52 Q 40 47 45 52" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
+    eyeRight = <path d="M 55 52 Q 60 47 65 52" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 33 46 Q 40 40 47 45" />
+        <path d="M 53 45 Q 60 40 67 46" />
+      </g>
+    );
+    mouth = <path d="M 42 70 Q 46 66 50 70 T 58 70" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
+    sweatDrop = <path d="M 28 45 C 28 45 24 52 28 55 C 31 57 33 53 28 45" fill="#3498db" className="sweat-drip-anim" />;
+  }
+
+  return (
+    <div className={`tenali-avatar-wrapper ${expression}-state`} style={{ width: '120px', height: '144px', transition: 'transform 0.3s ease' }}>
+      <svg 
+        viewBox="0 0 100 120" 
+        className="tenali-avatar-svg"
+        style={{ width: '100%', height: '100%' }}
+      >
+        <ellipse cx="50" cy="112" rx="35" ry="6" fill="rgba(0,0,0,0.15)" />
+        <rect x="44" y="85" width="12" height="15" fill="#f5cd79" rx="4" />
+        <path d="M 20 110 Q 50 95 80 110 L 80 120 L 20 120 Z" fill={robeColor} />
+        <path d="M 40 96 Q 50 106 60 96" stroke="#f5cd79" strokeWidth="3.5" fill="none" />
+        <rect x="28" y="38" width="44" height="52" rx="20" fill="#f5cd79" />
+        <path d="M 48 40 Q 50 48 50 48 Q 50 48 52 40 Z" fill="#e74c3c" />
+        <circle cx="50" cy="46" r="2" fill="#f1c40f" />
+        {eyebrows}
+        {eyeLeft}
+        {eyeRight}
+        <path d="M 48 56 Q 50 62 52 56" stroke="#2c3e50" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+        <g fill="#2c3e50">
+          <path d="M 49 63 C 44 63 36 60 30 65 C 33 66 38 67 43 65 C 47 64 49 63 49 63 Z" />
+          <path d="M 51 63 C 56 63 64 60 70 65 C 67 66 62 67 57 65 C 53 64 51 63 51 63 Z" />
+        </g>
+        {mouth}
+        <circle cx="26" cy="62" r="5" fill="#f5cd79" />
+        <circle cx="74" cy="62" r="5" fill="#f5cd79" />
+        <path d="M 23 42 C 23 20 77 20 77 42 C 77 42 70 32 50 32 C 30 32 23 42 23 42 Z" fill={turbanColor} />
+        <path d="M 22 42 Q 50 35 78 42 Q 50 50 22 42 Z" fill={turbanAccent} />
+        <path d="M 26 36 Q 50 28 74 36" stroke={turbanColor} strokeWidth="3" fill="none" />
+        <path d="M 32 30 Q 50 22 68 30" stroke={turbanAccent} strokeWidth="3" fill="none" />
+        {jewelColor && (
+          <g>
+            <rect x="47" y="26" width="6" height="8" rx="2" fill={jewelColor} transform="rotate(45 50 30)" />
+            <circle cx="50" cy="30" r="1.5" fill="#ffffff" />
+          </g>
+        )}
+        {sweatDrop}
+      </svg>
+    </div>
+  );
+}
+
+function MindReaderApp({ onBack }) {
+  const [phase, setPhase] = useState('setup'); // 'setup' | 'playing' | 'gameover'
+  const [history, setHistory] = useState([]);
+  const [incorrectPredictions, setIncorrectPredictions] = useState([]);
+  const [royalChances, setRoyalChances] = useState(3);
+  const [nextQuestion, setNextQuestion] = useState(null);
+  const [prediction, setPrediction] = useState(null);
+  const [confidence, setConfidence] = useState(0);
+  const [remainingCount, setRemainingCount] = useState(15);
+  const [isFinalQuestion, setIsFinalQuestion] = useState(false);
+  const [actualConcept, setActualConcept] = useState(null);
+  const [mrr, setMrr] = useState(1000);
+  const [gamesToday, setGamesToday] = useState(0);
+  const [dailyLimit, setDailyLimit] = useState(3);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [unlockedSkins, setUnlockedSkins] = useState(['Classic Tenali']);
+  const [equippedSkin, setEquippedSkin] = useState('classic');
+  const [equippedTitle, setEquippedTitle] = useState('Novice Reader');
+  const [showCabinet, setShowCabinet] = useState(false);
+  const [recommendations, setRecommendations] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [mrrChange, setMrrChange] = useState(0);
+  const [cheated, setCheated] = useState(false);
+
+  // 15 MVP concepts
+  const mvpConcepts = [
+    'Prime Number', 'HCF (Highest Common Factor)', 'LCM (Lowest Common Multiple)',
+    'Square Root', 'Equivalent Fractions', 'Percentage', 'Linear Equation',
+    'Quadratic Equation', 'Matrix', 'Vector', 'Right Triangle',
+    "Pythagoras' Theorem", 'Venn Diagram', 'Mean', 'Probability'
+  ];
+
+  const titlesList = [
+    { name: 'Novice Reader', minMrr: 1000 },
+    { name: 'Royal Trickster', minMrr: 1100 },
+    { name: 'Court Genius', minMrr: 1250 },
+    { name: 'Mind Emperor', minMrr: 1400 },
+  ];
+
+  const skinsList = [
+    { id: 'classic', name: 'Classic Tenali', minMrr: 1000, description: 'Traditional court orange attire.' },
+    { id: 'royal', name: 'Royal Robes', minMrr: 1150, description: 'Gold and royal blue garments fitted for the palace.' },
+    { id: 'scholar', name: 'Sage Scholar', minMrr: 1300, description: 'White silver robes showing absolute mathematical wisdom.' }
+  ];
+
+  // Map to matching database or standard concept structures
+  const conceptsFullList = [
+    { name: 'Prime Number', description: 'A whole number greater than 1 with exactly two positive divisors: 1 and itself.', recommendations: { related: ['Composite Number', 'Prime Factorization'], prerequisites: ['Factors and Multiples'], exercises: ['Chapter 1 Lesson 1 Practice'] } },
+    { name: 'HCF (Highest Common Factor)', description: 'The largest positive integer that divides two or more integers without a remainder.', recommendations: { related: ['LCM', 'Prime Factorization'], prerequisites: ['Factors and Multiples'], exercises: ['Chapter 1 Lesson 2 Practice'] } },
+    { name: 'LCM (Lowest Common Multiple)', description: 'The smallest positive integer that is a multiple of two or more integers.', recommendations: { related: ['HCF', 'Prime Factorization'], prerequisites: ['Factors and Multiples'], exercises: ['Chapter 1 Lesson 2 Practice'] } },
+    { name: 'Square Root', description: 'A value that, when multiplied by itself, gives the original number.', recommendations: { related: ['Square Number', 'Surds'], prerequisites: ['Powers and Roots'], exercises: ['Chapter 1 Lesson 6 Practice'] } },
+    { name: 'Equivalent Fractions', description: 'Fractions that represent the same value or proportion of a whole, even if they have different numerators and denominators.', recommendations: { related: ['Simplest Form', 'Ratio'], prerequisites: ['Fractions Intro'], exercises: ['Chapter 5 Lesson 1 Practice'] } },
+    { name: 'Percentage', description: 'A relative value representing the hundredth part of any quantity.', recommendations: { related: ['Equivalent Fractions', 'Simple Interest'], prerequisites: ['Fractions and Decimals'], exercises: ['Chapter 5 Lesson 8 Practice'] } },
+    { name: 'Linear Equation', description: 'An equation between two variables that gives a straight line when plotted on a graph.', recommendations: { related: ['Quadratic Equation', 'Simultaneous Equations'], prerequisites: ['Simplifying Terms', 'Substitution'], exercises: ['Chapter 6 Lesson 1 Practice'] } },
+    { name: 'Quadratic Equation', description: 'An equation of degree 2, typically written as ax² + bx + c = 0, representing a curved path (parabola).', recommendations: { related: ['Linear Equation', 'Quadratic Formula'], prerequisites: ['Factoring Quadratics'], exercises: ['Chapter 10 Lesson 3 Practice'] } },
+    { name: 'Matrix', description: 'A rectangular array of numbers arranged in rows and columns.', recommendations: { related: ['Vector', 'Translation'], prerequisites: ['Basic Arithmetic'], exercises: ['Matrix Operations Practice'] } },
+    { name: 'Vector', description: 'A quantity having direction as well as magnitude.', recommendations: { related: ['Matrix', 'Translation'], prerequisites: ['Coordinate Geometry'], exercises: ['Chapter 23 Lesson 2 Practice'] } },
+    { name: 'Right Triangle', description: 'A triangle in which one angle is a right angle (exactly 90 degrees).', recommendations: { related: ['Pythagoras\' Theorem', 'Trigonometric Ratios'], prerequisites: ['Triangles Classification'], exercises: ['Chapter 3 Lesson 3 Practice'] } },
+    { name: "Pythagoras' Theorem", description: 'The theorem stating that in a right-angled triangle, the square of the hypotenuse is equal to the sum of the squares of the other two sides (a² + b² = c²).', recommendations: { related: ['Right Triangle', 'Trigonometric Ratios'], prerequisites: ['Right Triangle', 'Square Roots'], exercises: ['Chapter 11 Lesson 1 Practice'] } },
+    { name: 'Venn Diagram', description: 'A diagram that shows all possible logical relations between a finite collection of different sets.', recommendations: { related: ['Set Operations', 'Probability'], prerequisites: ['Sets Intro'], exercises: ['Chapter 9 Lesson 3 Practice'] } },
+    { name: 'Mean', description: 'The average of a set of numbers, calculated by summing all values and dividing by the total count.', recommendations: { related: ['Median', 'Mode', 'Range'], prerequisites: ['Basic Arithmetic'], exercises: ['Chapter 12 Lesson 1 Practice'] } },
+    { name: 'Probability', description: 'The branch of mathematics concerning numerical descriptions of how likely an event is to occur.', recommendations: { related: ['Venn Diagram', 'Sample Space'], prerequisites: ['Fractions and Percentages'], exercises: ['Chapter 8 Lesson 1 Practice'] } }
+  ];
+
+  useEffect(() => {
+    const loadProfileAndConfig = async () => {
+      setLoading(true);
+      try {
+        const configRes = await fetch(`${API}/api/mindreader/config`);
+        if (configRes.ok) {
+          const configData = await configRes.json();
+          if (configData.dailyLimit) setDailyLimit(configData.dailyLimit);
+        }
+
+        const token = authGetToken();
+        const headers = {};
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+        
+        const profileRes = await fetch(`${API}/api/mindreader/profile`, { headers });
+        if (profileRes.ok) {
+          const profileData = await profileRes.json();
+          if (profileData.authenticated) {
+            setMrr(profileData.mrr);
+            setGamesToday(profileData.mindReaderGamesToday);
+            setUnlockedSkins(profileData.unlockedSkins || ['Classic Tenali']);
+            setEquippedSkin(profileData.equippedSkin || 'classic');
+            setEquippedTitle(profileData.equippedTitle || 'Novice Reader');
+            setAuthenticated(true);
+          } else {
+            setAuthenticated(false);
+            const localMrr = parseInt(localStorage.getItem('tenali-mindreader-mrr') || '1000', 10);
+            setMrr(localMrr);
+            setEquippedSkin(localStorage.getItem('tenali-mindreader-skin') || 'classic');
+            setEquippedTitle(localStorage.getItem('tenali-mindreader-title') || 'Novice Reader');
+
+            const todayStr = new Date().toDateString();
+            const lastLocalGameDate = localStorage.getItem('tenali-mindreader-last-date') || '';
+            let localGamesToday = parseInt(localStorage.getItem('tenali-mindreader-games-today') || '0', 10);
+
+            if (lastLocalGameDate !== todayStr) {
+              localGamesToday = 0;
+              localStorage.setItem('tenali-mindreader-games-today', '0');
+              localStorage.setItem('tenali-mindreader-last-date', todayStr);
+            }
+            setGamesToday(localGamesToday);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load profile/config:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfileAndConfig();
+  }, []);
+
+  const handleEquipItem = async (type, val) => {
+    if (type === 'skin') {
+      setEquippedSkin(val);
+      if (authenticated) {
+        try {
+          const token = authGetToken();
+          await fetch(`${API}/api/mindreader/equip`, {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': token ? `Bearer ${token}` : ''
+            },
+            body: JSON.stringify({ skin: val })
+          });
+        } catch (err) {
+          console.error('Failed to sync equipped skin:', err);
+        }
+      } else {
+        try { localStorage.setItem('tenali-mindreader-skin', val) } catch {}
+      }
+    } else if (type === 'title') {
+      setEquippedTitle(val);
+      if (authenticated) {
+        try {
+          const token = authGetToken();
+          await fetch(`${API}/api/mindreader/equip`, {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': token ? `Bearer ${token}` : ''
+            },
+            body: JSON.stringify({ title: val })
+          });
+        } catch (err) {
+          console.error('Failed to sync equipped title:', err);
+        }
+      } else {
+        try { localStorage.setItem('tenali-mindreader-title', val) } catch {}
+      }
+    }
+  };
+
+  const startGame = async () => {
+    setLoading(true);
+    setErrorMsg('');
+    setHistory([]);
+    setIncorrectPredictions([]);
+    setRoyalChances(3);
+    setPrediction(null);
+    setNextQuestion(null);
+    setActualConcept(null);
+    setMrrChange(0);
+    setRecommendations(null);
+    setCheated(false);
+
+    try {
+      const res = await fetch(`${API}/api/mindreader/next`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ history: [], incorrectPredictions: [] })
+      });
+      if (!res.ok) throw new Error('Failed to start engine');
+      const data = await res.json();
+      
+      setConfidence(data.confidence || 0);
+      setRemainingCount(data.remainingCount || 15);
+      
+      if (data.prediction) {
+        setPrediction(data.prediction);
+      } else {
+        setNextQuestion(data.nextQuestion);
+        setIsFinalQuestion(data.isFinalQuestion || false);
+      }
+      setPhase('playing');
+    } catch (err) {
+      setErrorMsg(err.message || 'Error communicating with Tenali.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAnswer = async (answerVal) => {
+    if (loading || !nextQuestion) return;
+    setLoading(true);
+    setErrorMsg('');
+
+    const newHistory = [...history, { questionId: nextQuestion.id, answer: answerVal }];
+    setHistory(newHistory);
+
+    try {
+      const res = await fetch(`${API}/api/mindreader/next`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ history: newHistory, incorrectPredictions })
+      });
+
+      if (res.status === 409) {
+        setNextQuestion(null);
+        setPrediction(null);
+        setPhase('gameover');
+        return;
+      }
+
+      if (!res.ok) throw new Error('Error getting next question.');
+      const data = await res.json();
+
+      setConfidence(data.confidence || 0);
+      setRemainingCount(data.remainingCount || 0);
+
+      if (data.prediction) {
+        setPrediction(data.prediction);
+        setNextQuestion(null);
+      } else if (data.nextQuestion) {
+        setNextQuestion(data.nextQuestion);
+        setIsFinalQuestion(data.isFinalQuestion || false);
+        setPrediction(null);
+      } else {
+        setNextQuestion(null);
+        setPrediction(null);
+        setPhase('gameover');
+      }
+    } catch (err) {
+      setErrorMsg(err.message || 'Error processing response.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGambleResponse = async (isCorrectGuess) => {
+    if (loading || !prediction) return;
+
+    if (isCorrectGuess) {
+      await callEndGameAPI('loss', prediction.name);
+      setPhase('gameover');
+    } else {
+      const nextChances = royalChances - 1;
+      setRoyalChances(nextChances);
+
+      const newIncorrect = [...incorrectPredictions, prediction.name];
+      setIncorrectPredictions(newIncorrect);
+      setPrediction(null);
+
+      if (nextChances <= 0) {
+        setPhase('gameover');
+      } else {
+        setLoading(true);
+        try {
+          const res = await fetch(`${API}/api/mindreader/next`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ history, incorrectPredictions: newIncorrect })
+          });
+
+          if (res.status === 409 || !res.ok) {
+            setPhase('gameover');
+            return;
+          }
+
+          const data = await res.json();
+          setConfidence(data.confidence || 0);
+          setRemainingCount(data.remainingCount || 0);
+
+          if (data.prediction) {
+            setPrediction(data.prediction);
+          } else {
+            setNextQuestion(data.nextQuestion);
+            setIsFinalQuestion(data.isFinalQuestion || false);
+          }
+        } catch (err) {
+          setErrorMsg('Error recovering from incorrect gamble.');
+        } finally {
+          setLoading(false);
+        }
+      }
+    }
+  };
+
+  const callEndGameAPI = async (outcome, conceptName) => {
+    setLoading(true);
+    setErrorMsg('');
+    
+    const token = authGetToken();
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const payload = {
+      outcome,
+      concept: conceptName || 'Unknown',
+      questionsCount: history.length,
+      predictionsMade: incorrectPredictions,
+      scope: 'curriculum'
+    };
+
+    try {
+      const res = await fetch(`${API}/api/mindreader/end`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error('Failed to save game stats');
+      const data = await res.json();
+
+      setCheated(data.cheated || false);
+
+      if (data.authenticated) {
+        setMrrChange(data.cheated ? 0 : (data.mrr - mrr));
+        setMrr(data.mrr);
+        setGamesToday(data.mindReaderGamesToday);
+        setRecommendations(data.recommendations);
+      } else {
+        const isCheat = payload.predictionsMade.includes(payload.concept);
+        const diff = isCheat ? 0 : (outcome === 'win' ? 20 : -5);
+        const newMrr = Math.max(1000, mrr + diff);
+        setMrrChange(diff);
+        setMrr(newMrr);
+        
+        const newGamesToday = gamesToday + 1;
+        setGamesToday(newGamesToday);
+        setRecommendations(data.recommendations);
+
+        try {
+          localStorage.setItem('tenali-mindreader-mrr', String(newMrr));
+          localStorage.setItem('tenali-mindreader-games-today', String(newGamesToday));
+          localStorage.setItem('tenali-mindreader-last-date', new Date().toDateString());
+        } catch {}
+      }
+    } catch (err) {
+      const isCheat = payload.predictionsMade.includes(payload.concept);
+      setCheated(isCheat);
+      const diff = isCheat ? 0 : (outcome === 'win' ? 20 : -5);
+      const newMrr = Math.max(1000, mrr + diff);
+      setMrrChange(diff);
+      setMrr(newMrr);
+      const newGamesToday = gamesToday + 1;
+      setGamesToday(newGamesToday);
+
+      const matchedConcept = conceptsFullList.find(c => c.name === conceptName);
+      setRecommendations(matchedConcept ? matchedConcept.recommendations : {
+        related: [],
+        prerequisites: [],
+        exercises: []
+      });
+
+      try {
+        localStorage.setItem('tenali-mindreader-mrr', String(newMrr));
+        localStorage.setItem('tenali-mindreader-games-today', String(newGamesToday));
+        localStorage.setItem('tenali-mindreader-last-date', new Date().toDateString());
+      } catch {}
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConceptSelectedForWin = async (conceptName) => {
+    const selected = conceptsFullList.find(c => c.name === conceptName);
+    setActualConcept(selected || null);
+    await callEndGameAPI('win', conceptName);
+  };
+
+  const handlePlayAgain = async () => {
+    if (phase === 'gameover' && !recommendations && (royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0))) {
+      await callEndGameAPI('win', 'Unknown');
+    }
+    setPhase('setup');
+    setRecommendations(null);
+    setActualConcept(null);
+  };
+
+  const handleBackToHome = async () => {
+    if (phase === 'gameover' && !recommendations && (royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0))) {
+      await callEndGameAPI('win', 'Unknown');
+    }
+    onBack();
+  };
+
+  const getTenaliState = () => {
+    if (gamesToday >= dailyLimit) {
+      return {
+        expression: 'bored',
+        text: "Energy depleted! Do some lessons. See you tomorrow! ⚡"
+      };
+    }
+
+    if (phase === 'setup') {
+      return {
+        expression: 'thinking',
+        text: "Psst! Got a math concept? Think of one below, keep it secret, and click Start!"
+      };
+    }
+
+    if (phase === 'playing') {
+      const lastAnswer = history.length > 0 ? history[history.length - 1].answer : null;
+      
+      if (prediction) {
+        return {
+          expression: 'gamble',
+          text: `Boom! You are thinking of "${prediction.name}"! Right?`
+        };
+      }
+      
+      if (royalChances === 1) {
+        return {
+          expression: 'distressed',
+          text: `Uh oh, my back is against the wall! Tell me: ${nextQuestion?.text}`
+        };
+      }
+
+      if (lastAnswer === 'dontknow') {
+        return {
+          expression: 'bored',
+          text: `Uncertainty? Fine. Let's try this: ${nextQuestion?.text}`
+        };
+      }
+
+      if (confidence > 0.75) {
+        return {
+          expression: 'smirk',
+          text: `Oho, I see the path! Tell me: ${nextQuestion?.text}`
+        };
+      }
+      
+      if (confidence > 0.4) {
+        return {
+          expression: 'confident',
+          text: `I'm narrowing it down... ${nextQuestion?.text}`
+        };
+      }
+      
+      return {
+        expression: 'thinking',
+        text: `Let's see... Is this true: ${nextQuestion?.text}`
+      };
+    }
+
+    if (phase === 'gameover') {
+      if (cheated) {
+        return {
+          expression: 'cheated',
+          text: `Aha! No trickery in my court. You said NO to "${actualConcept?.name || 'my guess'}!" 😉`
+        };
+      }
+      
+      const didPlayerWin = royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0);
+      if (didPlayerWin) {
+        if (!actualConcept) {
+          return {
+            expression: 'shocked',
+            text: "What?! My calculations failed? What math concept was it?!"
+          };
+        }
+        return {
+          expression: 'loss',
+          text: `Aha, "${actualConcept.name}"! Brilliant defense. I salute you!`
+        };
+      } else {
+        return {
+          expression: 'smirk',
+          text: `Victory! "${prediction?.name || 'Your concept'}" was no match for my royal brain!`
+        };
+      }
+    }
+
+    return {
+      expression: 'thinking',
+      text: "Tenali is listening..."
+    };
+  };
+
+  const getRiskMeterLabel = () => {
+    if (confidence <= 0.25) return 'Tenali is studying your mind...';
+    if (confidence <= 0.50) return 'Tenali is scanning patterns...';
+    if (confidence <= 0.75) return 'Tenali is narrowing it down!';
+    return 'Tenali is highly confident!';
+  };
+
+  const getMeterColorClass = () => {
+    if (confidence <= 0.25) return 'meter-low';
+    if (confidence <= 0.50) return 'meter-medium';
+    if (confidence <= 0.75) return 'meter-high';
+    return 'meter-gamble';
+  };
+
+  const matchedRecConcept = conceptsFullList.find(
+    c => c.name === (prediction ? prediction.name : (actualConcept ? actualConcept.name : ''))
+  );
+
+  return (
+    <QuizLayout title="Tenali Mind Reader" subtitle="Recreational learning game" onBack={handleBackToHome}>
+      <div className="mindreader-container">
+        
+        {/* Top Hud & Rewards Cabinet Button */}
+        <div className="mr-top-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', width: '100%', flexWrap: 'wrap', gap: '10px' }}>
+          <div className="mrr-hud" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <span className="mrr-pill" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>🔮 MRR: <strong>{mrr}</strong></span>
+            <span className="title-pill" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>🏷️ Title: <strong>{equippedTitle}</strong></span>
+          </div>
+          <button className="cabinet-toggle-btn" onClick={() => setShowCabinet(true)} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, var(--clr-accent) 0%, #8e44ad 100%)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '20px', cursor: 'pointer', fontWeight: '600', boxShadow: '0 4px 12px rgba(142, 68, 173, 0.2)', transition: 'all 0.2s' }}>
+            🎁 Rewards Cabinet
+          </button>
+        </div>
+
+        {/* Character Hub */}
+        {(() => {
+          const stateObj = getTenaliState();
+          return (
+            <div className="character-hub" style={{ display: 'flex', gap: '20px', alignItems: 'center', background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: '16px', padding: '20px', marginBottom: '24px', flexWrap: 'wrap', boxShadow: '0 8px 32px rgba(0,0,0,0.08)', position: 'relative' }}>
+              <TenaliAvatar expression={stateObj.expression} skin={equippedSkin} />
+              <div className="dialogue-box" style={{ flex: 1, minWidth: '260px', position: 'relative' }}>
+                <div className="avatar-header" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                  <span className="avatar-name" style={{ fontWeight: '700', color: 'var(--clr-accent)', fontSize: '1.1rem' }}>Tenali Raman</span>
+                  <span className="avatar-title-tag" style={{ background: 'rgba(74, 144, 226, 0.15)', color: 'var(--clr-accent)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.78rem', fontWeight: '600', border: '1px solid rgba(74, 144, 226, 0.3)' }}>
+                    {equippedTitle}
+                  </span>
+                </div>
+                <div className="dialogue-speech" style={{ fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic', position: 'relative', paddingLeft: '12px', borderLeft: '3px solid var(--clr-accent)' }}>
+                  "{stateObj.text}"
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {phase === 'setup' && (
+          <div className="mr-card setup-card">
+            <h2>Think of a Concept!</h2>
+            <p className="instruction-text">
+              Secretly choose any mathematical concept from the list below without telling anyone or typing it.
+              Tenali will ask Yes/No questions and try to guess what you are thinking!
+            </p>
+            
+            <div className="concept-chips">
+              {mvpConcepts.map((c, i) => (
+                <span key={i} className="concept-chip">{c}</span>
+              ))}
+            </div>
+
+            <div className="mrr-badge-row" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '20px' }}>
+              <div className="mrr-badge">
+                <span className="badge-label">MIND READER RATING</span>
+                <span className="badge-value">🔮 {mrr}</span>
+              </div>
+              <div className="mrr-badge">
+                <span className="badge-label">DAILY CHANCES LEFT</span>
+                <span className="badge-value">⚡ {Math.max(0, dailyLimit - gamesToday)} / {dailyLimit}</span>
+              </div>
+            </div>
+
+            {errorMsg && <p className="error-text">{errorMsg}</p>}
+
+            {gamesToday >= dailyLimit ? (
+               <div className="lockout-warning-box" style={{ marginTop: '20px', padding: '16px', background: 'rgba(231, 76, 60, 0.1)', border: '1px solid rgba(231, 76, 60, 0.3)', borderRadius: '12px', color: 'var(--clr-wrong)', textAlign: 'center' }}>
+                 <p style={{ fontWeight: '600', marginBottom: '8px' }}>⚠️ Daily Limit Reached!</p>
+                 <p style={{ fontSize: '0.92rem', opacity: 0.9, lineHeight: 1.4 }}>
+                   My mind reading energy is depleted for today! Please complete some curriculum lessons and try again tomorrow.
+                 </p>
+               </div>
+            ) : (
+              <button className="submit-btn start-game-btn" onClick={startGame} disabled={loading}>
+                {loading ? 'Entering...' : 'Start Game →'}
+              </button>
+            )}
+          </div>
+        )}
+
+        {phase === 'playing' && (
+          <div className="mr-card playing-card">
+            <div className="game-hud">
+              <div className="chances-display">
+                <span className="hud-label">Royal Chances:</span>
+                <span className="hud-values">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <span key={i} className={`chance-heart ${i < royalChances ? 'active' : 'depleted'}`} style={{ marginRight: 4 }}>👑</span>
+                  ))}
+                </span>
+              </div>
+              <div className="remaining-count-pill">
+                Remaining: {remainingCount}
+              </div>
+            </div>
+
+            <div className="risk-meter-container">
+              <div className="risk-label-row">
+                <span>Confidence Meter</span>
+                <span className={`risk-status ${getMeterColorClass()}`}>{getRiskMeterLabel()}</span>
+              </div>
+              <div className="risk-bar-track">
+                <div 
+                  className={`risk-bar-fill ${getMeterColorClass()}`} 
+                  style={{ width: `${confidence * 100}%` }}
+                ></div>
+              </div>
+            </div>
+
+            {loading && <div className="loading-spinner">Tenali is thinking...</div>}
+
+            {!loading && prediction && (
+              <div className="prediction-hub pulsing-gamble" style={{ padding: '10px 0' }}>
+                <div className="button-row gamble-btns">
+                  <button className="submit-btn correct-btn" onClick={() => handleGambleResponse(true)}>
+                    Yes, you read my mind!
+                  </button>
+                  <button className="submit-btn wrong-btn" onClick={() => handleGambleResponse(false)}>
+                    No, that is incorrect!
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {!loading && nextQuestion && (
+              <div className={`question-hub ${isFinalQuestion ? 'final-question-flash' : ''}`} style={{ padding: '10px 0' }}>
+                {isFinalQuestion && <div className="final-q-banner" style={{ marginBottom: '15px' }}>⚠️ FINAL QUESTION ⚠️</div>}
+                <div className="button-row action-btns">
+                  <button className="submit-btn yes-btn" onClick={() => handleAnswer('yes')}>Yes</button>
+                  <button className="submit-btn no-btn" onClick={() => handleAnswer('no')}>No</button>
+                  <button className="submit-btn dontknow-btn" onClick={() => handleAnswer('dontknow')}>Don't Know</button>
+                </div>
+              </div>
+            )}
+
+            {errorMsg && <p className="error-text">{errorMsg}</p>}
+          </div>
+        )}
+
+        {phase === 'gameover' && (
+          <div className="mr-card gameover-card">
+            {royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0) ? (
+              <div className="win-display">
+                <h2>👑 VICTORY! 👑</h2>
+                <p className="outcome-desc">You defeated Tenali! He ran out of Royal Chances or couldn't guess your concept.</p>
+                {mrrChange > 0 && !cheated && <div className="mrr-up-anim">MRR Rating: {mrr - mrrChange} ➔ {mrr} (+{mrrChange})!</div>}
+
+                {cheated && (
+                  <div className="cheating-warning-box" style={{ marginTop: '20px', padding: '16px', background: 'rgba(241, 196, 15, 0.1)', border: '1px solid rgba(241, 196, 15, 0.3)', borderRadius: '12px', color: '#d35400', textAlign: 'center' }}>
+                    <p style={{ fontWeight: '700', fontSize: '1.1rem', marginBottom: '8px' }}>🔮 Tenali catches you red-handed! 🔮</p>
+                    <p style={{ fontSize: '0.95rem', lineHeight: 1.45 }}>
+                      "Aha! You told me my guess of <strong>{actualConcept?.name}</strong> was incorrect, but now you claim you were thinking of it! 
+                      Tenali's sharp mind cannot be fooled so easily. No MRR rating points awarded for trickery! 😉"
+                    </p>
+                  </div>
+                )}
+
+                {!recommendations && (
+                  <div className="actual-concept-selection" style={{ marginTop: 20 }}>
+                    <p style={{ marginBottom: 8 }}>What concept were you secretly thinking of?</p>
+                    <select 
+                      onChange={(e) => handleConceptSelectedForWin(e.target.value)}
+                      defaultValue=""
+                      style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--clr-surface)', color: 'var(--clr-text)', border: '1px solid var(--clr-border)', width: '100%' }}
+                    >
+                      <option value="" disabled>-- Select your concept --</option>
+                      {mvpConcepts.map((c, i) => (
+                        <option key={i} value={c}>{c}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="loss-display">
+                <h2>🔮 TENALI GUESSED IT! 🔮</h2>
+                <p className="outcome-desc">Tenali correctly identified your concept: <strong>{prediction?.name}</strong></p>
+                {mrrChange < 0 ? (
+                  <div className="mrr-down-anim" style={{ color: 'var(--clr-wrong)', fontWeight: 700, padding: '8px', background: 'rgba(231, 76, 60, 0.1)', borderRadius: '8px', display: 'inline-block', margin: '0 auto' }}>
+                    MRR Rating: {mrr - mrrChange} ➔ {mrr} ({mrrChange})!
+                  </div>
+                ) : (
+                  <div className="mrr-no-change">MRR Rating: {mrr} (+0)</div>
+                )}
+
+                {prediction?.definingCharacteristics && (
+                  <div className="reasoning-box">
+                    <h4>Defining Characteristics:</h4>
+                    <ul>
+                      {prediction.definingCharacteristics.map((char, i) => (
+                        <li key={i}>{char}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {recommendations && (
+              <div className="recommendations-box" style={{ marginTop: 20, textAlign: 'left', padding: '16px', background: 'var(--clr-surface)', borderRadius: '10px', border: '1px solid var(--clr-border)' }}>
+                <h3>Recommendations & Review</h3>
+                {matchedRecConcept && <p style={{ margin: '8px 0' }}><strong>Description:</strong> {matchedRecConcept.description}</p>}
+                <p style={{ margin: '8px 0' }}><strong>Related Concepts:</strong> {recommendations.related.join(', ')}</p>
+                <p style={{ margin: '8px 0' }}><strong>Prerequisite Topics:</strong> {recommendations.prerequisites.join(', ')}</p>
+                <p style={{ margin: '8px 0' }}><strong>Exercises:</strong> {recommendations.exercises.join(', ')}</p>
+              </div>
+            )}
+
+            <button className="submit-btn restart-btn" onClick={handlePlayAgain} style={{ marginTop: 24 }} disabled={loading}>
+              {loading ? 'Logging game...' : 'Play Again'}
+            </button>
+          </div>
+        )}
+
+      </div>
+
+      {/* Rewards Cabinet Sliding Drawer */}
+      {showCabinet && (
+        <div className="cabinet-overlay" onClick={() => setShowCabinet(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', justifyContent: 'flex-end', backdropFilter: 'blur(4px)' }}>
+          <div className="cabinet-drawer" onClick={(e) => e.stopPropagation()} style={{ width: '450px', maxWidth: '100%', height: '100%', background: 'var(--clr-surface)', boxShadow: '-10px 0 30px rgba(0,0,0,0.2)', padding: '30px', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+            <div className="cabinet-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid var(--clr-border)', paddingBottom: '12px' }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', color: 'var(--clr-text)' }}>🎁 Rewards Cabinet</h2>
+              <button className="close-cabinet-btn" onClick={() => setShowCabinet(false)} style={{ background: 'none', border: 'none', fontSize: '1.8rem', cursor: 'pointer', color: 'var(--clr-text-soft)' }}>&times;</button>
+            </div>
+            <p style={{ fontSize: '0.9rem', color: 'var(--clr-text-soft)', marginBottom: '20px', lineHeight: 1.4 }}>
+              Earn Mind Reader Rating (MRR) by defeating Tenali in games. Higher MRR unlocks special skins and titles!
+            </p>
+            <div className="cabinet-mrr-display" style={{ background: 'linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(142, 68, 173, 0.1) 100%)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '16px', textAlign: 'center', marginBottom: '24px' }}>
+              <span style={{ fontSize: '0.85rem', color: 'var(--clr-text-soft)', display: 'block', textTransform: 'uppercase', letterSpacing: '1px' }}>Your Current Rating</span>
+              <span style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--clr-accent)', display: 'block', margin: '4px 0' }}>🔮 {mrr} MRR</span>
+            </div>
+
+            {/* Skins List */}
+            <h3 style={{ borderBottom: '1px solid var(--clr-border)', paddingBottom: '8px', marginBottom: '12px', fontSize: '1.1rem', color: 'var(--clr-text)' }}>Skins</h3>
+            <div className="cabinet-items-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+              {skinsList.map((skinItem) => {
+                const isUnlocked = mrr >= skinItem.minMrr;
+                const isEquipped = equippedSkin === skinItem.id;
+                return (
+                  <div key={skinItem.id} className={`cabinet-item-card ${isEquipped ? 'equipped' : ''}`} style={{ border: isEquipped ? '2px solid var(--clr-accent)' : '1px solid var(--clr-border)', borderRadius: '12px', padding: '14px', background: isEquipped ? 'rgba(74, 144, 226, 0.05)' : 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.2s' }}>
+                    <div style={{ flex: 1, paddingRight: '12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                        <strong style={{ color: 'var(--clr-text)', fontSize: '0.98rem' }}>{skinItem.name}</strong>
+                        <span style={{ fontSize: '0.75rem', padding: '2px 6px', borderRadius: '4px', background: isUnlocked ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.1)', color: isUnlocked ? '#2ecc71' : 'var(--clr-wrong)', fontWeight: '600' }}>
+                          {isUnlocked ? '✓ Unlocked' : `🔒 ${skinItem.minMrr} MRR`}
+                        </span>
+                      </div>
+                      <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'var(--clr-text-soft)', lineHeight: 1.3 }}>{skinItem.description}</p>
+                    </div>
+                    <div>
+                      {isEquipped ? (
+                        <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--clr-accent)', padding: '6px 12px' }}>Equipped</span>
+                      ) : isUnlocked ? (
+                        <button onClick={() => handleEquipItem('skin', skinItem.id)} style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid var(--clr-accent)', background: 'none', color: 'var(--clr-accent)', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}>Equip</button>
+                      ) : (
+                        <button disabled style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid var(--clr-border)', background: 'none', color: 'var(--clr-text-soft)', opacity: 0.5, cursor: 'not-allowed' }}>Locked</button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Titles List */}
+            <h3 style={{ borderBottom: '1px solid var(--clr-border)', paddingBottom: '8px', marginBottom: '12px', fontSize: '1.1rem', color: 'var(--clr-text)' }}>Titles</h3>
+            <div className="cabinet-items-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {titlesList.map((titleItem) => {
+                const isUnlocked = mrr >= titleItem.minMrr;
+                const isEquipped = equippedTitle === titleItem.name;
+                return (
+                  <div key={titleItem.name} className={`cabinet-item-card ${isEquipped ? 'equipped' : ''}`} style={{ border: isEquipped ? '2px solid var(--clr-accent)' : '1px solid var(--clr-border)', borderRadius: '12px', padding: '14px', background: isEquipped ? 'rgba(74, 144, 226, 0.05)' : 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.2s' }}>
+                    <div style={{ flex: 1, paddingRight: '12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                        <strong style={{ color: 'var(--clr-text)', fontSize: '0.98rem' }}>{titleItem.name}</strong>
+                        <span style={{ fontSize: '0.75rem', padding: '2px 6px', borderRadius: '4px', background: isUnlocked ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.1)', color: isUnlocked ? '#2ecc71' : 'var(--clr-wrong)', fontWeight: '600' }}>
+                          {isUnlocked ? '✓ Unlocked' : `🔒 ${titleItem.minMrr} MRR`}
+                        </span>
+                      </div>
+                      <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'var(--clr-text-soft)' }}>Required Rating: {titleItem.minMrr} MRR</p>
+                    </div>
+                    <div>
+                      {isEquipped ? (
+                        <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--clr-accent)', padding: '6px 12px' }}>Equipped</span>
+                      ) : isUnlocked ? (
+                        <button onClick={() => handleEquipItem('title', titleItem.name)} style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid var(--clr-accent)', background: 'none', color: 'var(--clr-accent)', cursor: 'pointer', fontWeight: '600', transition: 'all 0.2s' }}>Equip</button>
+                      ) : (
+                        <button disabled style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid var(--clr-border)', background: 'none', color: 'var(--clr-text-soft)', opacity: 0.5, cursor: 'not-allowed' }}>Locked</button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+          </div>
+        </div>
+      )}
+    </QuizLayout>
+  );
+}
+
+/**
+ * QuizLayout Component
+ * Wrapper layout for quiz apps (PolyFactorApp, PrimeFactorApp, QFormulaApp, etc.)
+ * Provides consistent header with back button and title section
+ * All quiz content is rendered via children prop
  */
 function QuizLayout({ title, subtitle, onBack, children, timer }) {
   return (

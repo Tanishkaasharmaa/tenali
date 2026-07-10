@@ -28,10 +28,27 @@ const JWT_TTL = process.env.JWT_TTL || '14d';
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true, index: true, lowercase: true, trim: true },
   passwordHash: { type: String, required: true },
+  mrr: { type: Number, default: 1000 },
+  mindReaderGamesToday: { type: Number, default: 0 },
+  lastMindReaderGameDate: { type: String, default: "" },
+  unlockedSkins: [{ type: String, default: ["Classic Tenali"] }],
+  equippedSkin: { type: String, default: 'classic' },
+  equippedTitle: { type: String, default: 'Novice Reader' },
   createdAt: { type: Date, default: Date.now },
 });
 
 const User = mongoose.model('User', UserSchema);
+
+const MindReaderAnalyticSchema = new mongoose.Schema({
+  outcome: { type: String, enum: ['win', 'loss'], required: true },
+  concept: { type: String, required: true },
+  questionsCount: { type: Number, required: true },
+  scope: { type: String, required: true },
+  predictionsMade: [{ type: String }],
+  createdAt: { type: Date, default: Date.now }
+});
+
+const MindReaderAnalytic = mongoose.model('MindReaderAnalytic', MindReaderAnalyticSchema);
 
 // ─── Connection + seeding ────────────────────────────────────────────────────
 
@@ -120,4 +137,4 @@ router.get('/me', requireAuth, (req, res) => {
   res.json({ user: req.user });
 });
 
-module.exports = { connectMongo, seedUsers, router, requireAuth, User };
+module.exports = { connectMongo, seedUsers, router, requireAuth, User, MindReaderAnalytic };
