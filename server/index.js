@@ -8917,148 +8917,23 @@ app.post('/diffeq-api/check', express.json(), (req, res) => {
 // TENALI MIND READER (MVP API)
 // ═══════════════════════════════════════════════════════════════════════════
 const { QUESTIONS, CONCEPTS } = require('./mindReaderKB');
+const { runInference }        = require('./mindReaderEngine');
 
 app.post('/api/mindreader/next', express.json(), (req, res) => {
-  const history = req.body.history || []; // Array of { questionId, answer: 'yes' | 'no' | 'dontknow' }
-  const incorrectPredictions = req.body.incorrectPredictions || []; // Array of concept names
+  const history              = req.body.history              || [];
+  const incorrectPredictions = req.body.incorrectPredictions || [];
 
-  // 1. Initialize candidate pool
-  let activeConcepts = CONCEPTS.filter(c => !incorrectPredictions.includes(c.name));
+  const result = runInference(CONCEPTS, QUESTIONS, history, incorrectPredictions);
 
-  if (activeConcepts.length === 0) {
-    return res.status(404).json({ error: 'No candidate concepts left' });
+  if (result.error) {
+    // Distinguish "no candidates" (404) from inconsistent state (409)
+    const statusCode = result.remainingCount === 0 && incorrectPredictions.length > 0
+      ? 404
+      : 409;
+    return res.status(statusCode).json({ error: result.error });
   }
 
-  // 2. Perform Bayesian-like probability updates based on history
-  const probabilities = {};
-  activeConcepts.forEach(c => {
-    probabilities[c.id] = 1.0;
-  });
-
-  // Process history responses
-  history.forEach(h => {
-    const qId = h.questionId;
-    const ans = h.answer; // 'yes' | 'no' | 'dontknow'
-
-    activeConcepts.forEach(c => {
-      if (probabilities[c.id] === 0) return;
-
-      const expectedAnswer = c.answers[qId]; // true | false | null
-
-      if (ans === 'yes') {
-        if (expectedAnswer === true) {
-          probabilities[c.id] *= 0.98;
-        } else if (expectedAnswer === false) {
-          probabilities[c.id] = 0; // Strict elimination
-        } else {
-          probabilities[c.id] *= 0.5; // Muted update
-        }
-      } else if (ans === 'no') {
-        if (expectedAnswer === true) {
-          probabilities[c.id] = 0; // Strict elimination
-        } else if (expectedAnswer === false) {
-          probabilities[c.id] *= 0.98;
-        } else {
-          probabilities[c.id] *= 0.5; // Muted update
-        }
-      } else {
-        // 'dontknow' does not update probabilities (acts as 1.0)
-        probabilities[c.id] *= 1.0;
-      }
-    });
-  });
-
-  // Re-filter active concepts based on probabilities
-  activeConcepts = activeConcepts.filter(c => probabilities[c.id] > 0);
-
-  if (activeConcepts.length === 0) {
-    return res.status(409).json({ error: 'Inconsistent responses. No matching concepts found.' });
-  }
-
-  // Calculate sum of probabilities to re-normalize
-  let sum = 0;
-  activeConcepts.forEach(c => {
-    sum += probabilities[c.id];
-  });
-
-  // Re-normalize probabilities
-  activeConcepts.forEach(c => {
-    probabilities[c.id] /= sum;
-  });
-
-  // Sort concepts by probability descending
-  activeConcepts.sort((a, b) => probabilities[b.id] - probabilities[a.id]);
-
-  const maxProb = probabilities[activeConcepts[0].id];
-  const bestConcept = activeConcepts[0];
-
-  // 3. Check for prediction conditions (single candidate left or confidence >= 0.75)
-  if (activeConcepts.length === 1 || maxProb >= 0.75) {
-    return res.json({
-      prediction: {
-        id: bestConcept.id,
-        name: bestConcept.name,
-        description: bestConcept.description,
-        definingCharacteristics: bestConcept.definingCharacteristics,
-        recommendations: bestConcept.recommendations
-      },
-      confidence: maxProb,
-      remainingCount: activeConcepts.length
-    });
-  }
-
-  // 4. Select the next best question
-  const askedQIds = history.map(h => h.questionId);
-  const remainingQuestions = QUESTIONS.filter(q => !askedQIds.includes(q.id));
-
-  if (remainingQuestions.length === 0) {
-    // If no questions left, force prediction with top candidate
-    return res.json({
-      prediction: {
-        id: bestConcept.id,
-        name: bestConcept.name,
-        description: bestConcept.description,
-        definingCharacteristics: bestConcept.definingCharacteristics,
-        recommendations: bestConcept.recommendations
-      },
-      confidence: maxProb,
-      remainingCount: activeConcepts.length
-    });
-  }
-
-  // Find the question that splits the active concept pool closest to 50/50
-  let bestQ = null;
-  let minDiff = Infinity;
-
-  remainingQuestions.forEach(q => {
-    let yesWeight = 0;
-    let noWeight = 0;
-
-    activeConcepts.forEach(c => {
-      const cAns = c.answers[q.id];
-      if (cAns === true) {
-        yesWeight += probabilities[c.id];
-      } else if (cAns === false) {
-        noWeight += probabilities[c.id];
-      } else {
-        yesWeight += probabilities[c.id] * 0.5;
-        noWeight += probabilities[c.id] * 0.5;
-      }
-    });
-
-    const diff = Math.abs(yesWeight - noWeight);
-    if (diff < minDiff) {
-      minDiff = diff;
-      bestQ = q;
-    }
-  });
-
-  return res.json({
-    nextQuestion: bestQ,
-    confidence: maxProb,
-    remainingCount: activeConcepts.length,
-    isFinalQuestion: activeConcepts.length <= 2
-  });
+  return res.json(result);
 });
 
 const jwt = require('jsonwebtoken');

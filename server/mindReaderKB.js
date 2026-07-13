@@ -1,20 +1,20 @@
 const QUESTIONS = [
-  { id: 'q_geometry', text: 'Is it related to geometry, shapes, lines, or angles?' },
-  { id: 'q_algebra', text: 'Is it related to algebra, variables, or expressions?' },
-  { id: 'q_statistics', text: 'Does it involve data, probability, or averages?' },
-  { id: 'q_number', text: 'Is it related to basic arithmetic, primes, or fraction operations?' },
-  { id: 'q_applied', text: 'Is it related to finance, measurement, or rates?' },
-  { id: 'q_triangle', text: 'Does it involve triangles or trigonometric ratios?' },
-  { id: 'q_circle', text: 'Does it involve circles or round shapes?' },
-  { id: 'q_equation', text: 'Does it involve equations or solving for variables?' },
-  { id: 'q_operation', text: 'Does it represent an operation or mathematical process?' },
-  { id: 'q_fraction_percent', text: 'Does it involve fractions, decimals, percentages, or ratios?' },
-  { id: 'q_graph', text: 'Does it involve coordinates or graphs?' },
-  { id: 'q_prime_factor', text: 'Is it related to prime numbers, factors, HCF, or LCM?' },
-  { id: 'q_vector_matrix', text: 'Does it involve vectors or matrices?' },
-  { id: 'q_sets_logic', text: 'Does it involve sets or Venn diagrams?' },
-  { id: 'q_interest_finance', text: 'Is it related to money, interest, or financial math?' },
-  { id: 'q_measure_bound', text: 'Does it involve units of measurement or bounds?' }
+  { id: 'q_geometry', text: '🪄 Hmm... should I start looking among shapes, lines, and angles?' },
+  { id: 'q_algebra', text: '🔠 Is your secret hiding in the land of letters, variables, and expressions?' },
+  { id: 'q_statistics', text: '📊 Are we looking at clues from data, chance, or averages?' },
+  { id: 'q_number', text: '🔢 Is your secret hiding somewhere in the world of numbers?' },
+  { id: 'q_triangle', text: '📐 Does your shape have exactly three sides, or does it dance with triangle ratios?' },
+  { id: 'q_circle', text: '🟡 Is your shape perfectly round like a coin or a bubble?' },
+  { id: 'q_equation', text: '⚖️ Shall we balance two sides of an equation to find a mystery variable?' },
+  { id: 'q_operation', text: '⚙️ Does your secret ask us to perform an action, calculation, or step-by-step process?' },
+  { id: 'q_fraction_percent', text: '🍰 Does it slice something whole into fractions, decimals, percentages, or ratios?' },
+  { id: 'q_graph', text: '🗺️ Shall we map out our clues using coordinates on a grid or graph?' },
+  { id: 'q_prime_factor', text: '🧱 Is your secret about the building blocks of numbers, like primes or factors?' },
+  { id: 'q_vector_matrix', text: '🧭 Does it point us in a direction, or arrange numbers in a grid like a matrix?' },
+  { id: 'q_sets_logic', text: '🧺 Are we sorting things into different logical groups or sets?' },
+  { id: 'q_multiple', text: '📈 Are we searching for a multiple that grows bigger, rather than a factor that divides?' },
+  { id: 'q_hundred', text: '💯 Does your secret comparison focus on parts out of a hundred?' },
+  { id: 'q_degree_two', text: '🎢 Does this equation trace a curved path with a variable raised to the power of two?' }
 ];
 
 const CONCEPTS = [
@@ -37,10 +37,10 @@ const CONCEPTS = [
       exercises: ['Chapter 1 Lesson 1 Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true, q_applied: false,
+      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true,
       q_triangle: false, q_circle: false, q_equation: false, q_operation: false,
       q_fraction_percent: false, q_graph: false, q_prime_factor: true, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -62,10 +62,10 @@ const CONCEPTS = [
       exercises: ['Chapter 1 Lesson 2 Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true, q_applied: false,
+      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true,
       q_triangle: false, q_circle: false, q_equation: false, q_operation: true,
       q_fraction_percent: false, q_graph: false, q_prime_factor: true, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -87,10 +87,10 @@ const CONCEPTS = [
       exercises: ['Chapter 1 Lesson 2 Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true, q_applied: false,
+      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true,
       q_triangle: false, q_circle: false, q_equation: false, q_operation: true,
       q_fraction_percent: false, q_graph: false, q_prime_factor: true, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: true, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -112,10 +112,10 @@ const CONCEPTS = [
       exercises: ['Chapter 1 Lesson 6 Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true, q_applied: false,
+      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true,
       q_triangle: false, q_circle: false, q_equation: false, q_operation: true,
       q_fraction_percent: false, q_graph: false, q_prime_factor: false, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -137,10 +137,10 @@ const CONCEPTS = [
       exercises: ['Chapter 5 Lesson 1 Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true, q_applied: false,
+      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true,
       q_triangle: false, q_circle: false, q_equation: false, q_operation: false,
       q_fraction_percent: true, q_graph: false, q_prime_factor: false, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -162,10 +162,10 @@ const CONCEPTS = [
       exercises: ['Chapter 5 Lesson 8 Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true, q_applied: false,
+      q_geometry: false, q_algebra: false, q_statistics: false, q_number: true,
       q_triangle: false, q_circle: false, q_equation: false, q_operation: false,
       q_fraction_percent: true, q_graph: false, q_prime_factor: false, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: true, q_degree_two: false
     }
   },
   {
@@ -187,10 +187,10 @@ const CONCEPTS = [
       exercises: ['Chapter 6 Lesson 1 Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: true, q_statistics: false, q_number: false, q_applied: false,
+      q_geometry: false, q_algebra: true, q_statistics: false, q_number: false,
       q_triangle: false, q_circle: false, q_equation: true, q_operation: false,
       q_fraction_percent: false, q_graph: true, q_prime_factor: false, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -212,10 +212,10 @@ const CONCEPTS = [
       exercises: ['Chapter 10 Lesson 3 Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: true, q_statistics: false, q_number: false, q_applied: false,
+      q_geometry: false, q_algebra: true, q_statistics: false, q_number: false,
       q_triangle: false, q_circle: false, q_equation: true, q_operation: false,
       q_fraction_percent: false, q_graph: true, q_prime_factor: false, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: true
     }
   },
   {
@@ -237,10 +237,10 @@ const CONCEPTS = [
       exercises: ['Matrix Operations Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: true, q_statistics: false, q_number: false, q_applied: false,
+      q_geometry: false, q_algebra: true, q_statistics: false, q_number: false,
       q_triangle: false, q_circle: false, q_equation: false, q_operation: false,
       q_fraction_percent: false, q_graph: false, q_prime_factor: false, q_vector_matrix: true,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -262,10 +262,10 @@ const CONCEPTS = [
       exercises: ['Chapter 23 Lesson 2 Practice']
     },
     answers: {
-      q_geometry: true, q_algebra: false, q_statistics: false, q_number: false, q_applied: false,
+      q_geometry: true, q_algebra: false, q_statistics: false, q_number: false,
       q_triangle: false, q_circle: false, q_equation: false, q_operation: false,
       q_fraction_percent: false, q_graph: true, q_prime_factor: false, q_vector_matrix: true,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -287,10 +287,10 @@ const CONCEPTS = [
       exercises: ['Chapter 3 Lesson 3 Practice']
     },
     answers: {
-      q_geometry: true, q_algebra: false, q_statistics: false, q_number: false, q_applied: false,
+      q_geometry: true, q_algebra: false, q_statistics: false, q_number: false,
       q_triangle: true, q_circle: false, q_equation: false, q_operation: false,
       q_fraction_percent: false, q_graph: false, q_prime_factor: false, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -312,10 +312,10 @@ const CONCEPTS = [
       exercises: ['Chapter 11 Lesson 1 Practice']
     },
     answers: {
-      q_geometry: true, q_algebra: false, q_statistics: false, q_number: false, q_applied: false,
+      q_geometry: true, q_algebra: false, q_statistics: false, q_number: false,
       q_triangle: true, q_circle: false, q_equation: true, q_operation: true,
       q_fraction_percent: false, q_graph: false, q_prime_factor: false, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -337,10 +337,10 @@ const CONCEPTS = [
       exercises: ['Chapter 9 Lesson 3 Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: true, q_statistics: false, q_number: false, q_applied: false,
+      q_geometry: false, q_algebra: true, q_statistics: false, q_number: false,
       q_triangle: false, q_circle: true, q_equation: false, q_operation: false,
       q_fraction_percent: false, q_graph: false, q_prime_factor: false, q_vector_matrix: false,
-      q_sets_logic: true, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: true, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -362,10 +362,10 @@ const CONCEPTS = [
       exercises: ['Chapter 12 Lesson 1 Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: false, q_statistics: true, q_number: false, q_applied: false,
+      q_geometry: false, q_algebra: false, q_statistics: true, q_number: false,
       q_triangle: false, q_circle: false, q_equation: false, q_operation: true,
       q_fraction_percent: false, q_graph: false, q_prime_factor: false, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   },
   {
@@ -387,10 +387,10 @@ const CONCEPTS = [
       exercises: ['Chapter 8 Lesson 1 Practice']
     },
     answers: {
-      q_geometry: false, q_algebra: false, q_statistics: true, q_number: false, q_applied: false,
+      q_geometry: false, q_algebra: false, q_statistics: true, q_number: false,
       q_triangle: false, q_circle: false, q_equation: false, q_operation: false,
       q_fraction_percent: true, q_graph: false, q_prime_factor: false, q_vector_matrix: false,
-      q_sets_logic: false, q_interest_finance: false, q_measure_bound: false
+      q_sets_logic: false, q_multiple: false, q_hundred: false, q_degree_two: false
     }
   }
 ];
