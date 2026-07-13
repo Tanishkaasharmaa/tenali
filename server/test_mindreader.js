@@ -16,6 +16,11 @@ const {
   entropy,
   likelihood,
   informationGain,
+  expectedRemainingCandidates,
+  definitiveness,
+  groupTiebreakScore,
+  selectBestQuestion,
+  ENGINE_CONFIG,
   LIKELIHOOD,
 } = require('./mindReaderEngine');
 
@@ -307,13 +312,11 @@ section('Edge: isFinalQuestion flag when ≤2 candidates remain');
 
 section('Regression: Information Gain vs minDiff — IG picks the more informative question');
 {
-  // With uniform priors, the engine should select a question that has the
-  // highest expected discrimination.  We verify the first question asked
-  // on empty history is one of the high-IG category questions.
   const result = runInference(CONCEPTS, QUESTIONS, [], []);
-  const highValueQuestions = [
-    'q_geometry', 'q_algebra', 'q_statistics', 'q_number'
-  ];
+  // With the hybrid IG + ERC scorer, the first question must be broadly informative.
+  // Both pure IG-winners (q_geometry, q_algebra, q_statistics, q_number) and the
+  // ERC-favourite (q_operation) are valid broad-category questions; accept all of them.
+  const highValueQuestions = ['q_geometry', 'q_algebra', 'q_statistics', 'q_number', 'q_operation'];
   assert(
     highValueQuestions.includes(result.nextQuestion.id),
     `First question is a high-value category question: ${result.nextQuestion.id}`
@@ -416,6 +419,318 @@ section('Engine: Similar Concepts metadata suggestions');
     assert(typeof firstSC.name === 'string', 'similar concept has a name');
     assert(typeof firstSC.differenceCount === 'number', 'similar concept has differenceCount');
     assert(Array.isArray(firstSC.distinguishingQuestions), 'similar concept lists distinguishingQuestions');
+  }
+}
+
+// ─── T1: ENGINE_CONFIG is live-overridable ───────────────────────────────────
+
+section('T1 — ENGINE_CONFIG: live override changes engine behaviour');
+{
+  const originalTie = ENGINE_CONFIG.tieThreshold;
+
+  // Setting tieThreshold to 0.99 means every candidate pair is "near-tied";
+  // tiebreak mode should activate on the very first call.
+  ENGINE_CONFIG.tieThreshold = 0.99;
+  const result = runInference(CONCEPTS, QUESTIONS, [], []);
+  assert(!result.error,            'No error after ENGINE_CONFIG override');
+  assert(result.nextQuestion,      'Engine still returns a nextQuestion');
+
+  // Restore and verify
+  ENGINE_CONFIG.tieThreshold = originalTie;
+  assert(
+    ENGINE_CONFIG.tieThreshold === originalTie,
+    `ENGINE_CONFIG.tieThreshold restored to ${originalTie}`
+  );
+
+  // Confirm normal behaviour resumes
+  const result2 = runInference(CONCEPTS, QUESTIONS, [], []);
+  assert(!result2.error && result2.nextQuestion, 'Normal behaviour after config restore');
+}
+
+// ─── T2: expectedRemainingCandidates unit tests ───────────────────────────────
+
+section('T2 — expectedRemainingCandidates: ERC unit test');
+{
+  // q_sep perfectly separates c1 (true) and c2 (false) → 1 survivor per branch → ERC=1
+  const miniC = [
+    { id: 'ec1', answers: { q_sep: true,  q_same: true  } },
+    { id: 'ec2', answers: { q_sep: false, q_same: true  } },
+  ];
+  const miniP = { ec1: 0.5, ec2: 0.5 };
+
+  const ercSep  = expectedRemainingCandidates(miniC, miniP, 'q_sep');
+  const ercSame = expectedRemainingCandidates(miniC, miniP, 'q_same');
+
+  assert(
+    ercSep < miniC.length,
+    `ERC of discriminating question (${ercSep.toFixed(3)}) < total candidates (${miniC.length})`
+  );
+  assert(
+    ercSame >= ercSep,
+    `Non-discriminating question ERC (${ercSame.toFixed(3)}) ≥ discriminating ERC (${ercSep.toFixed(3)})`
+  );
+  assert(ercSep > 0, 'ERC is always positive');
+
+  // With null answers, both candidates survive both branches → high ERC
+  const miniNull = [
+    { id: 'en1', answers: { q_null: null } },
+    { id: 'en2', answers: { q_null: null } },
+  ];
+  const ercNull = expectedRemainingCandidates(miniNull, { en1: 0.5, en2: 0.5 }, 'q_null');
+  assert(
+    ercNull >= ercSep,
+    `Null-answer question ERC (${ercNull.toFixed(3)}) ≥ discriminating ERC (${ercSep.toFixed(3)})`
+  );
+}
+
+// ─── T3: Top-N group tiebreak activates for near-tied candidates ─────────────
+
+section('T3 — Tiebreak: group score selects best separator for 3 near-tied candidates');
+{
+  // Three candidates near-tied, three questions:
+  //   q_sep    — separates all three pairs (best separator)
+  //   q_partial — separates only ct1 vs ct2 (partial)
+  //   q_none   — all candidates answer the same (useless)
+  const tieCandidates = [
+    { id: 'ct1', answers: { q_sep: true,  q_partial: true,  q_none: true } },
+    { id: 'ct2', answers: { q_sep: false, q_partial: false, q_none: true } },
+    { id: 'ct3', answers: { q_sep: null,  q_partial: true,  q_none: true } },
+  ];
+  // All within 0.05 of the top — well inside tieThreshold=0.15
+  const tieProbs = { ct1: 0.36, ct2: 0.33, ct3: 0.31 };
+  const tieQuestions = [
+    { id: 'q_sep',     text: 'Separator question'     },
+    { id: 'q_partial', text: 'Partial separator'      },
+    { id: 'q_none',    text: 'Non-separator question' },
+  ];
+
+  const result = selectBestQuestion(tieCandidates, tieProbs, tieQuestions);
+
+  assert(result !== null,                  'selectBestQuestion returns a result');
+  assert(result.inTiebreakMode === true,   'Tiebreak mode activates for near-tied candidates');
+  assert(result.question.id !== 'q_none', 'Does not select the zero-separation question');
+
+  // Verify group tiebreak scores directly
+  const tsNone = groupTiebreakScore({ id: 'q_none' }, tieCandidates);
+  assert(Math.abs(tsNone) < 1e-9, `q_none group tiebreak score is 0 (got ${tsNone})`);
+
+  // q_sep: pairs ct1-ct2 |1-0|=1, ct1-ct3 |1-0.5|=0.5, ct2-ct3 |0-0.5|=0.5 → mean≈0.667
+  const tsSep = groupTiebreakScore({ id: 'q_sep' }, tieCandidates);
+  assert(tsSep > 0.5, `q_sep has high group tiebreak score (${tsSep.toFixed(3)} > 0.5)`);
+  assert(tsSep > tsNone, 'q_sep score > q_none score');
+}
+
+// ─── T4: Incorrect-prediction boost ─────────────────────────────────────────
+
+section('T4 — Incorrect-prediction boost: engine converges after wrong prediction');
+{
+  // Phase 1: confirm the engine works normally in the prime_number/hcf/lcm region
+  const narrowingHistory = [
+    { questionId: 'q_geometry',     answer: 'no'  },
+    { questionId: 'q_algebra',      answer: 'no'  },
+    { questionId: 'q_statistics',   answer: 'no'  },
+    { questionId: 'q_number',       answer: 'yes' },
+    { questionId: 'q_prime_factor', answer: 'yes' },
+  ];
+  const baseResult = runInference(CONCEPTS, QUESTIONS, narrowingHistory, []);
+  assert(!baseResult.error, 'No error: baseline narrowing history');
+  assert(
+    baseResult.nextQuestion || baseResult.prediction,
+    'Engine returns a question or prediction in baseline'
+  );
+
+  // Phase 2: reject Prime Number and verify the engine continues gracefully
+  const afterReject = runInference(CONCEPTS, QUESTIONS, narrowingHistory, ['Prime Number']);
+  assert(!afterReject.error, 'No error after incorrect prediction of Prime Number');
+  assert(
+    afterReject.remainingCount < CONCEPTS.length,
+    `Candidate count (${afterReject.remainingCount}) reduced after rejection`
+  );
+
+  // Phase 3: simulate a full game targeting HCF with Prime Number pre-rejected
+  const hcfMap   = {};
+  const hcfConcept = CONCEPTS.find(c => c.id === 'hcf');
+  for (const [qId, val] of Object.entries(hcfConcept.answers)) {
+    hcfMap[qId] = val === true ? 'yes' : val === false ? 'no' : 'dontknow';
+  }
+
+  const historyWithReject = [];
+  const incorrectPreds    = ['Prime Number'];
+  let   resolvedCorrectly = false;
+
+  for (let step = 0; step < 20; step++) {
+    const r = runInference(CONCEPTS, QUESTIONS, historyWithReject, incorrectPreds);
+    if (r.error) break;
+    if (r.prediction) {
+      assert(
+        r.prediction.id === 'hcf',
+        `Correctly predicts HCF after Prime Number rejection (got: ${r.prediction.name})`
+      );
+      resolvedCorrectly = true;
+      break;
+    }
+    const ans = hcfMap[r.nextQuestion.id] || 'dontknow';
+    historyWithReject.push({ questionId: r.nextQuestion.id, answer: ans });
+  }
+  assert(resolvedCorrectly, 'Engine resolves to HCF within 20 steps after incorrect prediction');
+}
+
+// ─── T5: Confidence formula — consistency and DK decay ────────────────────────
+
+section('T5 — Confidence: clean history yields higher confidence than DK history');
+{
+  // Give correct answers for 'mean' on broad category questions
+  const cleanHistory = [
+    { questionId: 'q_statistics', answer: 'yes'      },
+    { questionId: 'q_geometry',   answer: 'no'       },
+    { questionId: 'q_algebra',    answer: 'no'       },
+    { questionId: 'q_number',     answer: 'no'       },
+  ];
+  // Replace the last three with DK — same category-level answers but less certain
+  const dkHistory = [
+    { questionId: 'q_statistics', answer: 'yes'      },
+    { questionId: 'q_geometry',   answer: 'dontknow' },
+    { questionId: 'q_algebra',    answer: 'dontknow' },
+    { questionId: 'q_number',     answer: 'dontknow' },
+  ];
+
+  const rClean = runInference(CONCEPTS, QUESTIONS, cleanHistory, []);
+  const rDK    = runInference(CONCEPTS, QUESTIONS, dkHistory,    []);
+
+  assert(!rClean.error, 'No error: clean history');
+  assert(!rDK.error,    'No error: DK history');
+  assert(
+    rClean.confidence >= rDK.confidence,
+    `Clean history conf (${rClean.confidence.toFixed(3)}) ≥ DK history conf (${rDK.confidence.toFixed(3)})`
+  );
+  assert(rClean.confidence >= 0 && rClean.confidence <= 1, 'Clean conf ∈ [0,1]');
+  assert(rDK.confidence   >= 0 && rDK.confidence   <= 1,  'DK conf ∈ [0,1]');
+
+  // Empty history must return confidence = 0
+  // (gapSignal=0, igExhaustedFactor gated on history.length>0, consistency=0)
+  const rEmpty = runInference(CONCEPTS, QUESTIONS, [], []);
+  assert(
+    Math.abs(rEmpty.confidence - 0) < 1e-9,
+    `Confidence under uniform prior is 0.0 (got ${rEmpty.confidence})`
+  );
+}
+
+// ─── T6: DK decay + definitiveness ───────────────────────────────────────────
+
+section('T6 — DK decay: confidence decreases monotonically with more DK answers');
+{
+  // Anchor history: one non-DK answer to move away from the uniform prior (conf=0).
+  // Then add 0, 2, or 4 DK answers on top of it. The only variable is dkCount.
+  const anchor = { questionId: 'q_statistics', answer: 'yes' };
+
+  function dkHistory(dkCount) {
+    const dkEntries = QUESTIONS
+      .filter(q => q.id !== 'q_statistics')
+      .slice(0, dkCount)
+      .map(q => ({ questionId: q.id, answer: 'dontknow' }));
+    return [anchor, ...dkEntries];
+  }
+
+  const r0 = runInference(CONCEPTS, QUESTIONS, dkHistory(0), []);
+  const r2 = runInference(CONCEPTS, QUESTIONS, dkHistory(2), []);
+  const r4 = runInference(CONCEPTS, QUESTIONS, dkHistory(4), []);
+
+  assert(!r0.error && !r2.error && !r4.error, 'No errors with 0/2/4 DK histories');
+  assert(
+    r0.confidence >= r2.confidence,
+    `0-DK conf (${r0.confidence.toFixed(3)}) ≥ 2-DK conf (${r2.confidence.toFixed(3)})`
+  );
+  assert(
+    r2.confidence >= r4.confidence,
+    `2-DK conf (${r2.confidence.toFixed(3)}) ≥ 4-DK conf (${r4.confidence.toFixed(3)})`
+  );
+
+  // Definitiveness unit test with a mini-KB containing null entries
+  const miniDef = [
+    { id: 'd1', answers: { q_def: true,  q_amb: null } },
+    { id: 'd2', answers: { q_def: false, q_amb: null } },
+    { id: 'd3', answers: { q_def: true,  q_amb: false } },
+  ];
+  const defA = definitiveness({ id: 'q_def' }, miniDef);  // all non-null → 1.0
+  const defB = definitiveness({ id: 'q_amb' }, miniDef);  // 1/3 non-null → ~0.33
+
+  assert(
+    defA > defB,
+    `Definitive question score (${defA.toFixed(3)}) > ambiguous question score (${defB.toFixed(3)})`
+  );
+  assert(Math.abs(defA - 1.0) < 1e-9, 'All-definitive question has score of 1.0');
+  assert(defB > 0 && defB < 1,        'Partially-definitive question has score ∈ (0,1)');
+}
+
+// ─── T7: KB gap annotation in similarConcepts ────────────────────────────────
+
+section('T7 — KB Gap: wereAsked + missedQuestions in similarConcepts');
+{
+  // Part A: predict HCF WITHOUT asking q_multiple (the distinguishing question vs LCM).
+  // Give correct answers for all questions except q_multiple.
+  // To force a prediction for HCF without asking q_multiple, we reject LCM.
+  // Since only HCF remains as the candidate, the engine predicts HCF,
+  // but q_multiple is still marked as missed in similarConcepts.
+  const hcfConcept = CONCEPTS.find(c => c.id === 'hcf');
+  const historyNoMultiple = QUESTIONS
+    .filter(q => q.id !== 'q_multiple')
+    .map(q => ({
+      questionId: q.id,
+      answer: hcfConcept.answers[q.id] === true  ? 'yes'
+            : hcfConcept.answers[q.id] === false ? 'no'
+            : 'dontknow',
+    }));
+
+  const resultNoMultiple = runInference(CONCEPTS, QUESTIONS, historyNoMultiple, ['LCM (Lowest Common Multiple)']);
+  assert(resultNoMultiple.prediction !== undefined, 'Part A: prediction reached for HCF');
+
+  if (resultNoMultiple.prediction) {
+    const sc = resultNoMultiple.prediction.similarConcepts;
+    assert(Array.isArray(sc), 'similarConcepts is an array');
+
+    const lcmEntry = sc && sc.find(e => e.id === 'lcm');
+    assert(lcmEntry !== undefined, 'LCM appears as a similar concept to HCF');
+
+    if (lcmEntry) {
+      assert(
+        lcmEntry.wereAsked === false,
+        'wereAsked is false when distinguishing question (q_multiple) was not asked'
+      );
+      assert(
+        Array.isArray(lcmEntry.missedQuestions),
+        'missedQuestions is an array'
+      );
+      assert(
+        lcmEntry.missedQuestions.includes('q_multiple'),
+        `missedQuestions includes 'q_multiple' (got: ${JSON.stringify(lcmEntry.missedQuestions)})`
+      );
+    }
+  }
+
+  // Part B: predict HCF WITH q_multiple in history → wereAsked must be true.
+  const historyWithMultiple = QUESTIONS.map(q => ({
+    questionId: q.id,
+    answer: CONCEPTS.find(c => c.id === 'hcf').answers[q.id] === true  ? 'yes'
+          : CONCEPTS.find(c => c.id === 'hcf').answers[q.id] === false ? 'no'
+          : 'dontknow',
+  }));
+
+  const resultWithMultiple = runInference(CONCEPTS, QUESTIONS, historyWithMultiple, []);
+  assert(resultWithMultiple.prediction !== undefined, 'Part B: prediction reached for HCF');
+
+  if (resultWithMultiple.prediction) {
+    const scB    = resultWithMultiple.prediction.similarConcepts;
+    const lcmB   = scB && scB.find(e => e.id === 'lcm');
+    if (lcmB) {
+      assert(
+        lcmB.wereAsked === true,
+        'wereAsked is true when q_multiple WAS asked'
+      );
+      assert(
+        lcmB.missedQuestions.length === 0,
+        'missedQuestions is empty when all distinguishing questions were asked'
+      );
+    }
   }
 }
 
