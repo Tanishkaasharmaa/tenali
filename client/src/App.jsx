@@ -55750,7 +55750,7 @@ function MindReaderApp({ onBack }) {
     if (phase === 'setup') {
       return {
         expression: 'thinking',
-        text: "Welcome to the Court of Tenali! Think of a mathematical concept from the grid below, hold it secretly in your mind, and click Start Game. Let's see if my wits can pierce your thoughts!"
+        text: "Let's play a little game.\n\nThink of one mathematical idea.\nDon't tell me.\nJust keep it in your mind.\n\nWhen you're ready... Start the Game"
       };
     }
 
@@ -55847,6 +55847,7 @@ function MindReaderApp({ onBack }) {
           <div className="mrr-hud" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             <span className="mrr-pill" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>🔮 MRR: <strong>{mrr}</strong></span>
             <span className="title-pill" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>🏷️ Title: <strong>{equippedTitle}</strong></span>
+            <span className="chances-pill" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>⚡ Daily Chances: <strong>{Math.max(0, dailyLimit - gamesToday)} / {dailyLimit}</strong></span>
           </div>
           <button className="cabinet-toggle-btn" onClick={() => setShowCabinet(true)} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, var(--clr-accent) 0%, #8e44ad 100%)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '20px', cursor: 'pointer', fontWeight: '600', boxShadow: '0 4px 12px rgba(142, 68, 173, 0.2)', transition: 'all 0.2s' }}>
             🎁 Rewards Cabinet
@@ -55866,7 +55867,7 @@ function MindReaderApp({ onBack }) {
                     {equippedTitle}
                   </span>
                 </div>
-                <div className="dialogue-speech" style={{ fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic', position: 'relative', paddingLeft: '12px', borderLeft: '3px solid var(--clr-accent)' }}>
+                <div className="dialogue-speech" style={{ whiteSpace: 'pre-line', fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic', position: 'relative', paddingLeft: '12px', borderLeft: '3px solid var(--clr-accent)' }}>
                   "{stateObj.text}"
                 </div>
               </div>
@@ -55875,44 +55876,26 @@ function MindReaderApp({ onBack }) {
         })()}
 
         {phase === 'setup' && (
-          <div className="mr-card setup-card">
-            <h2 style={{ fontSize: '1.8rem', letterSpacing: '1px', color: 'var(--clr-accent)', textTransform: 'uppercase', marginBottom: '8px', textAlign: 'center' }}>TENALI</h2>
-            <div className="pregame-instructions" style={{ textAlign: 'center', fontSize: '1.1rem', lineHeight: '1.65', color: 'var(--clr-text)', margin: '12px 0' }}>
-              <p style={{ margin: '6px 0' }}>Let's play a little game.</p>
-              <p style={{ margin: '6px 0', fontWeight: '600' }}>Think of one mathematical idea.</p>
-              <p style={{ margin: '6px 0', color: 'var(--clr-text-soft)' }}>Don't tell me.</p>
-              <p style={{ margin: '6px 0', fontStyle: 'italic' }}>Just keep it in your mind.</p>
-              <p style={{ margin: '14px 0 6px', fontWeight: '600', color: 'var(--clr-accent)' }}>When you're ready...</p>
-            </div>
+          <div className="mr-card setup-card" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            <h2 style={{ fontSize: '1.4rem', letterSpacing: '1px', color: 'var(--clr-accent)', textTransform: 'uppercase', margin: '0', textAlign: 'center' }}>CHOOSE A MATHEMATICAL CONCEPT</h2>
 
-            <div className="concept-chips">
+            <div className="concept-chips" style={{ margin: '5px 0' }}>
               {mvpConcepts.map((c, i) => (
                 <span key={i} className="concept-chip">{c}</span>
               ))}
             </div>
 
-            <div className="mrr-badge-row" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '20px' }}>
-              <div className="mrr-badge">
-                <span className="badge-label">MIND READER RATING</span>
-                <span className="badge-value">🔮 {mrr}</span>
-              </div>
-              <div className="mrr-badge">
-                <span className="badge-label">DAILY CHANCES LEFT</span>
-                <span className="badge-value">⚡ {Math.max(0, dailyLimit - gamesToday)} / {dailyLimit}</span>
-              </div>
-            </div>
-
-            {errorMsg && <p className="error-text">{errorMsg}</p>}
+            {errorMsg && <p className="error-text" style={{ margin: '0' }}>{errorMsg}</p>}
 
             {gamesToday >= dailyLimit ? (
-              <div className="lockout-warning-box" style={{ marginTop: '20px', padding: '16px', background: 'rgba(231, 76, 60, 0.1)', border: '1px solid rgba(231, 76, 60, 0.3)', borderRadius: '12px', color: 'var(--clr-wrong)', textAlign: 'center' }}>
-                <p style={{ fontWeight: '600', marginBottom: '8px' }}>⚠️ Daily Limit Reached!</p>
-                <p style={{ fontSize: '0.92rem', opacity: 0.9, lineHeight: 1.4 }}>
+              <div className="lockout-warning-box" style={{ padding: '12px', background: 'rgba(231, 76, 60, 0.1)', border: '1px solid rgba(231, 76, 60, 0.3)', borderRadius: '12px', color: 'var(--clr-wrong)', textAlign: 'center' }}>
+                <p style={{ fontWeight: '600', margin: '0 0 4px 0', fontSize: '0.95rem' }}>⚠️ Daily Limit Reached!</p>
+                <p style={{ fontSize: '0.85rem', opacity: 0.9, lineHeight: 1.3, margin: '0' }}>
                   My mind reading energy is depleted for today! Please complete some curriculum lessons and try again tomorrow.
                 </p>
               </div>
             ) : (
-              <button className="submit-btn start-game-btn" onClick={startGame} disabled={loading} style={{ background: 'linear-gradient(135deg, var(--clr-accent) 0%, #d35400 100%)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              <button className="submit-btn start-game-btn" onClick={startGame} disabled={loading} style={{ margin: '0 auto', width: '220px', background: 'linear-gradient(135deg, var(--clr-accent) 0%, #d35400 100%)', textTransform: 'uppercase', letterSpacing: '1px', padding: '12px' }}>
                 {loading ? 'Entering...' : "I've got one."}
               </button>
             )}
