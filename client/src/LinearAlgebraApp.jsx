@@ -2940,7 +2940,7 @@ function LinearAlgebraApp({ onBack }) {
   const makeMissionDescriptive = (m) => {
     return (
       <>
-        <div style={{ fontWeight:700, color:'var(--la-accent)', marginBottom:4 }}>Your Mission: {m.goal}</div>
+        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--la-accent)', marginBottom: 4 }}>Your Mission: {m.goal}</div>
         <div style={{ fontWeight:400, fontSize:'0.9rem', lineHeight:1.5 }}>{m.story}</div>
       </>
     );
@@ -3124,30 +3124,42 @@ function LinearAlgebraApp({ onBack }) {
       <div className="la-header">
         <button className="la-modules-back" onClick={() => setPhase('modules')}>&larr; All Modules</button>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--la-text)' }}>{mod.emoji} Module {mod.id}: {mod.title}</div>
-          <div style={{ fontSize: '0.8rem', color: 'var(--la-text-soft)' }}>{solvedMissions.filter(id => id >= mod.start && id <= mod.end).length}/{mod.end - mod.start + 1} missions</div>
+          <div style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--la-text)' }}>{mod.emoji} Module {mod.id}: {mod.title}</div>
         </div>
-        <h1>{mission.emoji} {mission.title}</h1>
+        <h1 style={{ marginTop: 16 }}>{mission.emoji} {mission.title}</h1>
         <p>Mission {currentMission - mod.start + 1} of {modTotal}</p>
       </div>
 
       <div className="la-progress">
-        <button className="la-nav-btn" onClick={() => goToMission(currentMission - 1)} disabled={currentMission <= mod.start || !solvedMissions.includes(currentMission - 1)}>&larr; Prev</button>
-        {modMissions.map((m, idx) => {
-          const absId = m.id;
-          const canClick = solvedMissions.includes(absId) || absId <= currentMission;
-          return (
-            <div key={absId} className={'la-progress-dot' + (solvedMissions.includes(absId) ? ' solved' : '') + (absId === currentMission ? ' active' : '') + (absId > currentMission ? ' locked' : '') + (canClick ? ' clickable' : '')} title={'Mission ' + absId} onClick={canClick ? () => goToMission(absId) : undefined}>
-              {solvedMissions.includes(absId) ? '\u2713' : (idx + 1)}
-            </div>
-          );
-        })}
-        <button className="la-nav-btn" onClick={() => goToMission(currentMission + 1)} disabled={currentMission >= mod.end || !solvedMissions.includes(currentMission + 1)}>Next &rarr;</button>
+        <button className="la-nav-btn" onClick={() => goToMission(currentMission - 1)} disabled={currentMission <= mod.start}>&larr; Prev</button>
+        <div className="la-progress-dots">
+          {(() => {
+            const currentIdx = currentMission - mod.start;
+            const half = 2;
+            let startIdx = Math.max(0, currentIdx - half);
+            const endIdx = Math.min(modMissions.length - 1, startIdx + 4);
+            startIdx = Math.max(0, endIdx - 4);
+            const maxUnlocked = Math.max(0, ...solvedMissions.filter(id => id >= mod.start && id <= mod.end)) - mod.start;
+            return modMissions.slice(startIdx, endIdx + 1).map((m, i) => {
+              const absId = m.id;
+              const canClick = solvedMissions.includes(absId) || (absId - mod.start) <= maxUnlocked + 1;
+              return (
+                <div key={absId} className={'la-progress-dot' + (solvedMissions.includes(absId) ? ' solved' : '') + (absId === currentMission ? ' active' : '') + (!solvedMissions.includes(absId) && absId !== currentMission ? ' locked' : '') + (canClick ? ' clickable' : '')} title={'Mission ' + absId} onClick={canClick ? () => goToMission(absId) : undefined}>
+                  {solvedMissions.includes(absId) ? '\u2713' : (absId)}
+                </div>
+              );
+            });
+          })()}
+        </div>
+        <button className="la-nav-btn" onClick={() => goToMission(currentMission + 1)} disabled={currentMission >= mod.end || !solvedMissions.includes(currentMission)}>Next &rarr;</button>
       </div>
 
       {phase === 'intro' && (
         <div className="la-mission">
-          <div className="la-mission-goal"><strong>Your Mission:</strong> {mission.goal}</div>
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--la-accent)', marginBottom: 4 }}>Your Mission:</div>
+            <div style={{ fontSize: '1rem', lineHeight: 1.5, color: 'var(--la-text)' }}>{mission.goal}</div>
+          </div>
           <button className="la-quiz-next-btn" onClick={startPlay} style={{ maxWidth: 250, margin: '0 auto' }}>Accept Mission</button>
         </div>
       )}

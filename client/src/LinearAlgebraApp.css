@@ -66,6 +66,7 @@
 .la-modules-back {
   background: none; border: 1px solid var(--la-border); color: var(--la-text-soft);
   padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; margin-bottom: 6px;
+  display: block;
 }
 .la-modules-back:hover { border-color: var(--la-accent); color: var(--la-accent); }
 
@@ -78,7 +79,8 @@
 }
 .la-back:hover { background: var(--la-hover); color: var(--la-text); }
 
-.la-progress { display: flex; gap: 4px; justify-content: center; margin: 16px 0 20px; flex-wrap: wrap; }
+.la-progress { display: flex; gap: 4px; justify-content: center; align-items: center; margin: 16px 0 20px; }
+.la-progress-dots { display: flex; gap: 4px; justify-content: center; min-width: 180px; }
 .la-progress-dot {
   width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--la-border);
   background: transparent; display: flex; align-items: center; justify-content: center;

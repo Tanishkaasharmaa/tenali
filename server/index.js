@@ -10337,7 +10337,13 @@ const MQ = (() => {
       q = pick(pool)();
     }
     if (difficulty === 'easy' || difficulty === 'medium') {
-      q.choices = generateChoices(q.answer, q.prompt);
+      const isYesNo = q.type && q.type.startsWith('yesno') || (q.prompt && q.prompt.includes('(1=yes,0=no)'));
+      if (isYesNo) {
+        q.choices = ['Yes', 'No'];
+        q.prompt = q.prompt.replace(/\(1=yes,0=no\)/g, '').replace(/\s+/g, ' ').trim();
+      } else {
+        q.choices = generateChoices(q.answer, q.prompt);
+      }
     }
     return q;
   };
@@ -10406,6 +10412,13 @@ app.post('/la-mission-quiz-api/check', (req, res) => {
     const expLower = norm(expected);
     const textNorm = (s) => s.replace(/\s+/g, '').replace(/\u2212/g, '-').toLowerCase();
     correct = textNorm(raw) === expLower || textNorm(raw).includes(expLower) || expLower.includes(textNorm(raw));
+  }
+
+  if (!correct && ((type && type.startsWith('yesno')) || (_answerText && _answerText.includes('(1=yes,0=no)')))) {
+    const expNum = parseFloat(expected);
+    if ((expNum === 0 && n === 'yes') || (expNum === 1 && n === 'no')) {
+      correct = true;
+    }
   }
   res.json({ correct, display: expected, message: correct ? 'Correct!' : 'Incorrect' });
 });
