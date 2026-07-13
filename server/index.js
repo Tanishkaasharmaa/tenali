@@ -8925,6 +8925,8 @@ app.post('/api/mindreader/next', express.json(), (req, res) => {
 
   const result = runInference(CONCEPTS, QUESTIONS, history, incorrectPredictions);
 
+  console.log(`[MindReader API] History Length: ${history.length} | Remaining: ${result.remainingCount} | Confidence: ${result.confidence} | Prediction: ${result.prediction ? result.prediction.name : 'None'}`);
+
   if (result.error) {
     // Distinguish "no candidates" (404) from inconsistent state (409)
     const statusCode = result.remainingCount === 0 && incorrectPredictions.length > 0
@@ -9061,7 +9063,7 @@ app.post('/api/mindreader/end', express.json(), async (req, res) => {
     let authenticated = false;
     let cheated = false;
 
-    if (predictionsMade && predictionsMade.includes(concept)) {
+    if (outcome === 'win' && predictionsMade && predictionsMade.includes(concept)) {
       cheated = true;
     }
 

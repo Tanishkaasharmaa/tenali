@@ -201,7 +201,7 @@ The feature is rendered inside the React component `MindReaderApp`. It uses raw 
 2. **`pregame-thinking`**: An intermediate transitional phase triggered when the user starts the game. Renders a closed-eyes Tenali avatar and an animated visual music wave bars container simulating "thinking music" for a duration of 2.5 seconds. Meanwhile, the backend API is fetched in the background to hide server network latency.
 3. **`playing`**: Actively questioning. Displays:
    - **Royal Chances (Hearts)**: Starts at 3. Reversing a prediction (saying "No" to a guess) consumes 1 heart.
-   - **Risk/Confidence Meter**: A visual indicator showing how certain Tenali is (computed as `confidence * 100%`).
+   - **Risk/Confidence Meter**: A premium glowing slider representation (`○────────────●`) positioned above the thought cloud. The slider dot and label dynamically shift color and intensity based on Tenali's confidence: Calm (0%-15%, blue glow), Curious (16%-35%, green glow), Thinking (36%-55%, yellow glow), Confident (56%-75%, orange glow), and Royal Confidence (76%-100%, pulsing purple glow).
    - **Question Box**: Displays the text of the next question with **Yes**, **No**, and **Don't Know** buttons.
    - **Royal Gamble**: Initiated when Tenali guesses a concept. Prompts the user with a confirmation dialog.
 4. **`gameover`**: Displays whether the user won (successfully stumped Tenali) or lost (Tenali guessed it).

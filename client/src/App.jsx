@@ -55292,7 +55292,39 @@ function TenaliAvatar({ expression, skin }) {
       </g>
     );
     mouth = <path d="M 43 68 Q 52 72 61 60" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
+  } else if (expression === 'confused') {
+    eyeLeft = <circle cx="40" cy="48" r="4.5" fill="#2c3e50" />;
+    eyeRight = <circle cx="60" cy="52" r="4.5" fill="#2c3e50" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 33 45 Q 40 40 47 46" strokeLinecap="round" />
+        <path d="M 53 42 Q 60 48 67 44" strokeLinecap="round" />
+      </g>
+    );
+    mouth = <path d="M 42 70 Q 50 64 58 70" stroke="#2c3e50" strokeWidth="2.5" fill="none" strokeLinecap="round" />;
+  } else if (expression === 'shocked') {
+    eyeLeft = <circle cx="40" cy="50" r="7.5" fill="#2c3e50" />;
+    eyeRight = <circle cx="60" cy="50" r="7.5" fill="#2c3e50" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 32 36 Q 40 30 48 36" strokeLinecap="round" />
+        <path d="M 52 36 Q 60 30 68 36" strokeLinecap="round" />
+      </g>
+    );
+    mouth = <circle cx="50" cy="70" r="8" fill="none" stroke="#2c3e50" strokeWidth="3" />;
+    sweatDrop = <path d="M 72 45 C 72 45 76 52 72 55 C 69 57 67 53 72 45" fill="#3498db" className="sweat-drip-anim" />;
+  } else if (expression === 'proud') {
+    eyeLeft = <path d="M 34 52 Q 40 44 46 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
+    eyeRight = <path d="M 54 52 Q 60 44 66 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 33 41 Q 40 37 47 41" strokeLinecap="round" />
+        <path d="M 53 41 Q 60 37 67 41" strokeLinecap="round" />
+      </g>
+    );
+    mouth = <path d="M 40 64 Q 50 78 60 64 Z" fill="#2c3e50" />;
   }
+
 
   return (
     <div className={`tenali-avatar-wrapper ${expression}-state`} style={{ width: '120px', height: '144px', transition: 'transform 0.3s ease' }}>
@@ -55335,6 +55367,64 @@ function TenaliAvatar({ expression, skin }) {
     </div>
   );
 }
+
+const WRITING_TEXTS = {
+  yes: [
+    "A positive response! The notebook agrees... writing...",
+    "Yes? Excellent. The pattern falls into place... writing...",
+    "Ah, that confirms my calculations! Noting it down...",
+    "Tracing the connections... notebook updated!"
+  ],
+  no: [
+    "No? Fascinating. That cross-eliminates a whole sector... writing...",
+    "A negative! Even better, it narrows down the map... writing...",
+    "An unexpected turn, but my notebook adapts... writing...",
+    "A door closes, but a path opens... noting down..."
+  ],
+  dontknow: [
+    "Uncertainty? A true mathematician embraces the unknown... writing...",
+    "Don't know? Let me mark this with a question mark... processing...",
+    "No matter, we shall traverse this fog of war! writing...",
+    "A grey area! Intriguing... adjusting formulas..."
+  ]
+};
+
+const SHOCKED_TEXTS = [
+  "Unbelievable! You slipped right through my logical net! Let me re-examine...",
+  "Ah! A false path! My royal intuition was untested... Back to calculations!",
+  "Wait... my gamble failed? The mathematical ether plays tricks on me!"
+];
+
+const CONFUSED_TEXTS = [
+  "Wait, a contradiction? Did I leap to conclusions too quickly? Let us recalculate!",
+  "Hmm... my formulas are acting up. Let's redirect our questions.",
+  "A detour! That leads away from the prime candidate... Fascinating.",
+  "A subtle turn! You almost threw me off. Let me adjust my gears."
+];
+
+const PROUD_TEXTS = [
+  "Ah, the fog is clearing! I can feel the shape of your thoughts!",
+  "Hahaha! The coordinates line up! You cannot hide your secret from me!",
+  "Tenali's mind is a beacon of light piercing through your mystery!",
+  "Excellent! A perfect match. The court shall sing praises of my logic!"
+];
+
+const CONFIDENT_TEXTS = [
+  "Prepare yourself, the answer is close at hand!",
+  "The mathematical truth is undeniable! I am ready to make my guess!",
+  "I have woven the threads of your answers into a single conclusion!",
+  "Your thoughts are aligning like stars in a clear night sky."
+];
+
+const THINKING_TEXTS = [
+  "Aha! I see patterns forming...",
+  "Very interesting. My notebook is filling up with patterns.",
+  "Is it geometry, or does algebra hide within your thoughts?",
+  "Focus on your concept. Let the numbers guide us.",
+  "I'm listening closely... keep focusing on your math concept!",
+  "Hmm, a blank canvas of thoughts. Let's narrow it down...",
+  "Every answer eliminates a host of candidate ideas."
+];
 
 function MindReaderApp({ onBack }) {
   const [phase, setPhase] = useState('setup'); // 'setup' | 'playing' | 'gameover'
@@ -55821,10 +55911,16 @@ function MindReaderApp({ onBack }) {
       const data = await res.json();
 
       const newConfidence = data.confidence || 0;
-      const change = Math.abs(newConfidence - confidence);
+      const change = newConfidence - confidence;
+      console.log(`[MindReader Frontend] Confidence update: prev=${confidence} -> new=${newConfidence} (change=${change})`);
       setConfidence(newConfidence);
       setRemainingCount(data.remainingCount || 0);
-      setLastFeedback({ type: answerVal, change });
+      setLastFeedback({
+        type: answerVal,
+        change: Math.abs(change),
+        prevConfidence: confidence,
+        newConfidence
+      });
 
       if (data.prediction) {
         setPrediction(data.prediction);
@@ -55862,7 +55958,12 @@ function MindReaderApp({ onBack }) {
       setRoyalChances(nextChances);
       setShouldShake(true);
       setTimeout(() => setShouldShake(false), 500);
-      setLastFeedback({ type: 'gamble_rejected', change: 0 });
+      setLastFeedback({
+        type: 'gamble_rejected',
+        change: 0,
+        prevConfidence: confidence,
+        newConfidence: 0
+      });
 
       const newIncorrect = [...incorrectPredictions, prediction.name];
       setIncorrectPredictions(newIncorrect);
@@ -55912,6 +56013,8 @@ function MindReaderApp({ onBack }) {
   const callEndGameAPI = async (outcome, conceptName) => {
     setLoading(true);
     setErrorMsg('');
+    const matchedConcept = conceptsFullList.find(c => c.name === conceptName);
+    setActualConcept(matchedConcept || null);
 
     const token = authGetToken();
     const headers = { 'Content-Type': 'application/json' };
@@ -55937,7 +56040,7 @@ function MindReaderApp({ onBack }) {
       if (!res.ok) throw new Error('Failed to save game stats');
       const data = await res.json();
 
-      setCheated(data.cheated || false);
+      setCheated(outcome === 'win' && (data.cheated || false));
 
       if (data.authenticated) {
         setMrrChange(data.cheated ? 0 : (data.mrr - mrr));
@@ -55945,7 +56048,7 @@ function MindReaderApp({ onBack }) {
         setGamesToday(data.mindReaderGamesToday);
         setRecommendations(data.recommendations);
       } else {
-        const isCheat = payload.predictionsMade.includes(payload.concept);
+        const isCheat = outcome === 'win' && payload.predictionsMade.includes(payload.concept);
         const diff = isCheat ? 0 : (outcome === 'win' ? 20 : -5);
         const newMrr = Math.max(1000, mrr + diff);
         setMrrChange(diff);
@@ -55962,7 +56065,7 @@ function MindReaderApp({ onBack }) {
         } catch { }
       }
     } catch (err) {
-      const isCheat = payload.predictionsMade.includes(payload.concept);
+      const isCheat = outcome === 'win' && payload.predictionsMade.includes(payload.concept);
       setCheated(isCheat);
       const diff = isCheat ? 0 : (outcome === 'win' ? 20 : -5);
       const newMrr = Math.max(1000, mrr + diff);
@@ -56052,73 +56155,73 @@ function MindReaderApp({ onBack }) {
 
     if (phase === 'playing') {
       if (prediction) {
+        const gamblePool = [
+          `Ah! The mathematical patterns in your mind have coalesced! I believe you are secretly thinking of: "${prediction.name}". Am I correct?`,
+          `Eureka! The cosmic math coordinates point to none other than: "${prediction.name}". Speak, am I right?`,
+          `The digital fog lifts! I declare that your chosen secret is: "${prediction.name}". Can you deny my deduction?`,
+          `My royal abacus has finished its work. You are thinking of: "${prediction.name}"! Correct?`
+        ];
+        const index = history.length % gamblePool.length;
         return {
           expression: 'gamble',
-          text: `Ah! The mathematical patterns in your mind have coalesced! I believe you are secretly thinking of: "${prediction.name}". Am I correct?`
+          text: gamblePool[index]
         };
       }
 
       if (loading) {
-        const lastAnswer = history[history.length - 1]?.answer;
-        if (lastAnswer === 'no' || lastAnswer === 'dontknow') {
-          return {
-            expression: 'smirk',
-            text: "Aha! That's a crucial clue... Let me process this."
-          };
-        } else {
-          return {
-            expression: 'writing',
-            text: "Let me note that down in my notebook... The pattern forms."
-          };
-        }
+        const lastItem = history[history.length - 1];
+        const lastAnswer = lastItem?.answer || 'yes';
+        const writingTexts = WRITING_TEXTS[lastAnswer] || WRITING_TEXTS.yes;
+        const index = (history.length - 1) % writingTexts.length;
+        return {
+          expression: 'writing',
+          text: writingTexts[index]
+        };
       }
 
-      let feedbackPrefix = "";
+      const totalConcepts = mvpConcepts.length || 15;
+      let progress = 0;
+      if (prediction) {
+        progress = 1.0;
+      } else {
+        const eliminated = totalConcepts - remainingCount;
+        const rawProgress = totalConcepts > 1 ? eliminated / (totalConcepts - 1) : 0;
+        progress = Math.min(0.90, Math.max(0, rawProgress));
+      }
+
       let expression = 'thinking';
+      let selectedText = "";
 
       if (lastFeedback) {
         if (lastFeedback.type === 'gamble_rejected') {
-          expression = 'thinking';
-          feedbackPrefix = "Wait... a contradiction? Or did I leap to conclusions too quickly? Let us recalculate! ";
-        } else if (lastFeedback.type === 'dontknow') {
-          expression = 'smirk';
-          feedbackPrefix = "A mystery! But we shall navigate the mathematical ether regardless. ";
-        } else if (lastFeedback.type === 'yes' || lastFeedback.type === 'no') {
-          if (lastFeedback.type === 'no') {
-            expression = 'smirk';
-          } else {
-            expression = confidence > 0.75 ? 'confident' : 'thinking';
-          }
-
-          if (lastFeedback.change >= 0.15) {
-            feedbackPrefix = confidence > 0.6 
-              ? "Ah, the fog is clearing! I can feel the shape of your thoughts! " 
-              : "Wait... a subtle turn! You almost threw me off. ";
-          } else {
-            feedbackPrefix = "Interesting... that eliminates quite a few possibilities. ";
-          }
+          expression = 'shocked';
+          selectedText = SHOCKED_TEXTS[history.length % SHOCKED_TEXTS.length];
+        } else if (lastFeedback.newConfidence < lastFeedback.prevConfidence && lastFeedback.change > 0.02) {
+          expression = 'confused';
+          selectedText = CONFUSED_TEXTS[history.length % CONFUSED_TEXTS.length];
+        } else if (lastFeedback.newConfidence > lastFeedback.prevConfidence && lastFeedback.change >= 0.15 && confidence > 0.6) {
+          expression = 'proud';
+          selectedText = PROUD_TEXTS[history.length % PROUD_TEXTS.length];
         }
       }
 
-      if (confidence > 0.75 && expression !== 'smirk') {
-        expression = 'confident';
+      // Fallback to general confidence state mapping if expression was not set by sudden changes above
+      if (expression === 'thinking') {
+        if (progress > 0.75) {
+          expression = 'confident';
+          selectedText = CONFIDENT_TEXTS[history.length % CONFIDENT_TEXTS.length];
+        } else if (progress > 0.3) {
+          expression = 'smirk';
+          selectedText = THINKING_TEXTS[history.length % THINKING_TEXTS.length];
+        } else {
+          expression = 'thinking';
+          selectedText = THINKING_TEXTS[history.length % THINKING_TEXTS.length];
+        }
       }
 
-      if (expression === 'confident') {
-        return {
-          expression: 'confident',
-          text: feedbackPrefix ? feedbackPrefix.trim() : "Prepare yourself, the answer is close at hand!"
-        };
-      }
-      if (expression === 'smirk') {
-        return {
-          expression: 'smirk',
-          text: feedbackPrefix ? feedbackPrefix.trim() : "Aha! I see patterns forming..."
-        };
-      }
       return {
-        expression: 'thinking',
-        text: feedbackPrefix ? feedbackPrefix.trim() : "Focus on your concept. Let the numbers guide us."
+        expression,
+        text: selectedText
       };
     }
 
