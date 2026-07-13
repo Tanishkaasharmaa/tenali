@@ -55584,6 +55584,7 @@ function MindReaderApp({ onBack }) {
     if (loading || !nextQuestion) return;
     setLoading(true);
     setErrorMsg('');
+    const startTime = Date.now();
 
     const newHistory = [...history, { questionId: nextQuestion.id, answer: answerVal }];
     setHistory(newHistory);
@@ -55626,6 +55627,11 @@ function MindReaderApp({ onBack }) {
     } catch (err) {
       setErrorMsg(err.message || 'Error processing response.');
     } finally {
+      const elapsed = Date.now() - startTime;
+      const delay = Math.max(0, 1200 - elapsed);
+      if (delay > 0) {
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
       setLoading(false);
     }
   };
@@ -55652,6 +55658,7 @@ function MindReaderApp({ onBack }) {
         setPhase('gameover');
       } else {
         setLoading(true);
+        const startTime = Date.now();
         try {
           const res = await fetch(`${API}/api/mindreader/next`, {
             method: 'POST',
@@ -55677,6 +55684,11 @@ function MindReaderApp({ onBack }) {
         } catch (err) {
           setErrorMsg('Error recovering from incorrect gamble.');
         } finally {
+          const elapsed = Date.now() - startTime;
+          const delay = Math.max(0, 1200 - elapsed);
+          if (delay > 0) {
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
           setLoading(false);
         }
       }
@@ -55856,8 +55868,6 @@ function MindReaderApp({ onBack }) {
         }
       }
 
-      const qText = nextQuestion?.text || "";
-
       if (confidence > 0.75 && expression !== 'smirk') {
         expression = 'confident';
       }
@@ -55865,18 +55875,18 @@ function MindReaderApp({ onBack }) {
       if (expression === 'confident') {
         return {
           expression: 'confident',
-          text: `${feedbackPrefix}Prepare yourself, the answer is close at hand! Tell me, is this true: ${qText}`
+          text: feedbackPrefix ? feedbackPrefix.trim() : "Prepare yourself, the answer is close at hand!"
         };
       }
       if (expression === 'smirk') {
         return {
           expression: 'smirk',
-          text: `${feedbackPrefix}Let me ask: ${qText}`
+          text: feedbackPrefix ? feedbackPrefix.trim() : "Aha! I see patterns forming..."
         };
       }
       return {
         expression: 'thinking',
-        text: `${feedbackPrefix || "A fresh path begins. "}Does this apply to your concept: ${qText}`
+        text: feedbackPrefix ? feedbackPrefix.trim() : "Focus on your concept. Let the numbers guide us."
       };
     }
 
