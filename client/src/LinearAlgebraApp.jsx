@@ -38,8 +38,8 @@ const MISSIONS = [
     ],
     quiz: [
       { q: "If Ram's savings = 3x Lakshman's, do points (L,R) still lie on a line through the origin?", type: 'yesno', correct: 0 },
-      { q: 'For (6,3), what is the ratio R:L and why?', _isText: true, _keywords: ['2:1', '2 to 1', '2/1', '2: 1'] },
-      { q: 'Explain why all scalar multiples t(2,1) lie on the same line through the origin.', _isText: true, _keywords: ['scalar', 'multiple', 'line', 'origin', 'constant', 'ratio', 'direction'] }
+      { q: 'For points (2,1), (4,2), (6,3), is the ratio R:L always the same (2:1)?', type: 'yesno', correct: 0 },
+      { q: 'Do all scalar multiples t(2,1) lie on the same line through the origin?', type: 'yesno', correct: 0 }
     ],
     realLife: [
       { emoji: '🚕', title: 'Taxi Fare', equation: 'Total = 12x + 25', story: 'A taxi charges a base fare of Rs25 just for getting in, plus Rs12 for every kilometre you travel. So for 1 km you pay Rs37, for 2 km you pay Rs49, and so on. The total fare grows linearly with distance.', question: 'What does the base fare of Rs25 represent on the graph — where does the line start when the distance is zero?', answer: '25' },
@@ -75,8 +75,8 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'What is slope of line containing B,C,D?', type: 'yesno', correct: 0 },
-      { q: 'What is the equation of this line?', _isText: true, _keywords: ['y = x - 1', 'y=x-1', 'x - 1', 'x-1'] },
-      { q: 'Find the next point in the pattern (2,1), (3,2), (4,3), ...', _isText: true, _keywords: ['(5,4)', '5,4'] }
+      { q: 'Is the equation of the line through B(2,1), C(3,2), D(4,3) given by y = x - 1?', type: 'yesno', correct: 0 },
+      { q: 'Does the pattern (2,1), (3,2), (4,3) continue with (5,4)?', type: 'yesno', correct: 0 }
     ],
     realLife: [
       { emoji: '📍', title: 'GPS Path', equation: '', story: 'Your phone\'s GPS records waypoints as you walk. If all the recorded points happen to lie on a single straight line, that means you were walking in a perfectly straight direction the whole time. GPS apps use this to detect whether you deviated from a straight path.', question: 'What does it mean for GPS waypoints to be collinear, and what does that tell us about the path you walked?', answer: 'on same line' },
@@ -139,8 +139,8 @@ const MISSIONS = [
       'The +1 shifts the whole line UP by 1 unit!'
     ],
     quiz: [
-      { q: 'What is y when x=0 for y=2x+1?', _isText: true, _keywords: ['1', 'one'] },
-      { q: 'Where does y=2x+1 cross the y-axis?', _isText: true, _keywords: ['(0,1)', '0,1'] },
+      { q: 'Does y = 2x + 1 give y = 1 when x = 0?', type: 'yesno', correct: 0 },
+      { q: 'Does the line y = 2x + 1 cross the y-axis at (0,1)?', type: 'yesno', correct: 0 },
       { q: 'If we remove the +1, does y=2x pass through origin?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -172,8 +172,8 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'Does slider a control the slope/steepness of the line?', type: 'yesno', correct: 0 },
-      { q: 'What is the mathematical relationship between the slope a and the angle the line makes with the x-axis?', _isText: true, _keywords: ['tangent', 'tan', 'angle', 'steeper', 'increase'] },
-      { q: 'If you set a=0 and b=3, what type of line do you get and why?', _isText: true, _keywords: ['horizontal', 'flat', 'no slope', 'constant', 'y=3'] }
+      { q: 'Is the slope a equal to the tangent of the angle the line makes with the x-axis?', type: 'yesno', correct: 0 },
+      { q: 'If you set a=0 and b=3, do you get a horizontal line at y=3?', type: 'yesno', correct: 0 }
     ],
     realLife: [
       { emoji: '🏃', title: 'Running Speed', equation: '', story: 'When you go for a run, your distance from home can be modelled as a linear function. The slope of the line represents your running speed — a steeper line means you run faster. The y-intercept represents how far ahead you started from home (your initial position).', question: 'In a distance-time graph for a runner, what does the slope of the line physically represent?', answer: 'speed' },
@@ -201,8 +201,8 @@ const MISSIONS = [
       'What point does GeoGebra show?'
     ],
     quiz: [
-      { q: 'Write the coefficient matrix for the system 2x+3y=7, 3x+4y=10.', _isText: true, _keywords: ['[[2,3],[3,4]]', '[2,3]', '2 3', '3 4'] },
-      { q: 'What is the solution (x,y) to 2x+3y=7 and 3x+4y=10?', _isText: true, _keywords: ['x=2', 'y=1', '(2,1)', '2,1'] },
+      { q: 'Can the system 2x+3y=7, 3x+4y=10 be written in matrix form Ax=b?', type: 'yesno', correct: 0 },
+      { q: 'Does the solution to 2x+3y=7 and 3x+4y=10 satisfy both equations at the same time?', type: 'yesno', correct: 0 },
       { q: 'Can a system of 2 equations in 2 unknowns have more than one solution?', type: 'yesno', correct: 1 }
     ],
     realLife: [
@@ -232,7 +232,7 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'Is f(x)=3x+2 invertible because each x gives a unique y?', type: 'yesno', correct: 0 },
-      { q: 'What is the formula for the inverse function f⁻¹(y)?', _isText: true, _keywords: ['(y-2)/3', 'y-2/3', 'y/3 - 2', '(y-2)/3'] },
+      { q: 'Is the inverse of f(x)=3x+2 given by f⁻¹(y)=(y-2)/3?', type: 'yesno', correct: 0 },
       { q: 'For a function to be invertible, must it be one-to-one (injective)?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -262,8 +262,8 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'Is f(x)=x²-10 invertible over all real numbers?', type: 'yesno', correct: 1 },
-      { q: 'Why is a parabola not invertible globally?', _isText: true, _keywords: ['two', 'same', 'symmetric', 'one-to-one', 'not unique', 'fails'] },
-      { q: 'If f(a)=f(b) and a≠b for a quadratic, what does this tell you about invertibility?', _isText: true, _keywords: ['not invertible', 'not one-to-one', 'fails horizontal', 'two inputs same output'] }
+      { q: 'Can a parabola like y=x² be inverted globally (over all reals)?', type: 'yesno', correct: 1 },
+      { q: 'If f(a)=f(b) for two different inputs a and b, is f one-to-one (invertible)?', type: 'yesno', correct: 1 }
     ],
     realLife: [
       { emoji: '🎮', title: 'Projectile', equation: 'h(t) = -5t² + 20t', story: 'When you throw a ball straight up, its height over time follows a parabolic path — it rises, reaches a peak, then falls back down. The function h(t) = -5t² + 20t models this. At time t=2 seconds, you can substitute into the formula to find exactly how high the ball is at that moment.', question: 'Using the projectile motion formula, what is the height of the ball at time t = 2 seconds?', answer: '20' },
@@ -291,8 +291,8 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'Can a quadratic equation have two distinct real solutions?', type: 'yesno', correct: 0 },
-      { q: 'Why does the parabola y=x²-10 intersect y=54 at exactly two points?', _isText: true, _keywords: ['symmetric', 'parabola', 'symmetry', 'two', 'even'] },
-      { q: 'If f(a)=f(-a) for all a, what symmetry property does f have?', _isText: true, _keywords: ['even', 'symmetric', 'y-axis', 'f(-x)=f(x)'] }
+      { q: 'Does the parabola y=x²-10 intersect y=54 at two symmetric points?', type: 'yesno', correct: 0 },
+      { q: 'If f(a)=f(-a) for all a, is f an even function?', type: 'yesno', correct: 0 }
     ],
     realLife: [
       { emoji: '📡', title: 'Signal Strength', equation: '', story: 'A radio signal\'s strength depends on distance from the transmitter following a quadratic pattern: Signal = d² - 10. Because of the squared term, two different distances (one closer, one farther) can produce the exact same signal strength. This means there are two positions where you receive the same signal quality.', question: 'Why can two different positions give the same signal strength in this quadratic model?', answer: 'symmetric' },
@@ -319,7 +319,7 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'Can a cubic equation have more real solutions than a quadratic equation?', type: 'yesno', correct: 0 },
-      { q: 'Explain the relationship between the degree of a polynomial and its maximum number of real roots.', _isText: true, _keywords: ['degree', 'roots', 'fundamental', 'theorem', 'algebra', 'n'] },
+      { q: 'Can a degree-n polynomial have more than n real roots?', type: 'yesno', correct: 1 },
     ],
     realLife: [
       { emoji: '🎮', title: 'Video Game Physics', equation: '', story: 'In many video games, a character\'s jump height follows a cubic path — they accelerate, decelerate, and may even bounce. Because a cubic function can wiggle up and down, the character might reach the same height at three different moments during the jump — going up, coming down, and bouncing back up again.', question: 'How many different times can a character be at the same height during a cubic jump path?', answer: 'up to 3' },
@@ -347,8 +347,8 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'How many coordinates does a point in R³ need?', type: 'yesno', correct: 0 },
-      { q: 'What is the mathematical notation for the 2D real coordinate plane?', _isText: true, _keywords: ['R²', 'R^2', 'R2'] },
-      { q: 'If a data point has 5 independent measurements, which space does it live in?', _isText: true, _keywords: ['R⁵', 'R^5', 'R5', '5D', 'five'] }
+      { q: 'Is R² the standard notation for the 2D real coordinate plane?', type: 'yesno', correct: 0 },
+      { q: 'Does a data point with 5 independent measurements live in R⁵?', type: 'yesno', correct: 0 }
     ],
     realLife: [
       { emoji: '🌍', title: 'GPS Coordinates', equation: '', story: 'Your position on Earth\'s surface is described by two numbers: latitude and longitude. These two coordinates form a point in a 2-dimensional space (R²). Just like you need an (x,y) pair to locate a point on a flat map, you need exactly two numbers to pinpoint any location on the globe.', question: 'What mathematical space do latitude and longitude together define?', answer: 'R²' },
@@ -377,9 +377,9 @@ const MISSIONS = [
       'GeoGebra shows the transformed vector!'
     ],
     quiz: [
-      { q: 'If φ(1,0) = (2,3), what does this tell you about the first column of the matrix?', _isText: true, _keywords: ['column', 'first', '(2,3)', 'image of basis'] },
-      { q: 'What is φ(0,1) and what does it tell you about the second column?', _isText: true, _keywords: ['(3,4)', 'second column', 'column 2'] },
-      { q: 'Why is studying matrices as linear functions useful?', _isText: true, _keywords: ['unified', 'composition', 'composition', 'transform', 'framework', 'multiply'] }
+      { q: 'If φ(1,0) = (2,3), is (2,3) the first column of the matrix?', type: 'yesno', correct: 0 },
+      { q: 'Does φ(0,1) give the second column of the transformation matrix?', type: 'yesno', correct: 0 },
+      { q: 'Can matrix multiplication be used to compose (combine) two linear transformations?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '🖥️', title: 'Image Processing', equation: '', story: 'Every pixel in a digital image has three colour values: red, green, and blue (RGB). When you apply a filter — like making an image warmer or converting to black-and-white — each pixel\'s RGB triplet is multiplied by a matrix. The matrix transforms the original colours into new colours, creating the filtered effect.', question: 'What does the filter matrix do to each pixel\'s RGB colour values in image processing?', answer: 'transforms colors' },
@@ -407,9 +407,9 @@ const MISSIONS = [
       'A non-zero determinant means you can reverse the transformation.'
     ],
     quiz: [
-      { q: 'What is det([[1,2],[2,4]]) and what does it tell you about invertibility?', _isText: true, _keywords: ['0', 'zero', 'not invertible', 'singular'] },
+      { q: 'Is det([[1,2],[2,4]]) equal to zero?', type: 'yesno', correct: 0 },
       { q: 'Does a zero determinant always mean a matrix is not invertible?', type: 'yesno', correct: 0 },
-      { q: 'Explain the connection between det≠0 and solving Ax=b uniquely.', _isText: true, _keywords: ['inverse', 'unique', 'solution', 'x=A⁻¹b', 'non-singular'] }
+      { q: 'If det(A)≠0, does Ax=b always have a unique solution?', type: 'yesno', correct: 0 }
     ],
     realLife: [
       { emoji: '🏆', title: 'Robotics', equation: '', story: 'A robot arm needs to reach a specific position in space. The forward problem is: given the joint angles, where does the end of the arm end up? The inverse problem is harder but essential — given the desired position, what joint angles achieve it? This requires the matrix to be invertible so the transformation can be reversed.', question: 'What does the inverse of the robot arm\'s transformation matrix give you?', answer: 'joint angles' },
@@ -436,9 +436,9 @@ const MISSIONS = [
       'These vectors form the KERNEL or NULL SPACE.'
     ],
     quiz: [
-      { q: 'What does det=0 mean?', _isText: true, _keywords: ['singular', 'info lost', 'information lost', 'not invertible', 'zero', 'lost', 'collapse'] },
-      { q: 'The set of vectors mapping to the origin is called...', _isText: true, _keywords: ['kernel', 'null space', 'null'] },
-      { q: 'How many vectors map to the origin for a singular matrix?', _isText: true, _keywords: ['infinite', 'line', 'many', 'infinitely'] }
+      { q: 'Does det(A)=0 mean the matrix is singular (not invertible)?', type: 'yesno', correct: 0 },
+      { q: 'Is the set of vectors mapping to the origin called the null space (kernel)?', type: 'yesno', correct: 0 },
+      { q: 'Can a singular matrix map infinitely many vectors to the origin?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '📷', title: 'Image Blur', equation: '', story: 'When you blur a photo, some fine details are permanently lost. Mathematically, blurring is like applying a singular matrix to the image — the matrix has determinant zero, meaning certain information (the null space) is destroyed. No amount of processing can perfectly recover the original sharp image because the data has been irreversibly compressed.', question: 'Can you perfectly restore a blurred image back to its original sharp version? Why or why not?', answer: 'no - info lost' },
@@ -468,9 +468,9 @@ const MISSIONS = [
       'Multiply inverse by each encrypted pair to recover letters!'
     ],
     quiz: [
-      { q: 'If you encrypt (S,U)=(18,20) with [[2,3],[3,4]], what is the first component of the result?', _isText: true, _keywords: ['96', '96'] },
+      { q: 'Does encrypting (S,U)=(18,20) with [[2,3],[3,4]] give 96 as the first component?', type: 'yesno', correct: 0 },
       { q: 'Does the encryption matrix need to be invertible for decryption to work?', type: 'yesno', correct: 0 },
-      { q: 'Why is modular arithmetic necessary in Hill Cipher encryption?', _isText: true, _keywords: ['mod', 'modulo', 'wrap', 'letter', 'alphabet', '26', 'range'] }
+      { q: 'Is modular arithmetic necessary in Hill Cipher to keep results in the alphabet range?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '📱', title: 'Messaging Apps', equation: '', story: 'When you send a message on WhatsApp, the text is encrypted before transmission so that no one intercepting the data can read it. The encryption uses matrix multiplication — your message letters are converted to numbers, multiplied by a secret matrix, and the result is sent over the network. Only the recipient with the inverse matrix can decrypt it back.', question: 'What matrix operation is used to encrypt your messages in secure messaging apps?', answer: 'matrix multiplication' },
@@ -499,9 +499,9 @@ const MISSIONS = [
       'The system has NO exact solution.'
     ],
     quiz: [
-      { q: 'Solve 3A+1C=1200 and 1A+2C=1000. What is A?', _isText: true, _keywords: ['280', '280'] },
-      { q: 'What is a system with more equations than unknowns called?', _isText: true, _keywords: ['overdetermined'] },
-      { q: 'If no exact solution exists, what mathematical technique finds the best approximate solution?', _isText: true, _keywords: ['least squares', 'minimize error', 'minimise', 'best fit'] }
+      { q: 'Is the solution to 3A+1C=1200 and 1A+2C=1000 given by A=280?', type: 'yesno', correct: 0 },
+      { q: 'Is a system with more equations than unknowns called overdetermined?', type: 'yesno', correct: 0 },
+      { q: 'Does the least squares method find the best approximate solution when no exact solution exists?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '📈', title: 'Business Forecasting', equation: '', story: 'A company collects sales data from many past months (lots of data points) but wants to fit a simple trend line with just two parameters (slope and intercept). This creates an overdetermined system — more equations than unknowns. No single trend line passes through all the data points, so the best approach is to minimise the total error using least squares.', question: 'When you have many data points but only a few parameters to estimate, what type of system do you get?', answer: 'overdetermined' },
@@ -530,8 +530,8 @@ const MISSIONS = [
       'Values converge to ~667 City, ~333 Suburb!'
     ],
     quiz: [
-      { q: 'What is the steady state City fraction?', _isText: true, _keywords: ['66.7%', '66.7', '2/3', '67', '66.67'] },
-      { q: 'What matrix equation defines steady state?', _isText: true, _keywords: ['M*v = v', 'Mv = v', 'M v = v'] },
+      { q: 'Is the steady state City fraction approximately 2/3 (66.7%)?', type: 'yesno', correct: 0 },
+      { q: 'Is the steady state defined by the matrix equation Mv = v?', type: 'yesno', correct: 0 },
       { q: 'Does every Markov chain reach a steady state?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -561,9 +561,9 @@ const MISSIONS = [
       'Try different (x,y) values — you can only minimize error!'
     ],
     quiz: [
-      { q: 'How many rows in the matrix [[3,1],[1,2],[1,1]]?', _isText: true, _keywords: ['3', 'three'] },
+      { q: 'Does the matrix [[3,1],[1,2],[1,1]] have 3 rows?', type: 'yesno', correct: 0 },
       { q: 'Can 3 equations with 2 unknowns have an exact solution?', type: 'yesno', correct: 1 },
-      { q: 'What do we call a system with more equations than unknowns?', _isText: true, _keywords: ['overdetermined', 'over-determined'] }
+      { q: 'Is a system with more equations than unknowns called overdetermined?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '📊', title: 'Weather Prediction', equation: '', story: 'Meteorologists collect thousands of temperature, pressure, and humidity measurements to estimate just a few weather parameters for their forecast model. With far more measurements than parameters, the system is overdetermined. No single set of parameters perfectly fits all the data, so they use least squares to find the best compromise.', question: 'When thousands of weather measurements are used to estimate a few forecast parameters, what type of system results?', answer: 'overdetermined' },
@@ -593,8 +593,8 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'Do two non-parallel lines in a plane always intersect at exactly one point?', type: 'yesno', correct: 0 },
-      { q: 'Explain geometrically why a third random line is unlikely to pass through the intersection of the first two.', _isText: true, _keywords: ['intersection', 'point', 'specific', 'coincide', 'unlikely', 'random'] },
-      { q: 'What is the geometric interpretation of an overdetermined system with no solution?', _isText: true, _keywords: ['lines', 'do not meet', 'no common', 'not concurrent', 'inconsistent'] }
+      { q: 'Is a third random line unlikely to pass through the intersection of the first two?', type: 'yesno', correct: 0 },
+      { q: 'Does an overdetermined system with no solution mean the lines do not all meet at one point?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '🏗️', title: 'Engineering Design', equation: '', story: 'When designing a bridge, engineers must simultaneously satisfy constraints for strength (must support heavy loads), cost (must stay within budget), and weight (must not be too heavy for the foundations). These three constraints often conflict — making the bridge stronger increases cost. Since no single design perfectly satisfies all three, engineers must find the best compromise by minimising the total error.', question: 'When a bridge must satisfy conflicting strength, cost, and weight constraints, what do engineers do?', answer: 'error' },
@@ -624,7 +624,7 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'Does the steady-state distribution of a Markov chain depend on the initial state?', type: 'yesno', correct: 1 },
-      { q: 'Why must each row of a transition matrix sum to exactly 1?', _isText: true, _keywords: ['probability', 'total', '100%', 'all outcomes', 'certain'] },
+      { q: 'Must each row of a transition matrix sum to exactly 1 (total probability)?', type: 'yesno', correct: 0 },
       { q: 'Can a Markov chain have more than one steady-state distribution?', type: 'yesno', correct: 1 }
     ],
     realLife: [
@@ -655,7 +655,7 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'Does the steady-state distribution of a 3-state Markov chain depend on the starting state?', type: 'yesno', correct: 1 },
-      { q: 'Why does a 3-state chain need exactly 3 equations (plus normalization) to find the steady state?', _isText: true, _keywords: ['three', 'unknowns', 'states', 'variables', 'equations'] },
+      { q: 'Does a 3-state chain need exactly 3 equations plus normalization to find the steady state?', type: 'yesno', correct: 0 },
       { q: 'Can you use repeated matrix multiplication to find the steady state numerically?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -687,7 +687,7 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'Is the dot product of two perpendicular vectors always zero?', type: 'yesno', correct: 0 },
-      { q: 'For a general vector [a,b], what equation describes all vectors perpendicular to it?', _isText: true, _keywords: ['ax+by=0', 'ax + by = 0'] },
+      { q: 'Do all vectors perpendicular to [a,b] satisfy the equation ax+by=0?', type: 'yesno', correct: 0 },
       { q: 'Is the zero vector perpendicular to every vector?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -717,7 +717,7 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'Does the equation x+2y+3z=0 define a plane through the origin in R³?', type: 'yesno', correct: 0 },
-      { q: 'How many linearly independent equations are needed to define a line (not a plane) in R³?', _isText: true, _keywords: ['two', '2', 'two equations'] },
+      { q: 'Are exactly two independent equations needed to define a line (not a plane) in R³?', type: 'yesno', correct: 0 },
       { q: 'Does (2,7,3) satisfy x+2y+3z=0?', type: 'yesno', correct: 1 }
     ],
     realLife: [
@@ -747,8 +747,8 @@ const MISSIONS = [
       'So (x,y,z) = t*(1,1,-3) — a LINE!'
     ],
     quiz: [
-      { q: 'When you have 2 independent equations in 3 unknowns, how many free variables remain?', _isText: true, _keywords: ['1', 'one', '1 free'] },
-      { q: 'What is the null space direction of the plane W = span{(1,2,1),(2,7,3)}?', _isText: true, _keywords: ['(1,1,-3)', '1,1,-3'] },
+      { q: 'When you have 2 independent equations in 3 unknowns, does exactly 1 free variable remain?', type: 'yesno', correct: 0 },
+      { q: 'Is the null space direction of W = span{(1,2,1),(2,7,3)} given by (1,1,-3)?', type: 'yesno', correct: 0 },
       { q: 'Is the null space always perpendicular to the plane it is derived from?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -777,8 +777,8 @@ const MISSIONS = [
       'So (x,y,z) = t*(1,-2,1) — a line!'
     ],
     quiz: [
-      { q: 'What is the rank of [[1,2,3],[4,5,6],[7,8,9]] and why?', _isText: true, _keywords: ['2', 'rank 2', 'row3', 'redundant'] },
-      { q: 'What is the null space direction vector?', _isText: true, _keywords: ['(1,-2,1)', '1,-2,1'] },
+      { q: 'Is the rank of [[1,2,3],[4,5,6],[7,8,9]] equal to 2?', type: 'yesno', correct: 0 },
+      { q: 'Is the null space direction of [[1,2,3],[4,5,6],[7,8,9]] given by (1,-2,1)?', type: 'yesno', correct: 0 },
       { q: 'Is the null space perpendicular to every row of the matrix?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -808,9 +808,9 @@ const MISSIONS = [
       'Together they span ALL of space!'
     ],
     quiz: [
-      { q: 'What is the dimension of the row space of A = [[1,2,3],[4,5,6],[7,8,9]]?', _isText: true, _keywords: ['2', '2D', 'plane'] },
+      { q: 'Is the dimension of the row space of [[1,2,3],[4,5,6],[7,8,9]] equal to 2?', type: 'yesno', correct: 0 },
       { q: 'Do the row space and null space together span the entire input space?', type: 'yesno', correct: 0 },
-      { q: 'Explain why every row vector must be orthogonal to every null space vector.', _isText: true, _keywords: ['definition', 'Ax=0', 'row times', 'dot product', 'null'] }
+      { q: 'Is every row vector always orthogonal to every null space vector (Ax=0)?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '🏆', title: 'Recommendation Systems', equation: '', story: 'Netflix uses matrix factorisation to recommend movies. Your viewing preferences live in the row space of the rating matrix — the meaningful patterns. The null space represents irrelevant features that do not contribute to recommendations. By separating these two subspaces, Netflix can focus on the patterns that actually matter for predicting what you will enjoy.', question: 'In Netflix\'s recommendation algorithm, what does the null space of the rating matrix represent?', answer: 'irrelevant features' },
@@ -840,9 +840,9 @@ const MISSIONS = [
       'B collapses entire lines to points!'
     ],
     quiz: [
-      { q: 'What is the determinant of [[1,2],[2,4]]?', _isText: true, _keywords: ['0', 'zero'] },
+      { q: 'Is the determinant of [[1,2],[2,4]] equal to zero?', type: 'yesno', correct: 0 },
       { q: 'Does the matrix [[1,2],[2,4]] map distinct parallel lines to distinct points?', type: 'yesno', correct: 0 },
-      { q: 'Explain why B maps the entire line 2y+x=4 to the single point (4,8).', _isText: true, _keywords: ['collapses', 'same', 'output', 'x+2y=4', 'constant'] }
+      { q: 'Does the matrix [[1,2],[2,4]] map the entire line 2y+x=4 to the single point (4,8)?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '📷', title: '3D to 2D Photo', equation: '', story: 'When you take a photo with your phone camera, the 3D world in front of you is projected onto a flat 2D sensor. Millions of points at different depths in the real world all land on the same spot in the image — the depth dimension is collapsed. This is exactly what a singular matrix does: it maps a higher-dimensional space onto a lower-dimensional one, losing information in the process.', question: 'When a camera collapses 3D onto 2D, which dimension is lost — and what mathematical concept does this represent?', answer: 'depth' },
@@ -872,9 +872,9 @@ const MISSIONS = [
       'Drag to rotate the 3D view and see the plane through origin.'
     ],
     quiz: [
-      { q: 'How many linearly independent vectors are needed to span a plane in R³?', _isText: true, _keywords: ['2', 'two'] },
+      { q: 'Are exactly 2 linearly independent vectors needed to span a plane in R³?', type: 'yesno', correct: 0 },
       { q: 'Does the origin always belong to any span of vectors?', type: 'yesno', correct: 0 },
-      { q: 'If two vectors in R³ are scalar multiples of each other, what does their span produce?', _isText: true, _keywords: ['line', '1D', 'one-dimensional', 'not a plane'] }
+      { q: 'If two vectors in R³ are scalar multiples, does their span produce a line (not a plane)?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '✈️', title: 'Flight Routes', equation: '', story: 'An aeroplane can move in multiple directions simultaneously — forward and sideways, for example. The set of all possible velocity combinations forms a plane (the span of two direction vectors). Any velocity that is a linear combination of these basis directions is achievable. This is why two independent direction vectors span a 2D plane of reachable velocities.', question: 'What does the span of two independent direction vectors in 3D represent for an aeroplane?', answer: 'plane' },
@@ -905,7 +905,7 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'Do two planes in R³ typically intersect in a line?', type: 'yesno', correct: 0 },
-      { q: 'What is the null space direction of W?', _isText: true, _keywords: ['(1,1,-3)', '1,1,-3'] },
+      { q: 'Is the null space direction of W given by (1,1,-3)?', type: 'yesno', correct: 0 },
       { q: 'Is the null space perpendicular to every vector in the plane W?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -934,8 +934,8 @@ const MISSIONS = [
       'So null space = t(1,-2,1) — a line!'
     ],
     quiz: [
-      { q: 'What is the determinant of [[1,4,7],[2,5,8],[3,6,9]]?', _isText: true, _keywords: ['0', 'zero'] },
-      { q: 'What is the null space direction?', _isText: true, _keywords: ['(1,-2,1)', '1,-2,1'] },
+      { q: 'Is the determinant of [[1,4,7],[2,5,8],[3,6,9]] equal to zero?', type: 'yesno', correct: 0 },
+      { q: 'Is the null space direction of [[1,4,7],[2,5,8],[3,6,9]] given by (1,-2,1)?', type: 'yesno', correct: 0 },
       { q: 'Does the null space direction depend on which specific rows are redundant?', type: 'yesno', correct: 1 }
     ],
     realLife: [
@@ -966,8 +966,8 @@ const MISSIONS = [
       'Row space plane and null space line are perpendicular!'
     ],
     quiz: [
-      { q: 'What is the rank of [[1,4,7],[2,5,8],[3,6,9]]?', _isText: true, _keywords: ['2', 'rank 2'] },
-      { q: 'What is the nullity (dimension of null space)?', _isText: true, _keywords: ['1', 'one'] },
+      { q: 'Is the rank of [[1,4,7],[2,5,8],[3,6,9]] equal to 2?', type: 'yesno', correct: 0 },
+      { q: 'Is the nullity (dimension of null space) of [[1,4,7],[2,5,8],[3,6,9]] equal to 1?', type: 'yesno', correct: 0 },
       { q: 'Do the row space and column space always have the same dimension?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -997,8 +997,8 @@ const MISSIONS = [
       'Type: Dot(r2, n) — also 0! Row space \u22a5 Null space.'
     ],
     quiz: [
-      { q: 'What is (1,4,7)·(1,-2,1)? Show your computation.', _isText: true, _keywords: ['0', '1-8+7', '1 - 8 + 7'] },
-      { q: 'If Dot(r,n)=0 for a row r and null vector n, what does this confirm?', _isText: true, _keywords: ['perpendicular', 'orthogonal', 'fundamental theorem'] },
+      { q: 'Is (1,4,7)·(1,-2,1) = 0?', type: 'yesno', correct: 0 },
+      { q: 'If Dot(r,n)=0 for a row r and null vector n, does this confirm they are perpendicular?', type: 'yesno', correct: 0 },
       { q: 'Does every row of A have dot product 0 with every null space vector?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1029,8 +1029,8 @@ const MISSIONS = [
       'B collapses the whole line to a single point!'
     ],
     quiz: [
-      { q: 'What is the determinant of B = [[1,2],[2,4]]?', _isText: true, _keywords: ['0', 'zero'] },
-      { q: 'All points on the line 2y+x=4 map to which single output point?', _isText: true, _keywords: ['(4,8)', '4,8'] },
+      { q: 'Is the determinant of B = [[1,2],[2,4]] equal to zero?', type: 'yesno', correct: 0 },
+      { q: 'Do all points on the line 2y+x=4 map to the single point (4,8) under B?', type: 'yesno', correct: 0 },
       { q: 'Does a non-singular matrix (det≠0) also collapse lines to single points?', type: 'yesno', correct: 1 }
     ],
     realLife: [
@@ -1061,8 +1061,8 @@ const MISSIONS = [
       'Each line 2y+x=k maps to (k, 2k)!'
     ],
     quiz: [
-      { q: 'What point does the line 2y+x=10 map to under B?', _isText: true, _keywords: ['(10,20)', '10,20'] },
-      { q: 'What point does the line 2y+x=62 map to under B?', _isText: true, _keywords: ['(62,124)', '62,124'] },
+      { q: 'Does the line 2y+x=10 map to (10,20) under B=[[1,2],[2,4]]?', type: 'yesno', correct: 0 },
+      { q: 'Does the line 2y+x=62 map to (62,124) under B=[[1,2],[2,4]]?', type: 'yesno', correct: 0 },
       { q: 'Do different values of k always give different output points?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1091,8 +1091,8 @@ const MISSIONS = [
       'Null space direction (2,-1), range direction (1,2). Perpendicular!'
     ],
     quiz: [
-      { q: 'What is the null space direction of [[1,2],[2,4]]?', _isText: true, _keywords: ['(2,-1)', '2,-1', '(-2,1)', '-2,1'] },
-      { q: 'What is the range direction of [[1,2],[2,4]]?', _isText: true, _keywords: ['(1,2)', '1,2'] },
+      { q: 'Is the null space direction of [[1,2],[2,4]] given by (2,-1)?', type: 'yesno', correct: 0 },
+      { q: 'Is the range direction of [[1,2],[2,4]] given by (1,2)?', type: 'yesno', correct: 0 },
       { q: 'Are the null space and range of a matrix always perpendicular?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1123,8 +1123,8 @@ const MISSIONS = [
       'Output has only 1 dimension, not 2. One dimension collapsed!'
     ],
     quiz: [
-      { q: 'What is the rank of [[1,2],[2,4]]?', _isText: true, _keywords: ['1', 'rank 1'] },
-      { q: 'What is the nullity of [[1,2],[2,4]]?', _isText: true, _keywords: ['1', 'nullity 1'] },
+      { q: 'Is the rank of [[1,2],[2,4]] equal to 1?', type: 'yesno', correct: 0 },
+      { q: 'Is the nullity of [[1,2],[2,4]] equal to 1?', type: 'yesno', correct: 0 },
       { q: 'Does rank + nullity always equal the dimension of the input space?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1155,8 +1155,8 @@ const MISSIONS = [
       'Solve M*{x,y}={0,0} \u2014 null space = line t(-3,1).'
     ],
     quiz: [
-      { q: 'What is the rank of [[1,2],[3,6]]?', _isText: true, _keywords: ['1', 'rank 1'] },
-      { q: 'What is the row space direction?', _isText: true, _keywords: ['(1,2)', '1,2'] },
+      { q: 'Is the rank of [[1,2],[3,6]] equal to 1?', type: 'yesno', correct: 0 },
+      { q: 'Is the row space direction of [[1,2],[3,6]] given by (1,2)?', type: 'yesno', correct: 0 },
       { q: 'Are all three fundamental subspaces (row space, column space, null space) 1D lines for a rank-1 2×2 matrix?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1186,8 +1186,8 @@ const MISSIONS = [
       'This holds for EVERY matrix: R(M) \u22a5 N(M).'
     ],
     quiz: [
-      { q: 'Compute (1,3)·(-3,1). What do you get?', _isText: true, _keywords: ['0', '-3+3', '-3 + 3'] },
-      { q: 'Are R(M) and N(M) always perpendicular subspaces?', _isText: true, _keywords: ['yes', 'perpendicular', 'orthogonal', 'fundamental'] },
+      { q: 'Is (1,3)·(-3,1) = 0?', type: 'yesno', correct: 0 },
+      { q: 'Are R(M) and N(M) always perpendicular subspaces?', type: 'yesno', correct: 0 },
       { q: 'Is the zero vector in both R(M) and N(M)?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1218,8 +1218,8 @@ const MISSIONS = [
       'Check: Dot(column of M, N(M\u1d40)) = 0. Perpendicular!'
     ],
     quiz: [
-      { q: 'What is N(M) for [[1,2],[3,6]]?', _isText: true, _keywords: ['(-2,1)', '-2,1', 't(-2,1)'] },
-      { q: 'What is N(Mᵀ) for [[1,2],[3,6]]?', _isText: true, _keywords: ['(-3,1)', '-3,1', 't(-3,1)'] },
+      { q: 'Is N(M) for [[1,2],[3,6]] the direction (-2,1)?', type: 'yesno', correct: 0 },
+      { q: 'Is N(Mᵀ) for [[1,2],[3,6]] the direction (-3,1)?', type: 'yesno', correct: 0 },
       { q: 'Is N(Mᵀ) perpendicular to the column space C(M)?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1249,8 +1249,8 @@ const MISSIONS = [
       'Type: nM = (-2,1) \u2014 N(M) direction. Dot(r, nM)=0! R(M) \u22a5 N(M).'
     ],
     quiz: [
-      { q: 'C(M) is perpendicular to which subspace?', _isText: true, _keywords: ['N(Mᵀ)', 'N(MT)', 'left null', 'null space of transpose'] },
-      { q: 'R(M) is perpendicular to which subspace?', _isText: true, _keywords: ['N(M)', 'null space'] },
+      { q: 'Is C(M) perpendicular to N(Mᵀ) (left null space)?', type: 'yesno', correct: 0 },
+      { q: 'Is R(M) perpendicular to N(M) (null space)?', type: 'yesno', correct: 0 },
       { q: 'Do the four subspaces always form exactly two orthogonal pairs?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1282,8 +1282,8 @@ const MISSIONS = [
       'Both null spaces are lines in 3D through the origin.'
     ],
     quiz: [
-      { q: 'What is the rank of A = [[1,4,7],[2,5,8],[3,6,9]]?', _isText: true, _keywords: ['2', 'rank 2'] },
-      { q: 'What is the N(A) direction?', _isText: true, _keywords: ['(1,-2,1)', '1,-2,1'] },
+      { q: 'Is the rank of A = [[1,4,7],[2,5,8],[3,6,9]] equal to 2?', type: 'yesno', correct: 0 },
+      { q: 'Is the N(A) direction of [[1,4,7],[2,5,8],[3,6,9]] given by (1,-2,1)?', type: 'yesno', correct: 0 },
       { q: 'Are all four subspaces of this 3×3 rank-2 matrix either 1D lines or 2D planes?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1312,8 +1312,8 @@ const MISSIONS = [
       'Type: Z = {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}} \u2014 rank 0.'
     ],
     quiz: [
-      { q: 'What is the rank of Identity(4)?', _isText: true, _keywords: ['4', 'full rank'] },
-      { q: 'What is the rank of the zero 4×4 matrix?', _isText: true, _keywords: ['0', 'zero'] },
+      { q: 'Does Identity(4) have full rank (rank 4)?', type: 'yesno', correct: 0 },
+      { q: 'Is the rank of the zero 4×4 matrix equal to 0?', type: 'yesno', correct: 0 },
       { q: 'Does rank always equal the dimension of the range (column space)?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1345,7 +1345,7 @@ const MISSIONS = [
     quiz: [
       { q: 'If v is in the range of A, is 5v also in the range?', type: 'yesno', correct: 0 },
       { q: 'Is the range of a linear map always a subspace (closed under addition and scaling)?', type: 'yesno', correct: 0 },
-      { q: 'Which property of linear maps guarantees that A(αx) = αA(x)?', _isText: true, _keywords: ['scalar', 'homogeneity', 'multiplication', 'linearity', 'scaling'] }
+      { q: 'Does the property A(αx) = αA(x) (homogeneity) guarantee the range contains scalar multiples?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '🏗️', title: 'Amplifier', equation: '', story: 'An audio amplifier takes an input signal and produces a larger output. If you double the input volume, the output also doubles — the amplifier is a linear system. This scaling property means the output is always proportional to the input, which is why amplifiers produce clean, undistorted sound at moderate volumes.', question: 'In a linear amplifier, what happens to the output when you double the input voltage?', answer: 'double output' },
@@ -1376,8 +1376,8 @@ const MISSIONS = [
     ],
     quiz: [
       { q: 'If v and w are in the range of A, is v + w also in the range?', type: 'yesno', correct: 0 },
-      { q: 'The span of two linearly independent vectors in R³ is a...', _isText: true, _keywords: ['plane', '2D', 'two-dimensional'] },
-      { q: 'Which property of linear maps guarantees that A(x+y) = A(x)+A(y)?', _isText: true, _keywords: ['additivity', 'addition', 'superposition', 'linearity'] }
+      { q: 'Is the span of two linearly independent vectors in R³ a plane (2D)?', type: 'yesno', correct: 0 },
+      { q: 'Does the property A(x+y) = A(x)+A(y) (additivity) guarantee the range contains sums?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '🌈', title: 'Color Mixing', equation: '', story: 'If you can produce pure red light and pure blue light, then you can produce any shade of purple by mixing them in different proportions. The span of red and blue gives you the entire purple colour gamut. This is the spanning property of linear systems — any combination of achievable outputs is also achievable.', question: 'If red and blue are achievable colours, what does their span represent in terms of achievable colours?', answer: 'span of colors' },
@@ -1409,7 +1409,7 @@ const MISSIONS = [
     quiz: [
       { q: 'Are (1,2,3) and (2,4,6) linearly independent?', type: 'yesno', correct: 1 },
       { q: 'Are (1,0,0) and (0,1,0) linearly independent?', type: 'yesno', correct: 0 },
-      { q: 'What is the dimension of span of two linearly dependent vectors?', _isText: true, _keywords: ['1', 'one', 'line', '1D'] }
+      { q: 'Is the dimension of the span of two linearly dependent vectors equal to 1 (a line)?', type: 'yesno', correct: 0 },
     ],
     realLife: [
       { emoji: '🏗️', title: 'Redundant Sensors', equation: '', story: 'Imagine two temperature sensors in a room that always give the same reading because they are placed right next to each other. These two sensors are linearly dependent — one provides no information beyond what the other already tells you. Only one independent measurement exists, even though you have two sensors. The second sensor is redundant.', question: 'When two sensors always give the same reading, what does this mean in terms of linear independence?', answer: 'redundant info' },
@@ -1439,8 +1439,8 @@ const MISSIONS = [
       'R(A) \u22a5 N(A) in input space, C(A) \u22a5 N(A\u1d40) in output space.'
     ],
     quiz: [
-      { q: 'R(A) and N(A) live in which space?', _isText: true, _keywords: ['input', 'Rⁿ', 'domain', 'domain of A'] },
-      { q: 'C(A) and N(Aᵀ) live in which space?', _isText: true, _keywords: ['output', 'Rᵐ', 'codomain', 'range of A'] },
+      { q: 'Do R(A) and N(A) live in the input space (domain) of A?', type: 'yesno', correct: 0 },
+      { q: 'Do C(A) and N(Aᵀ) live in the output space (codomain) of A?', type: 'yesno', correct: 0 },
       { q: 'Do R(A) and N(A) together span the entire input space?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1470,8 +1470,8 @@ const MISSIONS = [
       'Type: Dot(c1,n) = 0, Dot(c2,n) = 0 \u2014 C(A) \u22a5 N(A\u1d40).'
     ],
     quiz: [
-      { q: 'Compute (1,4,7)·(1,-2,1).', _isText: true, _keywords: ['0', '1-8+7', '1 - 8 + 7'] },
-      { q: 'Compute (4,5,6)·(1,-2,1).', _isText: true, _keywords: ['0', '4-10+6', '4 - 10 + 6'] },
+      { q: 'Is (1,4,7)·(1,-2,1) = 0?', type: 'yesno', correct: 0 },
+      { q: 'Is (4,5,6)·(1,-2,1) = 0?', type: 'yesno', correct: 0 },
       { q: 'Are these two orthogonal pairs always true for any matrix?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1501,8 +1501,8 @@ const MISSIONS = [
       'Rank + Nullity = number of columns. Always!'
     ],
     quiz: [
-      { q: 'Rank + Nullity = ? (in terms of matrix dimensions)', _isText: true, _keywords: ['n', 'columns', 'number of columns'] },
-      { q: 'For B = [[1,2],[2,4]], what is rank + nullity?', _isText: true, _keywords: ['2', 'two'] },
+      { q: 'Does Rank + Nullity always equal the number of columns (n)?', type: 'yesno', correct: 0 },
+      { q: 'Is rank + nullity = 2 for B = [[1,2],[2,4]]?', type: 'yesno', correct: 0 },
       { q: 'Does rank + nullity always equal the number of columns?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1533,8 +1533,8 @@ const MISSIONS = [
       'R(M) = t(1,2) in \u211D\u00B2, C(M) = t(2,1,3) in \u211D\u00B3, N(M) = t(-2,1), N(M\u1d40) = plane.'
     ],
     quiz: [
-      { q: 'What is the rank of a 3×2 matrix with all rows collinear?', _isText: true, _keywords: ['1', 'rank 1'] },
-      { q: 'R(M) lives in which space?', _isText: true, _keywords: ['R²', 'input', 'R^2', '2D'] },
+      { q: 'Is the rank of a 3×2 matrix with all rows collinear equal to 1?', type: 'yesno', correct: 0 },
+      { q: 'Does R(M) live in the input space (R² for a 2-column matrix)?', type: 'yesno', correct: 0 },
       { q: 'Is C(M) a line in R³ for this rank-1 matrix?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1565,8 +1565,8 @@ const MISSIONS = [
       'Remember: every matrix has this beautiful structure!'
     ],
     quiz: [
-      { q: 'How many fundamental subspaces does a matrix define?', _isText: true, _keywords: ['4', 'four'] },
-      { q: 'The dimension of C(A) equals...', _isText: true, _keywords: ['rank', 'Rank(A)', 'rank of A'] },
+      { q: 'Does every matrix define exactly 4 fundamental subspaces?', type: 'yesno', correct: 0 },
+      { q: 'Is the dimension of C(A) equal to the rank of A?', type: 'yesno', correct: 0 },
       { q: 'Have you achieved Linear Algebra wisdom?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1597,8 +1597,8 @@ const MISSIONS = [
       'No redundancy in user preferences \u2014 3 independent taste profiles.'
     ],
     quiz: [
-      { q: 'Rank of a 3×4 matrix can be at most...', _isText: true, _keywords: ['3', 'three', 'min(3,4)'] },
-      { q: 'What does rank measure in a rating matrix?', _isText: true, _keywords: ['independent', 'taste', 'profile', 'preference', 'pattern'] },
+      { q: 'Can the rank of a 3×4 matrix be at most 3?', type: 'yesno', correct: 0 },
+      { q: 'Does rank measure the number of independent user taste profiles in a rating matrix?', type: 'yesno', correct: 0 },
       { q: 'If rank < number of users, what does that mean?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1628,8 +1628,8 @@ const MISSIONS = [
       'Recommend M2 (rating 3 from Alice, unrated by Bob)!'
     ],
     quiz: [
-      { q: 'What does the dot product measure?', _isText: true, _keywords: ['similarity', 'similar', 'angle', 'projection'] },
-      { q: 'Who is Bob most similar to?', _isText: true, _keywords: ['Alice', 'alice'] },
+      { q: 'Does the dot product measure similarity between two vectors?', type: 'yesno', correct: 0 },
+      { q: 'Is Bob most similar to Alice based on their ratings?', type: 'yesno', correct: 0 },
       { q: 'If two users have dot product 0, are they similar?', type: 'yesno', correct: 1 }
     ],
     realLife: [
@@ -1660,8 +1660,8 @@ const MISSIONS = [
       'Column 4: D links to C. Page C has most links!'
     ],
     quiz: [
-      { q: 'In PageRank, incoming links from important pages give...', _isText: true, _keywords: ['higher', 'higher rank', 'more important', 'more importance'] },
-      { q: 'The PageRank algorithm solves which eigenvector problem?', _isText: true, _keywords: ['Mv = v', 'M*v = v', 'eigenvalue 1', 'eigenvalue = 1'] },
+      { q: 'Do incoming links from important pages give a higher PageRank?', type: 'yesno', correct: 0 },
+      { q: 'Does the PageRank algorithm solve the eigenvector problem Mv = v?', type: 'yesno', correct: 0 },
       { q: 'Is the web graph adjacency matrix usually sparse?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1692,8 +1692,8 @@ const MISSIONS = [
       'The steady state = eigenvector with eigenvalue 1 = PageRank!'
     ],
     quiz: [
-      { q: 'The Power Method converges to which eigenvector?', _isText: true, _keywords: ['dominant', 'eigenvalue 1', 'largest', 'principal'] },
-      { q: "After first multiplication, C's score was...", _isText: true, _keywords: ['0.75', '3/4'] },
+      { q: 'Does the Power Method converge to the dominant (largest) eigenvector?', type: 'yesno', correct: 0 },
+      { q: 'After the first matrix multiplication in the Power Method, was C score 0.75?', type: 'yesno', correct: 0 },
       { q: 'Does the power method always converge?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1724,8 +1724,8 @@ const MISSIONS = [
       'Project onto first PC: 2D \u2192 1D along y=x!'
     ],
     quiz: [
-      { q: 'PCA finds directions of...', _isText: true, _keywords: ['maximum variance', 'max variance', 'largest variance', 'most variance', 'variance'] },
-      { q: 'Eigenvector with largest eigenvalue equals...', _isText: true, _keywords: ['first principal component', 'principal component', 'first PC', 'PC1'] },
+      { q: 'Does PCA find directions of maximum variance in the data?', type: 'yesno', correct: 0 },
+      { q: 'Is the eigenvector with the largest eigenvalue the first principal component?', type: 'yesno', correct: 0 },
       { q: 'Does reducing dimensions always lose some information?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1756,8 +1756,8 @@ const MISSIONS = [
       'SVD gives the complete picture: range basis (U), row space basis (V), and rank (\u03c3).'
     ],
     quiz: [
-      { q: 'Number of non-zero singular values equals...', _isText: true, _keywords: ['rank', 'rank of the matrix'] },
-      { q: 'Zero singular values correspond to...', _isText: true, _keywords: ['null space', 'null', 'nullity', 'kernel'] },
+      { q: 'Does the number of non-zero singular values equal the rank of the matrix?', type: 'yesno', correct: 0 },
+      { q: 'Do zero singular values correspond to the null space directions?', type: 'yesno', correct: 0 },
       { q: 'Does SVD reveal all four subspaces?', type: 'yesno', correct: 0 }
     ],
     realLife: [
@@ -1991,6 +1991,500 @@ function MiniGraph({ story, equation }) {
   );
 }
 
+function generateMqExplanation(q) {
+  const d = q.data || {};
+  const s = [];
+  const t = q.type || '';
+  const ans = q.answer || q.display || '';
+  const step = (label, text) => s.push({ label, text });
+
+  if (t === 'm1_yval') { step('Identify', `We have y = ${d.m}x.`); step('Substitute', `Plug in x = ${d.x}: y = ${d.m} × ${d.x}.`); step('Compute', `${d.m} × ${d.x} = ${d.m * d.x}.`); step('Answer', `y = ${ans}`); }
+  else if (t === 'm1_ratio') { step('Identify', `y = ${d.m}x means y is ${d.m} times x.`); step('Ratio', `y:x = ${d.m}:1.`); step('Answer', `Ratio = ${ans}`); }
+  else if (t === 'm1_findk') { step('Set up', `${d.c} = k × ${d.b}.`); step('Solve', `k = ${d.c} ÷ ${d.b} = ${d.k}.`); step('Verify', `${d.k} × ${d.b} = ${d.c}. ✓`); step('Answer', `k = ${ans}`); }
+  else if (t === 'm1_eval') { step('Understand', `Ram saves ${d.m}x what Lakshman saves (${d.x}).`); step('Calculate', `Ram saves ${d.m} × ${d.x} = ${d.m * d.x}.`); step('Answer', `${ans}`); }
+  else if (t === 'm1_compare') { step('Slopes', `y=${d.m1}x → slope ${d.m1}; y=${d.m2}x → slope ${d.m2}.`); step('Ratio', `${d.m2} ÷ ${d.m1} = ${d.m2 / d.m1}.`); step('Answer', `${ans}`); }
+  else if (t === 'm1_origin') { step('Test', `At x=0: y = ${d.m}(0) = 0.`); step('Conclusion', `Passes through (0,0).`); step('Answer', `y = ${ans}`); }
+  else if (t === 'm1_slope') { step('Formula', `Slope = (y₂−y₁)/(x₂−x₁).`); step('Compute', `(${d.y2}−${d.y1})/(${d.x2}−${d.x1}) = ${d.m}.`); step('Answer', `Slope = ${ans}`); }
+  else if (t === 'm1_notprop') { step('Concept', `y = kx with no constant term.`); step('Fix', `Set b = 0.`); step('Answer', `b = ${ans}`); }
+  else if (t === 'm1_inverse') { step('Set up', `${d.a}x = ${d.y}.`); step('Solve', `x = ${d.y}/${d.a} = ${d.x}.`); step('Answer', `x = ${ans}`); }
+  else if (t === 'm2_slope') { step('Compute', `(${d.y1}−0)/(${d.x1}−1) = ${d.y1}.`); step('Answer', `Slope = ${ans}`); }
+  else if (t === 'm2_collinear') { step('Check', `Slope (2,1)→(3,2)=1; (3,2)→(4,3)=1.`); step('Conclusion', `Same slopes → collinear.`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm2_next') { step('Pattern', `x+1, y+1 each step.`); step('Extend', `(4,3) → (5,4).`); step('Answer', `${ans}`); }
+  else if (t === 'm2_equation') { step('Line', `y = x − 1.`); step('Compute', `y = ${d.a+5} − 1 = ${d.a+4}.`); step('Answer', `y = ${ans}`); }
+  else if (t === 'm2_slope2') { step('Compute', `(${d.y1+d.m}−${d.y1})/(${d.x1+1}−${d.x1}) = ${d.m}.`); step('Answer', `Slope = ${ans}`); }
+  else if (t === 'm2_check') { step('Verify', `Is ${d.x-1} = ${d.x} − 1? Yes.`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm2_area') { step('Formula', `½|x₁(y₂−y₃)+x₂(y₃−y₁)+x₃(y₁−y₂)|.`); step('Answer', `Area = ${ans}`); }
+  else if (t === 'm2_extend') { step('Slope', `(${d.m*d.x0}−${d.m*(d.x0-1)})/((${d.x0+1})−${d.x0}) = ${d.m}.`); step('Answer', `Slope = ${ans}`); }
+  else if (t === 'm2_perpslope') { step('Rule', `m₁ × m₂ = −1.`); step('Compute', `−1/${d.m} = ${(-1/d.m).toFixed(4).replace(/\.?0+$/,'')}.`); step('Answer', `${ans}`); }
+  else if (t === 'm3_through') { step('Test', `y=${d.a}(0)=0.`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm3_yval') { step('Compute', `y = ${d.a}×${d.x} = ${d.a*d.x}.`); step('Answer', `y = ${ans}`); }
+  else if (t === 'm3_not') { step('Test', `y=2(0)+1=1≠0.`); step('Answer', `${ans} (No)`); }
+  else if (t === 'm3_neg') { step('Test', `y=−${d.a}(0)=0.`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm3_intercept') { step('Condition', `0 = ${d.a}(0)+b → b=0.`); step('Answer', `b = ${ans}`); }
+  else if (t === 'm3_scalar') { step('Check', `(3,${3*d.a}) = 3×(1,${d.a}).`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm3_intersect') { step('Set equal', `${d.a1}x = ${d.a2}x → x=0.`); step('Answer', `${ans}`); }
+  else if (t === 'm3_proportional') { step('Definition', `k = slope = ${d.a}.`); step('Answer', `k = ${ans}`); }
+  else if (t === 'm3_findx') { step('Solve', `${d.a}x = ${d.a*d.x} → x = ${d.x}.`); step('Answer', `x = ${ans}`); }
+  else if (t === 'm4_yint') { step('Compute', `y=${d.m}(0)+${d.b}=${d.b}.`); step('Answer', `y-int = ${ans}`); }
+  else if (t === 'm4_atzero') { step('Compute', `y = ${d.b}.`); step('Answer', `y = ${ans}`); }
+  else if (t === 'm4_shift') { step('Concept', `b=3 shifts up 3 units.`); step('Answer', `${ans}`); }
+  else if (t === 'm4_eval') { step('Compute', `y=${d.m}(${d.x})+${d.b}=${d.m*d.x+d.b}.`); step('Answer', `y = ${ans}`); }
+  else if (t === 'm4_cross') { step('Compute', `y=3(0)+${d.b}=${d.b}.`); step('Answer', `y = ${ans}`); }
+  else if (t === 'm4_noshift') { step('Concept', `No constant → passes through origin.`); step('Answer', `${ans}`); }
+  else if (t === 'm4_parallel') { step('Compute', `|${d.b2}−${d.b1}| = ${Math.abs(d.b2-d.b1)}.`); step('Answer', `Distance = ${ans}`); }
+  else if (t === 'm4_frompts') { step('Compute', `(${d.m*d.x+3}−3)/(${d.x}−0) = ${d.m}.`); step('Answer', `Slope = ${ans}`); }
+  else if (t === 'm4_compare') { step('Diff', `(${d.b+1})−(${d.b}) = 1.`); step('Answer', `${ans}`); }
+  else if (t === 'm5_steep') { step('Compare', `|${d.m+2}| > |${d.m}|.`); step('Answer', `y=${d.m+2}x steeper`); }
+  else if (t === 'm5_intercept') { step('Compute', `y = 0+${d.b} = ${d.b}.`); step('Answer', `y = ${ans}`); }
+  else if (t === 'm5_zero') { step('Compute', `y = 0.`); step('Answer', `y = ${ans}`); }
+  else if (t === 'm5_both') { step('Compute', `y=${d.m}(${d.x})+${d.b}=${d.m*d.x+d.b}.`); step('Answer', `y = ${ans}`); }
+  else if (t === 'm5_angle') { step('Compare', `|${d.m1}|=${Math.abs(d.m1)}, |${d.m2}|=${Math.abs(d.m2)}.`); step('Answer', `Slope ${Math.abs(d.m1)>Math.abs(d.m2)?d.m1:d.m2} larger`); }
+  else if (t === 'm5_negative') { step('Concept', `Negative slope → line goes down.`); step('Answer', `down`); }
+  else if (t === 'm5_perp') { step('Compute', `${d.m1}×${d.m2}=${d.m1*d.m2}.`); step('Answer', `Product = ${ans}`); }
+  else if (t === 'm5_model') { step('Compute', `${d.b}+${d.m}×${d.x}=${d.b+d.m*d.x}.`); step('Answer', `Total = ${ans}`); }
+  else if (t === 'm5_intersect') { step('Concept', `Different slopes → exactly 1 intersection.`); step('Answer', `${ans}`); }
+  else if (t === 'm6_verify') { step('Check', `${d.x}+${d.y}=${d.x+d.y}. ✓`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm6_count') { step('Identify', `x and y → 2 unknowns.`); step('Answer', `${ans}`); }
+  else if (t === 'm6_easy') { step('Solve', `x=${d.x}.`); step('Answer', `x = ${ans}`); }
+  else if (t === 'm6_solve') { step('Solve', `x=${d.x}.`); step('Answer', `x = ${ans}`); }
+  else if (t === 'm6_matrix') { step('Compute', `det=2(2)−3(1)=1.`); step('Answer', `det = ${ans}`); }
+  else if (t === 'm6_unique') { step('Rule', `Unique when det≠0.`); step('Answer', `nonzero`); }
+  else if (t === 'm6_2x2' || t === 'm6_2x2y') { step('Solve', `x=${d.x}, y=${d.y}.`); step('Answer', `${t==='m6_2x2'?'x':'y'} = ${ans}`); }
+  else if (t === 'm6_det') { step('Compute', `det(A) = ${d.det}.`); step('Answer', `det = ${ans}`); }
+  else if (t === 'm7_invert') { step('Invert', `f⁻¹(y)=y/${d.a}.`); step('Compute', `f⁻¹(${d.a*d.x})=${d.x}.`); step('Answer', `${ans}`); }
+  else if (t === 'm7_oneone') { step('Concept', `ax+b (a≠0) is always one-to-one.`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm7_formula') { step('Invert', `y=${d.a}x → x=y/${d.a}.`); step('Answer', `f⁻¹(y)=y/${ans}`); }
+  else if (t === 'm7_eval') { step('Compute', `f(${d.x})=${d.a*d.x+d.b}.`); step('Answer', `f(${d.x})=${ans}`); }
+  else if (t === 'm7_inveq') { step('Compute', `f⁻¹(${3*d.a+d.b})=3.`); step('Answer', `${ans}`); }
+  else if (t === 'm7_injective') { step('Definition', `Each y maps to exactly ONE x.`); step('Answer', `one`); }
+  else if (t === 'm7_invformula') { step('Invert', `x=(y−${d.b})/${d.a}.`); step('Answer', `f⁻¹(y)=(y−${d.b})/${ans}`); }
+  else if (t === 'm7_identity') { step('Concept', `f(f⁻¹(x))=x always.`); step('Answer', `x`); }
+  else if (t === 'm7_comp') { step('Compute', `f(g(${d.x}))=${d.x}.`); step('Answer', `${ans}`); }
+  else if (t === 'm8_square') { step('Compute', `(${d.x})²=${d.x*d.x}.`); step('Answer', `f(${d.x})=${ans}`); }
+  else if (t === 'm8_quad') { step('Compute', `(${d.x})²−${d.a}=${d.x*d.x-d.a}.`); step('Answer', `f(${d.x})=${ans}`); }
+  else if (t === 'm8_fzero') { step('Compute', `3²−9=0.`); step('Answer', `f(3)=${ans}`); }
+  else if (t === 'm8_invert') { step('Concept', `Parabola fails horizontal line test.`); step('Answer', `${ans} (No)`); }
+  else if (t === 'm8_two') { step('Observe', `f(${d.x})=f(${-d.x})=${d.x*d.x}.`); step('Answer', `${ans} (No)`); }
+  else if (t === 'm8_vertex') { step('Compute', `Vertex at x=0.`); step('Answer', `x = ${ans}`); }
+  else if (t === 'm8_factored') { step('Discriminant', `Δ=${d.a*d.a-4*d.b}.`); step('Answer', `${ans} roots`); }
+  else if (t === 'm8_symmetry') { step('Concept', `f(a)=f(−a) → symmetric about y-axis.`); step('Answer', `y-axis`); }
+  else if (t === 'm8_restrict') { step('Concept', `x≥0 makes it one-to-one.`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm9_quad') { step('Solve', `x=±${d.x}.`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm9_intersects') { step('Compute', `x=±${d.a} → 2 points.`); step('Answer', `${ans}`); }
+  else if (t === 'm9_posneg') { step('Solve', `x=${d.x}.`); step('Answer', `x = ${ans}`); }
+  else if (t === 'm9_both') { step('Solve', `x=±${d.x}.`); step('Answer', `x = ${ans}`); }
+  else if (t === 'm9_fail') { step('Concept', `f(a)=f(−a) for a≠0.`); step('Answer', `horizontal line test`); }
+  else if (t === 'm9_real') { step('Analyze', `x²=−${d.a}<0, no real roots.`); step('Answer', `${ans}`); }
+  else if (t === 'm9_formula') { step('Solve', `x=${d.a}.`); step('Answer', `x = ${ans}`); }
+  else if (t === 'm9_shifted') { step('Compute', `(${d.a+3}−${d.a})²=9.`); step('Answer', `f(${d.a+3})=${ans}`); }
+  else if (t === 'm9_discrim') { step('Interpret', `Δ=${d.d}>0 → 2 real roots.`); step('Answer', `2 roots`); }
+  else if (t === 'm10_cubic') { step('Compute', `(${d.x})³=${d.x*d.x*d.x}.`); step('Answer', `f(${d.x})=${ans}`); }
+  else if (t === 'm10_degree') { step('Concept', `Cubic has max 3 real roots.`); step('Answer', `${ans}`); }
+  else if (t === 'm10_cube_root') { step('Solve', `x=∛${d.x*d.x*d.x}=${d.x}.`); step('Answer', `x = ${ans}`); }
+  else if (t === 'm10_onesol') { step('Concept', `x³ strictly increasing → 1 solution.`); step('Answer', `${ans}`); }
+  else if (t === 'm10_positive') { step('Concept', `x³ strictly increasing → 1 positive root.`); step('Answer', `${ans}`); }
+  else if (t === 'm10_odd') { step('Concept', `Odd degree → goes from −∞ to +∞.`); step('Answer', `crosses x-axis`); }
+  else if (t === 'm10_factor') { step('Factor', `x(x−1)(x+1)=0.`); step('Answer', `${ans} roots`); }
+  else if (t === 'm10_complex') { step('Degree', `Degree 3 → 3 roots total.`); step('Answer', `${ans}`); }
+  else if (t === 'm10_sum') { step('Factor', `(x−3)(x²+3x+9)=0. Δ<0.`); step('Answer', `${ans} root`); }
+  else if (t === 'm11_r3') { step('Definition', `R³ → 3 coordinates.`); step('Answer', `${ans}`); }
+  else if (t === 'm11_r2') { step('Definition', `Plane → 2 coordinates.`); step('Answer', `${ans}`); }
+  else if (t === 'm11_r1') { step('Definition', `Line → 1 coordinate.`); step('Answer', `${ans}`); }
+  else if (t === 'm11_vecdim') { step('Count', `3 components → R³.`); step('Answer', `R³`); }
+  else if (t === 'm11_notation') { step('Definition', `2D plane = R².`); step('Answer', `R²`); }
+  else if (t === 'm11_5d') { step('Concept', `5 measurements → R⁵.`); step('Answer', `R⁵`); }
+  else if (t === 'm11_nd') { step('Definition', `n components.`); step('Answer', `${ans}`); }
+  else if (t === 'm11_origin') { step('Concept', `Point is 0D.`); step('Answer', `${ans}`); }
+  else if (t === 'm11_span') { step('Concept', `1 vector → line (1D).`); step('Answer', `${ans}`); }
+  else if (t === 'm12_col1') { step('Concept', `First column = image of (1,0).`); step('Answer', `(${ans})`); }
+  else if (t === 'm12_col2') { step('Concept', `Second column = image of (0,1).`); step('Answer', `(${ans})`); }
+  else if (t === 'm12_linear') { step('Definition', `Always linear.`); step('Answer', `linear`); }
+  else if (t === 'm12_apply') { step('Compute', `A·(1,0) = first column.`); step('Answer', `First column`); }
+  else if (t === 'm12_det') { step('Compute', `det=${d.det}. Non-zero → invertible.`); step('Answer', `det=${d.det}`); }
+  else if (t === 'm12_cols') { step('Definition', `Images of standard basis.`); step('Answer', `standard basis`); }
+  else if (t === 'm12_comp') { step('Compute', `(${d.A[0][0]*d.x+d.A[0][1]*d.y}, ${d.A[1][0]*d.x+d.A[1][1]*d.y}).`); step('Answer', `= (${d.r})`); }
+  else if (t === 'm12_2x2') { step('Concept', `Maps R²→R².`); step('Answer', `${ans}`); }
+  else if (t === 'm12_identity') { step('Concept', `I·v = v.`); step('Answer', `v`); }
+  else if (t === 'm13_detdiag') { step('Compute', `${d.a}×${d.d}=${d.a*d.d}.`); step('Answer', `det = ${ans}`); }
+  else if (t === 'm13_zero') { step('Compute', `1×4−2×2=0.`); step('Answer', `det=0, singular`); }
+  else if (t === 'm13_prod') { step('Property', `Product of diagonal entries.`); step('Answer', `diagonal entries`); }
+  else if (t === 'm13_det') { step('Compute', `det=${d.det}.`); step('Answer', `det = ${ans}`); }
+  else if (t === 'm13_invert') { step('Rule', `det≠0 → invertible.`); step('Answer', `${d.det!==0?'Yes':'No'}`); }
+  else if (t === 'm13_formula') { step('Formula', `det = ad−bc.`); step('Answer', `ad−bc`); }
+  else if (t === 'm13_singular') { step('Concept', `det=0 → rank < n.`); step('Answer', `rank < full`); }
+  else if (t === 'm13_inverse_det') { step('Property', `det(A⁻¹)=1/det(A)=${1/d.det}.`); step('Answer', `${ans}`); }
+  else if (t === 'm13_connection') { step('Rule', `A invertible ⟺ det≠0.`); step('Answer', `${d.det!==0?'Yes':'No'}`); }
+  else if (t === 'm14_det0') { step('Concept', `Singular matrix.`); step('Answer', `singular`); }
+  else if (t === 'm14_kernel') { step('Definition', `Kernel = null space.`); step('Answer', `null space`); }
+  else if (t === 'm14_zero') { step('Check', `A·0=0 always.`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm14_sing') { step('Concept', `Collapses nonzero vectors to zero.`); step('Answer', `zero vector`); }
+  else if (t === 'm14_ns_dir') { step('Solve', `x+2y=0 → (−2,1).`); step('Answer', `(${ans})`); }
+  else if (t === 'm14_many') { step('Concept', `Null space is a line → infinite.`); step('Answer', `infinitely many`); }
+  else if (t === 'm14_ns_calc') { step('Compute', `nullity = n − rank.`); step('Answer', `nullity = ${ans}`); }
+  else if (t === 'm14_nsr') { step('Theorem', `nullity+rank=n.`); step('Answer', `= n`); }
+  else if (t === 'm14_verify') { step('Check', `(1,2)·(−2,1)=−2+2=0.`); step('Answer', `= 0`); }
+  else if (t === 'm15_mult') { step('Concept', `Encrypts by matrix multiplication.`); step('Answer', `multiplication`); }
+  else if (t === 'm15_mod') { step('Concept', `Uses mod 26.`); step('Answer', `26`); }
+  else if (t === 'm15_decrypt') { step('Concept', `Multiply by A⁻¹.`); step('Answer', `inverse`); }
+  else if (t === 'm15_apply') { step('Compute', `${d.A[0][0]}×${d.v[0]}+${d.A[0][1]}×${d.v[1]}=${d.r[0]}.`); step('Answer', `= ${ans}`); }
+  else if (t === 'm15_det') { step('Rule', `det≠0 (mod26) → decryptable.`); step('Answer', `${d.det!==0?'Yes':'No'}`); }
+  else if (t === 'm15_identity') { step('Compute', `I·v=v, unchanged.`); step('Answer', `${ans}`); }
+  else if (t === 'm15_hill_det') { step('Compute', `det=${d.det}.`); step('Answer', `${d.det!==0?'Yes':'No'}`); }
+  else if (t === 'm15_2x2') { step('Concept', `2×2 matrices.`); step('Answer', `2×2`); }
+  else if (t === 'm15_encrypt') { step('Compute', `3×18+4×20=134.`); step('Answer', `= ${ans}`); }
+  else if (t === 'm16_count') { step('Count', `2 equations.`); step('Answer', `${ans}`); }
+  else if (t === 'm16_over') { step('Definition', `More equations → overdetermined.`); step('Answer', `over`); }
+  else if (t === 'm16_easy') { step('Solve', `A=${d.x}.`); step('Answer', `A = ${ans}`); }
+  else if (t === 'm16_solve') { step('Solve', `A=${d.x}.`); step('Answer', `A = ${ans}`); }
+  else if (t === 'm16_leastsq') { step('Concept', `Least squares method.`); step('Answer', `least squares`); }
+  else if (t === 'm16_verify') { step('Check', `Both equations satisfied. ✓`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm16_atb') { step('Transpose', `3×2 → 2×3.`); step('Answer', `2×3`); }
+  else if (t === 'm16_ata') { step('Compute', `Entry (1,1) = 11.`); step('Answer', `= ${d.ATA?d.ATA[0][0]:11}`); }
+  else if (t === 'm16_overdet') { step('Count', `3 equations, 2 unknowns.`); step('Answer', `${ans}`); }
+  else if (t === 'm17_steady') { step('Definition', `Probs stop changing.`); step('Answer', `changing`); }
+  else if (t === 'm17_matrix') { step('Definition', `Maps current → next state.`); step('Answer', `next`); }
+  else if (t === 'm17_sum') { step('Rule', `Rows sum to 1.`); step('Answer', `1`); }
+  else if (t === 'm17_step') { step('Compute', `Row 1 · [1,0] = ${d.P?d.P[0][0]:'?'}.`); step('Answer', `= ${d.P?d.P[0][0]:'?'}`); }
+  else if (t === 'm17_steady_eq') { step('Definition', `πP = π.`); step('Answer', `πP = π`); }
+  else if (t === 'm17_rows') { step('Compute', `Row 1 sums to 1.`); step('Answer', `1`); }
+  else if (t === 'm17_calc') { step('Concept', `π₁+π₂=1.`); step('Answer', `${ans}`); }
+  else if (t === 'm17_eigen') { step('Property', `Dominant eigenvalue = 1.`); step('Answer', `1`); }
+  else if (t === 'm17_det') { step('Compute', `det(P).`); step('Answer', `det = ${ans}`); }
+  else if (t === 'm18_rows') { step('Count', `3 rows.`); step('Answer', `${ans}`); }
+  else if (t === 'm18_cols') { step('Count', `2 columns.`); step('Answer', `${ans}`); }
+  else if (t === 'm18_type') { step('Definition', `Overdetermined.`); step('Answer', `over`); }
+  else if (t === 'm18_exact') { step('Concept', `Usually no exact solution.`); step('Answer', `${ans}`); }
+  else if (t === 'm18_intersect') { step('Concept', `One point typically.`); step('Answer', `${ans}`); }
+  else if (t === 'm18_3lines') { step('Concept', `Rarely concurrent.`); step('Answer', `${ans}`); }
+  else if (t === 'm18_least') { step('Definition', `Least squares.`); step('Answer', `least squares`); }
+  else if (t === 'm18_transpose') { step('Compute', `3×2 → 2×3.`); step('Answer', `2×3`); }
+  else if (t === 'm18_ata_det') { step('Compute', `66−36=30.`); step('Answer', `${ans}`); }
+  else if (t === 'm19_intersect') { step('Concept', `One point.`); step('Answer', `${ans}`); }
+  else if (t === 'm19_parallel') { step('Concept', `Zero points.`); step('Answer', `${ans}`); }
+  else if (t === 'm19_three') { step('Definition', `Concurrent.`); step('Answer', `concurrent`); }
+  else if (t === 'm19_unlikely') { step('Concept', `Very unlikely.`); step('Answer', `unlikely`); }
+  else if (t === 'm19_geometric') { step('Concept', `Lines don't all intersect.`); step('Answer', `intersect`); }
+  else if (t === 'm19_residual') { step('Concept', `Minimum residual.`); step('Answer', `residual`); }
+  else if (t === 'm19_atb') { step('Compute', `3×2 → 2×3 → A^T A is 2×2.`); step('Answer', `2×2`); }
+  else if (t === 'm19_ata_det') { step('Compute', `66−36=30.`); step('Answer', `${ans}`); }
+  else if (t === 'm19_rows') { step('Concept', `A has 3 cols → A^T has 3 rows.`); step('Answer', `${ans}`); }
+  else if (t === 'm20_prob') { step('Rule', `Between 0 and 1.`); step('Answer', `1`); }
+  else if (t === 'm20_rows') { step('Rule', `Sum to 1.`); step('Answer', `1`); }
+  else if (t === 'm20_state') { step('Concept', `2×2 matrix.`); step('Answer', `2×2`); }
+  else if (t === 'm20_step') { step('Compute', `First entry = ${d.P?d.P[0][0]:'?'}.`); step('Answer', `= ${d.P?d.P[0][0]:'?'}`); }
+  else if (t === 'm20_steady') { step('Definition', `πP=π.`); step('Answer', `π`); }
+  else if (t === 'm20_indep') { step('Property', `Independent of start.`); step('Answer', `${ans}`); }
+  else if (t === 'm20_det') { step('Compute', `det(P).`); step('Answer', `det = ${ans}`); }
+  else if (t === 'm20_multi') { step('Property', `Unique steady state.`); step('Answer', `${ans}`); }
+  else if (t === 'm20_eigen') { step('Property', `Eigenvalue = 1.`); step('Answer', `1`); }
+  else if (t === 'm21_states') { step('Concept', `3×3 matrix.`); step('Answer', `3×3`); }
+  else if (t === 'm21_equations') { step('Concept', `Need equations for each state.`); step('Answer', `${ans}`); }
+  else if (t === 'm21_norm') { step('Rule', `Sum to 1.`); step('Answer', `1`); }
+  else if (t === 'm21_power') { step('Concept', `Matrix powers converge.`); step('Answer', `${ans}`); }
+  else if (t === 'm21_indep2') { step('Property', `Same steady state.`); step('Answer', `${ans}`); }
+  else if (t === 'm21_sum') { step('Rule', `Rows sum to 1.`); step('Answer', `1`); }
+  else if (t === 'm21_row_sum') { step('Rule', `Row sums = 1.`); step('Answer', `1`); }
+  else if (t === 'm21_converge') { step('Property', `Converges to steady state.`); step('Answer', `steady`); }
+  else if (t === 'm22_dot') { step('Compute', `${d.a}×0+0×${d.b}=0.`); step('Answer', `= ${ans}`); }
+  else if (t === 'm22_perp') { step('Property', `Dot = 0.`); step('Answer', `0`); }
+  else if (t === 'm22_self') { step('Compute', `${d.a}²+${d.a}²=${2*d.a*d.a}.`); step('Answer', `= ${ans}`); }
+  else if (t === 'm22_eq') { step('Set up', `${d.a}x+${d.b}y=0.`); step('Answer', `${d.a}x+${d.b}y=0`); }
+  else if (t === 'm22_perpvec') { step('Compute', `Dot = ${d.u[0]*d.v[0]+d.u[1]*d.v[1]}.`); step('Answer', `= ${d.u[0]*d.v[0]+d.u[1]*d.v[1]}`); }
+  else if (t === 'm22_zero') { step('Check', `(0,0)·v=0.`); step('Answer', `${ans} (Yes)`); }
+  else if (t === 'm22_check') { step('Compute', `Dot = ${d.a*d.c+d.b*d.d}.`); step('Answer', `= ${d.a*d.c+d.b*d.d}`); }
+  else if (t === 'm22_dim') { step('Concept', `1D perpendicular complement.`); step('Answer', `${ans}`); }
+  else if (t === 'm22_angle') { step('Compute', `Dot = ${d.u[0]*d.v[0]+d.u[1]*d.v[1]}.`); step('Answer', `= ${d.u[0]*d.v[0]+d.u[1]*d.v[1]}`); }
+  else if (t === 'm23_plane') { step('Concept', `Equation in R³ → plane.`); step('Answer', `plane`); }
+  else if (t === 'm23_3d') { step('Definition', `3 coordinates.`); step('Answer', `${ans}`); }
+  else if (t === 'm23_check') { step('Compute', `2+14+9=25≠0.`); step('Answer', `${ans} (No)`); }
+  else if (t === 'm23_line') { step('Concept', `2 equations → line.`); step('Answer', `${ans}`); }
+  else if (t === 'm23_normal') { step('Concept', `Normal = (a,b,c).`); step('Answer', `(${d.a},${d.b},${d.c})`); }
+  else if (t === 'm23_perp2') { step('Concept', `Plane is 2D.`); step('Answer', `${ans}`); }
+  else if (t === 'm23_3dot') { step('Compute', `Dot = ${d.a*d.d+d.b*d.e+d.c*d.f}.`); step('Answer', `= ${d.a*d.d+d.b*d.e+d.c*d.f}`); }
+  else if (t === 'm23_check2') { step('Compute', `= ${d.x+2*d.y+3*d.z}.`); step('Answer', `= ${d.x+2*d.y+3*d.z}`); }
+  else if (t === 'm23_3planes') { step('Concept', `Each equation removes 1 dimension.`); step('Answer', `${ans}`); }
+  else { _genericExplanation(t, d, s, step, ans); }
+  return s;
+}
+
+function _genericExplanation(t, d, s, step, ans) {
+  if (t.startsWith('m24_') || t.startsWith('m25_') || t.startsWith('m26_') || t.startsWith('m27_') || t.startsWith('m28_') || t.startsWith('m29_') || t.startsWith('m30_') || t.startsWith('m31_') || t.startsWith('m32_') || t.startsWith('m33_') || t.startsWith('m34_') || t.startsWith('m35_') || t.startsWith('m36_')) {
+    if (t === 'm24_free') { step('Compute', `3−2=1 free variable.`); step('Answer', `${ans}`); }
+    else if (t === 'm24_null') { step('Definition', `Kernel = null space.`); step('Answer', `kernel`); }
+    else if (t === 'm24_perp') { step('Property', `NS ⊥ RS.`); step('Answer', `row space`); }
+    else if (t === 'm24_direction') { step('Compute', `1 free var → 1D.`); step('Answer', `1`); }
+    else if (t === 'm24_span') { step('Span', `1 vector in R³ → line.`); step('Answer', `line`); }
+    else if (t === 'm24_plane') { step('Span', `2 indep vectors → plane.`); step('Answer', `plane`); }
+    else if (t === 'm24_rn') { step('Rank-nullity', `= n columns.`); step('Answer', `columns`); }
+    else if (t === 'm24_null_check') { step('Compute', `nullity=3−${d.r}=${3-d.r}.`); step('Answer', `${ans}`); }
+    else if (t === 'm24_dim') { step('Compute', `dim=3−${d.r}=${3-d.r}.`); step('Answer', `${ans}`); }
+    else if (t === 'm25_rank') { step('Compute', `Rank = 2.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm25_sing') { step('Definition', `rank < n → singular.`); step('Answer', `singular`); }
+    else if (t === 'm25_det') { step('Compute', `det = 0.`); step('Answer', `det = ${ans}`); }
+    else if (t === 'm25_ns_dir') { step('Find', `(1,−2,1).`); step('Answer', `(${ans})`); }
+    else if (t === 'm25_nullity') { step('Compute', `3−2=1.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm25_perp') { step('Property', `NS ⊥ RS.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm25_check') { step('Compute', `1−4+3=0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm25_rank_null') { step('Compute', `nullity = 1.`); step('Answer', `${ans}`); }
+    else if (t === 'm25_null_dim') { step('Compute', `dim = 3−${d.r}=${3-d.r}.`); step('Answer', `${ans}`); }
+    else if (t === 'm26_rank') { step('Compute', `rank = 2.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm26_dim_row') { step('Property', `dim(RS) = rank.`); step('Answer', `rank`); }
+    else if (t === 'm26_dim_col') { step('Property', `dim(CS) = rank.`); step('Answer', `rank`); }
+    else if (t === 'm26_span') { step('Property', `R⊕N = Rⁿ.`); step('Answer', `Rⁿ`); }
+    else if (t === 'm26_orthogonal') { step('Property', `RS ⊥ NS.`); step('Answer', `orthogonal`); }
+    else if (t === 'm26_dim_sum') { step('Rank-nullity', `= n columns.`); step('Answer', `columns`); }
+    else if (t === 'm26_det') { step('Compute', `rank=${d.det!==0?2:1}.`); step('Answer', `rank = ${d.det!==0?2:1}`); }
+    else if (t === 'm26_sum') { step('Compute', `${d.r}+${d.n}=${d.r+d.n}.`); step('Answer', `${ans}`); }
+    else if (t === 'm26_dim') { step('Compute', `R=2D, N=1D.`); step('Answer', `R:2D, N:1D`); }
+    else if (t === 'm27_det') { step('Compute', `4−4=0.`); step('Answer', `det = ${ans}`); }
+    else if (t === 'm27_rank') { step('Compute', `R2=2R1 → rank=1.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm27_collapse') { step('Concept', `2D→1D.`); step('Answer', `${ans}`); }
+    else if (t === 'm27_apply') { step('Compute', `(${d.x+2*d.y},${2*d.x+4*d.y}).`); step('Answer', `(${d.r})`); }
+    else if (t === 'm27_parallel') { step('Concept', `Collapse to same point.`); step('Answer', `${ans}`); }
+    else if (t === 'm27_null_dir') { step('Find', `(−2,1).`); step('Answer', `(${ans})`); }
+    else if (t === 'm27_line_k') { step('Compute', `→ (${d.k},${2*d.k}).`); step('Answer', `(${d.k},${2*d.k})`); }
+    else if (t === 'm27_result') { step('Compute', `(${d.v[0]+2*d.v[1]},${2*d.v[0]+4*d.v[1]}).`); step('Answer', `(${d.r})`); }
+    else if (t === 'm27_dim_in_out') { step('Concept', `→ 0D point.`); step('Answer', `0D`); }
+    else if (t === 'm28_plane') { step('Concept', `2 vectors → plane.`); step('Answer', `${ans}`); }
+    else if (t === 'm28_origin') { step('Concept', `0·v=0.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm28_one') { step('Span', `→ line.`); step('Answer', `line`); }
+    else if (t === 'm28_scalar') { step('Concept', `Scalar multiples → line.`); step('Answer', `line`); }
+    else if (t === 'm28_indep') { step('Concept', `2 indep → plane.`); step('Answer', `plane`); }
+    else if (t === 'm28_r3') { step('Concept', `Need 3.`); step('Answer', `${ans}`); }
+    else if (t === 'm28_dim_check') { step('Compute', `min(${d.a},${d.b}).`); step('Answer', `min(${d.a},${d.b})`); }
+    else if (t === 'm28_3vec') { step('Concept', `→ R³.`); step('Answer', `${ans}`); }
+    else if (t === 'm28_dim_dep') { step('Concept', `< 3.`); step('Answer', `${ans}`); }
+    else if (t === 'm29_intersect') { step('Concept', `2 planes → line.`); step('Answer', `line`); }
+    else if (t === 'm29_null') { step('Property', `NS ⊥ plane.`); step('Answer', `perpendicular`); }
+    else if (t === 'm29_3d') { step('Definition', `1 equation.`); step('Answer', `${ans}`); }
+    else if (t === 'm29_normal') { step('Concept', `Normal = (${d.a},${d.b},${d.c}).`); step('Answer', `(${d.a},${d.b},${d.c})`); }
+    else if (t === 'm29_ns_line') { step('Compute', `3−2=1 → line.`); step('Answer', `line`); }
+    else if (t === 'm29_perp') { step('Property', `Always ⊥.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm29_dim') { step('Compute', `3−2=1.`); step('Answer', `dim = ${ans}`); }
+    else if (t === 'm29_rank_null') { step('Compute', `rank = 3−1=2.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm29_cross') { step('Compute', `Cross product first component.`); step('Answer', `${d.cp?d.cp[0]:'compute'}`); }
+    else if (t === 'm30_det') { step('Compute', `det = 0.`); step('Answer', `det = ${ans}`); }
+    else if (t === 'm30_rank') { step('Compute', `rank = 2.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm30_ns') { step('Find', `(1,−2,1).`); step('Answer', `(${ans})`); }
+    else if (t === 'm30_nullity') { step('Compute', `3−2=1.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm30_dep') { step('Concept', `Linearly dependent.`); step('Answer', `dependent`); }
+    else if (t === 'm30_check') { step('Compute', `1−8+7=0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm30_perp') { step('Compute', `= 0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm30_indep') { step('Concept', `Spanned by 2 vectors.`); step('Answer', `${ans}`); }
+    else if (t === 'm30_sum') { step('Rank-nullity', `= columns.`); step('Answer', `columns`); }
+    else if (t === 'm31_rank') { step('Compute', `rank = 2.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm31_nullity') { step('Compute', `nullity = 1.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm31_same') { step('Property', `= rank.`); step('Answer', `rank`); }
+    else if (t === 'm31_dim_row') { step('Compute', `= 2.`); step('Answer', `${ans}`); }
+    else if (t === 'm31_dim_null') { step('Compute', `= 1.`); step('Answer', `${ans}`); }
+    else if (t === 'm31_col') { step('Compute', `= 2.`); step('Answer', `${ans}`); }
+    else if (t === 'm31_rank_null') { step('Compute', `${d.r}+${d.n}=${d.r+d.n}.`); step('Answer', `${ans}`); }
+    else if (t === 'm31_count') { step('Definition', `4 subspaces.`); step('Answer', `${ans}`); }
+    else if (t === 'm31_dim_check') { step('Compute', `Input = R².`); step('Answer', `R²`); }
+    else if (t === 'm32_dot1') { step('Compute', `1−8+7=0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm32_perp') { step('Definition', `Dot=0 → ⊥.`); step('Answer', `perpendicular`); }
+    else if (t === 'm32_theorem') { step('Theorem', `RS ⊥ NS.`); step('Answer', `perpendicular`); }
+    else if (t === 'm32_check2') { step('Compute', `4−10+6=0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm32_all') { step('Property', `Always 0.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm32_why') { step('Concept', `Ax=0 → row·x=0.`); step('Answer', `0`); }
+    else if (t === 'm32_dot') { step('Compute', `7−16+9=0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm32_sum') { step('Compute', `${d.r}+(${d.n}−${d.r})=${d.n}.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm32_sum2') { step('Compute', `(${d.m}−${d.r})+${d.r}=${d.m}.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm33_det') { step('Compute', `det = 0.`); step('Answer', `det = ${ans}`); }
+    else if (t === 'm33_line') { step('Compute', `→ (4,8).`); step('Answer', `(${ans})`); }
+    else if (t === 'm33_nonsing') { step('Concept', `No collapse.`); step('Answer', `${ans} (No)`); }
+    else if (t === 'm33_apply') { step('Compute', `B·(0,2)=(4,8).`); step('Answer', `(${ans})`); }
+    else if (t === 'm33_all_same') { step('Concept', `Differ by NS vectors.`); step('Answer', `NS vectors`); }
+    else if (t === 'm33_range') { step('Definition', `In range/CS.`); step('Answer', `range`); }
+    else if (t === 'm33_intercept') { step('Compute', `Sum = ${d.k+d.k/2}.`); step('Answer', `${d.k+d.k/2}`); }
+    else if (t === 'm33_rank') { step('Compute', `rank = 1.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm34_k10') { step('Compute', `→ (10,20).`); step('Answer', `(${ans})`); }
+    else if (t === 'm34_k62') { step('Compute', `→ (62,124).`); step('Answer', `(${ans})`); }
+    else if (t === 'm34_diff') { step('Concept', `Different k → different output.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm34_formula') { step('Compute', `→ (${d.k},${2*d.k}).`); step('Answer', `(${d.k},${2*d.k})`); }
+    else if (t === 'm34_pattern') { step('Pattern', `k→(k,2k).`); step('Answer', `(1,2)`); }
+    else if (t === 'm34_parallel') { step('Concept', `Unique output.`); step('Answer', `different`); }
+    else if (t === 'm34_apply') { step('Compute', `(${d.A[0][0]*d.x+d.A[0][1]*d.y},${d.A[1][0]*d.x+d.A[1][1]*d.y}).`); step('Answer', `(${d.r})`); }
+    else if (t === 'm34_rank') { step('Compute', `dim = 1.`); step('Answer', `dim = ${ans}`); }
+    else if (t === 'm34_check') { step('Compute', `= ${d.x+2*d.y}.`); step('Answer', `= ${d.x+2*d.y}`); }
+    else if (t === 'm35_ns') { step('Find', `(−2,1).`); step('Answer', `(${ans})`); }
+    else if (t === 'm35_range') { step('Find', `(1,2).`); step('Answer', `(${ans})`); }
+    else if (t === 'm35_perp') { step('Check', `−2+2=0.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm35_formula') { step('Compute', `→ (${d.k},${2*d.k}).`); step('Answer', `(${d.k},${2*d.k})`); }
+    else if (t === 'm35_ns_range') { step('Compute', `= 0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm35_collapse') { step('Compute', `(k,2k).`); step('Answer', `${ans}`); }
+    else if (t === 'm35_output') { step('Compute', `= ${d.A[1][0]*d.x+d.A[1][1]*d.y}.`); step('Answer', `= ${d.A[1][0]*d.x+d.A[1][1]*d.y}`); }
+    else if (t === 'm35_rank1') { step('Compute', `rank = 1.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm35_det') { step('Compute', `det = 0.`); step('Answer', `det = ${ans}`); }
+    else if (t === 'm36_rank') { step('Compute', `rank = 1.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm36_nullity') { step('Compute', `nullity = 1.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm36_sum') { step('Compute', `1+1=2.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm36_ftoc') { step('Rank-nullity', `= columns.`); step('Answer', `columns`); }
+    else if (t === 'm36_dim_in') { step('Compute', `2−1=1.`); step('Answer', `${ans}`); }
+    else if (t === 'm36_dim_out') { step('Compute', `rank = 1.`); step('Answer', `${ans}`); }
+    else if (t === 'm36_general') { step('Compute', `nullity = ${d.n}−${d.r}=${d.n-d.r}.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm36_identity') { step('Compute', `0 lost.`); step('Answer', `${ans}`); }
+    else if (t === 'm36_zero') { step('Compute', `All lost.`); step('Answer', `${ans}`); }
+    else { step('Answer', `Correct answer: ${ans}`); }
+  }
+  else if (t.startsWith('m37_') || t.startsWith('m38_') || t.startsWith('m39_') || t.startsWith('m40_') || t.startsWith('m41_') || t.startsWith('m42_') || t.startsWith('m43_') || t.startsWith('m44_') || t.startsWith('m45_')) {
+    if (t === 'm37_rank') { step('Compute', `R2=3R1 → rank=1.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm37_row_dir') { step('Find', `(1,2).`); step('Answer', `(${ans})`); }
+    else if (t === 'm37_col_dir') { step('Find', `(1,3).`); step('Answer', `(${ans})`); }
+    else if (t === 'm37_null_dir') { step('Find', `(−2,1).`); step('Answer', `(${ans})`); }
+    else if (t === 'm37_all_1d') { step('Compute', `All 1D.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm37_dim_sum') { step('Compute', `1+1=2.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm37_verify') { step('Compute', `−2+2=0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm37_det_check') { step('Compute', `det=${d.det}.`); step('Answer', `${d.det!==0?'Yes':'No'}`); }
+    else if (t === 'm37_dim_check') { step('Compute', `1+1=2.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm38_dot') { step('Compute', `−3+3=0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm38_perp') { step('Property', `Always ⊥.`); step('Answer', `orthogonal`); }
+    else if (t === 'm38_zero') { step('Concept', `0 is in all.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm38_row') { step('Compute', `span(1,2).`); step('Answer', `span(1,2)`); }
+    else if (t === 'm38_null') { step('Compute', `span(−2,1).`); step('Answer', `span(−2,1)`); }
+    else if (t === 'm38_sum') { step('Rank-nullity', `= columns.`); step('Answer', `columns`); }
+    else if (t === 'm38_verify_any') { step('Compute', `= 0.`); step('Answer', `= 0`); }
+    else if (t === 'm38_sum_check') { step('Compute', `${d.r}+(${d.n}−${d.r})=${d.n}.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm38_which') { step('Concept', `R³.`); step('Answer', `R³`); }
+    else if (t === 'm39_nm') { step('Find', `span(−2,1).`); step('Answer', `span(−2,1)`); }
+    else if (t === 'm39_nmt') { step('Find', `span(3,−1).`); step('Answer', `span(3,−1)`); }
+    else if (t === 'm39_diff') { step('Concept', `Different spaces.`); step('Answer', `different`); }
+    else if (t === 'm39_perp_cm') { step('Property', `N(M^T) ⊥ C(M).`); step('Answer', `column space`); }
+    else if (t === 'm39_dim_nm') { step('Compute', `2−1=1.`); step('Answer', `${ans}`); }
+    else if (t === 'm39_dim_nmt') { step('Compute', `2−1=1.`); step('Answer', `${ans}`); }
+    else if (t === 'm39_verify') { step('Compute', `−3+3=0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm39_dim_check') { step('Compute', `(${d.m}−${d.r})+${d.r}=${d.m}.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm40_c_perp') { step('Property', `C ⊥ N^T.`); step('Answer', `N(A^T)`); }
+    else if (t === 'm40_r_perp') { step('Property', `R ⊥ N.`); step('Answer', `N(A)`); }
+    else if (t === 'm40_pairs') { step('Count', `2 pairs.`); step('Answer', `${ans}`); }
+    else if (t === 'm40_input') { step('Concept', `Rⁿ.`); step('Answer', `input`); }
+    else if (t === 'm40_output') { step('Concept', `Rᵐ.`); step('Answer', `output`); }
+    else if (t === 'm40_four') { step('Definition', `R, N, C, N^T.`); step('Answer', `R,N,C,N^T`); }
+    else if (t === 'm40_dim_check') { step('Compute', `= ${d.n}.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm40_dim_check2') { step('Compute', `= ${d.m}.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm40_dim_sum') { step('Compute', `${d.r}+(2−${d.r})=2.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm41_rank') { step('Compute', `rank = 2.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm41_ns') { step('Find', `(1,−2,1).`); step('Answer', `(${ans})`); }
+    else if (t === 'm41_dim_r') { step('Compute', `= 2.`); step('Answer', `${ans}`); }
+    else if (t === 'm41_subspaces') { step('Compute', `R:2D, N:1D.`); step('Answer', `R:2D, N:1D`); }
+    else if (t === 'm41_col') { step('Compute', `= 2D.`); step('Answer', `${ans}`); }
+    else if (t === 'm41_lns') { step('Compute', `3−2=1.`); step('Answer', `${ans}`); }
+    else if (t === 'm41_types') { step('Compute', `2+1=3.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm41_sum') { step('Compute', `${d.r}+(${d.n}−${d.r})=${d.n}.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm41_verify') { step('Compute', `1−8+7=0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm42_i4') { step('Compute', `rank = 4.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm42_zero') { step('Compute', `rank = 0.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm42_max') { step('Compute', `min(4,4)=4.`); step('Answer', `${ans}`); }
+    else if (t === 'm42_range') { step('Definition', `= dim(CS).`); step('Answer', `column space`); }
+    else if (t === 'm42_rank1') { step('Compute', `= 1D.`); step('Answer', `${ans}`); }
+    else if (t === 'm42_rank2') { step('Compute', `4−2=2.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm42_nullity') { step('Compute', `4−${d.r}=${4-d.r}.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm42_rank3') { step('Compute', `R:3D, N:1D.`); step('Answer', `R:3D, N:1D`); }
+    else if (t === 'm42_equiv') { step('Property', `rank(A)=rank(A^T).`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm43_line') { step('Property', `Closed under scalar mult.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm43_subspace') { step('Definition', `Always a subspace.`); step('Answer', `subspace`); }
+    else if (t === 'm43_closed') { step('Definition', `+ and scalar mult.`); step('Answer', `scalar multiplication`); }
+    else if (t === 'm43_prop') { step('Property', `Homogeneity.`); step('Answer', `homogeneity`); }
+    else if (t === 'm43_line_in') { step('Property', `In the range.`); step('Answer', `range`); }
+    else if (t === 'm43_zero') { step('Property', `A(0)=0.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm43_rank') { step('Compute', `rank=2.`); step('Answer', `rank = ${d.A||2}`); }
+    else if (t === 'm43_rank_check') { step('Compute', `rank=1.`); step('Answer', `${ans}`); }
+    else if (t === 'm44_add') { step('Property', `Closed under +.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm44_span2') { step('Concept', `→ plane.`); step('Answer', `plane`); }
+    else if (t === 'm44_closure') { step('Definition', `+ and scalar mult.`); step('Answer', `scalar multiplication`); }
+    else if (t === 'm44_prop') { step('Property', `Additivity.`); step('Answer', `additivity`); }
+    else if (t === 'm44_span_range') { step('Property', `In range.`); step('Answer', `range`); }
+    else if (t === 'm44_col') { step('Definition', `= CS.`); step('Answer', `column`); }
+    else if (t === 'm44_dim') { step('Compute', `= rank.`); step('Answer', `= rank`); }
+    else if (t === 'm44_dim_range') { step('Compute', `= 1.`); step('Answer', `${ans}`); }
+    else if (t === 'm44_sub') { step('Concept', `In R³.`); step('Answer', `R³`); }
+    else if (t === 'm45_dep') { step('Check', `(2,4,6)=2(1,2,3).`); step('Answer', `${ans} (No)`); }
+    else if (t === 'm45_indep') { step('Check', `Not multiples.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm45_dim_dep') { step('Compute', `dim=1.`); step('Answer', `dim = ${ans}`); }
+    else if (t === 'm45_span') { step('Compute', `→ 1D.`); step('Answer', `${ans}`); }
+    else if (t === 'm45_indep2') { step('Compute', `→ 2D.`); step('Answer', `${ans}`); }
+    else if (t === 'm45_dim') { step('Definition', `= # indep vectors.`); step('Answer', `independent`); }
+    else if (t === 'm45_rank') { step('Compute', `= r.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm45_three') { step('Compute', `= 3.`); step('Answer', `dim = ${ans}`); }
+    else if (t === 'm45_nullity') { step('Compute', `${d.n}−${d.r}=${d.n-d.r}.`); step('Answer', `nullity = ${ans}`); }
+    else { step('Answer', `Correct answer: ${ans}`); }
+  }
+  else if (t.startsWith('m46_') || t.startsWith('m47_') || t.startsWith('m48_') || t.startsWith('m49_') || t.startsWith('m50_')) {
+    if (t === 'm46_rn') { step('Concept', `Input space Rⁿ.`); step('Answer', `n`); }
+    else if (t === 'm46_cm') { step('Concept', `Output space Rᵐ.`); step('Answer', `m`); }
+    else if (t === 'm46_four') { step('Definition', `4 subspaces.`); step('Answer', `${ans}`); }
+    else if (t === 'm46_rn_span') { step('Property', `R⊕N=Rⁿ.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm46_perp_pairs') { step('Property', `R⊥N, C⊥N^T.`); step('Answer', `R⊥N, C⊥N^T`); }
+    else if (t === 'm46_dims') { step('Property', `= m.`); step('Answer', `m`); }
+    else if (t === 'm46_calc') { step('Compute', `r+(n−r)=n=${d.n}.`); step('Answer', `= ${d.n}`); }
+    else if (t === 'm46_calc2') { step('Compute', `(m−r)+r=m=${d.m}.`); step('Answer', `= ${d.m}`); }
+    else if (t === 'm46_zero') { step('Compute', `nullity=0.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm47_dot1') { step('Compute', `1−8+7=0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm47_dot2') { step('Compute', `4−10+6=0.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm47_confirm') { step('Concept', `RS ⊥ NS.`); step('Answer', `null space`); }
+    else if (t === 'm47_always') { step('Property', `Always true.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm47_rows') { step('Concept', `R³.`); step('Answer', `R³`); }
+    else if (t === 'm47_null') { step('Concept', `= 0.`); step('Answer', `0`); }
+    else if (t === 'm47_dim_check') { step('Compute', `2+1=3.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm47_dim_check2') { step('Compute', `2+1=3.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm47_check') { step('Compute', `(${d.n}−${d.r})+${d.r}=${d.n}.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm48_fn') { step('Rank-nullity', `= columns.`); step('Answer', `columns`); }
+    else if (t === 'm48_b') { step('Compute', `1+1=2.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm48_check') { step('Property', `Always.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm48_calc') { step('Compute', `${d.n}−${d.r}=${d.n-d.r}.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm48_rank2') { step('Compute', `4−2=2.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm48_rank0') { step('Compute', `nullity=n.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm48_full') { step('Compute', `= 0.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm48_zero') { step('Compute', `nullity=3.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm49_rank') { step('Compute', `rank=1.`); step('Answer', `rank = ${ans}`); }
+    else if (t === 'm49_rm') { step('Compute', `R².`); step('Answer', `R²`); }
+    else if (t === 'm49_cm') { step('Compute', `R³.`); step('Answer', `R³`); }
+    else if (t === 'm49_dim_r') { step('Rank-nullity', `= 2.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm49_dim_c') { step('Property', `= 3.`); step('Answer', `= ${ans}`); }
+    else if (t === 'm49_subspaces') { step('Compute', `N^T: 3−1=2.`); step('Answer', `${ans}`); }
+    else if (t === 'm49_perp1') { step('Compute', `1D⊥1D in R².`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm49_perp2') { step('Compute', `1D⊥2D in R³.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm49_summary') { step('Compute', `2D.`); step('Answer', `${ans}`); }
+    else if (t === 'm50_four') { step('Definition', `4.`); step('Answer', `${ans}`); }
+    else if (t === 'm50_rank') { step('Definition', `= rank.`); step('Answer', `rank`); }
+    else if (t === 'm50_done') { step('Encouragement', `Keep going!`); step('Answer', `${ans}`); }
+    else if (t === 'm50_pairs') { step('Property', `R⊥N, C⊥N^T.`); step('Answer', `R⊥N, C⊥N^T`); }
+    else if (t === 'm50_ftn') { step('Definition', `Rank-Nullity.`); step('Answer', `Rank-Nullity`); }
+    else if (t === 'm50_direct') { step('Definition', `Direct sum.`); step('Answer', `direct`); }
+    else if (t === 'm50_rank_nullity') { step('Compute', `3−2=1.`); step('Answer', `nullity = ${ans}`); }
+    else if (t === 'm50_dim_check') { step('Compute', `4−3=1.`); step('Answer', `dim = ${ans}`); }
+    else if (t === 'm50_all_dims') { step('Compute', `R=${d.r},N=${d.n-d.r},C=${d.r},N^T=${d.n-d.r}.`); step('Answer', `Input: R^${d.n}`); }
+    else { step('Answer', `Correct answer: ${ans}`); }
+  }
+  else if (t.startsWith('m51_') || t.startsWith('m52_') || t.startsWith('m53_') || t.startsWith('m54_') || t.startsWith('m55_') || t.startsWith('m56_')) {
+    if (t === 'm51_maxrank') { step('Compute', `min(3,4)=3.`); step('Answer', `${ans}`); }
+    else if (t === 'm51_rank') { step('Definition', `Independent patterns.`); step('Answer', `independent`); }
+    else if (t === 'm51_lowrank') { step('Concept', `Similar preferences.`); step('Answer', `similar`); }
+    else if (t === 'm51_users') { step('Concept', `Redundant preferences.`); step('Answer', `similar preferences`); }
+    else if (t === 'm51_factor') { step('Definition', `Matrix factorization.`); step('Answer', `factorization`); }
+    else if (t === 'm51_compress') { step('Compute', `Rank 10 << 5000.`); step('Answer', `${ans} (Yes)`); }
+    else if (t === 'm52_dot') { step('Definition', `Similarity.`); step('Answer', `similarity`); }
+    else if (t === 'm52_zero') { step('Concept', `Not similar.`); step('Answer', `${ans} (No)`); }
+    else if (t === 'm52_method') { step('Definition', `Similar users.`); step('Answer', `users`); }
+    else if (t === 'm52_calc') { step('Compute', `${d.u[0]*d.v[0]+d.u[1]*d.v[1]}.`); step('Answer', `= ${d.u[0]*d.v[0]+d.u[1]*d.v[1]}`); }
+    else if (t === 'm52_cosine') { step('Definition', `Dot/(‖u‖·‖v‖).`); step('Answer', `magnitudes`); }
+    else if (t === 'm52_predict') { step('Concept', `Similar users.`); step('Answer', `users`); }
+    else if (t === 'm53_links') { step('Concept', `More importance.`); step('Answer', `importance`); }
+    else if (t === 'm53_eigen') { step('Definition', `Eigenvector.`); step('Answer', `eigenvector`); }
+    else if (t === 'm53_sparse') { step('Concept', `Most entries 0.`); step('Answer', `sparse`); }
+    else if (t === 'm53_markov') { step('Concept', `Markov chain.`); step('Answer', `Markov`); }
+    else if (t === 'm53_damping') { step('Concept', `Following a link.`); step('Answer', `link`); }
+    else if (t === 'm53_steady') { step('Definition', `Steady-state eigenvector.`); step('Answer', `eigenvector`); }
+    else if (t === 'm54_converge') { step('Definition', `Dominant eigenvector.`); step('Answer', `dominant`); }
+    else if (t === 'm54_iterate') { step('Concept', `Then normalize.`); step('Answer', `normalize`); }
+    else if (t === 'm54_eigen1') { step('Property', `= 1.`); step('Answer', `1`); }
+    else { step('Answer', `Correct answer: ${ans}`); }
+  }
+  else {
+    step('Answer', `Correct answer: ${ans}`);
+  }
+}
+
 /* ── LinearAlgebraApp component ────────────────────── */
 function LinearAlgebraApp({ onBack }) {
   const [currentMission, setCurrentMission] = useState(() => {
@@ -2006,7 +2500,7 @@ function LinearAlgebraApp({ onBack }) {
   const [currentModule, setCurrentModule] = useState(() => {
     try { return parseInt(localStorage.getItem('la_module') || '1', 10); } catch { return 1; }
   });
-  const [phase, setPhase] = useState('intro');
+  const [phase, setPhase] = useState('modules');
   const [skillLevel, setSkillLevel] = useState('little');
   const [showSteps, setShowSteps] = useState(true);
   const [showHint, setShowHint] = useState(false);
@@ -2042,11 +2536,15 @@ function LinearAlgebraApp({ onBack }) {
   const [mqRevealed, setMqRevealed] = useState(false);
   const [mqResults, setMqResults] = useState([]);
   const [mqDifficulty, setMqDifficulty] = useState('easy');
+  const [mqAdaptiveLevel, setMqAdaptiveLevel] = useState(0);
+  const ADAPTIVE_LEVELS = ['easy', 'medium', 'hard'];
+  const effectiveMqDifficulty = mqDifficulty === 'adaptive' ? ADAPTIVE_LEVELS[Math.min(mqAdaptiveLevel, 2)] : mqDifficulty;
   const mqSubmittedRef = useRef(false);
   const mqAdvancedRef = useRef(false);
   const mqAdvanceRef = useRef(null);
   const mqSubmitRef = useRef(null);
   const mqSeenRef = useRef(new Set());
+  const [mqExplanation, setMqExplanation] = useState([]);
 
   function shuffle(arr) {
     const a = [...arr];
@@ -2181,19 +2679,19 @@ function LinearAlgebraApp({ onBack }) {
     setMqStarted(false); setMqFinished(false); setMqQuestion(null);
     setMqAnswer(''); setMqScore(0); setMqQNum(0); setMqResults([]);
     setMqFeedback(''); setMqIsCorrect(null); setMqRevealed(false);
-    setMqDifficulty('easy'); mqSubmittedRef.current = false; mqAdvancedRef.current = false; mqSeenRef.current = new Set();
+    setMqDifficulty('easy'); setMqAdaptiveLevel(0); mqSubmittedRef.current = false; mqAdvancedRef.current = false; mqSeenRef.current = new Set(); setMqExplanation([]);
   };
 
   const loadMqQuestion = async () => {
     setMqLoading(true); setMqLoadError('');
     try {
       const seenParam = mqSeenRef.current.size > 0 ? '&seen=' + encodeURIComponent([...mqSeenRef.current].join(',')) : '';
-      const r = await fetch(`/la-mission-quiz-api/question?missionId=${currentMission}&difficulty=${mqDifficulty}${seenParam}`);
+      const r = await fetch(`/la-mission-quiz-api/question?missionId=${currentMission}&difficulty=${effectiveMqDifficulty}${seenParam}`);
       if (!r.ok) throw new Error(`Server returned ${r.status}`);
       const data = await r.json();
       if (!data || !data.prompt) throw new Error('No prompt');
       if (data.type) mqSeenRef.current.add(data.type);
-      setMqQuestion(data); setMqAnswer(''); setMqFeedback(''); setMqIsCorrect(null); setMqRevealed(false);
+      setMqQuestion(data); setMqAnswer(''); setMqFeedback(''); setMqIsCorrect(null); setMqRevealed(false); setMqExplanation([]);
       mqSubmittedRef.current = false; mqAdvancedRef.current = false;
     } catch (e) {
       setMqQuestion(null); setMqLoadError(`Couldn't load question (${e.message}).`);
@@ -2225,8 +2723,12 @@ function LinearAlgebraApp({ onBack }) {
       const data = await r.json();
       setMqIsCorrect(data.correct); setMqRevealed(true);
       if (data.correct) setMqScore(s => s + 1);
+      if (mqDifficulty === 'adaptive') {
+        setMqAdaptiveLevel(prev => data.correct ? Math.min(prev + 1, 2) : Math.max(prev - 1, 0));
+      }
       setMqFeedback(data.correct ? `Correct! ${data.display}` : `Incorrect. Answer: ${data.display}`);
       setMqResults(prev => [...prev, { prompt: mqQuestion.prompt, userAnswer: String(ans).trim(), correctAnswer: data.display, correct: data.correct }]);
+      setMqExplanation(generateMqExplanation(mqQuestion));
     } catch (e) { mqSubmittedRef.current = false; }
   };
 
@@ -2234,15 +2736,22 @@ function LinearAlgebraApp({ onBack }) {
     if (!mqQuestion || mqRevealed) return;
     mqSubmittedRef.current = true;
     setMqIsCorrect(false); setMqRevealed(true);
+    if (mqDifficulty === 'adaptive') {
+      setMqAdaptiveLevel(prev => Math.max(prev - 1, 0));
+    }
     const display = mqQuestion.display || mqQuestion.answer || '';
     setMqFeedback(`Solution: ${display}`);
     setMqResults(prev => [...prev, { prompt: mqQuestion.prompt, userAnswer: '(solved)', correctAnswer: display, correct: false }]);
+    setMqExplanation(generateMqExplanation(mqQuestion));
   };
 
   const mqSkip = () => {
     if (!mqQuestion || mqRevealed) return;
     mqSubmittedRef.current = true;
     setMqIsCorrect(false); setMqRevealed(true);
+    if (mqDifficulty === 'adaptive') {
+      setMqAdaptiveLevel(prev => Math.max(prev - 1, 0));
+    }
     setMqFeedback('Skipped.');
     setMqResults(prev => [...prev, { prompt: mqQuestion.prompt, userAnswer: '(skipped)', correctAnswer: '—', correct: false }]);
   };
@@ -2564,26 +3073,62 @@ function LinearAlgebraApp({ onBack }) {
     );
   }
 
+  const openModule = (m) => {
+    setCurrentModule(m.id);
+    setCurrentMission(m.start);
+    setPhase('intro');
+    try { localStorage.setItem('la_module', String(m.id)); } catch {}
+  };
+
+  const isModuleUnlocked = (m) => {
+    if (m.id === 1) return true;
+    const prev = MODULES.find(pm => pm.id === m.id - 1);
+    if (!prev) return true;
+    return solvedMissions.filter(id => id >= prev.start && id <= prev.end).length >= (prev.end - prev.start + 1);
+  };
+
   return (
     <div className="la-module">
       <button className="la-back" onClick={onBack}>&larr; Home</button>
+
+      {phase === 'modules' && (
+        <div style={{ textAlign: 'center', padding: '8px 0' }}>
+          <h2 style={{ margin: '0 0 4px' }}>Linear Algebra</h2>
+          <p style={{ fontSize: '0.9rem', color: 'var(--clr-dim)', margin: '0 0 16px' }}>Choose a module to begin. Complete each module to unlock the next.</p>
+          <div className="la-flashcard-grid">
+            {MODULES.map(m => {
+              const unlocked = isModuleUnlocked(m);
+              const mSolved = solvedMissions.filter(id => id >= m.start && id <= m.end).length;
+              const mTotal = m.end - m.start + 1;
+              const isComplete = mSolved >= mTotal;
+              const progressPct = mTotal > 0 ? Math.round((mSolved / mTotal) * 100) : 0;
+              return (
+                <button key={m.id} className={'la-flashcard' + (unlocked ? ' unlocked' : ' locked') + (isComplete ? ' complete' : '')} onClick={() => unlocked && openModule(m)} disabled={!unlocked}>
+                  <div className="la-flashcard-emoji">{m.emoji}</div>
+                  <div className="la-flashcard-title">Module {m.id}: {m.title}</div>
+                  <div className="la-flashcard-sub">{mSolved}/{mTotal} missions{isComplete ? ' — Complete!' : ''}</div>
+                  {!unlocked && <div className="la-flashcard-lock">🔒 Complete Module {m.id - 1} to unlock</div>}
+                  {unlocked && !isComplete && (
+                    <div className="la-flashcard-progress">
+                      <div className="la-flashcard-progress-bar" style={{ width: progressPct + '%' }}></div>
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {phase !== 'modules' && (<>
       <div className="la-header">
-        <div className="la-module-tabs">
-          {MODULES.map(m => {
-            const mSolved = solvedMissions.filter(id => id >= m.start && id <= m.end).length;
-            const mTotal = m.end - m.start + 1;
-            const isComplete = mSolved >= mTotal;
-            const isUnlocked = m.id === 1 || MODULES.filter(pm => pm.id < m.id).every(pm => solvedMissions.filter(id => id >= pm.start && id <= pm.end).length >= (pm.end - pm.start + 1));
-            const isCurrent = m.id === currentModule;
-            return (
-              <button key={m.id} className={'la-module-tab' + (isCurrent ? ' active' : '') + (isComplete ? ' complete' : '') + (!isUnlocked ? ' locked' : '')} onClick={() => { if (isUnlocked) { setCurrentModule(m.id); setCurrentMission(m.start); setPhase('intro'); try { localStorage.setItem('la_module', String(m.id)); } catch {} } }} disabled={!isUnlocked}>
-                {m.emoji} {m.title} {!isUnlocked ? '\uD83D\uDD12' : ''}
-              </button>
-            );
-          })}
+        <button className="la-modules-back" onClick={() => setPhase('modules')}>&larr; All Modules</button>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--la-text)' }}>{mod.emoji} Module {mod.id}: {mod.title}</div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--la-text-soft)' }}>{solvedMissions.filter(id => id >= mod.start && id <= mod.end).length}/{mod.end - mod.start + 1} missions</div>
         </div>
         <h1>{mission.emoji} {mission.title}</h1>
-        <p>Module {currentModule} &middot; Mission {currentMission - mod.start + 1} of {modTotal}</p>
+        <p>Mission {currentMission - mod.start + 1} of {modTotal}</p>
       </div>
 
       <div className="la-progress">
@@ -2609,7 +3154,7 @@ function LinearAlgebraApp({ onBack }) {
 
       {phase === 'play' && (
         <div className="la-mission">
-          <div className="la-question-prompt" style={{ fontSize:'1rem', margin:'0 0 8px', lineHeight:1.5, fontWeight:600 }}>
+          <div className="la-question-prompt" style={{ fontSize:'1.2rem', margin:'0 0 10px', lineHeight:1.6, fontWeight:700 }}>
             {makeMissionDescriptive(mission)}
           </div>
           <GGBEmbed missionId={currentMission} ggbType={mission.ggbType} />
@@ -2633,7 +3178,7 @@ function LinearAlgebraApp({ onBack }) {
             <div style={{ textAlign: 'center', padding: '16px 0' }}>
               <p style={{ fontSize: '0.9rem', color: 'var(--clr-dim)', marginBottom: 12 }}>Test your understanding of this mission with 10 questions.</p>
               <div className="checkbox-group" style={{ marginBottom: 12, justifyContent: 'center' }}>
-                {['easy', 'medium', 'hard'].map(d => (
+                {['easy', 'medium', 'hard', 'adaptive'].map(d => (
                   <label key={d} className={`checkbox-pill${mqDifficulty === d ? ' active' : ''}`}>
                     <input type="radio" name="mq-diff" checked={mqDifficulty === d} onChange={() => setMqDifficulty(d)} />
                     {d.charAt(0).toUpperCase() + d.slice(1)}
@@ -2645,7 +3190,7 @@ function LinearAlgebraApp({ onBack }) {
           )}
           {mqStarted && !mqFinished && (
             <div style={{ textAlign: 'center' }}>
-              <div className="progress-pill center" style={{ marginBottom: 8 }}>Question {mqQNum}/{mqTotal} &middot; Score: {mqScore}</div>
+              <div className="progress-pill center" style={{ marginBottom: 8 }}>Question {mqQNum}/{mqTotal} &middot; Score: {mqScore}{mqDifficulty === 'adaptive' ? ` · Level: ${effectiveMqDifficulty}` : ''}</div>
               {mqLoading && <div style={{ padding: 20, color: 'var(--clr-text-soft)' }}>Loading…</div>}
               {!mqLoading && mqLoadError && <div style={{ padding: 16, color: 'var(--clr-wrong)' }}>{mqLoadError} <button onClick={loadMqQuestion}>Retry</button></div>}
               {mqQuestion && (
@@ -2677,6 +3222,18 @@ function LinearAlgebraApp({ onBack }) {
                   {mqFeedback && (
                     <div style={{ margin: '12px 0', padding: '10px 16px', borderRadius: 8, background: mqIsCorrect ? 'rgba(76,175,80,0.12)' : 'rgba(244,67,54,0.12)', color: mqIsCorrect ? 'var(--clr-correct)' : 'var(--clr-wrong)', fontWeight: 600 }}>
                       {mqFeedback}
+                    </div>
+                  )}
+                  {mqExplanation.length > 0 && (
+                    <div className="mq-explanation-panel">
+                      <div className="mq-explanation-title">Step-by-Step Solution</div>
+                      {mqExplanation.map((step, i) => (
+                        <div key={i} className="mq-explanation-step">
+                          <span className="mq-explanation-step-num">{i + 1}.</span>
+                          <span className="mq-explanation-step-label">{step.label}</span>
+                          <span className="mq-explanation-step-text">{step.text}</span>
+                        </div>
+                      ))}
                     </div>
                   )}
                   <div className="button-row" style={{ marginTop: 8 }}>
@@ -2736,6 +3293,7 @@ function LinearAlgebraApp({ onBack }) {
           })()}
         </div>
       )}
+      </>)}
     </div>
   );
 }

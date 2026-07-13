@@ -9185,7 +9185,7 @@ const MQ = (() => {
     // Mission 2: Treasure Map (collinearity)
     2: {
       easy: [
-        () => { const x1=ri(1,3),y1=ri(1,3); return {type:'m2_slope',answerType:'scalar',prompt:'Slope between (1,0) and ('+x1+','+y1+')?',answer:String(y1),display:String(y1),data:{x1,y1}}; },
+        () => { const y1=ri(1,5); return {type:'m2_slope',answerType:'scalar',prompt:'Slope between (1,0) and (2,'+y1+')?',answer:String(y1),display:String(y1),data:{x1:2,y1}}; },
         () => { return {type:'m2_collinear',answerType:'scalar',prompt:'Are (2,1), (3,2), (4,3) collinear? (1=yes,0=no)',answer:'1',display:'Yes',data:{}}; },
         () => { return {type:'m2_next',answerType:'scalar',prompt:'Next point in pattern (2,1), (3,2), (4,3)?',answer:'(5,4)',display:'(5,4)',data:{}}; },
       ],
@@ -9196,7 +9196,7 @@ const MQ = (() => {
       ],
       hard: [
         () => { const x1=ri(1,3),y1=ri(1,3),x2=x1+ri(1,3),y2=y1+ri(1,3); const x3=x2+ri(1,3),y3=y2+ri(1,3); const collinear=((y2-y1)*(x3-x2)===(y3-y2)*(x2-x1)); return {type:'m2_area',answerType:'scalar',prompt:'Area of triangle with vertices ('+x1+','+y1+'), ('+x2+','+y2+'), ('+x3+','+y3+')? (if collinear, 0)',answer:String(Math.abs((x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))/2)),display:String(Math.abs((x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))/2)),data:{x1,y1,x2,y2,x3,y3}}; },
-        () => { const m=ri(1,4),x0=ri(1,3); return {type:'m2_extend',answerType:'scalar',prompt:'Points (1,0), ('+x0+','+(m*(x0-1))+'), ('+'('+(x0+1)+')'+','+(m*x0)+'). Slope?',answer:String(m),display:String(m),data:{m,x0}}; },
+        () => { const m=ri(1,4),x0=ri(2,4); const y0=m*(x0-1); const x3=x0+1,y3=m*x0; return {type:'m2_extend',answerType:'scalar',prompt:'Points (1,0), ('+x0+','+y0+'), ('+x3+','+y3+'). Slope?',answer:String(m),display:String(m),data:{m,x0,y0,x3,y3}}; },
         () => { const m=ri(2,5); return {type:'m2_perpslope',answerType:'scalar',prompt:'Line perpendicular to y = '+m+'x - 1 has slope?',answer:String(rnd2(-1/m)),display:String(rnd2(-1/m)),data:{m}}; },
       ],
     },
@@ -10327,7 +10327,12 @@ const MQ = (() => {
         const test = pool[i]();
         return !seen.has(test.type);
       });
-      q = (unseen.length > 0 ? unseen : pool)[Math.floor(Math.random() * (unseen.length > 0 ? unseen.length : pool.length))]();
+      if (unseen.length > 0) {
+        q = unseen[Math.floor(Math.random() * unseen.length)]();
+      } else {
+        q = pick(pool)();
+        q.type = q.type + '_' + ri(1, 10000);
+      }
     } else {
       q = pick(pool)();
     }
@@ -10361,8 +10366,20 @@ app.post('/la-mission-quiz-api/check', (req, res) => {
   let correct = false;
 
   if (answerType === 'scalar') {
-    const userVal = parseFloat(n);
-    const expVal = parseFloat(norm(expected));
+    const parseNum = (s) => {
+      s = s.replace(/\s+/g, '').replace(/\u2212/g, '-');
+      if (s.includes('/')) {
+        const parts = s.split('/');
+        if (parts.length === 2) {
+          const num = parseFloat(parts[0]);
+          const den = parseFloat(parts[1]);
+          if (!isNaN(num) && !isNaN(den) && den !== 0) return num / den;
+        }
+      }
+      return parseFloat(s);
+    };
+    const userVal = parseNum(n);
+    const expVal = parseNum(norm(expected));
     if (!isNaN(userVal) && !isNaN(expVal)) {
       correct = Math.abs(userVal - expVal) < 0.5;
     } else {

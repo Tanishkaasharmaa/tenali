@@ -36825,7 +36825,7 @@ function Home({ onSelect }) {
     { key: 'integ', name: 'Integration', subtitle: 'Reverse differentiation & areas', color: 'blue' },
     { key: 'invtrig', name: 'Inverse Trig', subtitle: 'arcsin, arccos, arctan', color: 'green' },
     { key: 'limits', name: 'Limits', subtitle: 'Evaluate limits', color: 'purple' },
-    { key: 'linearalgebra', name: 'Linear Algebra', subtitle: 'Interactive 14-mission module with GeoGebra', color: 'orange' },
+    { key: 'linearalgebra', name: 'Linear Algebra', subtitle: '56 missions across 6 modules', color: 'orange' },
     { key: 'laquiz', name: 'Linear Algebra Quiz', subtitle: 'Vectors, matrices, systems & more', color: 'blue' },
     { key: 'lineareq', name: 'Linear Equations', subtitle: 'Solve for x in one variable', color: 'blue' },
     { key: 'lineq', name: 'Line Equation', subtitle: 'Find m and c from two points', color: 'green' },

@@ -33,6 +33,42 @@
 .la-module-tab.locked { opacity: 0.45; cursor: not-allowed; }
 .la-module-tab.locked:hover { opacity: 0.6; }
 .la-module-tab:hover:not(.locked):not(.active) { background: var(--la-accent); color: #fff; }
+
+.la-flashcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 8px;
+}
+.la-flashcard {
+  background: var(--la-card-bg);
+  border: 2px solid var(--la-border);
+  border-radius: 12px;
+  padding: 20px 14px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  text-align: center;
+  font-family: inherit;
+  color: var(--la-text);
+}
+.la-flashcard.unlocked:hover { transform: translateY(-3px); border-color: var(--la-accent); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+.la-flashcard.complete { border-color: var(--la-correct); }
+.la-flashcard.locked { opacity: 0.45; cursor: not-allowed; }
+.la-flashcard-emoji { font-size: 2.2rem; margin-bottom: 6px; }
+.la-flashcard-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+.la-flashcard-sub { font-size: 0.8rem; color: var(--la-text-soft); margin-bottom: 8px; }
+.la-flashcard-lock { font-size: 0.78rem; color: var(--la-text-soft); margin-top: 4px; }
+.la-flashcard-progress { height: 6px; background: var(--la-border); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+.la-flashcard-progress-bar { height: 100%; background: var(--la-accent); border-radius: 3px; transition: width 0.3s; }
+
+.la-modules-back {
+  background: none; border: 1px solid var(--la-border); color: var(--la-text-soft);
+  padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; margin-bottom: 6px;
+}
+.la-modules-back:hover { border-color: var(--la-accent); color: var(--la-accent); }
+
 .la-header h1 { font-family: var(--font-display); font-size: 1.6rem; margin: 8px 0 4px; color: var(--la-text); }
 .la-header p { color: var(--la-text-soft); font-size: 0.9rem; margin: 0; }
 .la-back {
@@ -93,7 +129,7 @@
 .la-ggb-fullscreen-btn:hover { background: #fff; color: var(--la-accent); border-color: var(--la-accent); }
 
 .la-answer-area { margin: 10px 0; }
-.la-question-prompt { font-size: 0.92rem; margin-bottom: 10px; line-height: 1.5; font-weight: 500; }
+.la-question-prompt { font-size: 1.15rem; margin-bottom: 12px; line-height: 1.6; font-weight: 600; }
 .la-input-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .la-text-input { flex: 1; min-width: 200px; padding: 10px 14px; border-radius: var(--la-radius-sm); border: 2px solid var(--la-border); background: var(--clr-input); color: var(--la-text); font-size: 0.95rem; font-family: var(--font-body); outline: none; transition: border-color 0.15s; }
 .la-text-input:focus { border-color: var(--la-accent); }
@@ -162,6 +198,14 @@
 .la-complete .big-score { font-size: 3rem; font-weight: 700; color: var(--la-accent); margin: 12px 0; }
 .la-complete p { color: var(--la-text-soft); margin: 6px 0; }
 .la-complete .teaser { margin-top: 20px; padding: 16px; background: var(--la-surface); border-radius: var(--la-radius-sm); border: 1px solid var(--la-border); font-style: italic; }
+
+.mq-explanation-panel { margin: 16px 0; padding: 16px; background: var(--la-surface); border-radius: var(--la-radius-sm); border: 1px solid var(--la-border); text-align: left; }
+.mq-explanation-title { font-size: 1rem; font-weight: 700; color: var(--la-accent); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--la-border); }
+.mq-explanation-step { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; line-height: 1.5; }
+.mq-explanation-step:last-child { border-bottom: none; }
+.mq-explanation-step-num { font-weight: 700; color: var(--la-accent); min-width: 20px; flex-shrink: 0; }
+.mq-explanation-step-label { font-weight: 600; color: var(--la-text); min-width: 90px; flex-shrink: 0; }
+.mq-explanation-step-text { color: var(--la-text-soft); }
 
 @media (max-width: 600px) {
   .la-mission { padding: 14px 16px; }
