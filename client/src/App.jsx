@@ -55390,21 +55390,186 @@ function MindReaderApp({ onBack }) {
 
   // Map to matching database or standard concept structures
   const conceptsFullList = [
-    { name: 'Prime Number', description: 'A whole number greater than 1 with exactly two positive divisors: 1 and itself.', recommendations: { related: ['Composite Number', 'Prime Factorization'], prerequisites: ['Factors and Multiples'], exercises: ['Chapter 1 Lesson 1 Practice'] } },
-    { name: 'HCF (Highest Common Factor)', description: 'The largest positive integer that divides two or more integers without a remainder.', recommendations: { related: ['LCM', 'Prime Factorization'], prerequisites: ['Factors and Multiples'], exercises: ['Chapter 1 Lesson 2 Practice'] } },
-    { name: 'LCM (Lowest Common Multiple)', description: 'The smallest positive integer that is a multiple of two or more integers.', recommendations: { related: ['HCF', 'Prime Factorization'], prerequisites: ['Factors and Multiples'], exercises: ['Chapter 1 Lesson 2 Practice'] } },
-    { name: 'Square Root', description: 'A value that, when multiplied by itself, gives the original number.', recommendations: { related: ['Square Number', 'Surds'], prerequisites: ['Powers and Roots'], exercises: ['Chapter 1 Lesson 6 Practice'] } },
-    { name: 'Equivalent Fractions', description: 'Fractions that represent the same value or proportion of a whole, even if they have different numerators and denominators.', recommendations: { related: ['Simplest Form', 'Ratio'], prerequisites: ['Fractions Intro'], exercises: ['Chapter 5 Lesson 1 Practice'] } },
-    { name: 'Percentage', description: 'A relative value representing the hundredth part of any quantity.', recommendations: { related: ['Equivalent Fractions', 'Simple Interest'], prerequisites: ['Fractions and Decimals'], exercises: ['Chapter 5 Lesson 8 Practice'] } },
-    { name: 'Linear Equation', description: 'An equation between two variables that gives a straight line when plotted on a graph.', recommendations: { related: ['Quadratic Equation', 'Simultaneous Equations'], prerequisites: ['Simplifying Terms', 'Substitution'], exercises: ['Chapter 6 Lesson 1 Practice'] } },
-    { name: 'Quadratic Equation', description: 'An equation of degree 2, typically written as ax² + bx + c = 0, representing a curved path (parabola).', recommendations: { related: ['Linear Equation', 'Quadratic Formula'], prerequisites: ['Factoring Quadratics'], exercises: ['Chapter 10 Lesson 3 Practice'] } },
-    { name: 'Matrix', description: 'A rectangular array of numbers arranged in rows and columns.', recommendations: { related: ['Vector', 'Translation'], prerequisites: ['Basic Arithmetic'], exercises: ['Matrix Operations Practice'] } },
-    { name: 'Vector', description: 'A quantity having direction as well as magnitude.', recommendations: { related: ['Matrix', 'Translation'], prerequisites: ['Coordinate Geometry'], exercises: ['Chapter 23 Lesson 2 Practice'] } },
-    { name: 'Right Triangle', description: 'A triangle in which one angle is a right angle (exactly 90 degrees).', recommendations: { related: ['Pythagoras\' Theorem', 'Trigonometric Ratios'], prerequisites: ['Triangles Classification'], exercises: ['Chapter 3 Lesson 3 Practice'] } },
-    { name: "Pythagoras' Theorem", description: 'The theorem stating that in a right-angled triangle, the square of the hypotenuse is equal to the sum of the squares of the other two sides (a² + b² = c²).', recommendations: { related: ['Right Triangle', 'Trigonometric Ratios'], prerequisites: ['Right Triangle', 'Square Roots'], exercises: ['Chapter 11 Lesson 1 Practice'] } },
-    { name: 'Venn Diagram', description: 'A diagram that shows all possible logical relations between a finite collection of different sets.', recommendations: { related: ['Set Operations', 'Probability'], prerequisites: ['Sets Intro'], exercises: ['Chapter 9 Lesson 3 Practice'] } },
-    { name: 'Mean', description: 'The average of a set of numbers, calculated by summing all values and dividing by the total count.', recommendations: { related: ['Median', 'Mode', 'Range'], prerequisites: ['Basic Arithmetic'], exercises: ['Chapter 12 Lesson 1 Practice'] } },
-    { name: 'Probability', description: 'The branch of mathematics concerning numerical descriptions of how likely an event is to occur.', recommendations: { related: ['Venn Diagram', 'Sample Space'], prerequisites: ['Fractions and Percentages'], exercises: ['Chapter 8 Lesson 1 Practice'] } }
+    {
+      name: 'Prime Number',
+      description: 'A whole number greater than 1 with exactly two positive divisors: 1 and itself.',
+      subject: 'Number',
+      categories: ['Number Concepts', 'Primes'],
+      definingCharacteristics: [
+        'It is a number concept, not algebra or geometry.',
+        'It has exactly two factors: 1 and the number itself.',
+        'It is not divisible by other numbers.'
+      ],
+      recommendations: { related: ['Composite Number', 'Prime Factorization'], prerequisites: ['Factors and Multiples'], exercises: ['Chapter 1 Lesson 1 Practice'] }
+    },
+    {
+      name: 'HCF (Highest Common Factor)',
+      description: 'The largest positive integer that divides two or more integers without a remainder.',
+      subject: 'Number',
+      categories: ['Number Concepts', 'Factors & Multiples'],
+      definingCharacteristics: [
+        'It is a number concept.',
+        'It represents an operation/process of finding factors.',
+        'It is used to simplify fractions and solve grouping problems.'
+      ],
+      recommendations: { related: ['LCM', 'Prime Factorization'], prerequisites: ['Factors and Multiples'], exercises: ['Chapter 1 Lesson 2 Practice'] }
+    },
+    {
+      name: 'LCM (Lowest Common Multiple)',
+      description: 'The smallest positive integer that is a multiple of two or more integers.',
+      subject: 'Number',
+      categories: ['Number Concepts', 'Factors & Multiples'],
+      definingCharacteristics: [
+        'It is a number concept.',
+        'It represents an operation/process of finding multiples.',
+        'It is used to find common denominators for fraction addition.'
+      ],
+      recommendations: { related: ['HCF', 'Prime Factorization'], prerequisites: ['Factors and Multiples'], exercises: ['Chapter 1 Lesson 2 Practice'] }
+    },
+    {
+      name: 'Square Root',
+      description: 'A value that, when multiplied by itself, gives the original number.',
+      subject: 'Number',
+      categories: ['Number Concepts', 'Powers & Roots'],
+      definingCharacteristics: [
+        'It is a number concept.',
+        'It is a mathematical operation (finding a number times itself).',
+        'It is the inverse operation of squaring.'
+      ],
+      recommendations: { related: ['Square Number', 'Surds'], prerequisites: ['Powers and Roots'], exercises: ['Chapter 1 Lesson 6 Practice'] }
+    },
+    {
+      name: 'Equivalent Fractions',
+      description: 'Fractions that represent the same value or proportion of a whole, even if they have different numerators and denominators.',
+      subject: 'Number',
+      categories: ['Fractions', 'Decimals & Percentages'],
+      definingCharacteristics: [
+        'It is a number concept.',
+        'It directly involves fractions/decimals/ratios.',
+        'It relies on multiplying or dividing the top and bottom by the same number.'
+      ],
+      recommendations: { related: ['Simplest Form', 'Ratio'], prerequisites: ['Fractions Intro'], exercises: ['Chapter 5 Lesson 1 Practice'] }
+    },
+    {
+      name: 'Percentage',
+      description: 'A relative value representing the hundredth part of any quantity.',
+      subject: 'Number',
+      categories: ['Fractions', 'Decimals & Percentages'],
+      definingCharacteristics: [
+        'It is a number concept.',
+        'It represents parts of a whole (fractions/ratios out of 100).',
+        'It is widely used in finance, discounts, and probability.'
+      ],
+      recommendations: { related: ['Equivalent Fractions', 'Simple Interest'], prerequisites: ['Fractions and Decimals'], exercises: ['Chapter 5 Lesson 8 Practice'] }
+    },
+    {
+      name: 'Linear Equation',
+      description: 'An equation between two variables that gives a straight line when plotted on a graph.',
+      subject: 'Algebra',
+      categories: ['Algebra', 'Equations'],
+      definingCharacteristics: [
+        'It is an algebra-related concept.',
+        'It involves solving an equation for variable x.',
+        'It represents a straight line on a graph.'
+      ],
+      recommendations: { related: ['Quadratic Equation', 'Simultaneous Equations'], prerequisites: ['Simplifying Terms', 'Substitution'], exercises: ['Chapter 6 Lesson 1 Practice'] }
+    },
+    {
+      name: 'Quadratic Equation',
+      description: 'An equation of degree 2, typically written as ax² + bx + c = 0, representing a curved path (parabola).',
+      subject: 'Algebra',
+      categories: ['Algebra', 'Equations'],
+      definingCharacteristics: [
+        'It is an algebra-related concept.',
+        'It involves equations and variables raised to the power of 2.',
+        'It plots as a curve (parabola), not a straight line.'
+      ],
+      recommendations: { related: ['Linear Equation', 'Quadratic Formula'], prerequisites: ['Factoring Quadratics'], exercises: ['Chapter 10 Lesson 3 Practice'] }
+    },
+    {
+      name: 'Matrix',
+      description: 'A rectangular array of numbers arranged in rows and columns.',
+      subject: 'Algebra',
+      categories: ['Algebra', 'Vectors & Matrices'],
+      definingCharacteristics: [
+        'It is an algebra-related concept.',
+        'It involves vectors, grids of numbers, or matrices.',
+        'It does not represent a standard algebraic function.'
+      ],
+      recommendations: { related: ['Vector', 'Translation'], prerequisites: ['Basic Arithmetic'], exercises: ['Matrix Operations Practice'] }
+    },
+    {
+      name: 'Vector',
+      description: 'A quantity having direction as well as magnitude.',
+      subject: 'Geometry',
+      categories: ['Geometry', 'Vectors & Matrices'],
+      definingCharacteristics: [
+        'It is related to geometry, space, or directions.',
+        'It involves vectors or column matrices.',
+        'It is used to represent translation transformations.'
+      ],
+      recommendations: { related: ['Matrix', 'Translation'], prerequisites: ['Coordinate Geometry'], exercises: ['Chapter 23 Lesson 2 Practice'] }
+    },
+    {
+      name: 'Right Triangle',
+      description: 'A triangle in which one angle is a right angle (exactly 90 degrees).',
+      subject: 'Geometry',
+      categories: ['Geometry', 'Triangles'],
+      definingCharacteristics: [
+        'It is a geometry concept.',
+        'It involves a three-sided shape (triangle).',
+        'It has a 90-degree angle.'
+      ],
+      recommendations: { related: ['Pythagoras\' Theorem', 'Trigonometric Ratios'], prerequisites: ['Triangles Classification'], exercises: ['Chapter 3 Lesson 3 Practice'] }
+    },
+    {
+      name: "Pythagoras' Theorem",
+      description: 'The theorem stating that in a right-angled triangle, the square of the hypotenuse is equal to the sum of the squares of the other two sides (a² + b² = c²).',
+      subject: 'Geometry',
+      categories: ['Geometry', 'Triangles'],
+      definingCharacteristics: [
+        'It is a geometry concept.',
+        'It involves triangles, hypotenuse, and squares of sides.',
+        'It is an equation/formula to calculate lengths.'
+      ],
+      recommendations: { related: ['Right Triangle', 'Trigonometric Ratios'], prerequisites: ['Right Triangle', 'Square Roots'], exercises: ['Chapter 11 Lesson 1 Practice'] }
+    },
+    {
+      name: 'Venn Diagram',
+      description: 'A diagram that shows all possible logical relations between a finite collection of different sets.',
+      subject: 'Algebra',
+      categories: ['Sets', 'Logic'],
+      definingCharacteristics: [
+        'It is related to algebra and set theory.',
+        'It involves sets, unions, intersections, and logic.',
+        'It is a visual diagram, not a coordinates plot.'
+      ],
+      recommendations: { related: ['Set Operations', 'Probability'], prerequisites: ['Sets Intro'], exercises: ['Chapter 9 Lesson 3 Practice'] }
+    },
+    {
+      name: 'Mean',
+      description: 'The average of a set of numbers, calculated by summing all values and dividing by the total count.',
+      subject: 'Statistics',
+      categories: ['Statistics', 'Averages'],
+      definingCharacteristics: [
+        'It is a statistics concept.',
+        'It represents an operation/calculation (sum divided by count).',
+        'It is used to summarize numerical data.'
+      ],
+      recommendations: { related: ['Median', 'Mode', 'Range'], prerequisites: ['Basic Arithmetic'], exercises: ['Chapter 12 Lesson 1 Practice'] }
+    },
+    {
+      name: 'Probability',
+      description: 'The branch of mathematics concerning numerical descriptions of how likely an event is to occur.',
+      subject: 'Statistics',
+      categories: ['Statistics', 'Probability'],
+      definingCharacteristics: [
+        'It is a statistics/probability concept.',
+        'It measures the likelihood of events happening.',
+        'Values always fall between 0 and 1 (or 0% and 100%).'
+      ],
+      recommendations: { related: ['Venn Diagram', 'Sample Space'], prerequisites: ['Fractions and Percentages'], exercises: ['Chapter 8 Lesson 1 Practice'] }
+    }
   ];
 
   useEffect(() => {
@@ -55828,6 +55993,24 @@ function MindReaderApp({ onBack }) {
     setActualConcept(selected || null);
     await callEndGameAPI('win', conceptName);
   };
+
+  const getConfusedRunners = (chosenConcept) => {
+    if (!chosenConcept) return [];
+    return conceptsFullList
+      .filter(c => c.name !== chosenConcept.name)
+      .map(c => {
+        let score = 0;
+        if (c.subject === chosenConcept.subject) score += 2;
+        const sharedCats = (c.categories || []).filter(cat => (chosenConcept.categories || []).includes(cat));
+        score += sharedCats.length;
+        return { name: c.name, score };
+      })
+      .filter(item => item.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 2)
+      .map(item => item.name);
+  };
+
 
   const handlePlayAgain = async () => {
     if (phase === 'gameover' && !recommendations && (royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0))) {
@@ -56313,7 +56496,13 @@ function MindReaderApp({ onBack }) {
             {royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0) ? (
               <div className="win-display">
                 <h2>👑 ROYAL VICTORY! 👑</h2>
-                <p className="outcome-desc" style={{ fontSize: '1.1rem', margin: '10px 0' }}>Outstanding! You successfully shielded your thoughts from Tenali's gaze. He ran out of options!</p>
+                <p className="outcome-desc" style={{ fontSize: '1.2rem', color: '#f1c40f', fontWeight: 'bold', margin: '10px 0' }}>
+                  "You fooled me! That was clever."
+                </p>
+                <p className="outcome-subdesc" style={{ fontSize: '0.98rem', color: 'var(--clr-text-soft)', marginBottom: '15px' }}>
+                  Outstanding! You successfully shielded your thoughts from Tenali's gaze. He ran out of options!
+                </p>
+                
                 {mrrChange > 0 && !cheated && <div className="mrr-up-anim">MRR Rating: {mrr - mrrChange} ➔ {mrr} (+{mrrChange})!</div>}
 
                 {cheated && (
@@ -56326,13 +56515,13 @@ function MindReaderApp({ onBack }) {
                   </div>
                 )}
 
-                {!recommendations && (
+                {!actualConcept && !recommendations && (
                   <div className="actual-concept-selection" style={{ marginTop: 20 }}>
-                    <p style={{ marginBottom: 8 }}>What concept were you secretly thinking of?</p>
+                    <p style={{ marginBottom: 8, fontWeight: '600' }}>What concept were you secretly thinking of?</p>
                     <select
                       onChange={(e) => handleConceptSelectedForWin(e.target.value)}
                       defaultValue=""
-                      style={{ padding: '8px 12px', borderRadius: 8, background: 'var(--clr-surface)', color: 'var(--clr-text)', border: '1px solid var(--clr-border)', width: '100%' }}
+                      style={{ padding: '10px 14px', borderRadius: 8, background: 'var(--clr-surface)', color: 'var(--clr-text)', border: '1px solid var(--clr-border)', width: '100%', fontSize: '1.05rem' }}
                     >
                       <option value="" disabled>-- Select your concept --</option>
                       {mvpConcepts.map((c, i) => (
@@ -56341,18 +56530,64 @@ function MindReaderApp({ onBack }) {
                     </select>
                   </div>
                 )}
+
+                {actualConcept && (
+                  <div className="confused-candidates-explainability" style={{ marginTop: '20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px', textAlign: 'left' }}>
+                    <h4 style={{ color: 'var(--clr-accent)', margin: '0 0 12px 0', fontSize: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '6px' }}>🧐 Mind-Reading Post-Mortem:</h4>
+                    
+                    <p style={{ margin: '6px 0', fontSize: '0.92rem' }}>
+                      🔑 **Your Secret Concept**: <strong style={{ color: '#2ecc71' }}>{actualConcept.name}</strong>
+                    </p>
+                    
+                    {incorrectPredictions.length > 0 && (
+                      <p style={{ margin: '6px 0', fontSize: '0.92rem' }}>
+                        ❌ **Tenali's Rejected Guesses**: <span style={{ color: 'var(--clr-wrong)', textDecoration: 'line-through' }}>{incorrectPredictions.join(', ')}</span>
+                      </p>
+                    )}
+
+                    {(() => {
+                      const runners = getConfusedRunners(actualConcept);
+                      if (runners.length > 0) {
+                        return (
+                          <p style={{ margin: '6px 0', fontSize: '0.92rem' }}>
+                            ⚖️ **Confused Runner-ups**: <span style={{ color: '#f1c40f' }}>{runners.join(', ')}</span>
+                          </p>
+                        );
+                      }
+                      return null;
+                    })()}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="loss-display">
                 <h2>🔮 TENALI TRIUMPHED! 🔮</h2>
                 <p className="outcome-desc" style={{ fontSize: '1.1rem', margin: '10px 0' }}>Tenali Raman successfully peeked into your thoughts and decoded your secret math pattern!</p>
-                {mrrChange < 0 ? (
-                  <div className="mrr-down-anim" style={{ color: 'var(--clr-wrong)', fontWeight: 700, padding: '8px', background: 'rgba(231, 76, 60, 0.1)', borderRadius: '8px', display: 'inline-block', margin: '0 auto' }}>
-                    MRR Rating: {mrr - mrrChange} ➔ {mrr} ({mrrChange})!
+                
+                {actualConcept && actualConcept.definingCharacteristics && (
+                  <div className="concept-characteristics-box" style={{ marginTop: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px', textAlign: 'left' }}>
+                    <p style={{ fontWeight: '700', color: 'var(--clr-accent)', marginBottom: '8px', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🧩 Key Characteristics Identified:</p>
+                    <ul style={{ listStyleType: 'none', paddingLeft: '0', margin: '0' }}>
+                      {actualConcept.definingCharacteristics.map((char, index) => (
+                        <li key={index} style={{ margin: '6px 0', fontSize: '0.92rem', color: 'var(--clr-text)', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                          <span style={{ color: '#2ecc71', fontWeight: 'bold' }}>✓</span>
+                          <span>{char}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <p style={{ marginTop: '12px', fontSize: '0.9rem', fontStyle: 'italic', color: 'var(--clr-text-soft)', textAlign: 'center' }}>"Excellent choice!"</p>
                   </div>
-                ) : (
-                  <div className="mrr-no-change">MRR Rating: {mrr} (+0)</div>
                 )}
+
+                <div style={{ marginTop: '16px' }}>
+                  {mrrChange < 0 ? (
+                    <div className="mrr-down-anim" style={{ color: 'var(--clr-wrong)', fontWeight: 700, padding: '8px', background: 'rgba(231, 76, 60, 0.1)', borderRadius: '8px', display: 'inline-block', margin: '0 auto' }}>
+                      MRR Rating: {mrr - mrrChange} ➔ {mrr} ({mrrChange})!
+                    </div>
+                  ) : (
+                    <div className="mrr-no-change">MRR Rating: {mrr} (+0)</div>
+                  )}
+                </div>
               </div>
             )}
 
