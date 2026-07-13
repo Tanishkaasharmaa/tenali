@@ -56089,6 +56089,42 @@ function MindReaderApp({ onBack }) {
               </div>
 
               <div className="playing-character-row" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', position: 'relative', marginTop: '10px' }}>
+                
+                {/* Phase 3 - Glowing Risk/Confidence Meter (○────────────●) */}
+                <div className="mr-risk-meter" style={{ width: '100%', maxWidth: '480px', marginBottom: '8px', marginTop: '5px' }}>
+                  <div className="risk-indicator-labels" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                    <span className={`risk-indicator-label ${confidence <= 0.15 ? 'active blue-glow' : ''}`} style={{ opacity: confidence <= 0.15 ? 1 : 0.45 }}>🙂 Calm</span>
+                    <span className={`risk-indicator-label ${confidence > 0.15 && confidence <= 0.35 ? 'active green-glow' : ''}`} style={{ opacity: confidence > 0.15 && confidence <= 0.35 ? 1 : 0.45 }}>😐 Curious</span>
+                    <span className={`risk-indicator-label ${confidence > 0.35 && confidence <= 0.55 ? 'active yellow-glow' : ''}`} style={{ opacity: confidence > 0.35 && confidence <= 0.55 ? 1 : 0.45 }}>🤔 Thinking</span>
+                    <span className={`risk-indicator-label ${confidence > 0.55 && confidence <= 0.75 ? 'active orange-glow' : ''}`} style={{ opacity: confidence > 0.55 && confidence <= 0.75 ? 1 : 0.45 }}>😏 Confident</span>
+                    <span className={`risk-indicator-label ${confidence > 0.75 ? 'active purple-glow' : ''}`} style={{ opacity: confidence > 0.75 ? 1 : 0.45 }}>😈 Royal Gamble</span>
+                  </div>
+                  <div className="risk-slider-track" style={{ display: 'flex', alignItems: 'center', width: '100%', position: 'relative', height: '20px', padding: '0 4px' }}>
+                    <span className="risk-slider-start-dot" style={{ fontSize: '1.3rem', color: confidence <= 0.15 ? '#3498db' : 'var(--clr-text-soft)', fontWeight: 'bold' }}>○</span>
+                    <div className="risk-slider-bar-wrapper" style={{ flexGrow: 1, position: 'relative', height: '3px', background: 'var(--clr-border)', margin: '0 10px', borderRadius: '2px' }}>
+                      <div 
+                        className={`risk-slider-glow-dot ${
+                          confidence <= 0.15 ? 'calm' :
+                          confidence <= 0.35 ? 'curious' :
+                          confidence <= 0.55 ? 'thinking' :
+                          confidence <= 0.75 ? 'confident' : 'royal'
+                        }`}
+                        style={{ 
+                          position: 'absolute', 
+                          top: '50%', 
+                          transform: 'translate(-50%, -50%)', 
+                          left: `${Math.min(100, Math.max(0, confidence * 100))}%`, 
+                          width: '14px', 
+                          height: '14px', 
+                          borderRadius: '50%', 
+                          transition: 'left 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s'
+                        }}
+                      />
+                    </div>
+                    <span className="risk-slider-end-dot" style={{ fontSize: '1.3rem', color: confidence > 0.75 ? '#9b59b6' : 'var(--clr-text-soft)', fontWeight: 'bold' }}>●</span>
+                  </div>
+                </div>
+
                 <div className="thought-cloud-bubble mr-card" style={{ position: 'relative', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '24px', padding: '16px 24px', width: '100%', maxWidth: '480px', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', textAlign: 'center' }}>
                   <div className="thought-dot thought-dot-1" style={{ position: 'absolute', bottom: '-14px', left: 'calc(50% - 6px)', width: '12px', height: '12px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
                   <div className="thought-dot thought-dot-2" style={{ position: 'absolute', bottom: '-24px', left: 'calc(50% - 4px)', width: '8px', height: '8px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>

@@ -3526,3 +3526,100 @@ button:disabled {
     bottom: -24px;
   }
 }
+
+/* ─── Tenali Mind Reader: Phase 3 Risk Meter ─── */
+.mr-risk-meter {
+  user-select: none;
+}
+.risk-indicator-label {
+  font-weight: 500;
+  font-size: 0.88rem;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+}
+.risk-indicator-label.active {
+  font-weight: 700;
+  transform: scale(1.12);
+}
+.risk-indicator-label.active.blue-glow {
+  color: #3498db;
+  text-shadow: 0 0 10px rgba(52, 152, 219, 0.8), 0 0 20px rgba(52, 152, 219, 0.4);
+}
+.risk-indicator-label.active.green-glow {
+  color: #2ecc71;
+  text-shadow: 0 0 10px rgba(46, 204, 113, 0.8), 0 0 20px rgba(46, 204, 113, 0.4);
+}
+.risk-indicator-label.active.yellow-glow {
+  color: #f1c40f;
+  text-shadow: 0 0 10px rgba(241, 196, 15, 0.8), 0 0 20px rgba(241, 196, 15, 0.4);
+}
+.risk-indicator-label.active.orange-glow {
+  color: #e67e22;
+  text-shadow: 0 0 10px rgba(230, 126, 34, 0.8), 0 0 20px rgba(230, 126, 34, 0.4);
+}
+.risk-indicator-label.active.purple-glow {
+  color: #9b59b6;
+  text-shadow: 0 0 12px rgba(155, 89, 182, 0.9), 0 0 24px rgba(155, 89, 182, 0.5);
+  animation: text-pulse-purple 1.5s infinite alternate;
+}
+
+.risk-slider-bar-wrapper {
+  background: var(--clr-border) !important;
+}
+
+.risk-slider-glow-dot {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.risk-slider-glow-dot.calm {
+  background-color: #3498db;
+  box-shadow: 0 0 8px #3498db, 0 0 16px #3498db;
+}
+.risk-slider-glow-dot.curious {
+  background-color: #2ecc71;
+  box-shadow: 0 0 8px #2ecc71, 0 0 16px #2ecc71;
+}
+.risk-slider-glow-dot.thinking {
+  background-color: #f1c40f;
+  box-shadow: 0 0 8px #f1c40f, 0 0 16px #f1c40f;
+}
+.risk-slider-glow-dot.confident {
+  background-color: #e67e22;
+  box-shadow: 0 0 10px #e67e22, 0 0 20px #e67e22;
+}
+.risk-slider-glow-dot.royal {
+  background-color: #9b59b6;
+  box-shadow: 0 0 12px #9b59b6, 0 0 24px #9b59b6, 0 0 36px rgba(155, 89, 182, 0.6);
+  animation: dot-pulse-royal 1.5s infinite alternate;
+}
+
+.risk-slider-start-dot, .risk-slider-end-dot {
+  transition: all 0.3s ease;
+}
+.risk-slider-start-dot {
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
+}
+.risk-slider-end-dot {
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+@keyframes text-pulse-purple {
+  0% {
+    text-shadow: 0 0 8px rgba(155, 89, 182, 0.7), 0 0 16px rgba(155, 89, 182, 0.3);
+  }
+  100% {
+    text-shadow: 0 0 14px rgba(155, 89, 182, 1), 0 0 28px rgba(155, 89, 182, 0.6);
+  }
+}
+
+@keyframes dot-pulse-royal {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 10px #9b59b6, 0 0 20px #9b59b6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.25);
+    box-shadow: 0 0 15px #9b59b6, 0 0 30px #9b59b6, 0 0 45px rgba(155, 89, 182, 0.8);
+  }
+}
