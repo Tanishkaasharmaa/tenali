@@ -55309,6 +55309,9 @@ function MindReaderApp({ onBack }) {
   const [history, setHistory] = useState([]);
   const [incorrectPredictions, setIncorrectPredictions] = useState([]);
   const [royalChances, setRoyalChances] = useState(3);
+  const [prevChances, setPrevChances] = useState(3);
+  const [shouldShake, setShouldShake] = useState(false);
+  const [lastFeedback, setLastFeedback] = useState(null); // { type: 'yes'|'no'|'dontknow'|'gamble_rejected', change: number }
   const [nextQuestion, setNextQuestion] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [confidence, setConfidence] = useState(0);
@@ -55492,6 +55495,9 @@ function MindReaderApp({ onBack }) {
         setHistory([]);
         setIncorrectPredictions([]);
         setRoyalChances(3);
+        setPrevChances(3);
+        setShouldShake(false);
+        setLastFeedback(null);
         setPrediction(null);
         setNextQuestion(null);
         setActualConcept(null);
@@ -55567,8 +55573,11 @@ function MindReaderApp({ onBack }) {
       if (!res.ok) throw new Error('Error getting next question.');
       const data = await res.json();
 
-      setConfidence(data.confidence || 0);
+      const newConfidence = data.confidence || 0;
+      const change = Math.abs(newConfidence - confidence);
+      setConfidence(newConfidence);
       setRemainingCount(data.remainingCount || 0);
+      setLastFeedback({ type: answerVal, change });
 
       if (data.prediction) {
         setPrediction(data.prediction);
@@ -55597,7 +55606,11 @@ function MindReaderApp({ onBack }) {
       setPhase('gameover');
     } else {
       const nextChances = royalChances - 1;
+      setPrevChances(royalChances);
       setRoyalChances(nextChances);
+      setShouldShake(true);
+      setTimeout(() => setShouldShake(false), 500);
+      setLastFeedback({ type: 'gamble_rejected', change: 0 });
 
       const newIncorrect = [...incorrectPredictions, prediction.name];
       setIncorrectPredictions(newIncorrect);
@@ -55768,21 +55781,41 @@ function MindReaderApp({ onBack }) {
           text: `Ah! The mathematical patterns in your mind have coalesced! I believe you are secretly thinking of: "${prediction.name}". Am I correct?`
         };
       }
+
+      let feedbackPrefix = "";
+      if (lastFeedback) {
+        if (lastFeedback.type === 'gamble_rejected') {
+          feedbackPrefix = "Wait... a contradiction? Or did I leap to conclusions too quickly? Let us recalculate! ";
+        } else if (lastFeedback.type === 'dontknow') {
+          feedbackPrefix = "A mystery! But we shall navigate the mathematical ether regardless. ";
+        } else if (lastFeedback.type === 'yes' || lastFeedback.type === 'no') {
+          if (lastFeedback.change >= 0.15) {
+            feedbackPrefix = confidence > 0.6 
+              ? "Ah, the fog is clearing! I can feel the shape of your thoughts! " 
+              : "Wait... a subtle turn! You almost threw me off. ";
+          } else {
+            feedbackPrefix = "Interesting... that eliminates quite a few possibilities. ";
+          }
+        }
+      }
+
+      const qText = nextQuestion?.text || "";
+
       if (confidence > 0.75) {
         return {
           expression: 'confident',
-          text: `I have narrowed down your thoughts. Prepare yourself, the answer is close at hand! Tell me, is this true: ${nextQuestion?.text}`
+          text: `${feedbackPrefix}Prepare yourself, the answer is close at hand! Tell me, is this true: ${qText}`
         };
       }
       if (confidence > 0.4) {
         return {
           expression: 'thinking',
-          text: `Intriguing choice... I see connections. Let me ask: ${nextQuestion?.text}`
+          text: `${feedbackPrefix}Let me ask: ${qText}`
         };
       }
       return {
         expression: 'thinking',
-        text: `A fresh path begins. Tell me, does this apply to your concept: ${nextQuestion?.text}`
+        text: `${feedbackPrefix || "A fresh path begins. "}Does this apply to your concept: ${qText}`
       };
     }
 
@@ -55825,6 +55858,14 @@ function MindReaderApp({ onBack }) {
     if (confidence <= 0.50) return 'Tenali is scanning patterns...';
     if (confidence <= 0.75) return 'Tenali is narrowing it down!';
     return 'Tenali is highly confident!';
+  };
+
+  const getConfidenceStatusLabel = () => {
+    if (confidence <= 0.15) return 'Puzzled... 🤔';
+    if (confidence <= 0.35) return 'Analyzing... 🔍';
+    if (confidence <= 0.55) return 'Sensing a Pattern... ⚡';
+    if (confidence <= 0.75) return 'Narrowing Down! 🎯';
+    return 'Highly Confident! 🔥';
   };
 
   const getMeterColorClass = () => {
@@ -55919,14 +55960,27 @@ function MindReaderApp({ onBack }) {
         )}
 
         {phase === 'playing' && (
-          <div className="mr-card playing-card">
+          <div className={`mr-card playing-card ${shouldShake ? 'shake-board' : ''}`}>
             <div className="game-hud">
-              <div className="chances-display">
+              <div className="chances-display" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span className="hud-label">Royal Chances:</span>
-                <span className="hud-values">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <span key={i} className={`chance-heart ${i < royalChances ? 'active' : 'depleted'}`} style={{ marginRight: 4 }}>👑</span>
-                  ))}
+                <span className="hud-values" style={{ display: 'flex', alignItems: 'center' }}>
+                  {Array.from({ length: 3 }).map((_, i) => {
+                    const isActive = i < royalChances;
+                    const isShattering = !isActive && i === royalChances && prevChances > royalChances;
+                    return (
+                      <span
+                        key={i}
+                        className={`chance-shield ${isActive ? 'active' : isShattering ? 'shattering' : 'depleted'}`}
+                        style={{ marginRight: 8 }}
+                      >
+                        🛡️
+                      </span>
+                    );
+                  })}
+                </span>
+                <span className="confidence-status-tag" style={{ marginLeft: '8px', fontSize: '0.85rem', color: 'var(--clr-accent)', fontWeight: '600', background: 'rgba(74, 144, 226, 0.1)', padding: '2px 8px', borderRadius: '12px' }}>
+                  {getConfidenceStatusLabel()}
                 </span>
               </div>
               <div className="remaining-count-pill">
