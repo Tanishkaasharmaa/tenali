@@ -40734,22 +40734,10 @@ function Home({ onSelect }) {
                 <strong style={{ color: 'var(--clr-accent)' }}>{app.name}</strong>
                 <span style={{ display: 'block', fontSize: '0.78rem', color: 'var(--clr-text-soft)', marginTop: '2px' }}>{app.subtitle}</span>
               </button>
-              <div style={{ height: '1px', background: 'var(--clr-border)', margin: '4px 0' }} />
-              
-              {featuredApps.map(app => (
-                <button key={app.key} onClick={() => { setMenuOpen(false); onSelect(app.key) }} style={{
-                  display: 'block', width: '100%', textAlign: 'left', padding: '10px 16px',
-                  background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text)',
-                  fontFamily: 'var(--font-body)', fontSize: '0.95rem', transition: 'background var(--transition)'
-                }} onMouseEnter={e => e.target.style.background = 'var(--clr-hover-strong)'}
-                   onMouseLeave={e => e.target.style.background = 'none'}>
-                  <strong style={{ color: 'var(--clr-accent)' }}>{app.name}</strong>
-                  <span style={{ display: 'block', fontSize: '0.78rem', color: 'var(--clr-text-soft)', marginTop: '2px' }}>{app.subtitle}</span>
-                </button>
-              ))}
+            ))}
+            <div style={{ height: '1px', background: 'var(--clr-border)', margin: '4px 0' }} />
             </div>}
           </div>
-        )}
       </div>
 
       {showAbout && (
