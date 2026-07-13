@@ -3433,3 +3433,20 @@ button:disabled {
 .shake-board {
   animation: shake 0.5s ease-in-out;
 }
+
+/* Thought Cloud Bubble Styles */
+.thought-cloud-bubble {
+  animation: float-cloud 4s ease-in-out infinite;
+}
+@keyframes float-cloud {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.thought-dot-1 {
+  animation: float-cloud 4s ease-in-out infinite;
+  animation-delay: 0.2s;
+}
+.thought-dot-2 {
+  animation: float-cloud 4s ease-in-out infinite;
+  animation-delay: 0.4s;
+}

@@ -55191,6 +55191,7 @@ function TenaliAvatar({ expression, skin }) {
   );
   let mouth = <path d="M 42 68 Q 50 72 58 68" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
   let sweatDrop = null;
+  let accessory = null;
 
   if (expression === 'thinking') {
     eyeLeft = <ellipse cx="40" cy="50" rx="6" ry="3.5" fill="#2c3e50" />;
@@ -55261,6 +55262,36 @@ function TenaliAvatar({ expression, skin }) {
       </g>
     );
     mouth = <path d="M 43 68 Q 50 71 57 68" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
+  } else if (expression === 'writing') {
+    eyeLeft = <path d="M 35 52 L 45 52" stroke="#2c3e50" strokeWidth="3.5" strokeLinecap="round" />;
+    eyeRight = <path d="M 55 52 L 65 52" stroke="#2c3e50" strokeWidth="3.5" strokeLinecap="round" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 33 44 L 47 44" strokeLinecap="round" />
+        <path d="M 53 44 L 67 44" strokeLinecap="round" />
+      </g>
+    );
+    mouth = <path d="M 43 67 Q 50 69 57 67" stroke="#2c3e50" strokeWidth="2" fill="none" strokeLinecap="round" />;
+    accessory = (
+      <g>
+        <rect x="62" y="75" width="22" height="28" fill="#fcf8e3" rx="2" stroke="#2c3e50" strokeWidth="1.5" />
+        <line x1="66" y1="81" x2="80" y2="81" stroke="#2c3e50" strokeWidth="1" opacity="0.4" />
+        <line x1="66" y1="86" x2="80" y2="86" stroke="#2c3e50" strokeWidth="1" opacity="0.4" />
+        <line x1="66" y1="91" x2="80" y2="91" stroke="#2c3e50" strokeWidth="1" opacity="0.4" />
+        <line x1="66" y1="96" x2="80" y2="96" stroke="#2c3e50" strokeWidth="1" opacity="0.4" />
+        <path d="M 78 72 L 72 84 L 70 86 L 73 84 Z" fill="#d35400" stroke="#2c3e50" strokeWidth="1" />
+      </g>
+    );
+  } else if (expression === 'smirk') {
+    eyeLeft = <circle cx="40" cy="50" r="5" fill="#2c3e50" />;
+    eyeRight = <path d="M 54 52 Q 60 46 66 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 33 42 Q 40 40 47 43" />
+        <path d="M 53 37 Q 60 33 67 39" />
+      </g>
+    );
+    mouth = <path d="M 43 68 Q 52 72 61 60" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
   }
 
   return (
@@ -55299,6 +55330,7 @@ function TenaliAvatar({ expression, skin }) {
           </g>
         )}
         {sweatDrop}
+        {accessory}
       </svg>
     </div>
   );
@@ -55782,13 +55814,38 @@ function MindReaderApp({ onBack }) {
         };
       }
 
+      if (loading) {
+        const lastAnswer = history[history.length - 1]?.answer;
+        if (lastAnswer === 'no' || lastAnswer === 'dontknow') {
+          return {
+            expression: 'smirk',
+            text: "Aha! That's a crucial clue... Let me process this."
+          };
+        } else {
+          return {
+            expression: 'writing',
+            text: "Let me note that down in my notebook... The pattern forms."
+          };
+        }
+      }
+
       let feedbackPrefix = "";
+      let expression = 'thinking';
+
       if (lastFeedback) {
         if (lastFeedback.type === 'gamble_rejected') {
+          expression = 'thinking';
           feedbackPrefix = "Wait... a contradiction? Or did I leap to conclusions too quickly? Let us recalculate! ";
         } else if (lastFeedback.type === 'dontknow') {
+          expression = 'smirk';
           feedbackPrefix = "A mystery! But we shall navigate the mathematical ether regardless. ";
         } else if (lastFeedback.type === 'yes' || lastFeedback.type === 'no') {
+          if (lastFeedback.type === 'no') {
+            expression = 'smirk';
+          } else {
+            expression = confidence > 0.75 ? 'confident' : 'thinking';
+          }
+
           if (lastFeedback.change >= 0.15) {
             feedbackPrefix = confidence > 0.6 
               ? "Ah, the fog is clearing! I can feel the shape of your thoughts! " 
@@ -55801,15 +55858,19 @@ function MindReaderApp({ onBack }) {
 
       const qText = nextQuestion?.text || "";
 
-      if (confidence > 0.75) {
+      if (confidence > 0.75 && expression !== 'smirk') {
+        expression = 'confident';
+      }
+
+      if (expression === 'confident') {
         return {
           expression: 'confident',
           text: `${feedbackPrefix}Prepare yourself, the answer is close at hand! Tell me, is this true: ${qText}`
         };
       }
-      if (confidence > 0.4) {
+      if (expression === 'smirk') {
         return {
-          expression: 'thinking',
+          expression: 'smirk',
           text: `${feedbackPrefix}Let me ask: ${qText}`
         };
       }
@@ -55884,19 +55945,21 @@ function MindReaderApp({ onBack }) {
       <div className="mindreader-container">
 
         {/* Top Hud & Rewards Cabinet Button */}
-        <div className="mr-top-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', width: '100%', flexWrap: 'wrap', gap: '10px' }}>
-          <div className="mrr-hud" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            <span className="mrr-pill" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>🔮 MRR: <strong>{mrr}</strong></span>
-            <span className="title-pill" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>🏷️ Title: <strong>{equippedTitle}</strong></span>
-            <span className="chances-pill" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>⚡ Daily Chances: <strong>{Math.max(0, dailyLimit - gamesToday)} / {dailyLimit}</strong></span>
+        {phase === 'setup' && (
+          <div className="mr-top-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', width: '100%', flexWrap: 'wrap', gap: '10px' }}>
+            <div className="mrr-hud" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <span className="mrr-pill" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>🔮 MRR: <strong>{mrr}</strong></span>
+              <span className="title-pill" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>🏷️ Title: <strong>{equippedTitle}</strong></span>
+              <span className="chances-pill" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', padding: '6px 12px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600' }}>⚡ Daily Chances: <strong>{Math.max(0, dailyLimit - gamesToday)} / {dailyLimit}</strong></span>
+            </div>
+            <button className="cabinet-toggle-btn" onClick={() => setShowCabinet(true)} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, var(--clr-accent) 0%, #8e44ad 100%)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '20px', cursor: 'pointer', fontWeight: '600', boxShadow: '0 4px 12px rgba(142, 68, 173, 0.2)', transition: 'all 0.2s' }}>
+              🎁 Rewards Cabinet
+            </button>
           </div>
-          <button className="cabinet-toggle-btn" onClick={() => setShowCabinet(true)} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, var(--clr-accent) 0%, #8e44ad 100%)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '20px', cursor: 'pointer', fontWeight: '600', boxShadow: '0 4px 12px rgba(142, 68, 173, 0.2)', transition: 'all 0.2s' }}>
-            🎁 Rewards Cabinet
-          </button>
-        </div>
+        )}
 
         {/* Character Hub */}
-        {(() => {
+        {phase !== 'playing' && (() => {
           const stateObj = getTenaliState();
           return (
             <div className="character-hub" style={{ display: 'flex', gap: '20px', alignItems: 'center', background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: '16px', padding: '20px', marginBottom: '24px', flexWrap: 'wrap', boxShadow: '0 8px 32px rgba(0,0,0,0.08)', position: 'relative' }}>
@@ -55959,88 +56022,107 @@ function MindReaderApp({ onBack }) {
           </div>
         )}
 
-        {phase === 'playing' && (
-          <div className={`mr-card playing-card ${shouldShake ? 'shake-board' : ''}`}>
-            <div className="game-hud">
-              <div className="chances-display" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="hud-label">Royal Chances:</span>
-                <span className="hud-values" style={{ display: 'flex', alignItems: 'center' }}>
-                  {Array.from({ length: 3 }).map((_, i) => {
-                    const isActive = i < royalChances;
-                    const isShattering = !isActive && i === royalChances && prevChances > royalChances;
-                    return (
-                      <span
-                        key={i}
-                        className={`chance-shield ${isActive ? 'active' : isShattering ? 'shattering' : 'depleted'}`}
-                        style={{ marginRight: 8 }}
-                      >
-                        🛡️
-                      </span>
-                    );
-                  })}
-                </span>
-                <span className="confidence-status-tag" style={{ marginLeft: '8px', fontSize: '0.85rem', color: 'var(--clr-accent)', fontWeight: '600', background: 'rgba(74, 144, 226, 0.1)', padding: '2px 8px', borderRadius: '12px' }}>
-                  {getConfidenceStatusLabel()}
-                </span>
+        {phase === 'playing' && (() => {
+          const stateObj = getTenaliState();
+          return (
+            <div className={`mr-card playing-card ${shouldShake ? 'shake-board' : ''}`} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div className="game-hud" style={{ borderBottom: '1px solid var(--clr-border)', paddingBottom: '12px' }}>
+                <div className="chances-display" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span className="hud-label">Royal Chances:</span>
+                  <span className="hud-values" style={{ display: 'flex', alignItems: 'center' }}>
+                    {Array.from({ length: 3 }).map((_, i) => {
+                      const isActive = i < royalChances;
+                      const isShattering = !isActive && i === royalChances && prevChances > royalChances;
+                      return (
+                        <span
+                          key={i}
+                          className={`chance-shield ${isActive ? 'active' : isShattering ? 'shattering' : 'depleted'}`}
+                          style={{ marginRight: 8 }}
+                        >
+                          🛡️
+                        </span>
+                      );
+                    })}
+                  </span>
+                </div>
+                <div className="remaining-count-pill">
+                  Remaining: {remainingCount}
+                </div>
               </div>
-              <div className="remaining-count-pill">
-                Remaining: {remainingCount}
+
+              <div className="playing-character-row" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', position: 'relative', marginTop: '10px' }}>
+                <TenaliAvatar expression={stateObj.expression} skin={equippedSkin} />
+                
+                <div className="thought-cloud-bubble" style={{ position: 'relative', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '24px', padding: '16px 24px', width: '100%', maxWidth: '480px', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', textAlign: 'center' }}>
+                  <div className="thought-dot thought-dot-1" style={{ position: 'absolute', top: '-14px', left: 'calc(50% - 6px)', width: '12px', height: '12px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
+                  <div className="thought-dot thought-dot-2" style={{ position: 'absolute', top: '-24px', left: 'calc(50% - 4px)', width: '8px', height: '8px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
+                  
+                  <div className="thought-header" style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--clr-accent)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    Tenali's Mind Cloud
+                  </div>
+                  
+                  <div className="dialogue-speech" style={{ whiteSpace: 'pre-line', fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic' }}>
+                    "{stateObj.text}"
+                  </div>
+
+                  {prediction && (
+                    <div className="cloud-confidence-section" style={{ marginTop: '15px', borderTop: '1px dashed var(--clr-border)', paddingTop: '10px' }}>
+                      <div className="risk-label-row" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
+                        <span style={{ fontWeight: '500' }}>Confidence Meter</span>
+                        <span className={`risk-status ${getMeterColorClass()}`} style={{ fontWeight: 'bold' }}>{getConfidenceStatusLabel()} ({getRiskMeterLabel()})</span>
+                      </div>
+                      <div className="risk-bar-track" style={{ height: '8px', background: 'var(--clr-border)', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div
+                          className={`risk-bar-fill ${getMeterColorClass()}`}
+                          style={{ width: `${confidence * 100}%`, height: '100%', transition: 'width 0.4s ease' }}
+                        ></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
+
+              {loading && <div className="loading-spinner">Tenali is thinking...</div>}
+
+              {!loading && prediction && (
+                <div className="prediction-hub pulsing-gamble">
+                  <h3 className="gamble-title">⚡ ROYAL GAMBLE ⚡</h3>
+                  <p className="gamble-prompt">
+                    I believe you are secretly thinking of:
+                  </p>
+                  <div className="prediction-box">
+                    {prediction.name}
+                  </div>
+                  <p className="gamble-confirm">Am I correct?</p>
+
+                  <div className="button-row gamble-btns">
+                    <button className="submit-btn correct-btn" onClick={() => handleGambleResponse(true)}>
+                      Yes, you read my mind!
+                    </button>
+                    <button className="submit-btn wrong-btn" onClick={() => handleGambleResponse(false)}>
+                      No, that is incorrect!
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {!loading && nextQuestion && (
+                <div className={`question-hub ${isFinalQuestion ? 'final-question-flash' : ''}`}>
+                  {isFinalQuestion && <div className="final-q-banner">⚠️ FINAL QUESTION ⚠️</div>}
+                  <p className="question-text" style={{ fontSize: '1.25rem', textAlign: 'center', marginBottom: '20px' }}>{nextQuestion.text}</p>
+
+                  <div className="button-row action-btns" style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+                    <button className="submit-btn yes-btn" onClick={() => handleAnswer('yes')}>Yes</button>
+                    <button className="submit-btn no-btn" onClick={() => handleAnswer('no')}>No</button>
+                    <button className="submit-btn dontknow-btn" onClick={() => handleAnswer('dontknow')}>Don't Know</button>
+                  </div>
+                </div>
+              )}
+
+              {errorMsg && <p className="error-text">{errorMsg}</p>}
             </div>
-
-            <div className="risk-meter-container">
-              <div className="risk-label-row">
-                <span>Confidence Meter</span>
-                <span className={`risk-status ${getMeterColorClass()}`}>{getRiskMeterLabel()}</span>
-              </div>
-              <div className="risk-bar-track">
-                <div
-                  className={`risk-bar-fill ${getMeterColorClass()}`}
-                  style={{ width: `${confidence * 100}%` }}
-                ></div>
-              </div>
-            </div>
-
-            {loading && <div className="loading-spinner">Tenali is thinking...</div>}
-
-            {!loading && prediction && (
-              <div className="prediction-hub pulsing-gamble">
-                <h3 className="gamble-title">⚡ ROYAL GAMBLE ⚡</h3>
-                <p className="gamble-prompt">
-                  I believe you are secretly thinking of:
-                </p>
-                <div className="prediction-box">
-                  {prediction.name}
-                </div>
-                <p className="gamble-confirm">Am I correct?</p>
-
-                <div className="button-row gamble-btns">
-                  <button className="submit-btn correct-btn" onClick={() => handleGambleResponse(true)}>
-                    Yes, you read my mind!
-                  </button>
-                  <button className="submit-btn wrong-btn" onClick={() => handleGambleResponse(false)}>
-                    No, that is incorrect!
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {!loading && nextQuestion && (
-              <div className={`question-hub ${isFinalQuestion ? 'final-question-flash' : ''}`}>
-                {isFinalQuestion && <div className="final-q-banner">⚠️ FINAL QUESTION ⚠️</div>}
-                <p className="question-text">{nextQuestion.text}</p>
-
-                <div className="button-row action-btns">
-                  <button className="submit-btn yes-btn" onClick={() => handleAnswer('yes')}>Yes</button>
-                  <button className="submit-btn no-btn" onClick={() => handleAnswer('no')}>No</button>
-                  <button className="submit-btn dontknow-btn" onClick={() => handleAnswer('dontknow')}>Don't Know</button>
-                </div>
-              </div>
-            )}
-
-            {errorMsg && <p className="error-text">{errorMsg}</p>}
-          </div>
-        )}
+          );
+        })()}
 
         {phase === 'gameover' && (
           <div className="mr-card gameover-card">
