@@ -489,7 +489,8 @@ const getNodeText = (node) => {
 function Confetti() {
   const [particles, setParticles] = useState([]);
   useEffect(() => {
-    const colors = ['#ffb300', '#4caf50', '#2196f3', '#e05a4a', '#e91e63', '#9c27b0', '#00bcd4', '#ffeb3b', '#ff9800'];
+    // Restricted to brown, orange, gold, copper, bronze, and cream colors to fit the theme
+    const colors = ['#e8864a', '#ff9800', '#ffb300', '#d27c3c', '#a16738', '#ffd54f', '#ede8e3', '#795548', '#b57c50'];
     const shapes = ['50%', '0%']; // circles or squares
     const newParticles = Array.from({ length: 50 }).map((_, i) => ({
       id: i,
@@ -535,26 +536,30 @@ function GoalSuccessScorecard({ score, totalQ, sessionGoal, resultsTable, button
     speed: {
       title: 'Speed Run Achieved!',
       badge: '⚡ Speed Run',
-      color: '#ffb300',
-      bgGlow: 'rgba(255,179,0,0.15)',
+      color: 'var(--clr-accent)',
+      bgGlow: 'rgba(232, 134, 74, 0.15)',
+      bgLight: 'rgba(232, 134, 74, 0.08)',
     },
     perfect: {
       title: 'Perfect Solve Achieved!',
       badge: '🎯 Perfect Solve',
-      color: '#4caf50',
-      bgGlow: 'rgba(76,175,80,0.15)',
+      color: '#ffb300',
+      bgGlow: 'rgba(255, 179, 0, 0.15)',
+      bgLight: 'rgba(255, 179, 0, 0.08)',
     },
     revision: {
       title: 'Revision Achieved!',
       badge: '🔄 Revision',
-      color: '#2196f3',
-      bgGlow: 'rgba(33,150,243,0.15)',
+      color: '#d27c3c',
+      bgGlow: 'rgba(210, 124, 60, 0.15)',
+      bgLight: 'rgba(210, 124, 60, 0.08)',
     }
   }[sessionGoal] || {
     title: 'Goal Achieved!',
     badge: '🏆 Goal Completed',
-    color: 'var(--clr-accent, #e8864a)',
-    bgGlow: 'rgba(232,134,74,0.15)',
+    color: 'var(--clr-accent)',
+    bgGlow: 'rgba(232, 134, 74, 0.15)',
+    bgLight: 'rgba(232, 134, 74, 0.08)',
   };
 
   const encouragingTexts = {
@@ -588,7 +593,7 @@ function GoalSuccessScorecard({ score, totalQ, sessionGoal, resultsTable, button
   }, [sessionGoal]);
 
   return (
-    <div className="goal-success-card" style={{ border: `2px solid ${goalDetails.color}`, boxShadow: `0 8px 32px ${goalDetails.bgGlow}, var(--shadow-card)` }}>
+    <div className="goal-success-card" style={{ border: `2px solid ${goalDetails.bgGlow}`, boxShadow: `0 8px 32px ${goalDetails.bgGlow}, var(--shadow-card)` }}>
       <Confetti />
       
       <div className="success-checkmark-container">
@@ -600,6 +605,7 @@ function GoalSuccessScorecard({ score, totalQ, sessionGoal, resultsTable, button
           strokeWidth: '4',
           stroke: goalDetails.color,
           strokeMiterlimit: '10',
+          background: goalDetails.bgLight,
           animation: `checkmarkFill .4s ease-in-out .4s forwards, checkmarkScale .3s ease-in-out .9s both`,
         }}>
           <circle className="success-checkmark-circle" cx="26" cy="26" r="25" fill="none" style={{
@@ -636,14 +642,11 @@ function GoalSuccessScorecard({ score, totalQ, sessionGoal, resultsTable, button
       </div>
 
       <h2 style={{
-        fontSize: '2rem',
+        fontSize: '2.2rem',
         fontWeight: '800',
         marginBottom: '0.5rem',
-        color: 'var(--clr-text)',
+        color: goalDetails.color,
         fontFamily: 'var(--font-display, Georgia, serif)',
-        background: `linear-gradient(45deg, #fff 30%, ${goalDetails.color} 100%)`,
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
       }}>
         {goalDetails.title}
       </h2>
@@ -658,7 +661,7 @@ function GoalSuccessScorecard({ score, totalQ, sessionGoal, resultsTable, button
         maxWidth: '460px',
         padding: '0.8rem 1.2rem',
         borderRadius: '12px',
-        background: 'rgba(255, 255, 255, 0.03)',
+        background: 'var(--clr-hover)',
         borderLeft: `4px solid ${goalDetails.color}`,
         textAlign: 'center'
       }}>
@@ -716,8 +719,8 @@ function GoalSuccessScorecard({ score, totalQ, sessionGoal, resultsTable, button
               cursor: 'pointer',
               transition: 'all 0.2s ease',
               border: btn.props.style?.border || 'none',
-              background: btn.props.style?.background || `linear-gradient(45deg, ${goalDetails.color} 0%, rgba(255,255,255,0.15) 100%)`,
-              color: '#fff',
+              background: btn.props.style?.background || `linear-gradient(135deg, ${goalDetails.color} 0%, rgba(141,110,99,0.3) 100%)`,
+              color: btn.props.style?.color || '#fff',
               boxShadow: `0 4px 12px ${goalDetails.bgGlow}`,
             }
           });

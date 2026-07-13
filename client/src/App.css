@@ -2555,7 +2555,7 @@ button:disabled {
 .goal-success-card {
   padding: 2.5rem 2rem;
   border-radius: 24px;
-  background: linear-gradient(135deg, var(--clr-card) 0%, rgba(30, 30, 35, 0.98) 100%);
+  background: linear-gradient(135deg, var(--clr-card) 0%, var(--clr-surface) 100%);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -2656,5 +2656,34 @@ button:disabled {
 }
 .goal-success-card ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.25);
+}
+
+/* Goal Practice Mode selection pills style overrides */
+.checkbox-pill.active[style*="#ffb300"],
+.checkbox-pill.active[style*="255,179,0"] {
+  background: rgba(232, 134, 74, 0.14) !important;
+  border-color: var(--clr-accent) !important;
+  color: var(--clr-accent) !important;
+}
+
+.checkbox-pill.active[style*="#f44336"],
+.checkbox-pill.active[style*="244,67,54"] {
+  background: rgba(255, 179, 0, 0.14) !important;
+  border-color: #ffb300 !important;
+  color: #ffb300 !important;
+}
+
+.checkbox-pill.active[style*="#2196f3"],
+.checkbox-pill.active[style*="33,150,243"] {
+  background: rgba(210, 124, 60, 0.14) !important;
+  border-color: #d27c3c !important;
+  color: #d27c3c !important;
+}
+
+/* Adaptive Mode rainbow pill override */
+.checkbox-pill.active[style*="linear-gradient"] {
+  background: linear-gradient(135deg, var(--clr-accent), #ffb300, #d27c3c) !important;
+  color: #fff !important;
+  border: none !important;
 }
 
