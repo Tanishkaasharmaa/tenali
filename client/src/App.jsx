@@ -55970,6 +55970,30 @@ function MindReaderApp({ onBack }) {
 
         {phase !== 'playing' && (() => {
           const stateObj = getTenaliState();
+          if (phase === 'setup') {
+            return (
+              <div className="character-hub-horizontal">
+                <TenaliAvatar expression={stateObj.expression} skin={equippedSkin} />
+                
+                <div className="thought-cloud-bubble-side">
+                  <div className="thought-dot-side-1" />
+                  <div className="thought-dot-side-2" />
+                  
+                  <div className="thought-header" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <span className="avatar-name" style={{ fontWeight: '700', color: 'var(--clr-accent)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Tenali Raman</span>
+                    <span className="avatar-title-tag" style={{ background: 'rgba(74, 144, 226, 0.15)', color: 'var(--clr-accent)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: '600', border: '1px solid rgba(74, 144, 226, 0.3)' }}>
+                      {equippedTitle}
+                    </span>
+                  </div>
+                  
+                  <div className="dialogue-speech" style={{ whiteSpace: 'pre-line', fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic' }}>
+                    "{stateObj.text}"
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
           return (
             <div className="character-hub-vertical" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', position: 'relative', marginBottom: '24px', width: '100%' }}>
               {/* Dialogue Box styled as a thought cloud above Tenali */}
