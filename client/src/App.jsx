@@ -55251,6 +55251,16 @@ function TenaliAvatar({ expression, skin }) {
       </g>
     );
     mouth = <path d="M 42 66 Q 50 62 58 66" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
+  } else if (expression === 'closed-eyes') {
+    eyeLeft = <path d="M 34 50 Q 40 54 46 50" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
+    eyeRight = <path d="M 54 50 Q 60 54 66 50" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 33 43 Q 40 41 47 43" />
+        <path d="M 53 43 Q 60 41 67 43" />
+      </g>
+    );
+    mouth = <path d="M 43 68 Q 50 71 57 68" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
   }
 
   return (
@@ -55456,44 +55466,81 @@ function MindReaderApp({ onBack }) {
     }
   };
 
-  const startGame = async () => {
-    setLoading(true);
-    setErrorMsg('');
-    setHistory([]);
-    setIncorrectPredictions([]);
-    setRoyalChances(3);
-    setPrediction(null);
-    setNextQuestion(null);
-    setActualConcept(null);
-    setMrrChange(0);
-    setRecommendations(null);
-    setCheated(false);
-
-    try {
-      const res = await fetch(`${API}/api/mindreader/next`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ history: [], incorrectPredictions: [] })
-      });
-      if (!res.ok) throw new Error('Failed to start engine');
-      const data = await res.json();
-
-      setConfidence(data.confidence || 0);
-      setRemainingCount(data.remainingCount || 15);
-
-      if (data.prediction) {
-        setPrediction(data.prediction);
-      } else {
-        setNextQuestion(data.nextQuestion);
-        setIsFinalQuestion(data.isFinalQuestion || false);
-      }
-      setPhase('playing');
-    } catch (err) {
-      setErrorMsg(err.message || 'Error communicating with Tenali.');
-    } finally {
-      setLoading(false);
-    }
+  const startGame = () => {
+    setPhase('pregame-thinking');
   };
+
+  useEffect(() => {
+    if (phase === 'pregame-thinking') {
+      let timerFinished = false;
+      let apiFinished = false;
+      let apiData = null;
+      let apiError = null;
+
+      // 1. Start the 2.5s timer
+      const timer = setTimeout(() => {
+        timerFinished = true;
+        if (apiFinished) {
+          transitionToPlay();
+        }
+      }, 2500);
+
+      // 2. Fetch the first question
+      const fetchFirstQuestion = async () => {
+        setLoading(true);
+        setErrorMsg('');
+        setHistory([]);
+        setIncorrectPredictions([]);
+        setRoyalChances(3);
+        setPrediction(null);
+        setNextQuestion(null);
+        setActualConcept(null);
+        setMrrChange(0);
+        setRecommendations(null);
+        setCheated(false);
+
+        try {
+          const res = await fetch(`${API}/api/mindreader/next`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ history: [], incorrectPredictions: [] })
+          });
+          if (!res.ok) throw new Error('Failed to start engine');
+          apiData = await res.json();
+        } catch (err) {
+          apiError = err.message || 'Error communicating with Tenali.';
+        } finally {
+          apiFinished = true;
+          setLoading(false);
+          if (timerFinished) {
+            transitionToPlay();
+          }
+        }
+      };
+
+      const transitionToPlay = () => {
+        if (apiError) {
+          setErrorMsg(apiError);
+          setPhase('setup');
+        } else if (apiData) {
+          setConfidence(apiData.confidence || 0);
+          setRemainingCount(apiData.remainingCount || 15);
+
+          if (apiData.prediction) {
+            setPrediction(apiData.prediction);
+          } else {
+            setNextQuestion(apiData.nextQuestion);
+            setIsFinalQuestion(apiData.isFinalQuestion || false);
+          }
+          setPhase('playing');
+        }
+      };
+
+      fetchFirstQuestion();
+
+      return () => clearTimeout(timer);
+    }
+  }, [phase]);
 
   const handleAnswer = async (answerVal) => {
     if (loading || !nextQuestion) return;
@@ -55707,6 +55754,13 @@ function MindReaderApp({ onBack }) {
       };
     }
 
+    if (phase === 'pregame-thinking') {
+      return {
+        expression: 'closed-eyes',
+        text: "Tenali Raman is closing his eyes... searching the mathematical ether..."
+      };
+    }
+
     if (phase === 'playing') {
       if (prediction) {
         return {
@@ -55822,11 +55876,14 @@ function MindReaderApp({ onBack }) {
 
         {phase === 'setup' && (
           <div className="mr-card setup-card">
-            <h2>Think of a Concept!</h2>
-            <p className="instruction-text">
-              Secretly choose any mathematical concept from the list below without telling anyone or typing it.
-              Tenali will ask Yes/No questions and try to guess what you are thinking!
-            </p>
+            <h2 style={{ fontSize: '1.8rem', letterSpacing: '1px', color: 'var(--clr-accent)', textTransform: 'uppercase', marginBottom: '8px', textAlign: 'center' }}>TENALI</h2>
+            <div className="pregame-instructions" style={{ textAlign: 'center', fontSize: '1.1rem', lineHeight: '1.65', color: 'var(--clr-text)', margin: '12px 0' }}>
+              <p style={{ margin: '6px 0' }}>Let's play a little game.</p>
+              <p style={{ margin: '6px 0', fontWeight: '600' }}>Think of one mathematical idea.</p>
+              <p style={{ margin: '6px 0', color: 'var(--clr-text-soft)' }}>Don't tell me.</p>
+              <p style={{ margin: '6px 0', fontStyle: 'italic' }}>Just keep it in your mind.</p>
+              <p style={{ margin: '14px 0 6px', fontWeight: '600', color: 'var(--clr-accent)' }}>When you're ready...</p>
+            </div>
 
             <div className="concept-chips">
               {mvpConcepts.map((c, i) => (
@@ -55855,10 +55912,26 @@ function MindReaderApp({ onBack }) {
                 </p>
               </div>
             ) : (
-              <button className="submit-btn start-game-btn" onClick={startGame} disabled={loading}>
-                {loading ? 'Entering...' : 'Start Game →'}
+              <button className="submit-btn start-game-btn" onClick={startGame} disabled={loading} style={{ background: 'linear-gradient(135deg, var(--clr-accent) 0%, #d35400 100%)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                {loading ? 'Entering...' : "I've got one."}
               </button>
             )}
+          </div>
+        )}
+
+        {phase === 'pregame-thinking' && (
+          <div className="mr-card pregame-thinking-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '3rem 2rem' }}>
+            <h2 style={{ fontSize: '1.6rem', color: 'var(--clr-accent)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Tenali Raman is Listening...</h2>
+            <div className="pregame-music-container" style={{ display: 'flex', gap: '6px', height: '40px', alignItems: 'flex-end', margin: '2rem 0' }}>
+              <div className="music-bar bar-1"></div>
+              <div className="music-bar bar-2"></div>
+              <div className="music-bar bar-3"></div>
+              <div className="music-bar bar-4"></div>
+              <div className="music-bar bar-5"></div>
+            </div>
+            <p style={{ fontStyle: 'italic', opacity: 0.8, fontSize: '1.05rem', animation: 'pulse-opacity 1.5s infinite' }}>
+              🎵 🎶 (Visualizing thoughts) 🎶 🎵
+            </p>
           </div>
         )}
 
