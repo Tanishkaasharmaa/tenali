@@ -55894,7 +55894,7 @@ function MindReaderApp({ onBack }) {
       if (cheated) {
         return {
           expression: 'cheated',
-          text: `Aha! You told me my guess of "${actualConcept?.name || 'that concept'}" was incorrect, but now you claim you were thinking of it! Tenali's sharp mind cannot be fooled so easily. No MRR rating points awarded for trickery! 😉`
+          text: "Aha! You told me my guess was incorrect, but now you claim you were thinking of it! Tenali's sharp mind cannot be fooled so easily. No MRR rating points awarded for trickery! 😉"
         };
       }
 
@@ -55908,12 +55908,12 @@ function MindReaderApp({ onBack }) {
         }
         return {
           expression: 'loss',
-          text: `A brilliant victory! You were indeed thinking of "${actualConcept.name}". I bow to your mathematical shield!`
+          text: "A brilliant victory! You successfully guarded your thoughts. I bow to your mathematical shield!"
         };
       } else {
         return {
           expression: 'confident',
-          text: `Victory! My mind-reading art reigns supreme in the court. "${prediction?.name || 'Your concept'}" was no match for my logic!`
+          text: "Victory! My mind-reading art reigns supreme in the court. Your thoughts are an open book to my logic!"
         };
       }
     }
@@ -55968,23 +55968,27 @@ function MindReaderApp({ onBack }) {
           </div>
         )}
 
-        {/* Character Hub */}
         {phase !== 'playing' && (() => {
           const stateObj = getTenaliState();
           return (
-            <div className="character-hub" style={{ display: 'flex', gap: '20px', alignItems: 'center', background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: '16px', padding: '20px', marginBottom: '24px', flexWrap: 'wrap', boxShadow: '0 8px 32px rgba(0,0,0,0.08)', position: 'relative' }}>
-              <TenaliAvatar expression={stateObj.expression} skin={equippedSkin} />
-              <div className="dialogue-box" style={{ flex: 1, minWidth: '260px', position: 'relative' }}>
-                <div className="avatar-header" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <span className="avatar-name" style={{ fontWeight: '700', color: 'var(--clr-accent)', fontSize: '1.1rem' }}>Tenali Raman</span>
-                  <span className="avatar-title-tag" style={{ background: 'rgba(74, 144, 226, 0.15)', color: 'var(--clr-accent)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.78rem', fontWeight: '600', border: '1px solid rgba(74, 144, 226, 0.3)' }}>
+            <div className="character-hub-vertical" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', position: 'relative', marginBottom: '24px', width: '100%' }}>
+              {/* Dialogue Box styled as a thought cloud above Tenali */}
+              <div className="thought-cloud-bubble mr-card" style={{ position: 'relative', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '24px', padding: '16px 24px', width: '100%', maxWidth: '480px', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', textAlign: 'center' }}>
+                <div className="thought-dot thought-dot-1" style={{ position: 'absolute', bottom: '-14px', left: 'calc(50% - 6px)', width: '12px', height: '12px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
+                <div className="thought-dot thought-dot-2" style={{ position: 'absolute', bottom: '-24px', left: 'calc(50% - 4px)', width: '8px', height: '8px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
+                
+                <div className="thought-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
+                  <span className="avatar-name" style={{ fontWeight: '700', color: 'var(--clr-accent)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Tenali Raman</span>
+                  <span className="avatar-title-tag" style={{ background: 'rgba(74, 144, 226, 0.15)', color: 'var(--clr-accent)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: '600', border: '1px solid rgba(74, 144, 226, 0.3)' }}>
                     {equippedTitle}
                   </span>
                 </div>
-                <div className="dialogue-speech" style={{ whiteSpace: 'pre-line', fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic', position: 'relative', paddingLeft: '12px', borderLeft: '3px solid var(--clr-accent)' }}>
+                
+                <div className="dialogue-speech" style={{ whiteSpace: 'pre-line', fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic' }}>
                   "{stateObj.text}"
                 </div>
               </div>
+              <TenaliAvatar expression={stateObj.expression} skin={equippedSkin} />
             </div>
           );
         })()}
@@ -56061,11 +56065,9 @@ function MindReaderApp({ onBack }) {
               </div>
 
               <div className="playing-character-row" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', position: 'relative', marginTop: '10px' }}>
-                <TenaliAvatar expression={stateObj.expression} skin={equippedSkin} />
-                
-                <div className="thought-cloud-bubble" style={{ position: 'relative', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '24px', padding: '16px 24px', width: '100%', maxWidth: '480px', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', textAlign: 'center' }}>
-                  <div className="thought-dot thought-dot-1" style={{ position: 'absolute', top: '-14px', left: 'calc(50% - 6px)', width: '12px', height: '12px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
-                  <div className="thought-dot thought-dot-2" style={{ position: 'absolute', top: '-24px', left: 'calc(50% - 4px)', width: '8px', height: '8px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
+                <div className="thought-cloud-bubble mr-card" style={{ position: 'relative', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '24px', padding: '16px 24px', width: '100%', maxWidth: '480px', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', textAlign: 'center' }}>
+                  <div className="thought-dot thought-dot-1" style={{ position: 'absolute', bottom: '-14px', left: 'calc(50% - 6px)', width: '12px', height: '12px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
+                  <div className="thought-dot thought-dot-2" style={{ position: 'absolute', bottom: '-24px', left: 'calc(50% - 4px)', width: '8px', height: '8px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
                   
                   <div className="thought-header" style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--clr-accent)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     Tenali's Mind Cloud
@@ -56074,22 +56076,9 @@ function MindReaderApp({ onBack }) {
                   <div className="dialogue-speech" style={{ whiteSpace: 'pre-line', fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic' }}>
                     "{stateObj.text}"
                   </div>
-
-                  {prediction && (
-                    <div className="cloud-confidence-section" style={{ marginTop: '15px', borderTop: '1px dashed var(--clr-border)', paddingTop: '10px' }}>
-                      <div className="risk-label-row" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                        <span style={{ fontWeight: '500' }}>Confidence Meter</span>
-                        <span className={`risk-status ${getMeterColorClass()}`} style={{ fontWeight: 'bold' }}>{getConfidenceStatusLabel()} ({getRiskMeterLabel()})</span>
-                      </div>
-                      <div className="risk-bar-track" style={{ height: '8px', background: 'var(--clr-border)', borderRadius: '4px', overflow: 'hidden' }}>
-                        <div
-                          className={`risk-bar-fill ${getMeterColorClass()}`}
-                          style={{ width: `${confidence * 100}%`, height: '100%', transition: 'width 0.4s ease' }}
-                        ></div>
-                      </div>
-                    </div>
-                  )}
                 </div>
+
+                <TenaliAvatar expression={stateObj.expression} skin={equippedSkin} />
               </div>
 
               {loading && <div className="loading-spinner">Tenali is thinking...</div>}
@@ -56138,15 +56127,15 @@ function MindReaderApp({ onBack }) {
           <div className="mr-card gameover-card">
             {royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0) ? (
               <div className="win-display">
-                <h2>👑 VICTORY! 👑</h2>
-                <p className="outcome-desc">You defeated Tenali! He ran out of Royal Chances or couldn't guess your concept.</p>
+                <h2>👑 ROYAL VICTORY! 👑</h2>
+                <p className="outcome-desc" style={{ fontSize: '1.1rem', margin: '10px 0' }}>Outstanding! You successfully shielded your thoughts from Tenali's gaze. He ran out of options!</p>
                 {mrrChange > 0 && !cheated && <div className="mrr-up-anim">MRR Rating: {mrr - mrrChange} ➔ {mrr} (+{mrrChange})!</div>}
 
                 {cheated && (
                   <div className="cheating-warning-box" style={{ marginTop: '20px', padding: '16px', background: 'rgba(241, 196, 15, 0.1)', border: '1px solid rgba(241, 196, 15, 0.3)', borderRadius: '12px', color: '#d35400', textAlign: 'center' }}>
                     <p style={{ fontWeight: '700', fontSize: '1.1rem', marginBottom: '8px' }}>🔮 Tenali catches you red-handed! 🔮</p>
                     <p style={{ fontSize: '0.95rem', lineHeight: 1.45 }}>
-                      "Aha! You told me my guess of <strong>{actualConcept?.name}</strong> was incorrect, but now you claim you were thinking of it!
+                      "Aha! You told me my guess was incorrect, but now you claim you were thinking of it!
                       Tenali's sharp mind cannot be fooled so easily. No MRR rating points awarded for trickery! 😉"
                     </p>
                   </div>
@@ -56170,25 +56159,14 @@ function MindReaderApp({ onBack }) {
               </div>
             ) : (
               <div className="loss-display">
-                <h2>🔮 TENALI GUESSED IT! 🔮</h2>
-                <p className="outcome-desc">Tenali correctly identified your concept: <strong>{prediction?.name}</strong></p>
+                <h2>🔮 TENALI TRIUMPHED! 🔮</h2>
+                <p className="outcome-desc" style={{ fontSize: '1.1rem', margin: '10px 0' }}>Tenali Raman successfully peeked into your thoughts and decoded your secret math pattern!</p>
                 {mrrChange < 0 ? (
                   <div className="mrr-down-anim" style={{ color: 'var(--clr-wrong)', fontWeight: 700, padding: '8px', background: 'rgba(231, 76, 60, 0.1)', borderRadius: '8px', display: 'inline-block', margin: '0 auto' }}>
                     MRR Rating: {mrr - mrrChange} ➔ {mrr} ({mrrChange})!
                   </div>
                 ) : (
                   <div className="mrr-no-change">MRR Rating: {mrr} (+0)</div>
-                )}
-
-                {prediction?.definingCharacteristics && (
-                  <div className="reasoning-box">
-                    <h4>Defining Characteristics:</h4>
-                    <ul>
-                      {prediction.definingCharacteristics.map((char, i) => (
-                        <li key={i}>{char}</li>
-                      ))}
-                    </ul>
-                  </div>
                 )}
               </div>
             )}
