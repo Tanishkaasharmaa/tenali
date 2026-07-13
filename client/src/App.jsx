@@ -56062,6 +56062,19 @@ function MindReaderApp({ onBack }) {
 
         {phase === 'playing' && (() => {
           const stateObj = getTenaliState();
+
+          // Calculate visual progress of the risk meter based on concepts remaining
+          const totalConcepts = mvpConcepts.length; // 15
+          let meterProgress = 0;
+          if (prediction) {
+            meterProgress = 1.0;
+          } else {
+            const eliminated = totalConcepts - remainingCount;
+            // Map eliminated concepts to progress between 0 and 0.90
+            const rawProgress = totalConcepts > 1 ? eliminated / (totalConcepts - 1) : 0;
+            meterProgress = Math.min(0.90, Math.max(0, rawProgress));
+          }
+
           return (
             <div className={`mr-card playing-card ${shouldShake ? 'shake-board' : ''}`} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div className="game-hud" style={{ borderBottom: '1px solid var(--clr-border)', paddingBottom: '12px' }}>
@@ -56093,27 +56106,27 @@ function MindReaderApp({ onBack }) {
                 {/* Phase 3 - Glowing Risk/Confidence Meter (○────────────●) */}
                 <div className="mr-risk-meter" style={{ width: '100%', maxWidth: '480px', marginBottom: '8px', marginTop: '5px' }}>
                   <div className="risk-indicator-labels" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                    <span className={`risk-indicator-label ${confidence <= 0.15 ? 'active blue-glow' : ''}`} style={{ opacity: confidence <= 0.15 ? 1 : 0.45 }}>🙂 Calm</span>
-                    <span className={`risk-indicator-label ${confidence > 0.15 && confidence <= 0.35 ? 'active green-glow' : ''}`} style={{ opacity: confidence > 0.15 && confidence <= 0.35 ? 1 : 0.45 }}>😐 Curious</span>
-                    <span className={`risk-indicator-label ${confidence > 0.35 && confidence <= 0.55 ? 'active yellow-glow' : ''}`} style={{ opacity: confidence > 0.35 && confidence <= 0.55 ? 1 : 0.45 }}>🤔 Thinking</span>
-                    <span className={`risk-indicator-label ${confidence > 0.55 && confidence <= 0.75 ? 'active orange-glow' : ''}`} style={{ opacity: confidence > 0.55 && confidence <= 0.75 ? 1 : 0.45 }}>😏 Confident</span>
-                    <span className={`risk-indicator-label ${confidence > 0.75 ? 'active purple-glow' : ''}`} style={{ opacity: confidence > 0.75 ? 1 : 0.45 }}>😈 Royal Gamble</span>
+                    <span className={`risk-indicator-label ${meterProgress <= 0.15 ? 'active blue-glow' : ''}`} style={{ opacity: meterProgress <= 0.15 ? 1 : 0.45 }}>🙂 Calm</span>
+                    <span className={`risk-indicator-label ${meterProgress > 0.15 && meterProgress <= 0.35 ? 'active green-glow' : ''}`} style={{ opacity: meterProgress > 0.15 && meterProgress <= 0.35 ? 1 : 0.45 }}>😐 Curious</span>
+                    <span className={`risk-indicator-label ${meterProgress > 0.35 && meterProgress <= 0.55 ? 'active yellow-glow' : ''}`} style={{ opacity: meterProgress > 0.35 && meterProgress <= 0.55 ? 1 : 0.45 }}>🤔 Thinking</span>
+                    <span className={`risk-indicator-label ${meterProgress > 0.55 && meterProgress <= 0.75 ? 'active orange-glow' : ''}`} style={{ opacity: meterProgress > 0.55 && meterProgress <= 0.75 ? 1 : 0.45 }}>😏 Confident</span>
+                    <span className={`risk-indicator-label ${meterProgress > 0.75 ? 'active purple-glow' : ''}`} style={{ opacity: meterProgress > 0.75 ? 1 : 0.45 }}>😈 Royal Gamble</span>
                   </div>
                   <div className="risk-slider-track" style={{ display: 'flex', alignItems: 'center', width: '100%', position: 'relative', height: '20px', padding: '0 4px' }}>
-                    <span className="risk-slider-start-dot" style={{ fontSize: '1.3rem', color: confidence <= 0.15 ? '#3498db' : 'var(--clr-text-soft)', fontWeight: 'bold' }}>○</span>
+                    <span className="risk-slider-start-dot" style={{ fontSize: '1.3rem', color: meterProgress <= 0.15 ? '#3498db' : 'var(--clr-text-soft)', fontWeight: 'bold' }}>○</span>
                     <div className="risk-slider-bar-wrapper" style={{ flexGrow: 1, position: 'relative', height: '3px', background: 'var(--clr-border)', margin: '0 10px', borderRadius: '2px' }}>
                       <div 
                         className={`risk-slider-glow-dot ${
-                          confidence <= 0.15 ? 'calm' :
-                          confidence <= 0.35 ? 'curious' :
-                          confidence <= 0.55 ? 'thinking' :
-                          confidence <= 0.75 ? 'confident' : 'royal'
+                          meterProgress <= 0.15 ? 'calm' :
+                          meterProgress <= 0.35 ? 'curious' :
+                          meterProgress <= 0.55 ? 'thinking' :
+                          meterProgress <= 0.75 ? 'confident' : 'royal'
                         }`}
                         style={{ 
                           position: 'absolute', 
                           top: '50%', 
                           transform: 'translate(-50%, -50%)', 
-                          left: `${Math.min(100, Math.max(0, confidence * 100))}%`, 
+                          left: `${Math.min(100, Math.max(0, meterProgress * 100))}%`, 
                           width: '14px', 
                           height: '14px', 
                           borderRadius: '50%', 
@@ -56121,7 +56134,7 @@ function MindReaderApp({ onBack }) {
                         }}
                       />
                     </div>
-                    <span className="risk-slider-end-dot" style={{ fontSize: '1.3rem', color: confidence > 0.75 ? '#9b59b6' : 'var(--clr-text-soft)', fontWeight: 'bold' }}>●</span>
+                    <span className="risk-slider-end-dot" style={{ fontSize: '1.3rem', color: meterProgress > 0.75 ? '#9b59b6' : 'var(--clr-text-soft)', fontWeight: 'bold' }}>●</span>
                   </div>
                 </div>
 
