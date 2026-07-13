@@ -3622,4 +3622,71 @@ button:disabled {
     transform: translate(-50%, -50%) scale(1.25);
     box-shadow: 0 0 15px #9b59b6, 0 0 30px #9b59b6, 0 0 45px rgba(155, 89, 182, 0.8);
   }
-}
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* Phase 4 — Royal Gamble Cinematic Overlay */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.mr-cinematic-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 8, 20, 0.94);
+  backdrop-filter: blur(12px) brightness(0.2);
+  -webkit-backdrop-filter: blur(12px) brightness(0.2);
+  z-index: 10000; /* Over everything */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeInOverlay 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  padding: 24px;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.cinematic-avatar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 140px;
+  animation: scaleUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.cinematic-bubble {
+  border-radius: 24px;
+  animation: scaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.cinematic-countdown {
+  line-height: 1;
+  font-family: var(--font-display, sans-serif);
+}
+
+.cinematic-reveal-box {
+  box-shadow: 0 15px 45px rgba(108, 92, 231, 0.35);
+}
+

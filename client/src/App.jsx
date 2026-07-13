@@ -55363,6 +55363,9 @@ function MindReaderApp({ onBack }) {
   const [errorMsg, setErrorMsg] = useState('');
   const [mrrChange, setMrrChange] = useState(0);
   const [cheated, setCheated] = useState(false);
+  const [cinematicStep, setCinematicStep] = useState('idle'); // 'idle' | 'think' | 'figured' | 'ask' | 'countdown' | 'reveal'
+  const [countdownNum, setCountdownNum] = useState(3);
+
 
   // 15 MVP concepts
   const mvpConcepts = [
@@ -55458,6 +55461,52 @@ function MindReaderApp({ onBack }) {
 
     loadProfileAndConfig();
   }, []);
+
+  // Trigger Phase 4 cinematic sequence when prediction is set
+  useEffect(() => {
+    if (prediction && cinematicStep === 'idle') {
+      setCinematicStep('think');
+    }
+  }, [prediction]);
+
+  // Timing logic for the cinematic stages: think -> figured -> ask -> countdown -> reveal
+  useEffect(() => {
+    if (cinematicStep === 'idle') return;
+
+    if (cinematicStep === 'think') {
+      const timer = setTimeout(() => {
+        setCinematicStep('figured');
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+    if (cinematicStep === 'figured') {
+      const timer = setTimeout(() => {
+        setCinematicStep('ask');
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+    if (cinematicStep === 'ask') {
+      const timer = setTimeout(() => {
+        setCinematicStep('countdown');
+        setCountdownNum(3);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+    if (cinematicStep === 'countdown') {
+      if (countdownNum > 1) {
+        const timer = setTimeout(() => {
+          setCountdownNum(prev => prev - 1);
+        }, 1000);
+        return () => clearTimeout(timer);
+      } else {
+        const timer = setTimeout(() => {
+          setCinematicStep('reveal');
+        }, 1000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [cinematicStep, countdownNum]);
+
 
   const handleEquipItem = async (type, val) => {
     if (type === 'skin') {
@@ -55954,6 +56003,69 @@ function MindReaderApp({ onBack }) {
     <QuizLayout title="Tenali Mind Reader" subtitle="Recreational learning game" onBack={handleBackToHome}>
       <div className="mindreader-container">
 
+        {/* Phase 4 - Royal Gamble Cinematic Overlay */}
+        {prediction && cinematicStep !== 'idle' && (
+          <div className="mr-cinematic-overlay">
+            
+            {/* Glowing Royal Gamble meter */}
+            <div className="mr-risk-meter royal-gamble-meter" style={{ width: '90%', maxWidth: '400px', margin: '20px auto' }}>
+              <div className="risk-indicator-labels" style={{ display: 'flex', justifyContent: 'center', marginBottom: '8px' }}>
+                <span className="risk-indicator-label active purple-glow" style={{ color: '#a29bfe', textShadow: '0 0 12px #6c5ce7', fontSize: '1.2rem', fontWeight: 'bold' }}>😈 Royal Gamble</span>
+              </div>
+              <div className="risk-slider-track" style={{ display: 'flex', alignItems: 'center', height: '10px', justifyContent: 'center' }}>
+                <span style={{ color: '#a29bfe', fontWeight: 'bold' }}>○</span>
+                <div style={{ flexGrow: 1, height: '4px', background: '#6c5ce7', margin: '0 12px', borderRadius: '2px', boxShadow: '0 0 12px #6c5ce7' }}></div>
+                <span style={{ color: '#a29bfe', fontWeight: 'bold' }}>●</span>
+              </div>
+            </div>
+
+            {/* The Zoomed Suspense Tenali Avatar */}
+            <div className="cinematic-avatar-container" style={{ margin: '30px 0', transform: 'scale(1.3)', transition: 'transform 0.8s ease' }}>
+              <TenaliAvatar expression="gamble" skin={equippedSkin} />
+            </div>
+
+            {/* Speech bubble or dialogue */}
+            {(cinematicStep === 'think' || cinematicStep === 'figured' || cinematicStep === 'ask') && (
+              <div className="thought-cloud-bubble mr-card cinematic-bubble" style={{ background: 'var(--clr-surface)', border: '2px solid #6c5ce7', borderRadius: '24px', padding: '20px 30px', maxWidth: '400px', textAlign: 'center', boxShadow: '0 8px 24px rgba(108, 92, 231, 0.25)', margin: '15px' }}>
+                <div className="dialogue-speech" style={{ fontSize: '1.25rem', color: 'var(--clr-text)', fontStyle: 'italic', fontWeight: '600', animation: 'scaleUp 0.3s ease-out forwards' }}>
+                  {cinematicStep === 'think' && "I think..."}
+                  {cinematicStep === 'figured' && "I've figured it out."}
+                  {cinematicStep === 'ask' && "Would you like to hear my guess?"}
+                </div>
+              </div>
+            )}
+
+            {/* Countdown Tick */}
+            {cinematicStep === 'countdown' && (
+              <div className="cinematic-countdown" key={countdownNum} style={{ fontSize: '6.5rem', fontWeight: '900', color: '#fdcb6e', textShadow: '0 0 20px #f1c40f', animation: 'scaleUp 1s ease-out forwards', margin: '20px 0' }}>
+                {countdownNum}
+              </div>
+            )}
+
+            {/* Reveal of Guess & Action Buttons */}
+            {cinematicStep === 'reveal' && (
+              <div className="prediction-hub pulsing-gamble cinematic-reveal-box" style={{ width: '90%', maxWidth: '480px', display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'scaleUp 0.5s ease-out forwards', padding: '20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px' }}>
+                <h3 className="gamble-title" style={{ color: '#a29bfe', textShadow: '0 0 10px #6c5ce7', fontSize: '1.8rem', marginBottom: '8px', letterSpacing: '1px' }}>⚡ ROYAL GAMBLE ⚡</h3>
+                <p className="gamble-prompt" style={{ color: 'var(--clr-text-soft)', marginBottom: '15px' }}>I believe you are thinking of:</p>
+                <div className="prediction-box" style={{ background: 'linear-gradient(135deg, var(--clr-surface) 0%, rgba(108, 92, 231, 0.1) 100%)', border: '3px solid #6c5ce7', borderRadius: '16px', padding: '24px 16px', fontSize: '2rem', fontWeight: '800', textAlign: 'center', boxShadow: '0 0 30px rgba(108, 92, 231, 0.4)', width: '100%', marginBottom: '20px', color: 'var(--clr-text)' }}>
+                  {prediction.name}
+                </div>
+                <p className="gamble-confirm" style={{ fontSize: '1.15rem', marginBottom: '20px', fontWeight: 'bold', color: 'var(--clr-text)' }}>Am I correct?</p>
+                <div className="button-row gamble-btns" style={{ display: 'flex', gap: '16px', width: '100%', justifyContent: 'center' }}>
+                  <button className="submit-btn correct-btn" onClick={() => { handleGambleResponse(true); setCinematicStep('idle'); }} style={{ padding: '14px 28px', background: 'var(--clr-correct)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.1rem', transition: 'transform 0.2s', boxShadow: '0 4px 12px rgba(46, 204, 113, 0.3)' }}>
+                    Yes, read my mind!
+                  </button>
+                  <button className="submit-btn wrong-btn" onClick={() => { handleGambleResponse(false); setCinematicStep('idle'); }} style={{ padding: '14px 28px', background: 'var(--clr-wrong)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.1rem', transition: 'transform 0.2s', boxShadow: '0 4px 12px rgba(231, 76, 60, 0.3)' }}>
+                    No, that is incorrect!
+                  </button>
+                </div>
+              </div>
+            )}
+
+          </div>
+        )}
+
+
         {/* Top Hud & Rewards Cabinet Button */}
         {phase === 'setup' && (
           <div className="mr-top-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', width: '100%', flexWrap: 'wrap', gap: '10px' }}>
@@ -56156,7 +56268,7 @@ function MindReaderApp({ onBack }) {
 
               {loading && <div className="loading-spinner">Tenali is thinking...</div>}
 
-              {!loading && prediction && (
+              {!loading && prediction && cinematicStep === 'idle' && (
                 <div className="prediction-hub pulsing-gamble">
                   <h3 className="gamble-title">⚡ ROYAL GAMBLE ⚡</h3>
                   <p className="gamble-prompt">
