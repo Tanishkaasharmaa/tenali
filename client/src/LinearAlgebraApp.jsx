@@ -2725,7 +2725,7 @@ function LinearAlgebraApp({ onBack }) {
     setMqLoading(true); setMqLoadError('');
     try {
       const seenParam = mqSeenRef.current.size > 0 ? '&seen=' + encodeURIComponent([...mqSeenRef.current].join(',')) : '';
-      const r = await fetch(`/la-mission-quiz-api/question?missionId=${currentMission}&difficulty=${effectiveMqDifficulty}${seenParam}`);
+      const r = await fetch(`${API}/la-mission-quiz-api/question?missionId=${currentMission}&difficulty=${effectiveMqDifficulty}${seenParam}`);
       if (!r.ok) throw new Error(`Server returned ${r.status}`);
       const data = await r.json();
       if (!data || !data.prompt) throw new Error('No prompt');
@@ -2758,7 +2758,7 @@ function LinearAlgebraApp({ onBack }) {
     mqSubmittedRef.current = true;
     const payload = { ...mqQuestion, userAnswer: String(ans).trim() };
     try {
-      const r = await fetch('/la-mission-quiz-api/check', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const r = await fetch(`${API}/la-mission-quiz-api/check`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       const data = await r.json();
       setMqIsCorrect(data.correct); setMqRevealed(true);
       if (data.correct) setMqScore(s => s + 1);
