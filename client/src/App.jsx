@@ -28,8 +28,8 @@ import './App.css'
 const API = import.meta.env.VITE_API_BASE_URL || '';
 
 // App version — increment with each commit
-const TENALI_VERSION = '1.0.86'
-const TENALI_BUILD_DATE = '2026-05-03 18:28 IST'
+const TENALI_VERSION = '1.0.87'
+const TENALI_BUILD_DATE = '2026-07-14 17:49 IST'
 
 // ─── Auth helpers ───────────────────────────────────────────────────────────
 // Tiny pub/sub on top of localStorage so AuthMenu and AuthGate stay in sync.
@@ -56296,12 +56296,12 @@ function MindReaderApp({ onBack }) {
             {/* Glowing Royal Gamble meter */}
             <div className="mr-risk-meter royal-gamble-meter" style={{ width: '90%', maxWidth: '400px', margin: '20px auto' }}>
               <div className="risk-indicator-labels" style={{ display: 'flex', justifyContent: 'center', marginBottom: '8px' }}>
-                <span className="risk-indicator-label active purple-glow" style={{ color: '#a29bfe', textShadow: '0 0 12px #6c5ce7', fontSize: '1.2rem', fontWeight: 'bold' }}>😈 Royal Gamble</span>
+                <span className="risk-indicator-label active orange-glow" style={{ color: 'var(--clr-accent)', textShadow: '0 0 12px var(--clr-accent-soft)', fontSize: '1.2rem', fontWeight: 'bold' }}>😈 Royal Gamble</span>
               </div>
               <div className="risk-slider-track" style={{ display: 'flex', alignItems: 'center', height: '10px', justifyContent: 'center' }}>
-                <span style={{ color: '#a29bfe', fontWeight: 'bold' }}>○</span>
-                <div style={{ flexGrow: 1, height: '4px', background: '#6c5ce7', margin: '0 12px', borderRadius: '2px', boxShadow: '0 0 12px #6c5ce7' }}></div>
-                <span style={{ color: '#a29bfe', fontWeight: 'bold' }}>●</span>
+                <span style={{ color: 'var(--clr-accent)', fontWeight: 'bold' }}>○</span>
+                <div style={{ flexGrow: 1, height: '4px', background: 'var(--clr-accent)', margin: '0 12px', borderRadius: '2px', boxShadow: '0 0 12px var(--clr-accent-soft)' }}></div>
+                <span style={{ color: 'var(--clr-accent)', fontWeight: 'bold' }}>●</span>
               </div>
             </div>
 
@@ -56312,7 +56312,7 @@ function MindReaderApp({ onBack }) {
 
             {/* Speech bubble or dialogue */}
             {(cinematicStep === 'think' || cinematicStep === 'figured' || cinematicStep === 'ask') && (
-              <div className="thought-cloud-bubble mr-card cinematic-bubble" style={{ background: 'var(--clr-surface)', border: '2px solid #6c5ce7', borderRadius: '24px', padding: '20px 30px', maxWidth: '400px', textAlign: 'center', boxShadow: '0 8px 24px rgba(108, 92, 231, 0.25)', margin: '15px' }}>
+              <div className="thought-cloud-bubble mr-card cinematic-bubble" style={{ background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '24px', padding: '20px 30px', maxWidth: '400px', textAlign: 'center', boxShadow: '0 8px 24px var(--clr-accent-soft)', margin: '15px' }}>
                 <div className="dialogue-speech" style={{ fontSize: '1.25rem', color: 'var(--clr-text)', fontStyle: 'italic', fontWeight: '600', animation: 'scaleUp 0.3s ease-out forwards' }}>
                   {cinematicStep === 'think' && "I think..."}
                   {cinematicStep === 'figured' && "I've figured it out."}
@@ -56331,9 +56331,9 @@ function MindReaderApp({ onBack }) {
             {/* Reveal of Guess & Action Buttons */}
             {cinematicStep === 'reveal' && (
               <div className="prediction-hub pulsing-gamble cinematic-reveal-box" style={{ width: '90%', maxWidth: '480px', display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'scaleUp 0.5s ease-out forwards', padding: '20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px' }}>
-                <h3 className="gamble-title" style={{ color: '#a29bfe', textShadow: '0 0 10px #6c5ce7', fontSize: '1.8rem', marginBottom: '8px', letterSpacing: '1px' }}>⚡ ROYAL GAMBLE ⚡</h3>
+                <h3 className="gamble-title" style={{ color: 'var(--clr-accent)', textShadow: '0 0 10px var(--clr-accent-soft)', fontSize: '1.8rem', marginBottom: '8px', letterSpacing: '1px' }}>⚡ ROYAL GAMBLE ⚡</h3>
                 <p className="gamble-prompt" style={{ color: 'var(--clr-text-soft)', marginBottom: '15px' }}>I believe you are thinking of:</p>
-                <div className="prediction-box" style={{ background: 'linear-gradient(135deg, var(--clr-surface) 0%, rgba(108, 92, 231, 0.1) 100%)', border: '3px solid #6c5ce7', borderRadius: '16px', padding: '24px 16px', fontSize: '2rem', fontWeight: '800', textAlign: 'center', boxShadow: '0 0 30px rgba(108, 92, 231, 0.4)', width: '100%', marginBottom: '20px', color: 'var(--clr-text)' }}>
+                <div className="prediction-box" style={{ background: 'linear-gradient(135deg, var(--clr-surface) 0%, rgba(232, 134, 74, 0.1) 100%)', border: '3px solid var(--clr-accent)', borderRadius: '16px', padding: '24px 16px', fontSize: '2rem', fontWeight: '800', textAlign: 'center', boxShadow: '0 0 30px rgba(232, 134, 74, 0.4)', width: '100%', marginBottom: '20px', color: 'var(--clr-text)' }}>
                   {prediction.name}
                 </div>
                 <p className="gamble-confirm" style={{ fontSize: '1.15rem', marginBottom: '20px', fontWeight: 'bold', color: 'var(--clr-text)' }}>Am I correct?</p>

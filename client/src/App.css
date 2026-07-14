@@ -3142,7 +3142,7 @@ button:disabled {
 }
 
 .loss-display h2 {
-  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  background: linear-gradient(135deg, var(--clr-accent), #d35400);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -3687,6 +3687,6 @@ button:disabled {
 }
 
 .cinematic-reveal-box {
-  box-shadow: 0 15px 45px rgba(108, 92, 231, 0.35);
+  box-shadow: 0 15px 45px rgba(232, 134, 74, 0.35);
 }
 
