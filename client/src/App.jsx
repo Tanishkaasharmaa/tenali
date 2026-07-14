@@ -41970,10 +41970,13 @@ function MixedLabApp({ onBack, selectedActivities, initialDifficulty, initialNum
   // Prefetch cache: holds the next question already fetched in background
   const prefetchRef = useRef(null)
 
+  // Relative paths only — the `${API}` base is applied once at each fetch site
+  // (below). Including it here too caused a double `/summership` prefix under
+  // subpath deploys, so requests 404'd to index.html and broke question loading.
   const endpoints = {
-    'visual-math-lab-redux': `${API || ''}/api/visual-math-lab-redux`,
-    'mensuration-lab': `${API || ''}/api/mensuration-lab`,
-    addition: `${API || ''}/addition-api`,
+    'visual-math-lab-redux': `/api/visual-math-lab-redux`,
+    'mensuration-lab': `/api/mensuration-lab`,
+    addition: `/addition-api`,
   }
 
   const chooseActivityKey = () => {
