@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './PercentExplanationApp.css';
 import { playSound } from './audioContext';
 
@@ -577,6 +577,22 @@ function LevelsSelectView({ onBack, onSelectLevel }) {
 
 function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearInitialStep }) {
   const [activeSection, setActiveSection] = useState(1); // 1 to 5
+  const [infoOpen, setInfoOpen] = useState(false);
+  const isTouchRef = React.useRef(false);
+
+  useEffect(() => {
+    const handleGlobalClick = (e) => {
+      if (!e.target.closest('.level-info-anchor')) {
+        setInfoOpen(false);
+      }
+    };
+    window.addEventListener('click', handleGlobalClick);
+    window.addEventListener('touchstart', handleGlobalClick);
+    return () => {
+      window.removeEventListener('click', handleGlobalClick);
+      window.removeEventListener('touchstart', handleGlobalClick);
+    };
+  }, []);
 
   React.useEffect(() => {
     if (initialStep) {
@@ -620,8 +636,8 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
   const [exampleStep, setExampleStep] = useState(1);
   const totalExampleSteps             = 4;
 
-  // ── Clipboard ──
-  const [copied, setCopied]           = useState(false);
+  // ── Story completion gate (section 4 → 5) ──
+  const [storyFinished, setStoryFinished] = useState(false);
 
   // ── Quiz gate ──
   const [quizPassed, setQuizPassed]   = useState(false);
@@ -640,15 +656,6 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
 
   const calculatedPart = ((percent / 100) * whole).toFixed(1).replace(/\.0$/, '');
 
-  const aiPromptText = `Explain the concept of 'finding a percentage of a whole number' using a simple real-life analogy. Detail the step-by-step method, and explain why dividing the percentage by 100 works. Keep the explanation general without using specific numerical values.`;
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(aiPromptText).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-
   // Both theory AND example must be fully revealed before the quiz gate appears
   const isExplanationFinished =
     theoryStep === totalTheorySteps && exampleStep === totalExampleSteps;
@@ -659,11 +666,43 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
         <button className="back-button" onClick={onBack}>← Levels</button>
       </div>
 
-      <h1 className="title-serif">Level 1: Find a Percentage</h1>
-      <p className="subtitle-body">
-        Interact with the visual model below to build your intuition, then check
-        the theory and worked example.
-      </p>
+      {/* Title + info icon */}
+      <div className="level-title-row">
+        <h1 className="title-serif" style={{ margin: 0 }}>Level 1: Find a Percentage</h1>
+        <div className="level-info-anchor">
+          <button
+            className="level-info-btn"
+            aria-label="About this level"
+            onTouchStart={() => {
+              isTouchRef.current = true;
+            }}
+            onMouseEnter={() => {
+              if (!isTouchRef.current) {
+                setInfoOpen(true);
+              }
+            }}
+            onMouseLeave={() => {
+              if (!isTouchRef.current) {
+                setInfoOpen(false);
+              }
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isTouchRef.current) {
+                setInfoOpen(prev => !prev);
+                setTimeout(() => {
+                  isTouchRef.current = false;
+                }, 50);
+              }
+            }}
+          >
+            ⓘ
+          </button>
+          <div className={`level-info-popup${infoOpen ? ' is-open' : ''}`}>
+            <p>Learn how to find any percentage of a number. Practice with sliders, see the math, then finish with a story and quiz.</p>
+          </div>
+        </div>
+      </div>
 
       {/* Persistent progress bar indicator */}
       <div className="explanation-progress-bar-container" style={{ marginBottom: '30px' }}>
@@ -689,82 +728,75 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
             zIndex: 2,
             transition: 'width 0.3s ease'
           }} />
-          
-          {/* Step Circles */}
+
+          {/* Step Circles — plain numbered buttons, no tooltip */}
           {[
-            { id: 1, label: 'Visual', desc: 'Visual Model' },
-            { id: 2, label: 'Theory', desc: 'Theory' },
-            { id: 3, label: 'Example', desc: 'Worked Example' },
-            { id: 4, label: 'Prompt', desc: 'AI Prompt' },
-            { id: 5, label: 'Quiz', desc: 'Quick Quiz' }
+            { id: 1 },
+            { id: 2 },
+            { id: 3 },
+            { id: 4 },
+            { id: 5 }
           ].map((step) => {
             const isCompleted = step.id < activeSection;
-            const isActive = step.id === activeSection;
-            
-            let bgColor = '#FFF';
-            let borderColor = '#CFD8DC';
-            let textColor = '#78909C';
-            
+            const isActive    = step.id === activeSection;
+            const isDisabled  = (step.id === 4 && !isExplanationFinished) || (step.id === 5 && (!isExplanationFinished || !storyFinished));
+
+            let bgColor     = 'var(--clr-card)';
+            let borderColor = 'var(--clr-border)';
+            let textColor   = 'var(--clr-text-soft)';
             if (isCompleted) {
-              bgColor = '#E8F5E9';
-              borderColor = '#4CAF50';
-              textColor = '#2E7D32';
+              bgColor     = 'var(--clr-correct-bg)';
+              borderColor = 'var(--clr-correct)';
+              textColor   = 'var(--clr-correct)';
             } else if (isActive) {
-              bgColor = '#FFFBEA';
+              bgColor     = 'var(--clr-accent-soft)';
               borderColor = 'var(--clr-accent)';
-              textColor = 'var(--clr-accent)';
+              textColor   = 'var(--clr-accent)';
             }
-            
+
             return (
-              <button
-                key={step.id}
-                onClick={() => {
-                  if (step.id === 5 && !isExplanationFinished) return;
-                  setActiveSection(step.id);
-                }}
-                disabled={step.id === 5 && !isExplanationFinished}
-                style={{
-                  zIndex: 3,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  background: 'none',
-                  border: 'none',
-                  cursor: (step.id === 5 && !isExplanationFinished) ? 'not-allowed' : 'pointer',
-                  padding: 0
-                }}
-              >
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  backgroundColor: bgColor,
-                  border: `3px solid ${borderColor}`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: '900',
-                  color: textColor,
-                  transition: 'all 0.2s ease',
-                  boxShadow: isActive ? '0 0 10px rgba(232, 134, 74, 0.4)' : 'none'
-                }}>
-                  {isCompleted ? '✓' : step.id}
-                </div>
-                <span style={{
-                  marginTop: '6px',
-                  fontSize: '0.85rem',
-                  fontWeight: isActive ? '800' : '500',
-                  color: textColor
-                }}>
-                  {step.label}
-                </span>
-              </button>
+              <div key={step.id} style={{ position: 'relative', zIndex: 3 }}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (isDisabled) return;
+                    setActiveSection(step.id);
+                  }}
+                  disabled={isDisabled}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    background: 'none',
+                    border: 'none',
+                    cursor: isDisabled ? 'not-allowed' : 'pointer',
+                    padding: 0,
+                  }}
+                >
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    backgroundColor: bgColor,
+                    border: `3px solid ${borderColor}`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: '900',
+                    color: textColor,
+                    transition: 'all 0.2s ease',
+                    boxShadow: isActive ? '0 0 10px rgba(232, 134, 74, 0.4)' : 'none',
+                  }}>
+                    {isCompleted ? '✓' : step.id}
+                  </div>
+                </button>
+              </div>
             );
           })}
         </div>
-        
+
         <div style={{ textAlign: 'center', marginTop: '15px', fontWeight: '800', color: 'var(--clr-dim)' }}>
-          {`Section ${activeSection} of 5 · ${['Interactive Visual Model', 'Concept Theory', 'Step-by-Step Worked Example', 'AI Study Assistant Prompt', 'Quick Check Quiz'][activeSection - 1]}`}
+          {`Section ${activeSection} of 5 · ${['Interactive Visual Model', 'Concept Theory', 'Step-by-Step Worked Example', 'Percent Story', 'Quick Check Quiz'][activeSection - 1]}`}
         </div>
       </div>
 
@@ -774,10 +806,6 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
         {activeSection === 1 && (
           <div className="explanation-card interactive-card">
             <h2 className="section-title">1. Interactive Visual Model</h2>
-            <p className="section-subtitle">
-              Drag the slider and select different wholes to see how percentages
-              represent parts of a quantity.
-            </p>
 
             <div className="equation-banner">
               <div className="math-display">
@@ -861,9 +889,7 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
                 <div className="step-item fade-in">
                   <div className="step-num">1</div>
                   <div className="step-content">
-                    <strong>What is a percentage?</strong> A percentage is a way of
-                    expressing a quantity as a fraction of 100. The term comes from
-                    the Latin <em>per centum</em>, meaning "by the hundred."
+                    <strong>What is a percentage?</strong> A percentage means "how many out of 100."
                   </div>
                 </div>
               )}
@@ -871,10 +897,7 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
                 <div className="step-item fade-in">
                   <div className="step-num">2</div>
                   <div className="step-content">
-                    <strong>Visualize the grid:</strong> Imagine the whole amount
-                    (e.g., {whole}) is divided into 100 equal parts. Each part
-                    contains 1% of the total. For {whole}, each 1% is equal to{' '}
-                    {whole / 100}.
+                    <strong>Think of 100 pieces:</strong> Imagine cutting the whole into 100 equal slices.
                   </div>
                 </div>
               )}
@@ -882,11 +905,7 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
                 <div className="step-item fade-in">
                   <div className="step-num">3</div>
                   <div className="step-content">
-                    <strong>Converting the Percent:</strong> To make it ready for
-                    calculation, we convert the percentage sign into a divisor of
-                    100. So {percent}% is written as{' '}
-                    <span className="monospace">({percent} / 100)</span> or{' '}
-                    <span className="monospace">{(percent / 100).toFixed(2)}</span>.
+                    <strong>Turn the percent into a decimal:</strong> Divide it by 100 — so {percent}% becomes {(percent / 100).toFixed(2)}.
                   </div>
                 </div>
               )}
@@ -894,9 +913,8 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
                 <div className="step-item fade-in">
                   <div className="step-num">4</div>
                   <div className="step-content">
-                    <strong>The General Formula:</strong> To calculate the part,
-                    scale the whole amount by this fraction:
-                    <div className="formula-block">Part = (Percent / 100) × Whole</div>
+                    <strong>Use the formula!</strong> Multiply the decimal by the whole to get the part:
+                    <div className="formula-block">Part = (Percent ÷ 100) × Whole</div>
                   </div>
                 </div>
               )}
@@ -937,7 +955,7 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
                 <div className="step-item fade-in">
                   <div className="step-indicator">Step 1</div>
                   <div className="step-content">
-                    Convert the percentage to a fraction over 100:
+                    Write the percent as a fraction over 100:
                     <div className="math-equation">15% = 15 / 100</div>
                   </div>
                 </div>
@@ -946,7 +964,7 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
                 <div className="step-item fade-in">
                   <div className="step-indicator">Step 2</div>
                   <div className="step-content">
-                    Set up the multiplication equation by scaling the whole amount:
+                    Multiply the fraction by the whole amount:
                     <div className="math-equation">(15 / 100) × 80</div>
                   </div>
                 </div>
@@ -955,7 +973,7 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
                 <div className="step-item fade-in">
                   <div className="step-indicator">Step 3</div>
                   <div className="step-content">
-                    Convert the fraction to a decimal to simplify the math:
+                    Change the fraction to a decimal:
                     <div className="math-equation">0.15 × 80</div>
                   </div>
                 </div>
@@ -964,15 +982,18 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
                 <div className="step-item fade-in">
                   <div className="step-indicator">Step 4</div>
                   <div className="step-content">
-                    Multiply to get the final answer:
+                    Multiply to get the answer:
                     <div className="math-equation">0.15 × 80 = 12</div>
-                    <p style={{ marginTop: '8px', color: 'var(--clr-correct)' }}>
-                      So, <strong>15% of 80 is 12</strong>.
-                        </p>
                   </div>
                 </div>
               )}
             </div>
+
+            {exampleStep >= 4 && (
+              <div className="example-conclusion-box fade-in">
+                So, <strong>15% of 80 is 12</strong>! <span className="pop-emoji">🎉</span>
+              </div>
+            )}
 
             <div className="explanation-nav-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '30px', gap: '15px' }}>
               <button className="percentages-btn percentages-btn-secondary" onClick={() => setActiveSection(2)}>
@@ -990,7 +1011,7 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                   <div className="completion-badge" style={{ margin: 0, position: 'static', transform: 'none' }}>✓ Example Completed</div>
                   <button className="percentages-btn" onClick={() => setActiveSection(4)}>
-                    Next: AI Prompt ➡️
+                    Next: Percent Story ➡️
                   </button>
                 </div>
               )}
@@ -998,42 +1019,19 @@ function Level1ExplanationView({ onBack, onContinueToQuiz, initialStep, clearIni
           </div>
         )}
 
-        {/* ── SECTION D: AI STUDY ASSISTANT PROMPT ── */}
-        {activeSection === 4 && (
-          <div className="explanation-card prompt-card">
-            <h2 className="section-title">4. AI Study Assistant Prompt</h2>
-            <p className="section-subtitle">
-              Copy this generic prompt and paste it into any AI chat tool (like
-              Gemini or ChatGPT) for further personalised analogies and drills.
-            </p>
-
-            <div className="prompt-box">
-              <p className="prompt-content-text">{aiPromptText}</p>
-              <button
-                className={`copy-btn ${copied ? 'copied' : ''}`}
-                onClick={copyToClipboard}
-              >
-                {copied ? '✓ Copied!' : '📋 Copy Prompt'}
-              </button>
-            </div>
-
-            <div className="explanation-nav-row" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px' }}>
-              <button className="percentages-btn percentages-btn-secondary" onClick={() => setActiveSection(3)}>
-                ⬅️ Back
-              </button>
-              <button
-                className="percentages-btn"
-                onClick={() => setActiveSection(5)}
-                disabled={!isExplanationFinished}
-              >
-                Next: Quick Quiz ➡️
-              </button>
-            </div>
-          </div>
+        {/* ── SECTION D: PERCENT STORY ── */}
+        {activeSection === 4 && isExplanationFinished && (
+          <PercentStory
+            onAdvance={() => setStoryFinished(true)}
+            onBack={() => setActiveSection(3)}
+            onContinue={() => {
+              setStoryFinished(true);
+              setActiveSection(5);
+            }}
+          />
         )}
 
-        {/* ── SECTION E: MICRO-QUIZ GATE ── */}
-        {activeSection === 5 && isExplanationFinished && (
+        {activeSection === 5 && isExplanationFinished && storyFinished && (
           <div>
             <div className="explanation-card quiz-gate-card">
               <h2 className="section-title">
@@ -1205,5 +1203,369 @@ function MicroQuiz({ onPass }) {
         </div>
       )}
     </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PERCENT STORY  (Section 4 — animated visual narrative, NOT a quiz)
+//
+// A 4-panel narrative about a jar of 100 candies. Pure tap-through. No drag,
+// no evaluation, no fine motor skill required. Every Next tap advances the
+// visual state with smooth, staggered animation:
+//
+//   Panel 1 — Full jar (100 candies, glow-in)
+//   Panel 2 — 25 candies given away (stagger grey-out + live counter tick 0→25)
+//   Panel 3 — "25 / 100 = 25%" reveal (remaining 75 pulse-glow, big label)
+//   Panel 4 — Tie-back to the lesson (single row, full-grid bounce, caption slide-in)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/* Legacy candy-tapping story retained for diff safety.
+function PercentStory({ onAdvance, onBack, onContinue }) {
+  const STORY_BEATS = 5;
+  const [currentBeat, setCurrentBeat] = useState(0);
+  const [givenAway, setGivenAway] = useState([]);
+  const [guess, setGuess] = useState(null);
+  const isSelectionBeat = currentBeat === 1;
+  const isGuessBeat = currentBeat === 2;
+  const isLastBeat = currentBeat === STORY_BEATS - 1;
+  const hasGivenAway25 = givenAway.length === 25;
+  const fadedCandies = givenAway;
+
+  const beats = [
+    { title: 'Meet Percy, keeper of the candy jar', expression: 'neutral', eyebrow: 'Comic 1 of 5' },
+    { title: 'You choose the part', expression: hasGivenAway25 ? 'excited' : 'thinking', eyebrow: 'Comic 2 of 5' },
+    { title: 'Make your best guess', expression: 'thinking', eyebrow: 'Comic 3 of 5' },
+    { title: 'Here is the percent connection', expression: 'excited', eyebrow: 'Comic 4 of 5' },
+    { title: 'Previously on: Percy’s candy jar', expression: 'neutral', eyebrow: 'Comic 5 of 5' },
+  ][currentBeat];
+
+  const toggleCandy = (index) => {
+    if (!isSelectionBeat) return;
+    setGivenAway((selected) => {
+      if (selected.includes(index)) return selected.filter((candy) => candy !== index);
+      return selected.length < 25 ? [...selected, index] : selected;
+    });
+  };
+
+  const nextBeat = () => {
+    if (isLastBeat) {
+      onAdvance();
+      onContinue();
+      return;
+    }
+    setCurrentBeat((beat) => beat + 1);
+  };
+
+  const nextDisabled = (isSelectionBeat && !hasGivenAway25) || (isGuessBeat && guess === null);
+  const guessFeedback = guess === 25
+    ? 'Nice prediction! You spotted the “out of 100” clue.'
+    : 'Good thinking — now let’s translate the fraction together.';
+
+  return (
+    <section className={`explanation-card percent-story-card story-beat-${currentBeat}`}>
+      <div className="percent-story-header">
+        <span className="percent-story-eyebrow">{beats.eyebrow}</span>
+        <h2 className="section-title">{beats.title}</h2>
+      </div>
+
+      <div className="percent-story-progress" aria-label={`Story beat ${currentBeat + 1} of ${STORY_BEATS}`}>
+        {Array.from({ length: STORY_BEATS }, (_, index) => <span key={index} className={index <= currentBeat ? 'is-current' : ''} />)}
+      </div>
+
+      <div className="percent-story-stage">
+        {currentBeat === 0 && (
+          <div className="percent-story-comic-strip">
+            <ComicPanel expression="neutral" line="Hi! I’m Percy. My jar is completely full." />
+            <ComicPanel expression="excited" line="Count the whole with me: there are 100 candies in this jar!" />
+          </div>
+        )}
+
+        {currentBeat === 1 && (
+          <div className="percent-story-comic-strip">
+            <ComicPanel expression="thinking" line="A friend needs 25 candies. Tap 25 candies to give them away." />
+            <ComicPanel expression={hasGivenAway25 ? 'excited' : 'neutral'} line={hasGivenAway25 ? 'Exactly 25! Those are the part of the whole.' : `${givenAway.length} selected — keep going until you reach 25.`} />
+          </div>
+        )}
+
+        {currentBeat === 2 && (
+          <div className="percent-story-comic-strip">
+            <ComicPanel expression="thinking" line="We gave away 25 out of 100. What percent do you think that is?" />
+            <div className="percent-story-guess" role="group" aria-label="Choose a percent guess">
+              {[20, 25, 75].map((option) => (
+                <button key={option} type="button" className={`percent-story-guess-option${guess === option ? ' is-selected' : ''}`} onClick={() => setGuess(option)}>{option}%</button>
+              ))}
+            </div>
+            {guess !== null && <ComicPanel expression={guess === 25 ? 'excited' : 'neutral'} line={guessFeedback} />}
+          </div>
+        )}
+
+        {currentBeat === 3 && (
+          <div className="percent-story-comic-strip">
+            <ComicPanel expression="excited" line="Percent literally means “per hundred.” Our whole is already 100!" />
+            <div className="percent-story-formula" aria-label="25 out of 100 equals 25 percent"><strong>25</strong><span>out of 100</span><b>=</b><strong>25%</strong></div>
+            <ComicPanel expression="neutral" line="So 25 candies is 25% of the jar. The part becomes the percent." />
+          </div>
+        )}
+
+        {currentBeat === 4 && (
+          <div className="percent-story-recap" aria-label="Recap of the candy jar story">
+            <ComicPanel expression="neutral" mini line="Whole: 100 candies." />
+            <ComicPanel expression="thinking" mini line="Part: 25 given away." />
+            <ComicPanel expression="excited" mini line="25 ÷ 100 = 25%." />
+          </div>
+        )}
+
+        <div className="percent-story-counter" aria-live="polite">
+          {currentBeat === 0 && <><strong>100</strong><span>candies = the whole</span></>}
+          {currentBeat === 1 && <><strong>{givenAway.length} / 25</strong><span>candies given away</span></>}
+          {currentBeat >= 2 && <><strong>25 / 100 = 25%</strong><span>part out of whole = percent</span></>}
+        </div>
+
+        <div className={`percent-story-jar${isSelectionBeat ? ' is-interactive' : ''}`} aria-label="A jar containing 100 candies">
+          <div className="percent-story-grid">
+            {Array.from({ length: 100 }, (_, index) => {
+              const isFaded = fadedCandies.includes(index);
+              return isSelectionBeat ? (
+                <button key={index} type="button" aria-label={`${isFaded ? 'Return' : 'Give away'} candy ${index + 1}`} aria-pressed={isFaded} onClick={() => toggleCandy(index)} className={`percent-story-candy${isFaded ? ' is-faded' : ''}`} />
+              ) : <span key={index} aria-hidden="true" className={`percent-story-candy${isFaded ? ' is-faded' : ''}${currentBeat >= 3 && !isFaded ? ' is-glowing' : ''}`} />;
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div className="explanation-nav-row percent-story-nav">
+        <button className="percentages-btn percentages-btn-secondary" onClick={onBack}>← Back</button>
+        <button className="percentages-btn" onClick={nextBeat} disabled={nextDisabled}>
+          {isLastBeat ? 'Next: Quick Quiz →' : 'Next comic →'}
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function ComicPanel({ expression, line, mini = false }) {
+  return (
+    <article className={`percent-story-comic-panel${mini ? ' is-mini' : ''}`}>
+      <PercyAvatar expression={expression} />
+      <p className="percent-story-speech">{line}</p>
+    </article>
+  );
+}
+
+function PercyAvatar({ expression }) {
+  const eyes = expression === 'excited' ? '★ ★' : expression === 'thinking' ? '• ◔' : '• •';
+  const mouth = expression === 'excited' ? '⌣' : expression === 'thinking' ? '⌒' : '﹀';
+  return <span className={`percent-story-avatar is-${expression}`} role="img" aria-label={`Percy looks ${expression}`}><span className="avatar-lid">⌒</span><span className="avatar-face"><i>{eyes}</i><b>{mouth}</b></span><span className="avatar-candy">●</span></span>;
+}
+*/
+
+const SCENARIOS = [
+  { theme: 'Candy Jar', icon: '🍬', whole: 100, part: 25, unit: 'candies', gridColumns: 10, intro: 'I filled this jar with 100 candies. That whole jar is our total.', taken: 'Then I gave away 25 candies. Watch those 25 fade out.', guess: 'What percent of the jar did I give away?', formula: 'Percentage means “out of 100.” We gave away 25 out of 100: 25 ÷ 100 × 100 = 25%.', recap: 'So 25 candies out of 100 candies is 25%. You’ve got it!', guesses: [20, 25, 75] },
+  { theme: 'Pizza Party', icon: '🍕', whole: 8, part: 2, unit: 'slices', gridColumns: 8, intro: 'This pizza was cut into 8 equal slices. All 8 slices make the whole pizza.', taken: 'Two slices were eaten. Let’s take away those 2 slices.', guess: 'What percent of the pizza was eaten?', formula: 'We ate 2 out of 8 slices. 2 ÷ 8 × 100 = 25%.', recap: 'Two of eight equal slices is 25% of the pizza.', guesses: [20, 25, 50] },
+  { theme: 'Classroom Helpers', icon: '🧑‍🎓', whole: 20, part: 5, unit: 'students', gridColumns: 5, intro: 'There are 20 students in this class. That is the whole group.', taken: 'Five students volunteered to help. Let’s highlight those 5.', guess: 'What percent of the class volunteered?', formula: 'That is 5 out of 20 students. 5 ÷ 20 × 100 = 25%.', recap: 'Five out of twenty students is 25% of the class.', guesses: [20, 25, 50] },
+  { theme: 'Piggy Bank', icon: '🪙', whole: 40, part: 10, unit: 'coins', gridColumns: 8, intro: 'This piggy bank has 40 coins in it. That is the whole amount.', taken: '10 coins are spent on a notebook. Let’s move those 10 away.', guess: 'What percent of the coins were spent?', formula: 'We spent 10 out of 40 coins. 10 ÷ 40 × 100 = 25%.', recap: 'Ten out of forty coins is 25% spent.', guesses: [20, 25, 40] },
+  { theme: 'Football Match', icon: '⚽', whole: 90, part: 45, unit: 'minutes', gridColumns: 10, intro: 'A football match lasts 90 minutes. That is the whole match.', taken: 'The first 45 minutes have been played. Let’s mark that time as complete.', guess: 'What percent of the match is finished?', formula: 'That is 45 out of 90 minutes. 45 ÷ 90 × 100 = 50%.', recap: 'When 45 of 90 minutes are complete, the match is 50% finished—halfway!', guesses: [25, 50, 75] },
+];
+
+function PercentStory({ onAdvance, onBack, onContinue }) {
+  const scenario = useState(() => SCENARIOS[Math.floor(Math.random() * SCENARIOS.length)])[0];
+  const [currentBeat, setCurrentBeat] = useState(0);
+  const [guess, setGuess] = useState(null);
+  const [revealState, setRevealState] = useState('idle');
+  const percent = (scenario.part / scenario.whole) * 100;
+  const isLastBeat = currentBeat === 4;
+  const isRevealBeat = currentBeat === 1;
+  const isGuessBeat = currentBeat === 2;
+
+  useEffect(() => {
+    if (!isRevealBeat) {
+      setRevealState('idle');
+      return undefined;
+    }
+    setRevealState('animating');
+    const revealTimer = window.setTimeout(() => setRevealState('complete'), 1500);
+    return () => window.clearTimeout(revealTimer);
+  }, [isRevealBeat]);
+
+  const nextBeat = () => {
+    if (isLastBeat) {
+      onAdvance();
+      onContinue();
+      return;
+    }
+    setCurrentBeat((beat) => beat + 1);
+  };
+
+  const guessFeedback = guess === percent
+    ? 'Nice prediction! You found the correct percent.'
+    : 'Good thinking—now let’s translate the part and whole together.';
+  const panelCopy = [
+    scenario.intro,
+    revealState === 'complete' ? 'Done! ' + scenario.part + ' ' + scenario.unit + ' are the part of the whole.' : scenario.taken,
+    guess !== null ? guessFeedback : scenario.guess,
+    scenario.formula,
+    scenario.recap,
+  ][currentBeat];
+  const expression = currentBeat === 2 ? 'thinking' : currentBeat >= 3 || revealState === 'complete' ? 'excited' : 'neutral';
+  const actionLabel = isLastBeat ? 'Next: Quick Quiz →' : isRevealBeat ? 'Got it' : 'Next comic →';
+  const nextDisabled = (isRevealBeat && revealState !== 'complete') || (isGuessBeat && guess === null);
+
+  return (
+    <section className={'explanation-card percent-story-card story-beat-' + currentBeat} data-scenario={scenario.theme}>
+      <div className="percent-story-header">
+        <span className="percent-story-eyebrow">Percent story · {scenario.theme}</span>
+        <h2 className="section-title">{currentBeat === 0 ? 'Explore the ' + scenario.theme : 'Comic ' + (currentBeat + 1) + ' of 5'}</h2>
+      </div>
+      <div className="percent-story-progress" aria-label={'Story beat ' + (currentBeat + 1) + ' of 5'}>
+        {Array.from({ length: 5 }, (_, index) => <span key={index} className={index <= currentBeat ? 'is-current' : ''} />)}
+      </div>
+      <div className="percent-story-stage">
+        {/* STATIC PREVIEW FOR USER APPROVAL - WILL BE REMOVED AFTER APPROVAL */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '20px',
+          padding: '16px',
+          marginBottom: '20px',
+          border: '2px dashed var(--clr-accent)',
+          borderRadius: '16px',
+          backgroundColor: 'var(--clr-card)',
+          width: '100%',
+          maxWidth: '560px'
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <Percy expression="neutral" />
+            <div style={{ fontSize: '0.85rem', fontWeight: 'bold', marginTop: '6px', color: 'var(--clr-text)' }}>Neutral / Explaining</div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <Percy expression="excited" />
+            <div style={{ fontSize: '0.85rem', fontWeight: 'bold', marginTop: '6px', color: 'var(--clr-text)' }}>Happy / Excited</div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <Percy expression="thinking" />
+            <div style={{ fontSize: '0.85rem', fontWeight: 'bold', marginTop: '6px', color: 'var(--clr-text)' }}>Thinking</div>
+          </div>
+        </div>
+
+        <article className="percent-story-comic-panel">
+          <Percy expression={expression} />
+          <p className="percent-story-speech">{panelCopy}</p>
+        </article>
+        {isGuessBeat && <div className="percent-story-guess" role="group" aria-label="Choose a percent guess">{scenario.guesses.map((option) => <button key={option} type="button" className={'percent-story-guess-option' + (guess === option ? ' is-selected' : '')} onClick={() => setGuess(option)}>{option}%</button>)}</div>}
+        {currentBeat === 3 && <div className="percent-story-formula" aria-label={scenario.part + ' out of ' + scenario.whole + ' equals ' + percent + ' percent'}><strong>{scenario.part}</strong><span>out of {scenario.whole}</span><b>=</b><strong>{percent}%</strong></div>}
+        {currentBeat === 4 && <div className="percent-story-recap" aria-label={'Recap of the ' + scenario.theme + ' story'}><span>Whole: {scenario.whole} {scenario.unit}</span><span>Part: {scenario.part} {scenario.theme === 'Football Match' ? 'completed' : 'taken'}</span><strong>{scenario.part} ÷ {scenario.whole} = {percent}%</strong></div>}
+        <div className="percent-story-counter" aria-live="polite">
+          {currentBeat === 0 && <><strong>{scenario.whole}</strong><span>{scenario.unit} = the whole</span></>}
+          {isRevealBeat && <><strong>{revealState === 'complete' ? scenario.part : 0} / {scenario.part}</strong><span>{revealState === 'complete' ? scenario.unit + ' revealed' : 'revealing the part...'}</span></>}
+          {currentBeat >= 2 && <><strong>{scenario.part} / {scenario.whole} = {percent}%</strong><span>part out of whole = percent</span></>}
+        </div>
+        <div className="percent-story-jar" aria-label={scenario.whole + ' ' + scenario.unit + ' in the ' + scenario.theme + ' story'}>
+          <div className="percent-story-grid" style={{ '--grid-columns': scenario.gridColumns }}>
+            {Array.from({ length: scenario.whole }, (_, index) => {
+              const isFaded = isRevealBeat && index < scenario.part && revealState !== 'idle';
+              return <span key={index} aria-hidden="true" className={'percent-story-item' + (isFaded ? ' is-faded' : '')} style={isFaded ? { '--item-delay': (index / scenario.part * 1100) + 'ms' } : undefined}>{scenario.icon}</span>;
+            })}
+          </div>
+        </div>
+      </div>
+      <div className="explanation-nav-row percent-story-nav">
+        <button className="percentages-btn percentages-btn-secondary" onClick={onBack}>← Back</button>
+        <button className="percentages-btn" onClick={nextBeat} disabled={nextDisabled}>{actionLabel}</button>
+      </div>
+    </section>
+  );
+}
+
+function Percy({ expression }) {
+  return (
+    <svg
+      className={'percent-story-avatar is-' + expression}
+      viewBox="0 0 100 92"
+      overflow="visible"
+      role="img"
+      aria-label={'Percy looks ' + expression}
+    >
+      {/* Outer Hood (behind head/body) */}
+      <circle cx="40" cy="36" r="24" fill="#FFD000" />
+
+      {/* Inner Hood lining (depth shadow) */}
+      <circle cx="40" cy="36" r="21" fill="#2D3748" />
+
+      {/* Hoodie Body (shoulders and torso) */}
+      <path
+        d="M 12 92 V 76 C 12 64, 22 60, 40 60 C 58 60, 68 64, 68 76 V 92 Z"
+        fill="#FFD000"
+      />
+
+      {/* Hoodie collar drawstrings */}
+      <path d="M 36 63 L 36 73" fill="none" stroke="#2D3748" strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="36" cy="74.5" r="1.5" fill="#2D3748" />
+      <path d="M 44 63 L 44 75" fill="none" stroke="#2D3748" strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="44" cy="76.5" r="1.5" fill="#2D3748" />
+
+      {/* Face/Skin (peach) */}
+      <circle cx="40" cy="42" r="19" fill="#FFD5B4" />
+
+      {/* Rosy Cheek Circles */}
+      <circle cx="28" cy="47" r="3" fill="#FF8A8A" fillOpacity="0.4" />
+      <circle cx="52" cy="47" r="3" fill="#FF8A8A" fillOpacity="0.4" />
+
+      {/* Hair: Short tousled dark hair */}
+      <path
+        d="M 19 38 C 17 22, 28 14, 34 20 C 38 12, 48 12, 51 20 C 58 16, 63 24, 61 38 C 57 34, 51 34, 48 38 C 44 32, 36 32, 33 39 C 28 34, 23 34, 19 38 Z"
+        fill="#2D3748"
+      />
+
+      {/* ── NEUTRAL: relaxed open-palm gesture at chest/waist height ── */}
+      {expression === 'neutral' && (
+        <>
+          <circle cx="31" cy="43" r="2.2" fill="#2D3748" />
+          <circle cx="49" cy="43" r="2.2" fill="#2D3748" />
+          <path d="M 27 37 Q 31 35 35 37" fill="none" stroke="#2D3748" strokeWidth="2" strokeLinecap="round" />
+          <path d="M 45 37 Q 49 35 53 37" fill="none" stroke="#2D3748" strokeWidth="2" strokeLinecap="round" />
+          <path d="M 35 50 Q 40 53 45 50" fill="none" stroke="#2D3748" strokeWidth="2.2" strokeLinecap="round" />
+          {/* Arm: bent elbow — upper arm drops from shoulder, forearm turns right at mid-chest */}
+          <path d="M 60 74 Q 62 80 65 76 Q 70 70 76 72" fill="none" stroke="#FFD000" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Cuff */}
+          <path d="M 73 69 L 77 74" fill="none" stroke="#2D3748" strokeWidth="1.5" strokeLinecap="round" />
+          {/* Open palm — rounded mitten, palm facing viewer */}
+          <ellipse cx="80" cy="73" rx="5" ry="4" fill="#FFD5B4" />
+          <path d="M 79 70 Q 82 68 84 71" fill="none" stroke="#FFD5B4" strokeWidth="2" strokeLinecap="round" />
+        </>
+      )}
+
+      {/* ── EXCITED: arm raised high, bent, cheering fist ── */}
+      {expression === 'excited' && (
+        <>
+          <path d="M 28 44 Q 31.5 40.5 35 44" fill="none" stroke="#2D3748" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M 45 44 Q 48.5 40.5 52 44" fill="none" stroke="#2D3748" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M 27 35 Q 31.5 31.5 36 35" fill="none" stroke="#2D3748" strokeWidth="2" strokeLinecap="round" />
+          <path d="M 44 35 Q 48.5 31.5 53 35" fill="none" stroke="#2D3748" strokeWidth="2" strokeLinecap="round" />
+          <path d="M 33 49 C 33 58, 47 58, 47 49 Z" fill="#2D3748" />
+          {/* Arm: shoots up from shoulder, bends at elbow near head */}
+          <path d="M 58 78 Q 66 66 66 52" fill="none" stroke="#FFD000" strokeWidth="8" strokeLinecap="round" />
+          <path d="M 62 54 L 67 52" fill="none" stroke="#2D3748" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="66" cy="47" r="5.5" fill="#FFD5B4" />
+          <path d="M 63 47 Q 60 47 62 50" fill="none" stroke="#FFD5B4" strokeWidth="2.2" strokeLinecap="round" />
+        </>
+      )}
+
+      {/* ── THINKING: hand up to chin, asymmetric face ── */}
+      {expression === 'thinking' && (
+        <>
+          <circle cx="31" cy="43" r="2.2" fill="#2D3748" />
+          <path d="M 45 44 Q 48.5 41.5 52 44" fill="none" stroke="#2D3748" strokeWidth="2.2" strokeLinecap="round" />
+          <path d="M 27 38 Q 31 39 35 38" fill="none" stroke="#2D3748" strokeWidth="2" strokeLinecap="round" />
+          <path d="M 44 32 Q 48.5 29 53 32" fill="none" stroke="#2D3748" strokeWidth="2" strokeLinecap="round" />
+          <path d="M 35 51 Q 37.5 49 40 51 Q 42.5 53 45 51" fill="none" stroke="#2D3748" strokeWidth="2.2" strokeLinecap="round" />
+          {/* Arm: bends inward, hand touches chin */}
+          <path d="M 58 78 Q 52 72 45 62" fill="none" stroke="#FFD000" strokeWidth="8" strokeLinecap="round" />
+          <path d="M 43 64 L 48 61" fill="none" stroke="#2D3748" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="43" cy="57" r="4.5" fill="#FFD5B4" />
+          <path d="M 42 57 Q 39 53 43 53" fill="none" stroke="#FFD5B4" strokeWidth="2.2" strokeLinecap="round" />
+        </>
+      )}
+    </svg>
   );
 }
