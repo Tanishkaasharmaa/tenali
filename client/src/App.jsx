@@ -43221,6 +43221,8 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
 
   const [answerInputs, setAnswerInputs] = useState([])
   const [carryInputs, setCarryInputs] = useState([])
+  const [correctAnswerDigits, setCorrectAnswerDigits] = useState(null)
+  const [correctCarryDigits, setCorrectCarryDigits] = useState(null)
   const answerRefs = useRef([])
   const carryRefs = useRef([])
   const advanceTimerRef = useRef(null)
@@ -43229,9 +43231,10 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
 
   const startQuiz = async () => {
     const q = Number(numQuestions) || DEFAULT_TOTAL
-    setTotalQ(q); setScore(0); setQuestionNumber(0); setResults([])
+    setTotalQ(q); setScore(0); setQuestionNumber(1); setResults([])
     setFinished(false); setStarted(true); setFeedback(''); setIsCorrect(null); setRevealed(false)
-    timer.start()
+    setCorrectAnswerDigits(null); setCorrectCarryDigits(null)
+    timer.reset(); timer.start()
     await fetchQuestion()
   }
 
@@ -43243,6 +43246,7 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
       setQuestion(data)
       setAnswerInputs(new Array(data.answerDigits.length).fill(''))
       setCarryInputs(new Array(data.carries.length).fill(''))
+      setCorrectAnswerDigits(null); setCorrectCarryDigits(null)
       setTimeout(() => { if (answerRefs.current[data.answerDigits.length - 1]) answerRefs.current[data.answerDigits.length - 1].focus() }, 100)
     } catch (e) { console.error('Fetch column addition question failed:', e) }
     setLoading(false)
@@ -43271,7 +43275,6 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
   const focusCarry = (i) => { if (carryRefs.current[i]) carryRefs.current[i].focus() }
 
   const handleKeyDown = (idx, e, isCarry) => {
-    if (e.key === 'Enter') { e.preventDefault(); handleSubmit(); return }
 
     if (e.key === 'Backspace') {
       if (e.currentTarget.value) return
@@ -43340,13 +43343,10 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
         body: JSON.stringify({ a: question.a, b: question.b, userAnswer, userCarries, sessionGoal })
       })
       const data = await r.json()
+      setCorrectAnswerDigits(data.answerDigits)
+      setCorrectCarryDigits(data.correctCarries)
       setIsCorrect(data.correct); setRevealed(true)
-      if (!data.correct) {
-        setAnswerInputs(data.answerDigits ? data.answerDigits.map(String) : answerInputs)
-        setCarryInputs(data.correctCarries ? data.correctCarries.map(String) : carryInputs)
-      }
 
-      // Always fetch the step-by-step explanation after submission
       let explanation = ''
       try {
         const sr = await fetch(`${API}/column-addition-api/check`, {
@@ -43361,9 +43361,7 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
       const resultLine = data.correct ? '✓ Correct!' : `✗ ${data.message || 'Incorrect'}`
       setFeedback(explanation ? `${resultLine}\n\n— Step-by-step solution —\n${explanation}` : resultLine)
       setResults(prev => [...prev, { question: `${question.a} + ${question.b}`, userAnswer: Number(userAnswer.filter(v => v !== null).join('')) || '', correct: data.correct, correctAnswer: data.correctAnswer, time: timer.elapsed }])
-      if (data.correct) {
-        setScore(s => s + 1)
-      }
+      if (data.correct) setScore(s => s + 1)
     } catch (e) { console.error('Check failed:', e); setFeedback('Error checking answer') }
   }
 
@@ -43377,6 +43375,8 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
         body: JSON.stringify({ a: question.a, b: question.b, userAnswer: [], userCarries: [], solve: true })
       })
       const data = await r.json()
+      setCorrectAnswerDigits(data.answerDigits)
+      setCorrectCarryDigits(data.correctCarries)
       setIsCorrect(false); setRevealed(true)
       setAnswerInputs(data.answerDigits ? data.answerDigits.map(String) : question.answerDigits.map(String))
       setCarryInputs(data.correctCarries ? data.correctCarries.map(String) : question.carries.map(String))
@@ -43384,6 +43384,8 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
       setResults(prev => [...prev, { question: `${question.a} + ${question.b}`, userAnswer: data.correctAnswer, correct: false, correctAnswer: data.correctAnswer, time: timer.elapsed }])
     } catch (e) {
       console.error('Solve failed:', e)
+      setCorrectAnswerDigits(question.answerDigits)
+      setCorrectCarryDigits(question.carries)
       setRevealed(true); setIsCorrect(false)
       setAnswerInputs(question.answerDigits.map(String))
       setCarryInputs(question.carries.map(String))
@@ -43395,13 +43397,10 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
   const advanceQuestion = () => {
     if (advanceTimerRef.current) { clearTimeout(advanceTimerRef.current); advanceTimerRef.current = null }
     setRevealed(false); setIsCorrect(null); setFeedback(''); setAnswerInputs([]); setCarryInputs([])
-    if (questionNumber + 1 >= totalQ) { setFinished(true); timer.stop() }
-    else { setQuestionNumber(qn => qn + 1); fetchQuestion() }
+    setCorrectAnswerDigits(null); setCorrectCarryDigits(null)
+    if (questionNumber >= totalQ) { setFinished(true); timer.stop() }
+    else { setQuestionNumber(qn => qn + 1); timer.reset(); timer.start(); fetchQuestion() }
   }
-
-  useEffect(() => {
-    if (questionNumber === 0 && started && !question) { setQuestionNumber(1); fetchQuestion() }
-  }, [started])
 
   const diffLabels = { easy: 'Easy — 1 digit', medium: 'Medium — 2 digits', hard: 'Hard — 3 digits', extrahard: 'Extra Hard — 4 digits' }
 
@@ -43447,11 +43446,13 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
                 <span style={{ width: '44px' }} />
                 {question.carries.map((c, i) => {
                   if (i === question.carries.length - 1) return <span key={i} style={{ width: '40px' }} />
-                  const isRight = revealed && carryInputs[i] === String(c) && carryInputs[i] !== ''
-                  const isWrong = revealed && carryInputs[i] !== String(c)
+                  const correct = revealed && correctCarryDigits ? String(correctCarryDigits[i]) : '';
+                  const isRight = revealed && correct !== '' && String(carryInputs[i] || '') === correct;
+                  const isWrong = revealed && correct !== '' && !isRight;
+                  const shown = revealed ? correct : carryInputs[i] || '';
                   return (
                     <input key={i} ref={el => carryRefs.current[i] = el} type="text" maxLength={1}
-                      value={revealed ? String(c) : carryInputs[i] || ''}
+                      value={shown}
                       onChange={e => handleInput(i, e.target.value, true)}
                       onKeyDown={e => handleKeyDown(i, e, true)}
                       disabled={revealed}
@@ -43483,11 +43484,13 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
               <div style={{ display: 'flex', gap: '4px', marginTop: '8px' }}>
                 <span style={{ width: '44px' }} />
                 {question.answerDigits.map((d, i) => {
-                  const isRight = revealed && answerInputs[i] === String(d) && answerInputs[i] !== ''
-                  const isWrong = revealed && answerInputs[i] !== String(d)
+                  const correctDigit = revealed && correctAnswerDigits ? String(correctAnswerDigits[i]) : '';
+                  const isRight = revealed && correctDigit !== '' && String(answerInputs[i] || '') === correctDigit;
+                  const isWrong = revealed && correctDigit !== '' && !isRight;
+                  const shown = revealed ? correctDigit : answerInputs[i] || '';
                   return (
                     <input key={i} ref={el => answerRefs.current[i] = el} type="text" maxLength={1}
-                      value={revealed ? String(d) : answerInputs[i] || ''}
+                      value={shown}
                       onChange={e => handleInput(i, e.target.value, false)}
                       onKeyDown={e => handleKeyDown(i, e, false)}
                       disabled={revealed}
@@ -43554,6 +43557,8 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
 
   const [answerInputs, setAnswerInputs] = useState([])
   const [carryInputs, setCarryInputs] = useState([])
+  const [correctAnswerDigits, setCorrectAnswerDigits] = useState(null)
+  const [correctCarryDigits, setCorrectCarryDigits] = useState(null)
   const answerRefs = useRef([])
   const carryRefs = useRef([])
   const advanceTimerRef = useRef(null)
@@ -43562,9 +43567,10 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
 
   const startQuiz = async () => {
     const q = Number(numQuestions) || DEFAULT_TOTAL
-    setTotalQ(q); setScore(0); setQuestionNumber(0); setResults([])
+    setTotalQ(q); setScore(0); setQuestionNumber(1); setResults([])
     setFinished(false); setStarted(true); setFeedback(''); setIsCorrect(null); setRevealed(false)
-    timer.start()
+    setCorrectAnswerDigits(null); setCorrectCarryDigits(null)
+    timer.reset(); timer.start()
     await fetchQuestion()
   }
 
@@ -43576,6 +43582,7 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
       setQuestion(data)
       setAnswerInputs(new Array(data.answerDigits.length).fill(''))
       setCarryInputs(new Array(data.carries.length).fill(''))
+      setCorrectAnswerDigits(null); setCorrectCarryDigits(null)
       setTimeout(() => {
         const lastIdx = data.answerDigits.length - 1
         if (answerRefs.current[lastIdx]) answerRefs.current[lastIdx].focus()
@@ -43586,7 +43593,7 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
 
   const handleInput = (idx, val, isCarry) => {
     if (revealed) return
-    if (val !== '' && !/^\d$/.test(val)) return
+    if (val !== '' && !/^\d{1,2}$/.test(val)) return
     const setter = isCarry ? setCarryInputs : setAnswerInputs
     const arr = isCarry ? carryInputs : answerInputs
     const next = [...arr]; next[idx] = val; setter(next)
@@ -43603,7 +43610,6 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
   const focusCarry = (i) => { if (carryRefs.current[i]) carryRefs.current[i].focus() }
 
   const handleKeyDown = (idx, e, isCarry) => {
-    if (e.key === 'Enter') { e.preventDefault(); handleSubmit(); return }
 
     if (e.key === 'Backspace') {
       if (e.currentTarget.value) return
@@ -43618,14 +43624,14 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
 
     if (e.key === 'ArrowUp') {
       e.preventDefault()
-      if (!isCarry && idx < carryInputs.length - 1) focusCarry(idx)
+      if (!isCarry && idx < carryInputs.length - 1 && carryRefs.current[idx]) focusCarry(idx)
       else if (isCarry) focusAnswer(idx)
       return
     }
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       if (isCarry) focusAnswer(idx)
-      else if (idx < carryInputs.length - 1) focusCarry(idx)
+      else if (idx < carryInputs.length - 1 && carryRefs.current[idx]) focusCarry(idx)
       return
     }
     if (e.key === 'ArrowLeft') {
@@ -43637,7 +43643,7 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
     if (e.key === 'ArrowRight') {
       e.preventDefault()
       if (!isCarry) { if (idx < answerInputs.length - 1) focusAnswer(idx + 1) }
-      else { if (idx < carryInputs.length - 2) focusCarry(idx + 1); else if (idx === carryInputs.length - 2) focusAnswer(idx + 1) }
+      else { if (idx < answerInputs.length - 1) focusAnswer(idx + 1) }
       return
     }
   }
@@ -43646,7 +43652,7 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
     if (revealed || loading || !question) return
     timer.stop()
     const userAnswer = answerInputs.map(v => v === '' ? null : Number(v))
-    const userCarries = carryInputs.map(v => v === '' ? 0 : Number(v))
+    const userCarries = carryInputs.map(v => v === '' ? '' : v)
     try {
       const r = await fetch(`${API}/column-multiplication-api/check`, {
         method: 'POST',
@@ -43654,11 +43660,9 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
         body: JSON.stringify({ a: question.a, b: question.b, userAnswer, userCarries, sessionGoal })
       })
       const data = await r.json()
+      setCorrectAnswerDigits(data.answerDigits)
+      setCorrectCarryDigits(data.correctCarries)
       setIsCorrect(data.correct); setRevealed(true)
-      if (!data.correct) {
-        setAnswerInputs(data.answerDigits ? data.answerDigits.map(String) : answerInputs)
-        setCarryInputs(data.correctCarries ? data.correctCarries.map(String) : carryInputs)
-      }
       let explanation = ''
       try {
         const sr = await fetch(`${API}/column-multiplication-api/check`, {
@@ -43686,6 +43690,8 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
         body: JSON.stringify({ a: question.a, b: question.b, userAnswer: [], userCarries: [], solve: true })
       })
       const data = await r.json()
+      setCorrectAnswerDigits(data.answerDigits)
+      setCorrectCarryDigits(data.correctCarries)
       setIsCorrect(false); setRevealed(true)
       setAnswerInputs(data.answerDigits ? data.answerDigits.map(String) : question.answerDigits.map(String))
       setCarryInputs(data.correctCarries ? data.correctCarries.map(String) : question.carries.map(String))
@@ -43693,6 +43699,8 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
       setResults(prev => [...prev, { question: `${question.a} × ${question.b}`, userAnswer: data.correctAnswer, correct: false, correctAnswer: data.correctAnswer, time: timer.elapsed }])
     } catch (e) {
       console.error('Solve failed:', e)
+      setCorrectAnswerDigits(question.answerDigits)
+      setCorrectCarryDigits(question.carries)
       setRevealed(true); setIsCorrect(false)
       setAnswerInputs(question.answerDigits.map(String))
       setCarryInputs(question.carries.map(String))
@@ -43704,13 +43712,10 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
   const advanceQuestion = () => {
     if (advanceTimerRef.current) { clearTimeout(advanceTimerRef.current); advanceTimerRef.current = null }
     setRevealed(false); setIsCorrect(null); setFeedback(''); setAnswerInputs([]); setCarryInputs([])
-    if (questionNumber + 1 >= totalQ) { setFinished(true); timer.stop() }
-    else { setQuestionNumber(qn => qn + 1); fetchQuestion() }
+    setCorrectAnswerDigits(null); setCorrectCarryDigits(null)
+    if (questionNumber >= totalQ) { setFinished(true); timer.stop() }
+    else { setQuestionNumber(qn => qn + 1); timer.reset(); timer.start(); fetchQuestion() }
   }
-
-  useEffect(() => {
-    if (questionNumber === 0 && started && !question) { setQuestionNumber(1); fetchQuestion() }
-  }, [started])
 
   const diffLabels = { easy: 'Easy — 1 digit × 1', medium: 'Medium — 1 digit × 2', hard: 'Hard — 1 digit × 3', extrahard: 'Extra Hard — 1 digit × 4' }
 
@@ -43755,11 +43760,13 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
                 <span style={{ width: '44px' }} />
                 {question.carries.map((c, i) => {
                   if (i === question.carries.length - 1) return <span key={i} style={{ width: '40px' }} />
-                  const isRight = revealed && carryInputs[i] === String(c) && carryInputs[i] !== ''
-                  const isWrong = revealed && carryInputs[i] !== String(c)
+                  const correct = revealed && correctCarryDigits ? String(correctCarryDigits[i]) : '';
+                  const isRight = revealed && correct !== '' && String(carryInputs[i] || '') === correct;
+                  const isWrong = revealed && correct !== '' && !isRight;
+                  const shown = revealed ? correct : carryInputs[i] || '';
                   return (
                     <input key={i} ref={el => carryRefs.current[i] = el} type="text" maxLength={1}
-                      value={revealed ? String(c) : carryInputs[i] || ''}
+                      value={shown}
                       onChange={e => handleInput(i, e.target.value, true)}
                       onKeyDown={e => handleKeyDown(i, e, true)}
                       disabled={revealed}
@@ -43791,11 +43798,13 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
               <div style={{ display: 'flex', gap: '4px', marginTop: '8px' }}>
                 <span style={{ width: '44px' }} />
                 {question.answerDigits.map((d, i) => {
-                  const isRight = revealed && answerInputs[i] === String(d) && answerInputs[i] !== ''
-                  const isWrong = revealed && answerInputs[i] !== String(d)
+                  const correctDigit = revealed && correctAnswerDigits ? String(correctAnswerDigits[i]) : '';
+                  const isRight = revealed && correctDigit !== '' && String(answerInputs[i] || '') === correctDigit;
+                  const isWrong = revealed && correctDigit !== '' && !isRight;
+                  const shown = revealed ? correctDigit : answerInputs[i] || '';
                   return (
                     <input key={i} ref={el => answerRefs.current[i] = el} type="text" maxLength={1}
-                      value={revealed ? String(d) : answerInputs[i] || ''}
+                      value={shown}
                       onChange={e => handleInput(i, e.target.value, false)}
                       onKeyDown={e => handleKeyDown(i, e, false)}
                       disabled={revealed}
@@ -43862,6 +43871,9 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
 
   const [answerInputs, setAnswerInputs] = useState([])
   const [borrowInputs, setBorrowInputs] = useState([])
+  const [correctAnswerDigits, setCorrectAnswerDigits] = useState(null)
+  const [correctBorrowDigits, setCorrectBorrowDigits] = useState(null)
+  const [activeBorrows, setActiveBorrows] = useState(new Set())
   const answerRefs = useRef([])
   const borrowRefs = useRef([])
   const advanceTimerRef = useRef(null)
@@ -43870,9 +43882,10 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
 
   const startQuiz = async () => {
     const q = Number(numQuestions) || DEFAULT_TOTAL
-    setTotalQ(q); setScore(0); setQuestionNumber(0); setResults([])
+    setTotalQ(q); setScore(0); setQuestionNumber(1); setResults([])
     setFinished(false); setStarted(true); setFeedback(''); setIsCorrect(null); setRevealed(false)
-    timer.start()
+    setCorrectAnswerDigits(null); setCorrectBorrowDigits(null); setActiveBorrows(new Set())
+    timer.reset(); timer.start();
     await fetchQuestion()
   }
 
@@ -43884,6 +43897,7 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
       setQuestion(data)
       setAnswerInputs(new Array(data.answerDigits.length).fill(''))
       setBorrowInputs(new Array(data.borrows.length).fill(''))
+      setCorrectAnswerDigits(null); setCorrectBorrowDigits(null); setActiveBorrows(new Set())
       setTimeout(() => {
         const lastIdx = data.answerDigits.length - 1
         if (answerRefs.current[lastIdx]) answerRefs.current[lastIdx].focus()
@@ -43892,60 +43906,60 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
     setLoading(false)
   }
 
+  const activateBorrow = (idx, isCurrentlyActive) => {
+    if (isCurrentlyActive) {
+      setActiveBorrows(prev => { const next = new Set(prev); next.delete(idx); return next })
+      setBorrowInputs(prev => { const a = [...prev]; a[idx] = ''; return a })
+    } else {
+      setActiveBorrows(prev => { const next = new Set(prev); next.add(idx); return next })
+      setTimeout(() => { if (borrowRefs.current[idx]) borrowRefs.current[idx].focus() }, 50)
+    }
+  }
+
   const handleInput = (idx, val, isBorrow) => {
     if (revealed) return
-    if (val !== '' && !/^\d$/.test(val)) return
+    if (val !== '' && !(isBorrow ? /^\d{1,2}$/.test(val) : /^\d$/.test(val))) return
     const setter = isBorrow ? setBorrowInputs : setAnswerInputs
     const arr = isBorrow ? borrowInputs : answerInputs
     const next = [...arr]; next[idx] = val; setter(next)
-
-    if (!val) return
-    if (!isBorrow && idx > 0 && borrowRefs.current[idx]) {
-      borrowRefs.current[idx].focus()
-    } else if (isBorrow && answerRefs.current[idx]) {
-      answerRefs.current[idx].focus()
-    }
   }
 
   const focusAnswer = (i) => { if (answerRefs.current[i]) answerRefs.current[i].focus() }
   const focusBorrow = (i) => { if (borrowRefs.current[i]) borrowRefs.current[i].focus() }
 
   const handleKeyDown = (idx, e, isBorrow) => {
-    if (e.key === 'Enter') { e.preventDefault(); handleSubmit(); return }
 
     if (e.key === 'Backspace') {
       if (e.currentTarget.value) return
       e.preventDefault()
-      if (!isBorrow) {
-        if (borrowRefs.current[idx]) borrowRefs.current[idx].focus()
-      } else {
-        if (idx < answerInputs.length - 1 && answerRefs.current[idx + 1]) answerRefs.current[idx + 1].focus()
+      if (isBorrow) {
+        focusAnswer(idx)
+      } else if (idx < answerInputs.length - 1) {
+        focusAnswer(idx + 1)
       }
       return
     }
 
     if (e.key === 'ArrowUp') {
       e.preventDefault()
-      if (!isBorrow && borrowRefs.current[idx]) focusBorrow(idx)
-      else if (isBorrow) focusAnswer(idx)
+      if (!isBorrow && activeBorrows.has(idx) && borrowRefs.current[idx]) focusBorrow(idx)
       return
     }
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       if (isBorrow) focusAnswer(idx)
-      else if (borrowRefs.current[idx]) focusBorrow(idx)
       return
     }
     if (e.key === 'ArrowLeft') {
       e.preventDefault()
       if (!isBorrow) { if (idx > 0) focusAnswer(idx - 1) }
-      else { if (idx > 1) focusBorrow(idx - 1); else if (idx === 1) focusAnswer(1) }
+      else { focusAnswer(idx) }
       return
     }
     if (e.key === 'ArrowRight') {
       e.preventDefault()
       if (!isBorrow) { if (idx < answerInputs.length - 1) focusAnswer(idx + 1) }
-      else { if (idx > 0) focusAnswer(idx) }
+      else { focusAnswer(idx) }
       return
     }
   }
@@ -43954,7 +43968,7 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
     if (revealed || loading || !question) return
     timer.stop()
     const userAnswer = answerInputs.map(v => v === '' ? null : Number(v))
-    const userBorrows = borrowInputs.map(v => v === '' ? 0 : Number(v))
+    const userBorrows = borrowInputs.map(v => v === '' ? '' : v)
     try {
       const r = await fetch(`${API}/column-subtraction-api/check`, {
         method: 'POST',
@@ -43962,11 +43976,13 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
         body: JSON.stringify({ a: question.a, b: question.b, userAnswer, userBorrows, sessionGoal })
       })
       const data = await r.json()
-      setIsCorrect(data.correct); setRevealed(true)
-      if (!data.correct) {
-        setAnswerInputs(data.answerDigits ? data.answerDigits.map(String) : answerInputs)
-        setBorrowInputs(data.correctBorrows ? data.correctBorrows.map(String) : borrowInputs)
+      const allBorrows = new Set(activeBorrows)
+      if (data.correctBorrows && question.aDigits) {
+        data.correctBorrows.forEach((v, i) => { if (question.aDigits[i] != null && String(v) !== String(question.aDigits[i])) allBorrows.add(i) })
       }
+      setCorrectAnswerDigits(data.answerDigits)
+      setCorrectBorrowDigits(data.correctBorrows)
+      setIsCorrect(data.correct); setRevealed(true); setActiveBorrows(allBorrows)
       let explanation = ''
       try {
         const sr = await fetch(`${API}/column-subtraction-api/check`, {
@@ -43987,6 +44003,7 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
   const handleSolve = async () => {
     if (revealed || loading || !question) return
     timer.stop()
+    const allBorrows = new Set()
     try {
       const r = await fetch(`${API}/column-subtraction-api/check`, {
         method: 'POST',
@@ -43994,14 +44011,24 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
         body: JSON.stringify({ a: question.a, b: question.b, userAnswer: [], userBorrows: [], solve: true })
       })
       const data = await r.json()
-      setIsCorrect(false); setRevealed(true)
+      if (data.correctBorrows && question.aDigits) {
+        data.correctBorrows.forEach((v, i) => { if (question.aDigits[i] != null && String(v) !== String(question.aDigits[i])) allBorrows.add(i) })
+      }
+      setCorrectAnswerDigits(data.answerDigits)
+      setCorrectBorrowDigits(data.correctBorrows)
+      setIsCorrect(false); setRevealed(true); setActiveBorrows(allBorrows)
       setAnswerInputs(data.answerDigits ? data.answerDigits.map(String) : question.answerDigits.map(String))
       setBorrowInputs(data.correctBorrows ? data.correctBorrows.map(String) : question.borrows.map(String))
       setFeedback(data.explanation || 'Solved — study the borrows above each column.')
       setResults(prev => [...prev, { question: `${question.a} − ${question.b}`, userAnswer: data.correctAnswer, correct: false, correctAnswer: data.correctAnswer, time: timer.elapsed }])
     } catch (e) {
       console.error('Solve failed:', e)
-      setRevealed(true); setIsCorrect(false)
+      if (question.borrows && question.aDigits) {
+        question.borrows.forEach((v, i) => { if (question.aDigits[i] != null && String(v) !== String(question.aDigits[i])) allBorrows.add(i) })
+      }
+      setCorrectAnswerDigits(question.answerDigits)
+      setCorrectBorrowDigits(question.borrows)
+      setRevealed(true); setIsCorrect(false); setActiveBorrows(allBorrows)
       setAnswerInputs(question.answerDigits.map(String))
       setBorrowInputs(question.borrows.map(String))
       setFeedback('Solved — study the borrows above each column.')
@@ -44011,14 +44038,10 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
 
   const advanceQuestion = () => {
     if (advanceTimerRef.current) { clearTimeout(advanceTimerRef.current); advanceTimerRef.current = null }
-    setRevealed(false); setIsCorrect(null); setFeedback(''); setAnswerInputs([]); setBorrowInputs([])
-    if (questionNumber + 1 >= totalQ) { setFinished(true); timer.stop() }
-    else { setQuestionNumber(qn => qn + 1); fetchQuestion() }
+    setRevealed(false); setIsCorrect(null); setFeedback(''); setCorrectAnswerDigits(null); setCorrectBorrowDigits(null); setActiveBorrows(new Set())
+    if (questionNumber >= totalQ) { setFinished(true); timer.stop() }
+    else { setQuestionNumber(qn => qn + 1); setAnswerInputs([]); setBorrowInputs([]); timer.reset(); timer.start(); fetchQuestion() }
   }
-
-  useEffect(() => {
-    if (questionNumber === 0 && started && !question) { setQuestionNumber(1); fetchQuestion() }
-  }, [started])
 
   const diffLabels = { easy: 'Easy — 2 digit', medium: 'Medium — 2 digit', hard: 'Hard — 3 digit', extrahard: 'Extra Hard — 4 digit' }
 
@@ -44058,29 +44081,49 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
         {loading || !question ? <div className="question-box">Loading question…</div> : (
           <>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '16px 0', fontFamily: '"Courier New", monospace', fontSize: '1.8rem', fontWeight: 700 }}>
-              {/* Borrow row */}
+              {/* Borrow row: only visible for activated columns */}
               <div style={{ display: 'flex', gap: '4px', marginBottom: '4px' }}>
                 <span style={{ width: '44px' }} />
-                <span style={{ width: '40px' }} />
                 {question.borrows.map((_, i) => {
-                  if (i === 0) return null
+                  if (!activeBorrows.has(i) && !revealed) {
+                    return <span key={i} style={{ width: '40px', height: '36px' }} />
+                  }
+                  const correct = revealed && correctBorrowDigits ? String(correctBorrowDigits[i]) : '';
+                  const isOptional = question.aDigits && question.aDigits[i] != null && correct === String(question.aDigits[i]);
+                  const isRight = revealed && correct !== '' && (String(borrowInputs[i] || '') === correct || (isOptional && (!borrowInputs[i] || borrowInputs[i] === '')));
+                  const isWrong = revealed && correct !== '' && !isRight;
+                  const shown = revealed ? (isOptional && (!borrowInputs[i] || borrowInputs[i] === '') ? '' : correct) : (borrowInputs[i] || '');
                   return (
-                    <input key={i} ref={el => borrowRefs.current[i] = el} type="text" maxLength={1}
-                      value={revealed ? String(question.borrows[i] || 0) : borrowInputs[i] || ''}
+                    <input key={i} ref={el => borrowRefs.current[i] = el} type="text" maxLength={2}
+                      value={shown}
                       onChange={e => handleInput(i, e.target.value, true)}
                       onKeyDown={e => handleKeyDown(i, e, true)}
                       disabled={revealed}
-                      style={{ width: '40px', height: '36px', textAlign: 'center', fontSize: '1rem', fontWeight: 700, background: revealed ? (question.borrows[i] ? '#1a472a' : '#3a2f28') : '#3a2f28', border: `2px solid ${revealed && question.borrows[i] ? '#2ecc71' : '#5B5048'}`, borderRadius: '8px', color: revealed && question.borrows[i] ? '#2ecc71' : '#F4F1ED', fontFamily: '"Courier New", monospace', outline: 'none' }}
+                      style={{ width: '40px', height: '36px', textAlign: 'center', fontSize: '1rem', fontWeight: 700, background: revealed ? (isRight ? '#1a472a' : (isWrong ? '#5c1a1a' : '#3a2f28')) : '#3a2f28', border: `2px solid ${revealed && isRight ? '#2ecc71' : (revealed && isWrong ? '#e74c3c' : '#5B5048')}`, borderRadius: '8px', color: revealed && isRight ? '#2ecc71' : (revealed && isWrong ? '#e74c3c' : '#F4F1ED'), fontFamily: '"Courier New", monospace', outline: 'none' }}
                     />
-                  )
+                  );
                 })}
               </div>
-              {/* Minuend (top number) */}
+              {/* Minuend (top number) — click a digit to strikethrough and reveal borrow box */}
               <div style={{ display: 'flex', gap: '4px', marginBottom: '2px' }}>
                 <span style={{ width: '44px' }} />
-                {question.aDigits.map((d, i) => (
-                  <span key={i} style={{ width: '40px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F4F1ED' }}>{d !== null ? d : ''}</span>
-                ))}
+                {question.aDigits.map((d, i) => {
+                  const struck = activeBorrows.has(i) || (revealed && correctBorrowDigits && question.aDigits[i] != null && String(correctBorrowDigits[i]) !== String(question.aDigits[i]));
+                  return (
+                    <span key={i}
+                      onClick={() => { if (!revealed && d != null) activateBorrow(i, activeBorrows.has(i)) }}
+                      style={{
+                        width: '40px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: struck ? '#988D84' : '#F4F1ED',
+                        textDecoration: struck ? 'line-through' : 'none',
+                        cursor: revealed || d == null ? 'default' : 'pointer',
+                        opacity: struck ? 0.5 : 1,
+                        transition: 'all 0.15s ease',
+                      }}>
+                      {d !== null ? d : ''}
+                    </span>
+                  );
+                })}
               </div>
               {/* Subtrahend */}
               <div style={{ display: 'flex', gap: '4px', marginBottom: '4px' }}>
@@ -44098,11 +44141,13 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
               <div style={{ display: 'flex', gap: '4px', marginTop: '8px' }}>
                 <span style={{ width: '44px' }} />
                 {question.answerDigits.map((d, i) => {
-                  const isRight = revealed && answerInputs[i] === String(d) && answerInputs[i] !== ''
-                  const isWrong = revealed && answerInputs[i] !== String(d)
+                  const correctDigit = revealed && correctAnswerDigits ? String(correctAnswerDigits[i]) : '';
+                  const isRight = revealed && correctDigit !== '' && String(answerInputs[i] || '') === correctDigit;
+                  const isWrong = revealed && correctDigit !== '' && !isRight;
+                  const shown = revealed ? correctDigit : answerInputs[i] || '';
                   return (
                     <input key={i} ref={el => answerRefs.current[i] = el} type="text" maxLength={1}
-                      value={revealed ? String(d) : answerInputs[i] || ''}
+                      value={shown}
                       onChange={e => handleInput(i, e.target.value, false)}
                       onKeyDown={e => handleKeyDown(i, e, false)}
                       disabled={revealed}

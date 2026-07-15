@@ -699,29 +699,36 @@ function computeSubData(minuend, subtrahend) {
   const aStr = String(minuend);
   const bStr = String(subtrahend);
   const dStr = String(diff);
-  const opLen = Math.max(aStr.length, bStr.length);
-  const ansLen = dStr.length;
-  const aPad = aStr.padStart(ansLen, ' ');
-  const bPad = bStr.padStart(ansLen, ' ');
-  // borrows[i] = borrow box ABOVE answer column i (shown to the LEFT of the answer digit).
-  // Marks that column i needed to borrow from column i-1. Position 0 (leftmost) is always 0.
-  const borrows = new Array(ansLen).fill(0);
-  let borrow = 0;
-  for (let i = ansLen - 1; i >= 0; i--) {
-    let da = (parseInt(aPad[i]) || 0) - borrow;
+  const len = Math.max(aStr.length, bStr.length, dStr.length);
+  // Pad ALL THREE rows (minuend, subtrahend, difference) to the SAME length
+  // so column i in every row aligns vertically above the answer digit at column i.
+  const aPad = aStr.padStart(len, ' ');
+  const bPad = bStr.padStart(len, ' ');
+  const dPad = dStr.padStart(len, ' ');
+  // convertedTop[i] = the top digit in column i AFTER all borrows have been worked through.
+  // Paper-style: child strikes out the original digit and writes the converted value above.
+  // e.g. for 23−18, convertedTop = [1, 13]  (tens "2" becomes "1" after lending; ones "3" becomes "13")
+  // String values like "13", "12", "11", "9" mean "this column now holds a 2-digit-or-cascaded value".
+  const workTop = aPad.split('').map(d => d === ' ' ? 0 : Number(d));
+  const convertedTop = new Array(len).fill(0);
+  for (let i = len - 1; i >= 0; i--) {
     const db = parseInt(bPad[i]) || 0;
-    if (da < db) {
-      da += 10;
-      borrow = 1;
-      if (i > 0) borrows[i - 1] = 1;
-    } else {
-      borrow = 0;
+    let top = workTop[i];
+    if (top < db) {
+      let k = i - 1;
+      while (k >= 0 && workTop[k] === 0) k--;
+      if (k >= 0) {
+        workTop[k] -= 1;
+        for (let j = k + 1; j < i; j++) workTop[j] = 9;
+        top += 10;
+      }
     }
+    convertedTop[i] = top;
   }
-  const answerDigits = dStr.split('').map(Number);
+  const answerDigits = dPad.split('').map(Number);
   const aDigits = aPad.split('').map(d => d === ' ' ? null : Number(d));
   const bDigits = bPad.split('').map(d => d === ' ' ? null : Number(d));
-  return { answerDigits, aDigits, bDigits, borrows, digits: opLen };
+  return { answerDigits, aDigits, bDigits, borrows: convertedTop, digits: len };
 }
 
 app.get('/column-subtraction-api/question', (req, res) => {
@@ -751,17 +758,26 @@ app.post('/column-subtraction-api/check', (req, res) => {
   const numA = Number(a), numB = Number(b);
   const correctAnswer = numA - numB;
   const data = computeSubData(numA, numB);
+  const aPad = String(numA).padStart(data.answerDigits.length, ' ');
   const answerCorrect = Array.isArray(userAnswer) &&
-    userAnswer.map(Number).join('') === data.answerDigits.join('');
+    userAnswer.map(v => v === '' || v == null ? -1 : Number(v)).join('') === data.answerDigits.join('');
+  // For borrows: blank is OK when the converted top equals the original digit (no borrow happened)
   const borrowsCorrect = Array.isArray(userBorrows) &&
-    userBorrows.map(String).join('') === data.borrows.map(String).join('');
+    userBorrows.every((raw, i) => {
+      const v = (raw === '' || raw == null) ? '' : String(raw).trim();
+      const expected = String(data.borrows[i]);
+      const originalDigit = data.aDigits[i];
+      const isOptional = originalDigit != null && expected === String(originalDigit);
+      if (isOptional) return v === '' || v === expected;
+      return v !== '' && v === expected;
+    });
   const correct = answerCorrect && borrowsCorrect;
   res.json({
     correct,
     correctAnswer,
     answerDigits: data.answerDigits,
     correctBorrows: data.borrows,
-    message: correct ? 'Correct!' : borrowsCorrect ? 'Difference digits wrong' : answerCorrect ? 'Borrows wrong' : 'Try again',
+    message: correct ? 'Correct!' : borrowsCorrect ? 'Difference digits wrong' : answerCorrect ? 'Borrow marks wrong' : 'Try again',
   });
 });
 
