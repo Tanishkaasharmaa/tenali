@@ -11238,6 +11238,10 @@ app.get(/.*/, (_req, res) => {
  * Listen on all interfaces (0.0.0.0) at the configured port
  * 0.0.0.0 makes the server accessible from any network interface/IP address
  */
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Tenali app running on http://0.0.0.0:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Tenali app running on http://0.0.0.0:${PORT}`);
+  });
+}
+
+module.exports = app;
