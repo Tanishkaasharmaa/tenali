@@ -72,6 +72,9 @@ import VisualMathLabRedux, {
 import CoordinateGrid from './components/CoordinateGrid';
 import LanguageDashboard from './language/LanguageDashboard'
 import { VOCAB_CORPUS } from './vocabCorpus'
+import EquationSandboxApp from './lib/EquationSandboxApp.jsx';
+import QFormulaConceptApp from './lib/concept/QFormulaConceptApp.jsx';
+import SimulConceptApp from './lib/simul-concept/SimulConceptApp.jsx';
 
 // API base URL from environment variables (Vite)
 const API = import.meta.env.VITE_API_BASE_URL || '';
@@ -61401,3 +61404,5 @@ function MensurationLabApp({ onBack, initialDifficulty, initialNumQuestions, ini
 export default App
 export { AuthMenu }
 
+
+export const updateBKT = () => {};
