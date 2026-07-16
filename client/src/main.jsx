@@ -30,8 +30,10 @@ import { I18nProvider } from './lib/i18n.jsx';
 ReactDOM.createRoot(document.getElementById('root')).render(
   // StrictMode: Enables additional development checks and warnings
   <React.StrictMode>
-    <I18nProvider><App /></I18nProvider>
-    {/* Hamburger menu (login/logout) — fixed top-right, visible on every page */}
-    <AuthMenu />
+    <I18nProvider>
+      <App />
+      {/* Hamburger menu (login/logout) — fixed top-right, visible on every page */}
+      <AuthMenu />
+    </I18nProvider>
   </React.StrictMode>,
 )
