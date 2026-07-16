@@ -1,5 +1,43 @@
 # Changelog — Tenali
 
+Percentages — Level 1: Find a Percentage
+Author: Ritish Karmakar
+
+Version 1 — July 8, 2026
+Built the complete learning experience for Percentages Level 1 from the ground up.
+The explanation screen has five parts: an interactive visual where students drag a slider and watch a percentage bar fill up live, click-through theory, a worked example, a copyable AI study assistant prompt for students who want extra help from their own AI tool, and an understanding check before they're allowed into the real quiz. The understanding check pulls from 20 different real-life question templates — discounts, exam marks, sports stats — with randomized numbers each time and no repeats, so a student can't just memorize one answer to pass.
+The graded quiz was rebuilt with step-by-step diagnostic solving. If a student gets a question wrong, instead of just marking it incorrect, it breaks the problem into two guided steps — converting the percentage, then applying it — and walks them through each one. If they keep struggling with the same type of step across different questions, the app automatically sends them back to the exact part of the explanation that covers it, checks their understanding, then lets them continue.
+The whole quiz got a kid-friendly redesign too — a game-like "Percent Island" theme with XP, gems, a combo counter, unlockable badges, a friendly mascot with speech bubbles, confetti and sound on correct answers, and a level-completion screen.
+Files Changed
+FileChangeApp.jsxRebuilt the graded PercentApp component — new question generator, 3-mode state machine (Normal, Step-Wise Diagnostic, Check Question), escalation/failure-tracking logic, kid-friendly UI (Percent Island theme, mascot, XP/Gems/Combo, star progress, confetti, sound)App.cssAdded the full kid-friendly theme styling — Percent Island layout, mascot speech bubbles, star animations, confetti, chunky button styles, cream card backgroundsPercentExplanationApp.jsxBuilt the 5-part explanation screen (Level1ExplanationView) — interactive visual model, click-through theory, worked example, AI study assistant prompt, understanding check with 20 randomized scenario templatesPercentExplanationApp.cssStyling for the 5-part explanation screen
+
+Version 2 — July 9, 2026
+A cleanup pass focused on cognitive load. Both the explanation screen and the graded quiz were originally showing everything stacked on one long scrollable page, which was too much at once for the target age group. I changed both to reveal one section or one step at a time, with smooth fade transitions and a progress indicator so students always know where they are.
+I also fixed a sound bug — the app was creating a brand-new audio object every time a sound effect played, which eventually hits a browser limit and breaks. I fixed this by sharing a single audio instance across the whole app, so sound now plays reliably no matter how long the session runs, and the mute toggle works cleanly without needing to recreate anything.
+Files Changed
+FileChangeaudioContext.jsNEW — Singleton AudioContext + shared playSound utilityApp.jsxRemoved duplicate local playSound, imported the shared one; rewrote step-wise quiz rendering to show one card at a time instead of all stackedApp.cssAdded .percentages-card-transition-wrapper + fade-in keyframes for the one-card-at-a-time quiz viewPercentExplanationApp.jsxImported shared playSound; added activeSection state, horizontal timeline progress indicator, Previous/Next navigation, fixed a missing closing </div>PercentExplanationApp.cssAdded transition wrapper + fade-in keyframes for one-section-at-a-time view, timeline hover styles
+
+Version 3 — July 15, 2026
+The biggest update, based on direct feedback from my mentor.
+I removed the AI study assistant prompt step entirely — it's no longer part of the flow.
+I replaced the old drag-and-drop matching game with a proper guided mini-story. A friendly mascot now walks the student through one of five different real-world examples — a candy jar, a pizza, a classroom, a piggy bank, or a football match — picked at random each time so it stays fresh, but only one example is shown per visit so it doesn't overwhelm. The story plays out in five short beats: introduce the whole amount, show a part being taken away, ask the student to guess the percentage, reveal the answer and formula, then recap. I also removed the old interaction where students had to tap 25 individual items one by one — that's now a simple animated reveal with a single tap to continue, which is far less tedious and keeps the focus on understanding rather than clicking.
+I also gave the mascot three different expressions — explaining, excited, and thinking — so it reacts appropriately to what's happening in the story.
+Separately, I simplified the rest of the explanation screen for younger readers: shorter, simpler sentences, bigger formula and result displays, and a small info popup on the header instead of permanent instructional text cluttering every screen.
+Finally, I fixed a background color bug where some cards on the explanation screen and the graded quiz didn't match the rest of the app — everything now uses the same consistent color scheme in both light and dark mode.
+Files Changed
+FileChangePercentExplanationApp.jsxRemoved the AI Study Assistant Prompt section; replaced the old drag-and-drop Story section with a new data-driven, scenario-based Story component (5 rotating real-world scenarios) and mascot avatar with 3 expressions; added hover/tap info popup on the section header; simplified Theory and Worked Example section contentPercentExplanationApp.cssRemoved AI prompt and old drag-game styles; added Story section, mascot, and info popup styles; fixed background token usage across cards to resolve the color-drift bug; added responsive/typography adjustmentsPercent Island stylesheetFixed background token usage to match the rest of the app in both light and dark mode
+
+Version 4 — July 16, 2026
+Acted on a second round of mentor feedback about the theory and worked-example sections specifically.
+Previously, the Concept Theory and Worked Example sections showed all their points and steps stacked on screen at once. I changed both to reveal one idea or one step at a time, with a "1 of 4" style progress indicator so students can see how much is left, and simple back/next navigation to move through them.
+I also reordered the Concept Theory section so the core formula is introduced first, followed by the supporting explanation — since that's the main thing students need to walk away remembering, rather than saving it for last.
+I increased the font size and spacing on both sections' cards to make everything easier to read and less cramped for a young student, and fixed a bug where the "Interactive Visual Model" heading was accidentally appearing twice on the first section.
+Files Changed
+FileChangePercentExplanationApp.jsxConverted Concept Theory and Worked Example sections from all-cards-stacked to one-card-at-a-time click-through, with progress indicators and inner Back/Next navigation; reordered Concept Theory so the formula is introduced first; fixed duplicate rendering of the "Interactive Visual Model" headingPercentExplanationApp.cssIncreased font size and card spacing/padding on Theory and Worked Example cards; added progress-indicator and inner navigation button styles
+
+---
+
+# Changelog — Tenali
 All notable changes to this repository, grouped by date (newest first).
 Auto-curated from git history: pull-request merges and direct commits are listed;
 routine branch-sync merges are omitted. Regenerate with `gen_changelog.py`.
@@ -47,6 +85,7 @@ Confirmed no unrelated changes were introduced to background styling anywhere in
 
 Files Changed
 FileChangePercentExplanationApp.jsxRemoved AI Study Assistant Prompt section; replaced old drag-game Story section with new data-driven, scenario-based Story component and mascot; added info popup; simplified/restructured Theory and Worked Example sectionsPercentExplanationApp.cssRemoved AI prompt and old drag-game styles; added new Story, mascot, and info popup styles; fixed background token usage across cards; added responsive/typography adjustmentsPercent Island stylesheetFixed background token usage to match the rest of the app
+
 
 
 ## 2026-07-14
@@ -164,9 +203,6 @@ Refactoring pass across the Percentages feature addressing two issues raised aft
 | `App.css` | Added `.percentages-card-transition-wrapper` + `@keyframes percentages-card-fade-in` |
 | `PercentExplanationApp.jsx` | Imported `playSound`; added `activeSection` state, timeline indicator, nav buttons, transition wrapper; fixed a missing closing `</div>` |
 | `PercentExplanationApp.css` | Added `.explanation-card-transition-wrapper` + `@keyframes explanation-card-fade-in` + timeline hover styles |
-
-
-
 
 - Refactor HCF & LCM module with dynamic quiz, stepper locks, validation popups, accordion examples, and mistake redirection  _(dce3d1f, poorvipravallika06)_
 - change  _(8a493a7, muditagrawal2007)_
@@ -292,7 +328,6 @@ This escalation flag persists for the rest of the session — it is intentionall
 Note: this graded-quiz "Check Question Mode" is a separate mechanism from the explanation screen's "Understanding Check" (Section 2, part 5) — the former is a single-question gate re-entering the quiz after an escalation; the latter is the 4-question/3-to-pass round gating first entry into the quiz.
 
 7. NEW — Kid-Friendly UI/UX Redesign (ages 7–10)
-
 
 
 
