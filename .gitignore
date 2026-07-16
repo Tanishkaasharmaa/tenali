@@ -8,3 +8,4 @@ server/lil/learning_journey/in_memory_journey_progress.json
 server/dictionaryCache
 ISSUE_DRAFT.md
 PR_DRAFT.md
+**/*.ps1
