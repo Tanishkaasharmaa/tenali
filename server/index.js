@@ -81,26 +81,29 @@ try {
 app.use('/api/auth', auth.router);
 app.use('/api/progress', progress.router);
 auth.seedUsers().catch(() => {});  // always populate in-memory fallback
-  // ── Quadratic Evaluation ──────────────────────────────────────
-  if (p.includes('quadratic-api') && !p.includes('qformula')) {
-    const { a, b: bCoeff, c, x, opAB, opBC } = b;
-    const r = d.correctAnswer;
-    const op1 = (opAB || '+').toString();
-    const op2 = (opBC || '+').toString();
-    let s = `Problem: Evaluate y = ${a}x² ${op1} ${bCoeff}x ${op2} ${c} at x = ${x}\n\n`;
-    s += `Step 1: Substitute x = ${x} into each term:\n`;
-    const t1 = a * x * x;
-    const t2 = bCoeff * x;
-    s += `  ${a}(${x})² = ${a} × ${x*x} = ${t1}\n`;
-    s += `  ${bCoeff}(${x}) = ${t2}\n`;
-    s += `  constant = ${c}\n\n`;
-    s += `Step 2: Combine terms using the operators shown:\n`;
-    const fmtOp = (op) => (op === '-' ? '-' : '+');
-    // show the combination with explicit operators
-    s += `  ${t1} ${fmtOp(op1)} ${t2} ${fmtOp(op2)} ${c} = ${r}\n\n`;
-    s += `Tip: Compute powers first (x²), then apply the coefficient, and finally combine terms using the given operators.`;
-    return s;
+
+async function connectAuthMongoWithRetry(attempt = 1) {
+  const maxAttempts = Number(process.env.MONGO_CONNECT_ATTEMPTS || 10);
+  const retryDelayMs = Number(process.env.MONGO_CONNECT_RETRY_MS || 2000);
+
+  try {
+    await auth.connectMongo();
+    await auth.seedUsers();
+  } catch (err) {
+    if (attempt >= maxAttempts) {
+      console.error('[auth] Mongo connect failed - using in-memory auth:', err.message);
+      return;
+    }
+
+    console.warn(
+      `[auth] Mongo unavailable (${err.message}); retrying in ${Math.round(retryDelayMs / 1000)}s ` +
+      `(${attempt}/${maxAttempts})`
+    );
+    setTimeout(() => connectAuthMongoWithRetry(attempt + 1), retryDelayMs);
   }
+}
+
+connectAuthMongoWithRetry();
 
 /**
  * EXPLANATION SUPPORT MIDDLEWARE
@@ -338,9 +341,11 @@ app.use(async (req, res, next) => {
   const apiName = pathParts[1] || '';
   const topicId = apiName.replace('-api', '');
 
-auth.connectMongo()
-  .then(() => auth.seedUsers())
-  .catch(err => console.error('[auth] Mongo connect failed — using in-memory auth:', err));
+  // Intercept response JSON
+  const originalJson = res.json.bind(res);
+  res.json = function (data) {
+    // Restore res.json to avoid recursion
+    res.json = originalJson;
 
     // Async LIL execution wrapper
     if (userId && topicId) {
