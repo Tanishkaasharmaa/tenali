@@ -9144,6 +9144,248 @@ app.get('/mindreader', (_req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
+// TENALI REVERSE MIND READER (API)
+// ═══════════════════════════════════════════════════════════════════════════
+const { REVERSE_CONCEPTS, REVERSE_QUESTIONS, PERSONALITY_RESPONSES } = require('./mindReaderKB2');
+const crypto = require('crypto');
+
+// In-memory reverse mind reader sessions
+const reverseSessions = new Map();
+
+// Game session helper class
+class GameSession {
+  constructor(gameId, selectedConcept, difficulty = 'easy') {
+    this.gameId = gameId;
+    this.selectedConcept = selectedConcept;
+    this.difficulty = difficulty;
+    this.questionsRemaining = 10;
+    this.hintsRemaining = 2;
+    this.askedQuestions = [];
+    this.guessed = false;
+    this.createdAt = new Date();
+  }
+}
+
+// Session pruning interval (runs every 10 mins, cleans sessions older than 30 mins)
+setInterval(() => {
+  const now = Date.now();
+  for (const [gameId, session] of reverseSessions.entries()) {
+    if (now - session.createdAt.getTime() > 30 * 60 * 1000) {
+      reverseSessions.delete(gameId);
+      console.log(`[ReverseMindReader] Evicted expired session: ${gameId}`);
+    }
+  }
+}, 10 * 60 * 1000);
+
+app.post('/api/game/start', express.json(), async (req, res) => {
+  try {
+    const randomIndex = Math.floor(Math.random() * REVERSE_CONCEPTS.length);
+    const concept = REVERSE_CONCEPTS[randomIndex];
+    const gameId = 'sess_' + crypto.randomUUID().replace(/-/g, '');
+    
+    const session = new GameSession(gameId, concept);
+    reverseSessions.set(gameId, session);
+    
+    console.log(`[ReverseMindReader] Started session ${gameId} with concept "${concept.name}"`);
+    res.json({
+      gameId,
+      questionsRemaining: session.questionsRemaining,
+      hintsRemaining: session.hintsRemaining,
+      state: 'PLAYING'
+    });
+  } catch (err) {
+    console.error('[ReverseMindReader] Start game error:', err);
+    res.status(500).json({ error: 'Internal server error starting game' });
+  }
+});
+
+app.post('/api/game/question', express.json(), (req, res) => {
+  const { gameId, questionId } = req.body;
+  if (!gameId || !questionId) {
+    return res.status(400).json({ error: 'Missing gameId or questionId' });
+  }
+  
+  const session = reverseSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+  
+  if (session.questionsRemaining <= 0) {
+    return res.status(400).json({ error: 'No questions remaining' });
+  }
+  
+  const question = REVERSE_QUESTIONS.find(q => q.id === questionId);
+  if (!question) {
+    return res.status(400).json({ error: 'Invalid questionId' });
+  }
+  
+  if (session.askedQuestions.includes(questionId)) {
+    return res.status(400).json({ error: 'Question already asked' });
+  }
+  
+  const concept = session.selectedConcept;
+  const attributeVal = concept.attributes[question.attribute];
+  
+  let answer = 'dontknow';
+  if (attributeVal !== null && attributeVal !== undefined) {
+    if (question.operator === 'gte') {
+      answer = attributeVal >= question.expectedValue ? 'yes' : 'no';
+    } else if (question.operator === 'lte') {
+      answer = attributeVal <= question.expectedValue ? 'yes' : 'no';
+    } else {
+      answer = attributeVal === question.expectedValue ? 'yes' : 'no';
+    }
+  }
+  
+  session.questionsRemaining -= 1;
+  session.askedQuestions.push(questionId);
+  
+  const dialoguePool = PERSONALITY_RESPONSES[answer.toUpperCase()];
+  const dialogue = dialoguePool[Math.floor(Math.random() * dialoguePool.length)];
+  
+  console.log(`[ReverseMindReader] Session ${gameId} asked: "${question.text}" -> Answer: ${answer}`);
+  res.json({
+    dialogue,
+    answer,
+    questionsRemaining: session.questionsRemaining
+  });
+});
+
+app.post('/api/game/hint', express.json(), (req, res) => {
+  const { gameId } = req.body;
+  if (!gameId) {
+    return res.status(400).json({ error: 'Missing gameId' });
+  }
+  
+  const session = reverseSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+  
+  if (session.hintsRemaining <= 0) {
+    return res.status(400).json({ error: 'No hints remaining' });
+  }
+  
+  let hintText = '';
+  if (session.hintsRemaining === 2) {
+    hintText = session.selectedConcept.hints.hint1;
+  } else {
+    hintText = session.selectedConcept.hints.hint2;
+  }
+  
+  session.hintsRemaining -= 1;
+  
+  const hintDialoguePool = PERSONALITY_RESPONSES.HINT;
+  const randomPrefix = hintDialoguePool[Math.floor(Math.random() * hintDialoguePool.length)];
+  const dialogue = `${randomPrefix}"${hintText}"`;
+  
+  console.log(`[ReverseMindReader] Session ${gameId} requested hint. Remaining: ${session.hintsRemaining}`);
+  res.json({
+    dialogue,
+    hint: hintText,
+    hintsRemaining: session.hintsRemaining
+  });
+});
+
+app.post('/api/game/guess', express.json(), async (req, res) => {
+  const { gameId, guess } = req.body;
+  if (!gameId || !guess) {
+    return res.status(400).json({ error: 'Missing gameId or guess' });
+  }
+  
+  const session = reverseSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+  
+  const concept = session.selectedConcept;
+  const normalizedGuess = guess.trim().toLowerCase().replace(/\s+/g, '');
+  const normalizedConceptName = concept.name.trim().toLowerCase().replace(/\s+/g, '');
+  
+  const isCorrect = normalizedGuess === normalizedConceptName;
+  let rewardPoints = 0;
+  let user = null;
+  
+  try {
+    user = await getOptionalUser(req);
+  } catch (err) {
+    console.error('[ReverseMindReader] Error fetching optional user for guess:', err);
+  }
+  
+  if (isCorrect) {
+    rewardPoints = 20 + (session.questionsRemaining * 2) + (session.hintsRemaining * 5);
+  } else {
+    rewardPoints = -5;
+  }
+  
+  let finalMrr = 1000;
+  let finalGamesToday = 0;
+  let finalSkins = ["Classic Tenali"];
+  let authenticated = false;
+  
+  if (user) {
+    authenticated = true;
+    const todayStr = new Date().toDateString();
+    
+    if (user.lastMindReaderGameDate !== todayStr) {
+      user.mindReaderGamesToday = 0;
+      user.lastMindReaderGameDate = todayStr;
+    }
+    
+    user.mrr = Math.max(1000, (user.mrr || 1000) + rewardPoints);
+    user.mindReaderGamesToday += 1;
+    
+    if (!user.isInMemory) {
+      await user.save();
+    } else {
+      inMemoryProfiles[user.username.toLowerCase()] = user;
+    }
+    
+    finalMrr = user.mrr;
+    finalGamesToday = user.mindReaderGamesToday;
+    finalSkins = user.unlockedSkins || ["Classic Tenali"];
+  } else {
+    finalMrr = 1000;
+  }
+  
+  const mongoose = require('mongoose');
+  if (mongoose.connection.readyState === 1) {
+    await auth.MindReaderAnalytic.create({
+      outcome: isCorrect ? 'win' : 'loss',
+      concept: concept.name,
+      questionsCount: 10 - session.questionsRemaining,
+      scope: 'reverse_mindreader',
+      predictionsMade: [guess]
+    }).catch(err => console.error('[ReverseMindReader] Failed to save analytic:', err));
+  }
+  
+  reverseSessions.delete(gameId);
+  
+  console.log(`[ReverseMindReader] Session ${gameId} guess: "${guess}" | Secret: "${concept.name}" | Correct: ${isCorrect} | Reward: ${rewardPoints} MRR`);
+  
+  res.json({
+    correct: isCorrect,
+    reward: {
+      mrrChange: rewardPoints,
+      mrr: finalMrr,
+      mindReaderGamesToday: finalGamesToday,
+      unlockedSkins: finalSkins,
+      equippedSkin: user ? user.equippedSkin : 'classic',
+      equippedTitle: user ? user.equippedTitle : 'Novice Reader',
+      authenticated
+    },
+    concept: {
+      name: concept.name,
+      definition: concept.definition,
+      examples: concept.examples,
+      funFact: concept.funFact,
+      relatedLesson: concept.relatedLesson,
+      commonMistakes: concept.commonMistakes
+    }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
 // /graph — Prerequisite DAG visualisation
 // ═══════════════════════════════════════════════════════════════════════════
 app.get('/graph', (_req, res) => {
