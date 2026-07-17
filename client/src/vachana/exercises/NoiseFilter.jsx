@@ -564,7 +564,6 @@ export default function NoiseFilter() {
                       </span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {isCertified && <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem', color: '#2ea043', fontWeight: '700' }}><CheckIcon /> Certified</span>}
-                        {isActive && <span style={{ fontSize: '0.78rem', color: 'var(--clr-accent)', fontWeight: '700' }}>Active</span>}
                         <span style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)' }}>
                           {expandedTiers[tierNum] ? '▲' : '▼'}
                         </span>
