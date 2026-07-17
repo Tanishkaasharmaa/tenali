@@ -531,105 +531,7 @@ export default function NoiseFilter() {
   // VIEW: 1. DASHBOARD VIEW (Tier Selection)
   // ==========================================
   if (!sessionActive) {
-    if (selectedTier !== null) {
-      const tierNum = selectedTier;
-      const tierState = noiseState.tierStates[String(tierNum)] || 'locked';
-      const isActive = tierNum === noiseState.currentTier;
-      const isCertified = noiseState.tierStates[String(tierNum)] === 'certified';
 
-      return (
-        <div style={{ animation: 'fadeIn 0.3s ease-out', maxWidth: '600px', margin: '0 auto' }}>
-          {/* Back Button */}
-          <button
-            onClick={() => setSelectedTier(null)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent',
-              border: 'none', color: 'var(--clr-text-soft)', cursor: 'pointer', fontSize: '0.95rem',
-              fontWeight: '600', marginBottom: '24px', padding: '8px 0'
-            }}
-            onMouseEnter={e => e.currentTarget.style.color = 'var(--clr-text)'}
-            onMouseLeave={e => e.currentTarget.style.color = 'var(--clr-text-soft)'}
-          >
-            ← Back to Levels
-          </button>
-
-
-
-          {/* Stages List */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {(tierNum === 1 ? [1, 2, 3, 4, 5] : [1, 2, 3, 4]).map(stageNum => {
-              const isStageActive = isActive && stageNum === noiseState.currentLevelIndex;
-              const isStageDone = isCertified || (isActive && stageNum < noiseState.currentLevelIndex);
-
-              const origStageIndex = mapStageIndexToOriginal(tierNum, stageNum);
-              const label = tierNum === 1 && stageNum === 1 ? 'Tutorial' :
-                            (origStageIndex === 2 ? 'Practice: Part 1' :
-                             origStageIndex === 4 ? 'Practice: Part 2' :
-                             origStageIndex === 5 ? 'Review Level' : "Hero's Challenge");
-
-              return (
-                <button
-                  key={stageNum}
-                  onClick={() => startSession(null, tierNum, stageNum)}
-                  style={{
-                    padding: '16px 20px', width: '100%', borderRadius: '14px',
-                    background: isStageActive ? 'var(--clr-accent)' : (isStageDone ? 'rgba(46,160,67,0.08)' : 'var(--clr-surface)'),
-                    color: isStageActive ? '#fff' : (isStageDone ? '#2ea043' : 'var(--clr-text)'),
-                    border: isStageActive ? 'none' : `1px solid ${isStageDone ? 'rgba(46,160,67,0.2)' : 'var(--clr-border)'}`,
-                    cursor: 'pointer', fontSize: '1rem', fontWeight: '600', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)', transition: 'all 0.2s'
-                  }}
-                  onMouseEnter={e => {
-                    if (!isStageActive) e.currentTarget.style.borderColor = 'var(--clr-accent)';
-                  }}
-                  onMouseLeave={e => {
-                    if (!isStageActive) e.currentTarget.style.borderColor = isStageDone ? 'rgba(46,160,67,0.2)' : 'var(--clr-border)';
-                  }}
-                >
-                  <span>{label}</span>
-                  {isStageDone && <CheckIcon />}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Reset Level Progress */}
-          <div style={{ marginTop: '24px' }}>
-            <button
-              onClick={() => {
-                if (window.confirm("Are you sure you want to reset progress for this level?")) {
-                  const newState = {
-                    ...noiseState,
-                    currentTier: tierNum,
-                    currentLevelIndex: 1,
-                    failedLevelIndex: null,
-                    failedLevelType: null,
-                    reteachQuestionIds: []
-                  };
-                  newState.tierStates[String(tierNum)] = 'in_progress';
-                  saveNoiseState(newState);
-                }
-              }}
-              style={{
-                padding: '12px 20px', background: 'transparent', border: '1px solid var(--clr-border)',
-                color: '#ef5350', borderRadius: '12px', cursor: 'pointer', fontSize: '0.92rem',
-                fontWeight: '600', width: '100%', transition: 'all 0.2s'
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(239, 83, 80, 0.05)';
-                e.currentTarget.style.borderColor = '#ef5350';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.borderColor = 'var(--clr-border)';
-              }}
-            >
-              Reset Level Progress
-            </button>
-          </div>
-        </div>
-      );
-    }
 
     return (
       <div style={{ animation: 'fadeIn 0.4s ease-out' }}>
@@ -666,12 +568,8 @@ export default function NoiseFilter() {
               <div 
                 key={tierNum} 
                 onClick={() => {
-                  if (tierNum === 1) {
-                    setSelectedTier(1);
-                  } else {
-                    const startStage = (tierNum === noiseState.currentTier) ? noiseState.currentLevelIndex : 1;
-                    startSession(null, tierNum, startStage);
-                  }
+                  const startStage = (tierNum === noiseState.currentTier) ? noiseState.currentLevelIndex : 1;
+                  startSession(null, tierNum, startStage);
                 }}
                 style={{
                   background: isActive ? 'linear-gradient(135deg, var(--clr-surface) 0%, rgba(232, 134, 74, 0.04) 100%)' : 'var(--clr-surface)',
