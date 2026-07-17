@@ -1183,17 +1183,7 @@ export default function NoiseFilter() {
                     ))}
                   </div>
 
-                  <div style={{
-                    background: 'rgba(232, 134, 74, 0.08)', borderLeft: '4px solid var(--clr-accent)',
-                    borderRadius: '0 12px 12px 0', padding: '16px 20px', marginBottom: '32px'
-                  }}>
-                    <h5 style={{ margin: '0 0 6px', color: 'var(--clr-accent)', fontWeight: '700', fontSize: '0.9rem', textTransform: 'uppercase' }}>
-                      Key Math Fact
-                    </h5>
-                    <p style={{ margin: 0, color: 'var(--clr-text)', fontSize: '0.98rem', fontWeight: '500', lineHeight: '1.5' }}>
-                      {activeProblem.fact}
-                    </p>
-                  </div>
+
 
                   {/* Navigation inside modal */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '24px' }}>
