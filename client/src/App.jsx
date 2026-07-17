@@ -23,6 +23,7 @@
 
 import { useEffect, useState, useRef, useMemo } from 'react'
 import './App.css'
+import MindReaderApp2 from './MindReaderApp2'
 
 // API base URL from environment variables (Vite)
 const API = import.meta.env.VITE_API_BASE_URL || '';
@@ -40576,6 +40577,93 @@ function TenthApp({ onBack }) {
   )
 }
 
+function MindReaderWrapper({ onBack }) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialMode = urlParams.get('mode'); // 'tenali' | 'you' | null
+  
+  const [gameMode, setGameMode] = useState(initialMode);
+
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const params = new URLSearchParams(window.location.search);
+      setGameMode(params.get('mode'));
+    };
+    window.addEventListener('popstate', handleUrlChange);
+    const interval = setInterval(handleUrlChange, 500);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      clearInterval(interval);
+    };
+  }, []);
+
+  const handleSelectMode = (mode) => {
+    setGameMode(mode);
+    const newUrl = `${window.location.pathname}?mode=${mode}`;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+  };
+
+  const handleBackToLobby = () => {
+    setGameMode(null);
+    const newUrl = window.location.pathname;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+  };
+
+  if (gameMode === 'tenali') {
+    return <MindReaderApp onBack={handleBackToLobby} />;
+  }
+
+  if (gameMode === 'you') {
+    return <MindReaderApp2 onBack={handleBackToLobby} />;
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px', maxWidth: '800px', margin: '40px auto', padding: '20px', textAlign: 'center' }}>
+      <button className="back-button" onClick={onBack} style={{ alignSelf: 'flex-start' }}>← Home</button>
+      
+      <h2 style={{ fontSize: '1.8rem', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>Choose Your Mind Reader Mode</h2>
+      <p style={{ color: 'var(--clr-text-soft)', fontSize: '1.05rem', maxWidth: '550px', margin: '0 auto 10px', lineHeight: 1.5 }}>
+        Play the mathematical mind reading challenges. Do you want Tenali to read your mind, or do you want to guess Tenali's secret?
+      </p>
+      
+      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', width: '100%', maxWidth: '640px', marginTop: '10px' }}>
+        
+        {/* Mode 1: Tenali guesses */}
+        <div 
+          onClick={() => handleSelectMode('tenali')}
+          style={{ 
+            background: 'rgba(30, 39, 46, 0.4)', border: '2px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '30px 20px', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' 
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--clr-accent)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.transform = 'none' }}
+        >
+          <span style={{ fontSize: '3rem', display: 'block', marginBottom: '15px' }}>🔮</span>
+          <h3 style={{ color: 'var(--clr-accent)', margin: '0 0 10px 0', fontSize: '1.25rem' }}>Tenali will guess</h3>
+          <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.85rem', lineHeight: '1.4', margin: 0 }}>
+            Think of a mathematical concept, answer Tenali's binary questions, and see if he can read your mind!
+          </p>
+        </div>
+
+        {/* Mode 2: You guess */}
+        <div 
+          onClick={() => handleSelectMode('you')}
+          style={{ 
+            background: 'rgba(30, 39, 46, 0.4)', border: '2px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '30px 20px', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' 
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--clr-accent)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.transform = 'none' }}
+        >
+          <span style={{ fontSize: '3rem', display: 'block', marginBottom: '15px' }}>🙋‍♂️</span>
+          <h3 style={{ color: 'var(--clr-accent)', margin: '0 0 10px 0', fontSize: '1.25rem' }}>You want to guess</h3>
+          <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.85rem', lineHeight: '1.4', margin: 0 }}>
+            Tenali secretly selects a mathematical concept. Ask him questions, collect hints, and make your guess!
+          </p>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
 function App() {
   // Currently selected quiz mode (null = home menu, or key like 'gk', 'addition', etc.)
   const [mode, setMode] = useState(null)
@@ -40705,7 +40793,7 @@ function App() {
         <button className="theme-toggle" onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
-        <AuthGate><MindReaderApp onBack={() => { window.location.href = '/' }} /></AuthGate>
+        <AuthGate><MindReaderWrapper onBack={() => { window.location.href = '/' }} /></AuthGate>
       </>
     )
   }
@@ -41167,7 +41255,9 @@ function App() {
     tatsavit: TatsavitApp,         // Tatsavit (progressive math drill)
     randommix: RandomMixApp,       // Random Mix (adaptive)
     custom: CustomApp,             // Custom lesson builder
-    mindreader: MindReaderApp,     // Tenali Mind Reader (Akinator game)
+    mindreader: MindReaderWrapper,     // Tenali Mind Reader wrapper
+    mindreader_tenali: MindReaderApp, // Tenali guesses
+    mindreader_you: MindReaderApp2,   // You guess
     gym: GymApp,                   // Unified adaptive Gym — bundles all 7 below
     guess: GuessNumberApp,         // Binary magic — guess a number 0–31
     gymdecimals: GymDecimalsApp,   // Gym Decimals — signed decimal multiplication (MCQ)
@@ -41209,6 +41299,7 @@ function App() {
  * @param {Function} props.onSelect - Callback when user selects a quiz: receives mode key (e.g., 'gk')
  */
 function Home({ onSelect }) {
+  const [mrMenuOpen, setMrMenuOpen] = useState(false)
   // Special featured apps (shown in highlighted first row)
   const featuredApps = [
     { key: 'randommix', name: 'Random Mix', subtitle: 'Adaptive cross-topic quiz', color: 'featured' },
@@ -41371,17 +41462,54 @@ function Home({ onSelect }) {
             borderRadius: 'var(--radius-sm)', boxShadow: 'var(--shadow-card)',
             padding: '6px 0', minWidth: '200px', overflow: 'hidden'
           }}>
-            {featuredApps.map(app => (
-              <button key={app.key} onClick={() => { setMenuOpen(false); onSelect(app.key) }} style={{
-                display: 'block', width: '100%', textAlign: 'left', padding: '10px 16px',
-                background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text)',
-                fontFamily: 'var(--font-body)', fontSize: '0.95rem', transition: 'background var(--transition)'
-              }} onMouseEnter={e => e.target.style.background = 'var(--clr-hover-strong)'}
-                onMouseLeave={e => e.target.style.background = 'none'}>
-                <strong style={{ color: 'var(--clr-accent)' }}>{app.name}</strong>
-                <span style={{ display: 'block', fontSize: '0.78rem', color: 'var(--clr-text-soft)', marginTop: '2px' }}>{app.subtitle}</span>
-              </button>
-            ))}
+            {featuredApps.map(app => {
+              if (app.key === 'mindreader') {
+                return (
+                  <div key={app.key}>
+                    <button onClick={() => setMrMenuOpen(o => !o)} style={{
+                      display: 'block', width: '100%', textAlign: 'left', padding: '10px 16px',
+                      background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text)',
+                      fontFamily: 'var(--font-body)', fontSize: '0.95rem', transition: 'background var(--transition)'
+                    }} onMouseEnter={e => e.target.style.background = 'var(--clr-hover-strong)'}
+                      onMouseLeave={e => e.target.style.background = 'none'}>
+                      <strong style={{ color: 'var(--clr-accent)' }}>{app.name}</strong>
+                      <span style={{ display: 'block', fontSize: '0.78rem', color: 'var(--clr-text-soft)', marginTop: '2px' }}>{app.subtitle}</span>
+                    </button>
+                    {mrMenuOpen && (
+                      <div style={{ paddingLeft: '16px', borderLeft: '2.5px solid var(--clr-accent)', margin: '4px 0 4px 16px' }}>
+                        <button onClick={() => { setMenuOpen(false); setMrMenuOpen(false); onSelect('mindreader_tenali') }} style={{
+                          display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px',
+                          background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text-soft)',
+                          fontFamily: 'var(--font-body)', fontSize: '0.88rem', transition: 'color 0.15s'
+                        }} onMouseEnter={e => e.target.style.color = 'var(--clr-accent)'}
+                          onMouseLeave={e => e.target.style.color = 'var(--clr-text-soft)'}>
+                          🔮 Tenali will guess
+                        </button>
+                        <button onClick={() => { setMenuOpen(false); setMrMenuOpen(false); onSelect('mindreader_you') }} style={{
+                          display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px',
+                          background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text-soft)',
+                          fontFamily: 'var(--font-body)', fontSize: '0.88rem', transition: 'color 0.15s'
+                        }} onMouseEnter={e => e.target.style.color = 'var(--clr-accent)'}
+                          onMouseLeave={e => e.target.style.color = 'var(--clr-text-soft)'}>
+                          🙋‍♂️ You want to guess
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )
+              }
+              return (
+                <button key={app.key} onClick={() => { setMenuOpen(false); onSelect(app.key) }} style={{
+                  display: 'block', width: '100%', textAlign: 'left', padding: '10px 16px',
+                  background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text)',
+                  fontFamily: 'var(--font-body)', fontSize: '0.95rem', transition: 'background var(--transition)'
+                }} onMouseEnter={e => e.target.style.background = 'var(--clr-hover-strong)'}
+                  onMouseLeave={e => e.target.style.background = 'none'}>
+                  <strong style={{ color: 'var(--clr-accent)' }}>{app.name}</strong>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: 'var(--clr-text-soft)', marginTop: '2px' }}>{app.subtitle}</span>
+                </button>
+              )
+            })}
           </div>}
         </div>
       </div>
@@ -55163,7 +55291,7 @@ function TatsavitLineApp({ onBack }) {
  * TenaliAvatar SVG Component
  * Renders dynamically based on expression and equipped skin
  */
-function TenaliAvatar({ expression, skin }) {
+export function TenaliAvatar({ expression, skin }) {
   let turbanColor = '#e67e22'; // Orange default
   let turbanAccent = '#d35400';
   let robeColor = '#c0392b';
@@ -55426,7 +55554,7 @@ const THINKING_TEXTS = [
   "Every answer eliminates a host of candidate ideas."
 ];
 
-function MindReaderApp({ onBack }) {
+export function MindReaderApp({ onBack }) {
   const [phase, setPhase] = useState('setup'); // 'setup' | 'playing' | 'gameover'
   const [history, setHistory] = useState([]);
   const [incorrectPredictions, setIncorrectPredictions] = useState([]);

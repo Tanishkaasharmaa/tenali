@@ -12,13 +12,13 @@ All features for the new "Reverse Mind Reader" game are currently in the design 
 
 | Feature Area | Description | Implementation Status |
 |---|---|---|
-| **Phase 1: Core Architecture** | Core game loop, game states, rules, and constraints | 🟡 In Progress (Backend Complete) |
+| **Phase 1: Core Architecture** | Core game loop, game states, rules, and constraints | 🟢 Implemented (Backend + Frontend) |
 | **Phase 2: Knowledge Base** | Concept schema extension, attributes, hints, and dialogue | 🟢 Implemented ([mindReaderKB2.js](file:///d:/Projects/Tenali/server/mindReaderKB2.js)) |
 | **Phase 3: Question System** | Predefined categories, question library, validation | 🟢 Implemented (Predefined library validated) |
 | **Phase 4: Backend APIs** | APIs for `/start`, `/question`, `/hint`, `/guess`, `/end` | 🟢 Implemented (Endpoints verified via tests) |
-| **Phase 5: Frontend UI** | Layout, category navigation, search guess dialog, results | 🔴 Not Started |
-| **Phase 6: Avatar Expressions** | SVG avatar expressions linked to dialogue feedback | 🔴 Not Started |
-| **Phase 7: Reward System** | MRR updates, streak bonuses, title unlocks, skins | 🔴 Not Started |
+| **Phase 5: Frontend UI** | Layout, category navigation, search guess dialog, results | 🟢 Implemented ([MindReaderApp2.jsx](file:///d:/Projects/Tenali/client/src/MindReaderApp2.jsx)) |
+| **Phase 6: Avatar Expressions** | SVG avatar expressions linked to dialogue feedback | 🟢 Implemented (Dynamic expression transitions mapped) |
+| **Phase 7: Reward System** | MRR updates, streak bonuses, title unlocks, skins | 🟢 Implemented (In-memory rewards cabinet drawer) |
 | **Phase 8: Telemetry & Analytics** | Tracking metrics, question orders, wrong guesses | 🔴 Not Started |
 
 ---

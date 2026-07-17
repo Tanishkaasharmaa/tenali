@@ -1,0 +1,635 @@
+/**
+ * TENALI REVERSE MIND READER — CSS STYLES
+ * ═════════════════════════════════════════
+ * Implements a modern, responsive, premium dark-themed layout
+ * featuring glassmorphism, glowing micro-animations, and chat bubble styling.
+ */
+
+.mr2-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Glassmorphism Card Style */
+.mr2-card {
+  background: rgba(30, 39, 46, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* HUD Panel */
+.mr2-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.08) 0%, rgba(142, 68, 173, 0.08) 100%);
+  border: 1px solid rgba(74, 144, 226, 0.15);
+}
+
+.mr2-hud-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--clr-text);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mr2-hud-pill strong {
+  color: var(--clr-accent);
+}
+
+/* Horizontal Character Hub (Setup Screen) */
+.mr2-char-hub-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .mr2-char-hub-horizontal {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+}
+
+/* Vertical Character Hub (Playing Screen) */
+.mr2-char-hub-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin: 15px 0;
+  width: 100%;
+}
+
+/* Dialogue Speech Bubble */
+.mr2-speech-bubble {
+  position: relative;
+  background: rgba(30, 39, 46, 0.85);
+  border: 2px solid var(--clr-accent);
+  border-radius: 24px;
+  padding: 18px 24px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 8px 24px rgba(232, 134, 74, 0.12);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.mr2-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: calc(50% - 10px);
+  border-width: 15px 10px 0;
+  border-style: solid;
+  border-color: rgba(30, 39, 46, 0.85) transparent;
+  display: block;
+  width: 0;
+}
+
+.mr2-speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -18px;
+  left: calc(50% - 11px);
+  border-width: 16px 11px 0;
+  border-style: solid;
+  border-color: var(--clr-accent) transparent;
+  display: block;
+  width: 0;
+  z-index: -1;
+}
+
+.mr2-speech-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.mr2-char-name {
+  font-weight: 700;
+  color: var(--clr-accent);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mr2-char-title {
+  background: rgba(74, 144, 226, 0.15);
+  color: var(--clr-accent);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(74, 144, 226, 0.3);
+}
+
+.mr2-dialogue-text {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--clr-text);
+  font-style: italic;
+}
+
+/* Category Grid & Concept Chips */
+.mr2-concept-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.mr2-concept-chip {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--clr-text-soft);
+  transition: all 0.2s;
+}
+
+.mr2-concept-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--clr-text);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Split Pane Grid for Gameplay */
+.mr2-gameplay-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .mr2-gameplay-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mr2-control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mr2-transcript-panel {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 16px;
+  height: 380px;
+  box-sizing: border-box;
+}
+
+.mr2-transcript-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--clr-accent);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mr2-transcript-history {
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 6px;
+}
+
+/* Chat bubble styling */
+.mr2-chat-bubble {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  animation: scaleUp 0.25s ease-out forwards;
+}
+
+.mr2-chat-student {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--clr-accent) 0%, #d35400 100%);
+  color: white;
+  border-bottom-right-radius: 2px;
+}
+
+.mr2-chat-tenali {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--clr-text);
+  border-bottom-left-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mr2-chat-hint {
+  align-self: flex-start;
+  background: rgba(142, 68, 173, 0.15);
+  color: #d783ff;
+  border-bottom-left-radius: 2px;
+  border: 1px solid rgba(142, 68, 173, 0.3);
+}
+
+/* Category Tabs */
+.mr2-category-tabs {
+  display: flex;
+  gap: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 10px;
+  overflow-x: auto;
+}
+
+.mr2-tab-btn {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  color: var(--clr-text-soft);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.mr2-tab-btn:hover {
+  color: var(--clr-text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.mr2-tab-btn.active {
+  color: white;
+  background: var(--clr-accent);
+}
+
+/* Question List */
+.mr2-question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.mr2-question-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 10px 14px;
+  border-radius: 8px;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+.mr2-question-row:hover:not(.disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.mr2-question-row.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.mr2-question-text {
+  font-size: 0.9rem;
+  color: var(--clr-text-soft);
+  text-align: left;
+}
+
+.mr2-ask-btn {
+  background: rgba(74, 144, 226, 0.15);
+  color: #3498db;
+  border: 1px solid rgba(74, 144, 226, 0.3);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mr2-ask-btn:hover:not(:disabled) {
+  background: #3498db;
+  color: white;
+}
+
+.mr2-ask-btn:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--clr-text-soft);
+  border-color: transparent;
+  cursor: not-allowed;
+}
+
+/* Action Controls */
+.mr2-action-controls {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.mr2-hint-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(142, 68, 173, 0.15);
+  color: #d783ff;
+  border: 1px solid rgba(142, 68, 173, 0.3);
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mr2-hint-btn:hover:not(:disabled) {
+  background: #9b59b6;
+  color: white;
+}
+
+.mr2-hint-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.mr2-guess-trigger-btn {
+  flex-grow: 1;
+  background: linear-gradient(135deg, var(--clr-accent) 0%, #d35400 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(232, 134, 74, 0.25);
+  transition: all 0.2s;
+}
+
+.mr2-guess-trigger-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(232, 134, 74, 0.35);
+}
+
+/* Autocomplete Modal/Overlay */
+.mr2-guess-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.mr2-guess-modal {
+  width: 100%;
+  max-width: 480px;
+  background: #1e272e;
+  border: 2px solid var(--clr-accent);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.mr2-guess-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 10px;
+}
+
+.mr2-guess-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--clr-accent);
+}
+
+.mr2-close-btn {
+  background: none;
+  border: none;
+  color: var(--clr-text-soft);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.mr2-search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.mr2-search-input:focus {
+  border-color: var(--clr-accent);
+  box-shadow: 0 0 8px rgba(232, 134, 74, 0.2);
+}
+
+.mr2-concept-select-list {
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 4px;
+}
+
+.mr2-concept-select-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--clr-text-soft);
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.mr2-concept-select-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  border-color: var(--clr-accent);
+}
+
+.mr2-concept-select-item.selected {
+  background: rgba(232, 134, 74, 0.1);
+  color: var(--clr-accent);
+  border-color: var(--clr-accent);
+  font-weight: bold;
+}
+
+.mr2-submit-guess-btn {
+  background: var(--clr-accent);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mr2-submit-guess-btn:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--clr-text-soft);
+  cursor: not-allowed;
+}
+
+/* Result Screen Details */
+.mr2-result-win {
+  color: #2ecc71;
+  text-shadow: 0 0 15px rgba(46, 204, 113, 0.3);
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.mr2-result-loss {
+  color: #e74c3c;
+  text-shadow: 0 0 15px rgba(231, 76, 60, 0.3);
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.mr2-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+  margin: 20px 0;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mr2-details-item {
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--clr-text-soft);
+}
+
+.mr2-details-item strong {
+  color: var(--clr-text);
+}
+
+.mr2-details-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 5px 0 0 0;
+}
+
+.mr2-details-list li {
+  margin: 4px 0;
+  padding-left: 12px;
+  position: relative;
+}
+
+.mr2-details-list li::before {
+  content: "•";
+  color: var(--clr-accent);
+  position: absolute;
+  left: 0;
+}
+
+.mr2-mrr-up {
+  color: #2ecc71;
+  font-weight: 800;
+  font-size: 1.15rem;
+  animation: pulse-opacity 1s infinite alternate;
+}
+
+.mr2-mrr-down {
+  color: #e74c3c;
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+/* Animations */
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-opacity {
+  from { opacity: 0.75; }
+  to { opacity: 1; }
+}
+
+.mr2-music-bar {
+  flex-grow: 1;
+  width: 4px;
+  background-color: var(--clr-accent);
+  border-radius: 2px;
+  animation: bounceBar 1.2s ease-in-out infinite alternate;
+}
+
+.mr2-music-bar.bar-1 { animation-delay: 0.1s; height: 10px; }
+.mr2-music-bar.bar-2 { animation-delay: 0.3s; height: 25px; }
+.mr2-music-bar.bar-3 { animation-delay: 0.5s; height: 15px; }
+.mr2-music-bar.bar-4 { animation-delay: 0.2s; height: 35px; }
+.mr2-music-bar.bar-5 { animation-delay: 0.4s; height: 20px; }
+
+@keyframes bounceBar {
+  from { height: 5px; }
+  to { height: 38px; }
+}
