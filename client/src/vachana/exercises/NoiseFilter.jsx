@@ -143,6 +143,8 @@ export default function NoiseFilter() {
   const [teachIndex, setTeachIndex] = useState(0); // for teach stage slideshows
   const [hintsUsed, setHintsUsed] = useState(0);
   const [selectedTier, setSelectedTier] = useState(null);
+  const [showTutorialModal, setShowTutorialModal] = useState(false);
+  const [modalTeachIndex, setModalTeachIndex] = useState(0);
 
   // Keypress event handler hook
   useEffect(() => {
@@ -939,9 +941,34 @@ export default function NoiseFilter() {
                   : `Level ${noiseState.currentTier} · Stage ${noiseState.currentLevelIndex} — Question ${sessionQIndex + 1} of ${sessionQuestions.length}`
             }
           </span>
-          <span style={{ fontSize: '0.78rem', background: 'rgba(255,255,255,0.06)', padding: '4px 8px', borderRadius: '6px', fontWeight: '700' }}>
-            {!noiseState.isPlacing && `Pass Target: ${levelType === 'boss' || levelType === 'final_exam' ? '90%' : '80%'}`}
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {!noiseState.isPlacing && noiseState.currentTier > 1 && (
+              <button
+                onClick={() => {
+                  setModalTeachIndex(0);
+                  setShowTutorialModal(true);
+                }}
+                style={{
+                  padding: '4px 10px', background: 'rgba(232,134,74,0.12)', border: '1px solid var(--clr-accent)',
+                  color: 'var(--clr-accent)', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem',
+                  fontWeight: '700', transition: 'all 0.2s', display: 'inline-flex', alignItems: 'center', gap: '4px'
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'var(--clr-accent)';
+                  e.currentTarget.style.color = '#fff';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'rgba(232,134,74,0.12)';
+                  e.currentTarget.style.color = 'var(--clr-accent)';
+                }}
+              >
+                💡 Tutorial Reference
+              </button>
+            )}
+            <span style={{ fontSize: '0.78rem', background: 'rgba(255,255,255,0.06)', padding: '4px 8px', borderRadius: '6px', fontWeight: '700' }}>
+              {!noiseState.isPlacing && `Pass Target: ${levelType === 'boss' || levelType === 'final_exam' ? '90%' : '80%'}`}
+            </span>
+          </div>
         </div>
 
         {/* Progress bar */}
@@ -1120,6 +1147,116 @@ export default function NoiseFilter() {
                 {sessionQIndex < sessionQuestions.length - 1 ? 'Next Question' : 'Finish Session'}
               </button>
             )}
+          </div>
+        </div>
+      )}
+      {showTutorialModal && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0, 0, 0, 0.75)', display: 'flex', justifyContent: 'center',
+          alignItems: 'center', zIndex: 1000, padding: '20px', backdropFilter: 'blur(4px)'
+        }}>
+          <div style={{
+            background: 'var(--clr-surface)', border: '1px solid var(--clr-border)',
+            borderRadius: '24px', padding: '32px', width: '100%', maxWidth: '600px',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.5)', position: 'relative'
+          }}>
+            <button
+              onClick={() => setShowTutorialModal(false)}
+              style={{
+                position: 'absolute', top: '20px', right: '20px', background: 'transparent',
+                border: 'none', color: 'var(--clr-text-soft)', fontSize: '1.2rem', cursor: 'pointer'
+              }}
+            >
+              ✕
+            </button>
+            
+            <div style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              fontSize: '0.88rem', color: 'var(--clr-text-soft)', marginBottom: '20px'
+            }}>
+              <span style={{ fontWeight: '600' }}>
+                Level {noiseState.currentTier} · Tutorial Reference
+              </span>
+              <span style={{ fontSize: '0.78rem', background: 'rgba(255,255,255,0.06)', padding: '4px 8px', borderRadius: '6px' }}>
+                Example {modalTeachIndex + 1} of 5
+              </span>
+            </div>
+
+            {/* Teaching Card Problem details inside modal */}
+            {(() => {
+              const tierProblems = NOISE_CORPUS.filter(p => p.tier === noiseState.currentTier);
+              const activeProblem = tierProblems[modalTeachIndex]; // Chunk 1 tutorial is at index 0-4
+              if (!activeProblem) return null;
+
+              return (
+                <div>
+                  <div style={{
+                    fontSize: '1.15rem', color: 'var(--clr-text)', fontWeight: '700',
+                    lineHeight: '1.6', marginBottom: '24px', fontFamily: 'var(--font-display)',
+                    background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '16px',
+                    border: '1px solid var(--clr-border)'
+                  }}>
+                    {activeProblem.tokens.map((tok, idx) => (
+                      <span
+                        key={idx}
+                        style={{
+                          display: 'inline-block', margin: '0 3px', padding: '2px 4px',
+                          borderRadius: '4px',
+                          background: tok.isNoise ? 'rgba(239, 83, 80, 0.15)' : 'rgba(46, 160, 67, 0.15)',
+                          color: tok.isNoise ? '#ef5350' : '#2ea043',
+                          textDecoration: tok.isNoise ? 'line-through' : 'none',
+                          fontWeight: tok.isNoise ? '400' : '700'
+                        }}
+                      >
+                        {tok.text}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div style={{
+                    background: 'rgba(232, 134, 74, 0.08)', borderLeft: '4px solid var(--clr-accent)',
+                    borderRadius: '0 12px 12px 0', padding: '16px 20px', marginBottom: '32px'
+                  }}>
+                    <h5 style={{ margin: '0 0 6px', color: 'var(--clr-accent)', fontWeight: '700', fontSize: '0.9rem', textTransform: 'uppercase' }}>
+                      Key Math Fact
+                    </h5>
+                    <p style={{ margin: 0, color: 'var(--clr-text)', fontSize: '0.98rem', fontWeight: '500', lineHeight: '1.5' }}>
+                      {activeProblem.fact}
+                    </p>
+                  </div>
+
+                  {/* Navigation inside modal */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '24px' }}>
+                    {modalTeachIndex > 0 ? (
+                      <button
+                        onClick={() => setModalTeachIndex(prev => prev - 1)}
+                        style={{
+                          padding: '10px 20px', background: 'transparent', border: '1px solid var(--clr-border)',
+                          color: 'var(--clr-text)', borderRadius: '10px', cursor: 'pointer', fontWeight: '600'
+                        }}
+                      >
+                        Previous
+                      </button>
+                    ) : <div />}
+                    
+                    <button
+                      onClick={() => {
+                        if (modalTeachIndex < 4) {
+                          setModalTeachIndex(prev => prev + 1);
+                        } else {
+                          setShowTutorialModal(false);
+                        }
+                      }}
+                      className="submit-btn"
+                      style={{ padding: '10px 24px', fontWeight: '600' }}
+                    >
+                      {modalTeachIndex < 4 ? 'Next Concept' : 'Got it!'}
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </div>
       )}
