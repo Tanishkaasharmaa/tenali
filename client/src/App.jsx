@@ -23,7 +23,6 @@
 
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import VoiceAssistant from './components/VoiceAssistant';
-import { motion } from 'framer-motion';
 import OnboardingTour from './components/OnboardingTour';
 
 window.React = React;
