@@ -15,8 +15,8 @@ export const NOISE_CORPUS = [
     tokens: [
       { text: "5", isNoise: false },
       { text: "red", isNoise: true },
-      { text: "apples and", isNoise: false },
-      { text: "3", isNoise: false },
+      { text: "apples", isNoise: false },
+      { text: "and 3", isNoise: false },
       { text: "bananas.", isNoise: false },
       { text: "How many fruits?", isNoise: false }
     ],
@@ -30,8 +30,8 @@ export const NOISE_CORPUS = [
     question_text: "12 cupcakes and 8 cookies on a table. How many sweets?",
     tokens: [
       { text: "12", isNoise: false },
-      { text: "cupcakes and", isNoise: false },
-      { text: "8", isNoise: false },
+      { text: "cupcakes", isNoise: false },
+      { text: "and 8", isNoise: false },
       { text: "cookies", isNoise: false },
       { text: "on a table.", isNoise: true },
       { text: "How many sweets?", isNoise: false }
@@ -74,13 +74,12 @@ export const NOISE_CORPUS = [
     tier: 1,
     strand: "addition",
     title: "Sam's Shopping List",
-    question_text: "A blue notebook for $3 and a pen for $2. How much spent?",
+    question_text: "blue notebook for $3 and pen for $2. How much spent?",
     tokens: [
-      { text: "A", isNoise: false },
       { text: "blue", isNoise: true },
       { text: "notebook for", isNoise: false },
       { text: "$3", isNoise: false },
-      { text: "and a pen for", isNoise: false },
+      { text: "and pen for", isNoise: false },
       { text: "$2.", isNoise: false },
       { text: "How much spent?", isNoise: false }
     ],
@@ -94,8 +93,8 @@ export const NOISE_CORPUS = [
     question_text: "8 pigs and 3 cows in a barn. How many animals?",
     tokens: [
       { text: "8", isNoise: false },
-      { text: "pigs and", isNoise: false },
-      { text: "3", isNoise: false },
+      { text: "pigs", isNoise: false },
+      { text: "and 3", isNoise: false },
       { text: "cows", isNoise: false },
       { text: "in a barn.", isNoise: true },
       { text: "How many animals?", isNoise: false }
@@ -153,8 +152,7 @@ export const NOISE_CORPUS = [
     title: "Sitting on the Bus",
     question_text: "20 seats and 12 children. How many children?",
     tokens: [
-      { text: "20 seats", isNoise: true },
-      { text: "and", isNoise: false },
+      { text: "20 seats and", isNoise: true },
       { text: "12", isNoise: false },
       { text: "children.", isNoise: false },
       { text: "How many children?", isNoise: false }
