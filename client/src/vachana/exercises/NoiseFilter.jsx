@@ -663,7 +663,14 @@ export default function NoiseFilter() {
             return (
               <div 
                 key={tierNum} 
-                onClick={() => setSelectedTier(tierNum)}
+                onClick={() => {
+                  if (tierNum === 1) {
+                    setSelectedTier(1);
+                  } else {
+                    const startStage = (tierNum === noiseState.currentTier) ? noiseState.currentLevelIndex : 1;
+                    startSession(null, tierNum, startStage);
+                  }
+                }}
                 style={{
                   background: isActive ? 'linear-gradient(135deg, var(--clr-surface) 0%, rgba(232, 134, 74, 0.04) 100%)' : 'var(--clr-surface)',
                   border: isActive ? '1.5px solid var(--clr-accent)' : '1px solid var(--clr-border)',
