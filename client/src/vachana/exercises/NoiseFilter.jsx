@@ -516,39 +516,6 @@ export default function NoiseFilter() {
   if (!sessionActive) {
     return (
       <div style={{ animation: 'fadeIn 0.4s ease-out' }}>
-        {/* Header summary */}
-        <div style={{
-          background: 'linear-gradient(135deg, rgba(232, 134, 74, 0.08) 0%, rgba(20, 20, 20, 0) 100%)',
-          borderRadius: '24px',
-          border: '1px solid var(--clr-border)',
-          padding: '32px',
-          marginBottom: '32px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '24px'
-        }}>
-          <div>
-            <h3 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0 0 10px', color: 'var(--clr-text)', fontFamily: 'var(--font-display)' }}>
-              Noise Filter
-            </h3>
-            <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.96rem', lineHeight: '1.6', margin: 0, maxWidth: '640px' }}>
-              Learn to extract key numbers and math facts from word problems by filtering out unnecessary details and story fluff.
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', gap: '12px' }}>
-            {!noiseState.placementCompleted && (
-              <button onClick={() => setIsLoadingPlacement(true)} className="submit-btn" style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.92rem', fontWeight: '600' }}>
-                Level Test <RocketIcon />
-              </button>
-            )}
-            <button onClick={resetAllProgress} style={{ padding: '12px 20px', background: 'transparent', border: '1px solid var(--clr-border)', color: '#ef5350', borderRadius: '12px', cursor: 'pointer', fontSize: '0.92rem', fontWeight: '600' }}>
-              Reset Progress
-            </button>
-          </div>
-        </div>
 
         {/* Categories Placement Welcome Screen */}
         {isLoadingPlacement && (
