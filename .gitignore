@@ -5,3 +5,10 @@ server.log
 feature.md
 implementation_plan.md
 implementationplan.md
+docs/
+server/in_memory_users_db.json
+server/lil/learning_journey/in_memory_journey_progress.json
+server/dictionaryCache
+ISSUE_DRAFT.md
+PR_DRAFT.md
+**/*.ps1
