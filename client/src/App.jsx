@@ -67861,7 +67861,3 @@ function MensurationLabApp({ onBack, initialDifficulty, initialNumQuestions, ini
 
 export default App
 export { AuthMenu }
-
-
-import { updateBKT } from './bkt.js';
-export { updateBKT };

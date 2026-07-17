@@ -39,4 +39,13 @@ function bktUpdate(pMastery, isCorrect, params = DEFAULT_PARAMS) {
   return { posterior, pMasteryNext };
 }
 
-export { bktUpdate, DEFAULT_PARAMS, clamp };
+/**
+ * Convenience wrapper used by Concept Playgrounds.
+ * Accepts (currentScore, isCorrect, params?, meta?) and returns the new numeric mastery.
+ */
+function updateBKT(currentScore, isCorrect, params, _meta) {
+  const { pMasteryNext } = bktUpdate(currentScore, isCorrect, params || DEFAULT_PARAMS);
+  return pMasteryNext;
+}
+
+export { bktUpdate, updateBKT, DEFAULT_PARAMS, clamp };
