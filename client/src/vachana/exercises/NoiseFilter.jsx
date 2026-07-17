@@ -589,6 +589,41 @@ export default function NoiseFilter() {
                 <h4 style={{ margin: '0', fontSize: '1.1rem', fontWeight: '700', color: 'var(--clr-text)', fontFamily: 'var(--font-display)' }}>
                   {TIER_NAMES[tierNum]}
                 </h4>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '16px' }}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (window.confirm(`Are you sure you want to reset progress for Level ${tierNum}?`)) {
+                        const newState = {
+                          ...noiseState,
+                          currentTier: tierNum,
+                          currentLevelIndex: 1,
+                          failedLevelIndex: null,
+                          failedLevelType: null,
+                          reteachQuestionIds: []
+                        };
+                        newState.tierStates[String(tierNum)] = 'in_progress';
+                        saveNoiseState(newState);
+                      }
+                    }}
+                    style={{
+                      padding: '6px 12px', background: 'rgba(239,83,80,0.08)', border: '1px solid rgba(239,83,80,0.2)',
+                      color: '#ef5350', borderRadius: '8px', cursor: 'pointer', fontSize: '0.78rem',
+                      fontWeight: '600', transition: 'all 0.2s', display: 'inline-flex', alignItems: 'center', gap: '4px'
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = 'rgba(239,83,80,0.15)';
+                      e.currentTarget.style.borderColor = '#ef5350';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = 'rgba(239,83,80,0.08)';
+                      e.currentTarget.style.borderColor = 'rgba(239,83,80,0.2)';
+                    }}
+                  >
+                    ↺ Reset Progress
+                  </button>
+                </div>
               </div>
             );
           })}
