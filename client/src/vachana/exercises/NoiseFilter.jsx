@@ -645,12 +645,9 @@ export default function NoiseFilter() {
                   </div>
                 </div>
 
-                <h4 style={{ margin: '0 0 8px', fontSize: '1.1rem', fontWeight: '700', color: 'var(--clr-text)', fontFamily: 'var(--font-display)' }}>
+                <h4 style={{ margin: '0', fontSize: '1.1rem', fontWeight: '700', color: 'var(--clr-text)', fontFamily: 'var(--font-display)' }}>
                   {TIER_NAMES[tierNum]}
                 </h4>
-                <span style={{ fontSize: '0.8rem', color: 'var(--clr-accent)', marginTop: '8px', fontWeight: '600' }}>
-                  Open Level →
-                </span>
               </div>
             );
           })}
