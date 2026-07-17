@@ -11,181 +11,165 @@ export const NOISE_CORPUS = [
     tier: 1,
     strand: "addition",
     title: "Apples and Bananas",
-    question_text: "Alice has 5 shiny red apples, and Bob has 3 yellow bananas. How many fruits do they have in total?",
+    question_text: "Alice has 5 red apples and 3 bananas. How many fruits?",
     tokens: [
       { text: "Alice has", isNoise: false },
       { text: "5", isNoise: false },
-      { text: "shiny red", isNoise: true },
-      { text: "apples,", isNoise: false },
-      { text: "and Bob has", isNoise: false },
+      { text: "red", isNoise: true },
+      { text: "apples and", isNoise: false },
       { text: "3", isNoise: false },
-      { text: "yellow", isNoise: true },
       { text: "bananas.", isNoise: false },
-      { text: "How many fruits", isNoise: false },
-      { text: "do they have in total?", isNoise: false }
+      { text: "How many fruits?", isNoise: false }
     ],
-    explanation: "Adjectives describing the color of the fruits ('shiny red' and 'yellow') are irrelevant (noise) to calculating the total count of fruits."
+    explanation: "Adjective describing the color of the fruits ('red') is irrelevant (noise) to calculating the total count of fruits."
   },
   {
     id: "noise_1_02",
     tier: 1,
     strand: "addition",
     title: "Cupcakes and Cookies",
-    question_text: "A bakery has 12 hot chocolate cupcakes and 8 sugar cookies on a wooden table. How many sweets are there?",
+    question_text: "A bakery has 12 cupcakes and 8 cookies on a table. How many sweets?",
     tokens: [
       { text: "A bakery has", isNoise: false },
       { text: "12", isNoise: false },
-      { text: "hot chocolate", isNoise: true },
-      { text: "cupcakes", isNoise: false },
-      { text: "and", isNoise: false },
+      { text: "cupcakes and", isNoise: false },
       { text: "8", isNoise: false },
-      { text: "sugar", isNoise: true },
       { text: "cookies", isNoise: false },
-      { text: "on a wooden table.", isNoise: true },
-      { text: "How many sweets are there?", isNoise: false }
+      { text: "on a table.", isNoise: true },
+      { text: "How many sweets?", isNoise: false }
     ],
-    explanation: "Flavor details ('hot chocolate', 'sugar') and the location ('on a wooden table') are fluff that do not affect the total count of sweets."
+    explanation: "The location ('on a table') is fluff that does not affect the total count of sweets."
   },
   {
     id: "noise_1_03",
     tier: 1,
     strand: "subtraction",
     title: "Toy Cars in a Box",
-    question_text: "Tim has 15 toy cars in a plastic box. 4 of them are green and the rest are blue. How many blue cars are there?",
+    question_text: "Tim has 15 toy cars in a box. 4 are green, rest blue. How many blue?",
     tokens: [
       { text: "Tim has", isNoise: false },
       { text: "15", isNoise: false },
       { text: "toy cars", isNoise: false },
-      { text: "in a plastic box.", isNoise: true },
+      { text: "in a box.", isNoise: true },
       { text: "4", isNoise: false },
-      { text: "of them are green", isNoise: false },
-      { text: "and the rest are blue.", isNoise: false },
-      { text: "How many blue cars are there?", isNoise: false }
+      { text: "are green,", isNoise: false },
+      { text: "rest blue.", isNoise: false },
+      { text: "How many blue?", isNoise: false }
     ],
-    explanation: "The container details ('in a plastic box') are noise since they do not affect the mathematical ratio/count of the cars."
+    explanation: "The container details ('in a box') are noise since they do not affect the count of the cars."
   },
   {
     id: "noise_1_04",
     tier: 1,
     strand: "addition",
     title: "Roses and Bees",
-    question_text: "In a school garden, there are 10 red roses and 5 big bumblebees. How many flowers are in the garden?",
+    question_text: "There are 10 roses and 5 bees. How many flowers?",
     tokens: [
-      { text: "In a school garden,", isNoise: true },
-      { text: "there are", isNoise: false },
+      { text: "There are", isNoise: false },
       { text: "10", isNoise: false },
-      { text: "red", isNoise: true },
       { text: "roses", isNoise: false },
-      { text: "and 5 big bumblebees.", isNoise: true },
-      { text: "How many flowers are in the garden?", isNoise: false }
+      { text: "and 5 bees.", isNoise: true },
+      { text: "How many flowers?", isNoise: false }
     ],
-    explanation: "The location ('In a school garden'), the color ('red'), and the insects ('and 5 big bumblebees') are noise, as we only need to count the flowers (roses)."
+    explanation: "The insects ('and 5 bees') are noise, as we only need to count the flowers (roses)."
   },
   {
     id: "noise_1_05",
     tier: 1,
     strand: "addition",
     title: "Sam's Shopping List",
-    question_text: "Sam bought a blue notebook for $3 and a black pen for $2. How much money did Sam spend?",
+    question_text: "Sam bought a blue notebook for $3 and a pen for $2. How much spent?",
     tokens: [
       { text: "Sam bought a", isNoise: false },
       { text: "blue", isNoise: true },
       { text: "notebook for", isNoise: false },
       { text: "$3", isNoise: false },
-      { text: "and a", isNoise: false },
-      { text: "black", isNoise: true },
-      { text: "pen for", isNoise: false },
+      { text: "and a pen for", isNoise: false },
       { text: "$2.", isNoise: false },
-      { text: "How much money did Sam spend?", isNoise: false }
+      { text: "How much spent?", isNoise: false }
     ],
-    explanation: "The colors of the items ('blue' and 'black') are irrelevant details when we just need to add the costs of the items."
+    explanation: "The color of the item ('blue') is an irrelevant detail when we just need to add the costs."
   },
   {
     id: "noise_1_06",
     tier: 1,
     strand: "addition",
     title: "Animals in the Barn",
-    question_text: "A farmer has 8 fat pigs and 3 tall cows in a red barn. How many animals does he have?",
+    question_text: "A farmer has 8 pigs and 3 cows in a barn. How many animals?",
     tokens: [
       { text: "A farmer has", isNoise: false },
       { text: "8", isNoise: false },
-      { text: "fat", isNoise: true },
-      { text: "pigs", isNoise: false },
-      { text: "and", isNoise: false },
+      { text: "pigs and", isNoise: false },
       { text: "3", isNoise: false },
-      { text: "tall", isNoise: true },
       { text: "cows", isNoise: false },
-      { text: "in a red barn.", isNoise: true },
-      { text: "How many animals does he have?", isNoise: false }
+      { text: "in a barn.", isNoise: true },
+      { text: "How many animals?", isNoise: false }
     ],
-    explanation: "Descriptions ('fat', 'tall') and the location ('in a red barn') do not affect the summation of animal counts."
+    explanation: "The location ('in a barn') does not affect the summation of animal counts."
   },
   {
     id: "noise_1_07",
     tier: 1,
     strand: "subtraction",
     title: "Kids on the Field",
-    question_text: "There are 7 kids playing football on a grass field and 4 kids eating popcorn. How many kids are playing football?",
+    question_text: "There are 7 kids playing and 4 eating popcorn. How many playing?",
     tokens: [
       { text: "There are", isNoise: false },
       { text: "7", isNoise: false },
-      { text: "kids playing football", isNoise: false },
-      { text: "on a grass field", isNoise: true },
-      { text: "and 4 kids eating popcorn.", isNoise: true },
-      { text: "How many kids are playing football?", isNoise: false }
+      { text: "kids playing", isNoise: false },
+      { text: "and 4 eating popcorn.", isNoise: true },
+      { text: "How many playing?", isNoise: false }
     ],
-    explanation: "The location ('on a grass field') and the other group of kids ('and 4 kids eating popcorn') are completely irrelevant to finding the number of kids playing football."
+    explanation: "The other group of kids ('and 4 eating popcorn') is irrelevant to finding the number of kids playing."
   },
   {
     id: "noise_1_08",
     tier: 1,
     strand: "subtraction",
     title: "Lily's Stones",
-    question_text: "Lily found 9 smooth stones on a sunny beach, but she lost 3 of them. How many stones does she have now?",
+    question_text: "Lily found 9 stones on a beach, but she lost 3. How many now?",
     tokens: [
       { text: "Lily found", isNoise: false },
       { text: "9", isNoise: false },
-      { text: "smooth", isNoise: true },
       { text: "stones", isNoise: false },
-      { text: "on a sunny beach,", isNoise: true },
+      { text: "on a beach,", isNoise: true },
       { text: "but she lost", isNoise: false },
       { text: "3", isNoise: false },
       { text: "of them.", isNoise: false },
-      { text: "How many stones does she have now?", isNoise: false }
+      { text: "How many now?", isNoise: false }
     ],
-    explanation: "The texture ('smooth') and the setting ('on a sunny beach') are decorative elements that do not impact the arithmetic calculation."
+    explanation: "The setting ('on a beach') is a decorative element that does not impact the calculation."
   },
   {
     id: "noise_1_09",
     tier: 1,
     strand: "addition",
     title: "Mice and Milk",
-    question_text: "A cat caught 6 tiny mice in the kitchen and drank 2 cups of milk. How many mice did the cat catch?",
+    question_text: "A cat caught 6 mice and drank milk. How many mice caught?",
     tokens: [
       { text: "A cat caught", isNoise: false },
       { text: "6", isNoise: false },
-      { text: "tiny", isNoise: true },
       { text: "mice", isNoise: false },
-      { text: "in the kitchen", isNoise: true },
-      { text: "and drank 2 cups of milk.", isNoise: true },
-      { text: "How many mice did the cat catch?", isNoise: false }
+      { text: "and drank milk.", isNoise: true },
+      { text: "How many mice caught?", isNoise: false }
     ],
-    explanation: "The cat's milk-drinking habit ('and drank 2 cups of milk'), the location ('in the kitchen'), and the adjective ('tiny') are logical noise relative to the target question."
+    explanation: "The cat's milk-drinking habit ('and drank milk') is logical noise relative to the target question."
   },
   {
     id: "noise_1_10",
     tier: 1,
     strand: "addition",
     title: "Sitting on the Bus",
-    question_text: "A school bus has 20 leather seats. 12 children are sitting on the bus. How many children are on the bus?",
+    question_text: "A bus has 20 seats and 12 children. How many children?",
     tokens: [
-      { text: "A school bus has", isNoise: true },
-      { text: "20 leather seats.", isNoise: true },
+      { text: "A bus has", isNoise: false },
+      { text: "20 seats", isNoise: true },
+      { text: "and", isNoise: false },
       { text: "12", isNoise: false },
-      { text: "children are sitting on the bus.", isNoise: false },
-      { text: "How many children are on the bus?", isNoise: false }
+      { text: "children.", isNoise: false },
+      { text: "How many children?", isNoise: false }
     ],
-    explanation: "The count of bus seats ('20 leather seats') is irrelevant background information since the goal is simply to find the number of children currently on the bus."
+    explanation: "The count of bus seats ('20 seats') is irrelevant background information since the goal is simply to find the number of children."
   },
 
   // ================= TIER 2: MULTIPLICATION / DIVISION =================
