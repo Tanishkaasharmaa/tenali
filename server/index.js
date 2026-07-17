@@ -8918,6 +8918,99 @@ app.post('/diffeq-api/check', express.json(), (req, res) => {
 // ═══════════════════════════════════════════════════════════════════════════
 const { QUESTIONS, CONCEPTS } = require('./mindReaderKB');
 const { runInference }        = require('./mindReaderEngine');
+const challengeService       = require('./challengeService');
+const mindReaderEvents       = require('./mindReaderEvents');
+
+// Decoupled listener to handle ratings (MRR) and database analytics logging
+mindReaderEvents.on('challengeCompleted', async (data) => {
+  const { userContext: user, outcome, concept, questionsCount, scopeType, scopeValue, resultCollector } = data;
+  const todayStr = new Date().toDateString();
+  const diff = outcome === 'win' ? 20 : -5;
+
+  if (user) {
+    resultCollector.authenticated = true;
+    if (user.lastMindReaderGameDate !== todayStr) {
+      user.mindReaderGamesToday = 0;
+      user.lastMindReaderGameDate = todayStr;
+    }
+
+    user.mrr = Math.max(1000, (user.mrr || 1000) + diff);
+    user.mindReaderGamesToday += 1;
+
+    if (!user.isInMemory) {
+      await user.save().catch(err => console.error('[challenge] user save error:', err));
+    } else {
+      inMemoryProfiles[user.username.toLowerCase()] = user;
+    }
+
+    resultCollector.mrr = user.mrr;
+    resultCollector.mindReaderGamesToday = user.mindReaderGamesToday;
+    resultCollector.unlockedSkins = user.unlockedSkins || ["Classic Tenali"];
+    resultCollector.equippedSkin = user.equippedSkin || 'classic';
+    resultCollector.equippedTitle = user.equippedTitle || 'Novice Reader';
+  } else {
+    // Guest fallback
+    resultCollector.authenticated = false;
+    resultCollector.mrr = diff; // client will add this to its local MRR state
+  }
+
+  // Log analytics to database if connected
+  const mongoose = require('mongoose');
+  if (mongoose.connection.readyState === 1) {
+    auth.MindReaderAnalytic.create({
+      outcome,
+      concept: concept.name,
+      questionsCount: questionsCount || 0,
+      scope: `challenge:${scopeType}:${scopeValue || 'all'}`,
+      predictionsMade: []
+    }).catch(err => console.error('[challenge] analytic save error:', err));
+  }
+});
+
+// Challenge Mode HTTP API Route definitions
+app.get('/api/mindreader/challenge/metadata', (req, res) => {
+  try {
+    const meta = challengeService.getMetadata();
+    res.json(meta);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/mindreader/challenge/start', express.json(), (req, res) => {
+  const { scopeType, scopeValue, maxQuestions } = req.body;
+  try {
+    const result = challengeService.startChallenge(scopeType, scopeValue, maxQuestions);
+    res.json(result);
+  } catch (err) {
+    const status = err.statusCode || 500;
+    res.status(status).json({ error: err.message });
+  }
+});
+
+app.post('/api/mindreader/challenge/ask', express.json(), (req, res) => {
+  const { token, questionId } = req.body;
+  try {
+    const result = challengeService.askQuestion(token, questionId);
+    res.json(result);
+  } catch (err) {
+    const status = err.statusCode || 500;
+    res.status(status).json({ error: err.message });
+  }
+});
+
+app.post('/api/mindreader/challenge/guess', express.json(), async (req, res) => {
+  const { token, guessConceptId, questionsCount, forceEnd } = req.body;
+  try {
+    // Fetch optional authenticated user context
+    const user = await getOptionalUser(req);
+    const result = challengeService.guessConcept(token, guessConceptId, questionsCount, forceEnd, user);
+    res.json(result);
+  } catch (err) {
+    const status = err.statusCode || 500;
+    res.status(status).json({ error: err.message });
+  }
+});
 
 app.post('/api/mindreader/next', express.json(), (req, res) => {
   const history              = req.body.history              || [];

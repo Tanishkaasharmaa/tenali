@@ -55319,6 +55319,65 @@ function MindReaderApp({ onBack }) {
   const [mrrChange, setMrrChange] = useState(0);
   const [cheated, setCheated] = useState(false);
 
+  // ── Challenge Mode ("You Guess") State ────────────────────────────────
+  const [gameMode, setGameMode] = useState('tenali-guesses'); // 'tenali-guesses' | 'you-guess'
+  const [challengeMetadata, setChallengeMetadata] = useState(null);
+  const [challengeToken, setChallengeToken] = useState(null);
+  const [challengeQuestions, setChallengeQuestions] = useState([]); // asked: { qId, text, answer }
+  const [challengeCandidates, setChallengeCandidates] = useState([]); // candidate concepts for chosen scope
+  const [challengeMaxQuestions, setChallengeMaxQuestions] = useState(15);
+  const [challengeScopeType, setChallengeScopeType] = useState('all'); // all | grade | category
+  const [challengeScopeValue, setChallengeScopeValue] = useState('all');
+  const [challengeFilterCategory, setChallengeFilterCategory] = useState('all');
+  const [challengeGuessHistory, setChallengeGuessHistory] = useState([]); // list of incorrect guess names
+  const [challengeOutcome, setChallengeOutcome] = useState(null); // 'win' | 'loss'
+  const [challengeBestQuestions, setChallengeBestQuestions] = useState([]); // best questions at game end
+  const [tenaliSpeech, setTenaliSpeech] = useState("Welcome to the Court of Tenali Raman! Choose a mode below.");
+  const [tenaliExpression, setTenaliExpression] = useState("thinking");
+
+  const challengeDialogues = {
+    yes: [
+      "Aha, yes! The mathematical signs align with your question.",
+      "Indeed, that is true for my secret concept.",
+      "Yes, my secret concept possesses that exact quality!",
+      "Correct! Your deduction is sharp. The answer is Yes.",
+      "Yes! You are drawing closer to the secret of the court."
+    ],
+    no: [
+      "No, that does not apply to the concept in my mind.",
+      "Ah, a clever query, but the answer is No.",
+      "No, you must seek in another direction.",
+      "Negative! My secret concept does not share that property.",
+      "No, my secret concept rejects that claim."
+    ],
+    dontknow: [
+      "Hmm... even with all my courtly wisdom, I must say Don't Know.",
+      "That lies in a gray area. I cannot definitively say Yes or No.",
+      "An interesting angle, but I do not know the answer to that.",
+      "Don't Know! Tenali's mind is temporarily clouded on this point.",
+      "My records are silent on this matter. I do not know."
+    ]
+  };
+
+  const defaultQuestions = [
+    { id: 'q_geometry', text: '🪄 Hmm... should I start looking among shapes, lines, and angles?' },
+    { id: 'q_algebra', text: '🔠 Is your secret hiding in the land of letters, variables, and expressions?' },
+    { id: 'q_statistics', text: '📊 Are we looking at clues from data, chance, or averages?' },
+    { id: 'q_number', text: '🔢 Is your secret hiding somewhere in the world of numbers?' },
+    { id: 'q_triangle', text: '📐 Does your shape have exactly three sides, or does it dance with triangle ratios?' },
+    { id: 'q_circle', text: '🟡 Is your shape perfectly round like a coin or a bubble?' },
+    { id: 'q_equation', text: '⚖️ Shall we balance two sides of an equation to find a mystery variable?' },
+    { id: 'q_operation', text: '⚙️ Does your secret ask us to perform an action, calculation, or step-by-step process?' },
+    { id: 'q_fraction_percent', text: '🍰 Does it slice something whole into fractions, decimals, percentages, or ratios?' },
+    { id: 'q_graph', text: '🗺️ Shall we map out our clues using coordinates on a grid or graph?' },
+    { id: 'q_prime_factor', text: '🧱 Is your secret about the building blocks of numbers, like primes or factors?' },
+    { id: 'q_vector_matrix', text: '🧭 Does it point us in a direction, or arrange numbers in a grid like a matrix?' },
+    { id: 'q_sets_logic', text: '🧺 Are we sorting things into different logical groups or sets?' },
+    { id: 'q_multiple', text: '📈 Are we searching for a multiple that grows bigger, rather than a factor that divides?' },
+    { id: 'q_hundred', text: '💯 Does your secret comparison focus on parts out of a hundred?' },
+    { id: 'q_degree_two', text: '🎢 Does this equation trace a curved path with a variable raised to the power of two?' }
+  ];
+
   // 15 MVP concepts
   const mvpConcepts = [
     'Prime Number', 'HCF (Highest Common Factor)', 'LCM (Lowest Common Multiple)',
@@ -55367,6 +55426,25 @@ function MindReaderApp({ onBack }) {
         if (configRes.ok) {
           const configData = await configRes.json();
           if (configData.dailyLimit) setDailyLimit(configData.dailyLimit);
+        }
+
+        // Fetch challenge metadata
+        try {
+          const metaRes = await fetch(`${API}/api/mindreader/challenge/metadata`);
+          if (metaRes.ok) {
+            const metaData = await metaRes.json();
+            if (!metaData.scopes && metaData.concepts) {
+              const uniqueChapters = Array.from(new Set(metaData.concepts.map(c => c.chapter).filter(Boolean))).sort((a, b) => a - b);
+              const uniqueSubjects = Array.from(new Set(metaData.concepts.map(c => c.subject).filter(Boolean))).sort();
+              metaData.scopes = {
+                grade: uniqueChapters,
+                category: uniqueSubjects
+              };
+            }
+            setChallengeMetadata(metaData);
+          }
+        } catch (err) {
+          console.error('Failed to load challenge metadata:', err);
         }
 
         const token = authGetToken();
@@ -55453,6 +55531,230 @@ function MindReaderApp({ onBack }) {
       } else {
         try { localStorage.setItem('tenali-mindreader-title', val) } catch { }
       }
+    }
+  };
+
+  const startChallengeGame = async () => {
+    setLoading(true);
+    setErrorMsg('');
+    setChallengeQuestions([]);
+    setChallengeGuessHistory([]);
+    setChallengeOutcome(null);
+    setChallengeBestQuestions([]);
+    setMrrChange(0);
+    setRecommendations(null);
+    setActualConcept(null);
+    
+    let mappedScopeType = 'curriculum';
+    let mappedScopeValue = '';
+    
+    if (challengeScopeType === 'grade') {
+      mappedScopeType = 'chapter';
+      mappedScopeValue = String(challengeScopeValue);
+    } else if (challengeScopeType === 'category') {
+      mappedScopeType = 'subject';
+      mappedScopeValue = String(challengeScopeValue);
+    }
+    
+    try {
+      const res = await fetch(`${API}/api/mindreader/challenge/start`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          scopeType: mappedScopeType,
+          scopeValue: mappedScopeValue,
+          maxQuestions: challengeMaxQuestions
+        })
+      });
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to start challenge session');
+      }
+      const data = await res.json();
+      
+      setChallengeToken(data.token);
+      setChallengeCandidates(data.candidates);
+      setChallengeMaxQuestions(data.maxQuestions);
+      
+      setTenaliExpression('thinking');
+      setTenaliSpeech("I have secretly chosen a concept within your scope! Choose a question from the grid below to guess my thoughts.");
+      
+      setPhase('playing');
+    } catch (err) {
+      setErrorMsg(err.message || 'Error communicating with Tenali.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const askChallengeQuestion = async (qId, qText) => {
+    if (loading || challengeQuestions.some(q => q.qId === qId)) return;
+    setLoading(true);
+    setErrorMsg('');
+    
+    try {
+      const res = await fetch(`${API}/api/mindreader/challenge/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: challengeToken,
+          questionId: qId
+        })
+      });
+      if (!res.ok) throw new Error('Error asking question');
+      const data = await res.json();
+      
+      const answerVal = data.answer; // 'yes' | 'no' | 'dontknow'
+      
+      const newQuestions = [...challengeQuestions, { qId, text: qText, answer: answerVal }];
+      setChallengeQuestions(newQuestions);
+      
+      const templates = challengeDialogues[answerVal];
+      const speech = templates[Math.floor(Math.random() * templates.length)];
+      setTenaliSpeech(speech);
+      setTenaliExpression(answerVal === 'yes' ? 'confident' : 'thinking');
+
+      const remaining = challengeMaxQuestions - newQuestions.length;
+      if (remaining <= 0) {
+        await endChallengeGame(false, newQuestions.length);
+      }
+    } catch (err) {
+      setErrorMsg(err.message || 'Error processing response.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const makeChallengeGuess = async (guessId) => {
+    if (loading || !guessId) return;
+    setLoading(true);
+    setErrorMsg('');
+    
+    const matchedConcept = challengeCandidates.find(c => c.id === guessId);
+    const guessName = matchedConcept ? matchedConcept.name : 'Unknown';
+    
+    try {
+      const token = authGetToken();
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const res = await fetch(`${API}/api/mindreader/challenge/guess`, {
+         method: 'POST',
+         headers,
+         body: JSON.stringify({
+           token: challengeToken,
+           guessConceptId: guessId,
+           questionsCount: challengeQuestions.length,
+           forceEnd: false
+         })
+      });
+      if (!res.ok) throw new Error('Error validating guess');
+      const data = await res.json();
+      
+      if (data.correct) {
+        setActualConcept(data.concept);
+        setChallengeOutcome('win');
+        setChallengeBestQuestions(data.bestQuestions || []);
+        
+        if (data.authenticated) {
+          setMrrChange(data.mrr - mrr);
+          setMrr(data.mrr);
+          setGamesToday(data.mindReaderGamesToday);
+        } else {
+          // Guest calculates local MRR change
+          const diff = data.mrr; // For guests, server returns the MRR difference (+20 / -5)
+          const newMrr = Math.max(1000, mrr + diff);
+          setMrrChange(diff);
+          setMrr(newMrr);
+          const newGamesToday = gamesToday + 1;
+          setGamesToday(newGamesToday);
+          try {
+            localStorage.setItem('tenali-mindreader-mrr', String(newMrr));
+            localStorage.setItem('tenali-mindreader-games-today', String(newGamesToday));
+          } catch {}
+        }
+        
+        setRecommendations(data.concept.recommendations);
+        setTenaliSpeech(`Incredible! You correctly guessed "${guessName}". You have bested my secret!`);
+        setTenaliExpression('loss');
+        setPhase('gameover');
+      } else {
+        const newHistory = [...challengeGuessHistory, guessName];
+        setChallengeGuessHistory(newHistory);
+        setTenaliSpeech(`Alas! My secret concept is NOT "${guessName}". Try asking more questions or try another guess!`);
+        setTenaliExpression('confident');
+        
+        if (challengeQuestions.length >= challengeMaxQuestions) {
+          await endChallengeGame(false, challengeQuestions.length);
+        }
+      }
+    } catch (err) {
+      setErrorMsg(err.message || 'Error processing guess.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const endChallengeGame = async (isGiveUp, optQuestionsCount) => {
+    setLoading(true);
+    setErrorMsg('');
+    
+    const qCount = optQuestionsCount !== undefined ? optQuestionsCount : challengeQuestions.length;
+    
+    try {
+      const token = authGetToken();
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const res = await fetch(`${API}/api/mindreader/challenge/guess`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          token: challengeToken,
+          guessConceptId: '',
+          questionsCount: qCount,
+          forceEnd: true
+        })
+      });
+      if (!res.ok) throw new Error('Error ending challenge');
+      const data = await res.json();
+      
+      setActualConcept(data.concept);
+      setChallengeOutcome('loss');
+      setChallengeBestQuestions(data.bestQuestions || []);
+      
+      if (data.authenticated) {
+        setMrrChange(data.mrr - mrr);
+        setMrr(data.mrr);
+        setGamesToday(data.mindReaderGamesToday);
+      } else {
+        const diff = data.mrr;
+        const newMrr = Math.max(1000, mrr + diff);
+        setMrrChange(diff);
+        setMrr(newMrr);
+        const newGamesToday = gamesToday + 1;
+        setGamesToday(newGamesToday);
+        try {
+          localStorage.setItem('tenali-mindreader-mrr', String(newMrr));
+          localStorage.setItem('tenali-mindreader-games-today', String(newGamesToday));
+        } catch {}
+      }
+      
+      setRecommendations(data.concept.recommendations);
+      setTenaliSpeech(isGiveUp 
+        ? `You surrendered! My secret concept was "${data.concept.name}". Better luck next time!`
+        : `You ran out of questions! My secret concept was "${data.concept.name}". Better luck next time!`
+      );
+      setTenaliExpression('victory');
+      setPhase('gameover');
+    } catch (err) {
+      setErrorMsg(err.message || 'Error ending challenge.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55677,22 +55979,44 @@ function MindReaderApp({ onBack }) {
   };
 
   const handlePlayAgain = async () => {
-    if (phase === 'gameover' && !recommendations && (royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0))) {
-      await callEndGameAPI('win', 'Unknown');
+    if (gameMode === 'tenali-guesses') {
+      if (phase === 'gameover' && !recommendations && (royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0))) {
+        await callEndGameAPI('win', 'Unknown');
+      }
     }
     setPhase('setup');
     setRecommendations(null);
     setActualConcept(null);
+    setChallengeToken(null);
+    setChallengeGuessHistory([]);
+    setChallengeQuestions([]);
+    setTenaliSpeech("Welcome to the Court of Tenali Raman! Choose a mode below.");
+    setTenaliExpression("thinking");
   };
 
   const handleBackToHome = async () => {
-    if (phase === 'gameover' && !recommendations && (royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0))) {
-      await callEndGameAPI('win', 'Unknown');
+    if (gameMode === 'tenali-guesses') {
+      if (phase === 'gameover' && !recommendations && (royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0))) {
+        await callEndGameAPI('win', 'Unknown');
+      }
     }
     onBack();
   };
 
   const getTenaliState = () => {
+    if (gameMode === 'you-guess') {
+      if (gamesToday >= dailyLimit && phase === 'setup') {
+        return {
+          expression: 'loss',
+          text: "Alas, my challenge energies are completely depleted! Practice your curriculum lessons and I shall return tomorrow."
+        };
+      }
+      return {
+        expression: tenaliExpression,
+        text: tenaliSpeech
+      };
+    }
+
     if (gamesToday >= dailyLimit) {
       return {
         expression: 'loss',
@@ -55780,13 +56104,25 @@ function MindReaderApp({ onBack }) {
     return 'meter-gamble';
   };
 
+  const isCandidateEliminated = (candidate) => {
+    if (!candidate.answers) return false;
+    return challengeQuestions.some(asked => {
+      const candidateAnswer = candidate.answers[asked.qId];
+      const normalised = candidateAnswer === true ? 'yes' : (candidateAnswer === false ? 'no' : 'dontknow');
+      if (asked.answer !== 'dontknow' && normalised !== 'dontknow' && normalised !== asked.answer) {
+        return true;
+      }
+      return false;
+    });
+  };
+
   const matchedRecConcept = conceptsFullList.find(
     c => c.name === (prediction ? prediction.name : (actualConcept ? actualConcept.name : ''))
   );
 
   return (
     <QuizLayout title="Tenali Mind Reader" subtitle="Recreational learning game" onBack={handleBackToHome}>
-      <div className="mindreader-container">
+      <div className={`mindreader-container ${gameMode === 'you-guess' && phase === 'playing' ? 'challenge-wide' : ''}`}>
 
         {/* Top Hud & Rewards Cabinet Button */}
         <div className="mr-top-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', width: '100%', flexWrap: 'wrap', gap: '10px' }}>
@@ -55822,47 +56158,183 @@ function MindReaderApp({ onBack }) {
 
         {phase === 'setup' && (
           <div className="mr-card setup-card">
-            <h2>Think of a Concept!</h2>
-            <p className="instruction-text">
-              Secretly choose any mathematical concept from the list below without telling anyone or typing it.
-              Tenali will ask Yes/No questions and try to guess what you are thinking!
-            </p>
-
-            <div className="concept-chips">
-              {mvpConcepts.map((c, i) => (
-                <span key={i} className="concept-chip">{c}</span>
-              ))}
-            </div>
-
-            <div className="mrr-badge-row" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '20px' }}>
-              <div className="mrr-badge">
-                <span className="badge-label">MIND READER RATING</span>
-                <span className="badge-value">🔮 {mrr}</span>
-              </div>
-              <div className="mrr-badge">
-                <span className="badge-label">DAILY CHANCES LEFT</span>
-                <span className="badge-value">⚡ {Math.max(0, dailyLimit - gamesToday)} / {dailyLimit}</span>
-              </div>
-            </div>
-
-            {errorMsg && <p className="error-text">{errorMsg}</p>}
-
-            {gamesToday >= dailyLimit ? (
-              <div className="lockout-warning-box" style={{ marginTop: '20px', padding: '16px', background: 'rgba(231, 76, 60, 0.1)', border: '1px solid rgba(231, 76, 60, 0.3)', borderRadius: '12px', color: 'var(--clr-wrong)', textAlign: 'center' }}>
-                <p style={{ fontWeight: '600', marginBottom: '8px' }}>⚠️ Daily Limit Reached!</p>
-                <p style={{ fontSize: '0.92rem', opacity: 0.9, lineHeight: 1.4 }}>
-                  My mind reading energy is depleted for today! Please complete some curriculum lessons and try again tomorrow.
-                </p>
-              </div>
-            ) : (
-              <button className="submit-btn start-game-btn" onClick={startGame} disabled={loading}>
-                {loading ? 'Entering...' : 'Start Game →'}
+            {/* Game Mode Selection Tabs */}
+            <div className="mode-selection-tabs" style={{ display: 'flex', gap: '10px', marginBottom: '24px', borderBottom: '1px solid var(--clr-border)', paddingBottom: '16px' }}>
+              <button 
+                className={`mode-tab-btn ${gameMode === 'tenali-guesses' ? 'active' : ''}`}
+                onClick={() => {
+                  setGameMode('tenali-guesses');
+                  setTenaliSpeech("Welcome to the Court of Tenali! Think of a mathematical concept from the grid below, hold it secretly in your mind, and click Start Game. Let's see if my wits can pierce your thoughts!");
+                  setTenaliExpression('thinking');
+                }}
+                style={{
+                  flex: 1,
+                  padding: '12px 8px',
+                  borderRadius: '8px',
+                  border: '1px solid var(--clr-border)',
+                  background: gameMode === 'tenali-guesses' ? 'var(--clr-accent)' : 'var(--clr-surface)',
+                  color: gameMode === 'tenali-guesses' ? 'white' : 'var(--clr-text)',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  transition: 'all 0.2s'
+                }}
+              >
+                🔮 Tenali Guesses
               </button>
+              <button 
+                className={`mode-tab-btn ${gameMode === 'you-guess' ? 'active' : ''}`}
+                onClick={() => {
+                  setGameMode('you-guess');
+                  setTenaliSpeech("Challenge Mode! I have chosen a concept. You have a limited number of questions to narrow it down and correctly guess my chosen concept.");
+                  setTenaliExpression('confident');
+                }}
+                style={{
+                  flex: 1,
+                  padding: '12px 8px',
+                  borderRadius: '8px',
+                  border: '1px solid var(--clr-border)',
+                  background: gameMode === 'you-guess' ? 'var(--clr-accent)' : 'var(--clr-surface)',
+                  color: gameMode === 'you-guess' ? 'white' : 'var(--clr-text)',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  transition: 'all 0.2s'
+                }}
+              >
+                ⚔️ Tenali Challenges
+              </button>
+            </div>
+
+            {gameMode === 'tenali-guesses' ? (
+              <>
+                <h2>Think of a Concept!</h2>
+                <p className="instruction-text">
+                  Secretly choose any mathematical concept from the list below without telling anyone or typing it.
+                  Tenali will ask Yes/No questions and try to guess what you are thinking!
+                </p>
+
+                <div className="concept-chips">
+                  {mvpConcepts.map((c, i) => (
+                    <span key={i} className="concept-chip">{c}</span>
+                  ))}
+                </div>
+
+                <div className="mrr-badge-row" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '20px' }}>
+                  <div className="mrr-badge">
+                    <span className="badge-label">MIND READER RATING</span>
+                    <span className="badge-value">🔮 {mrr}</span>
+                  </div>
+                  <div className="mrr-badge">
+                    <span className="badge-label">DAILY CHANCES LEFT</span>
+                    <span className="badge-value">⚡ {Math.max(0, dailyLimit - gamesToday)} / {dailyLimit}</span>
+                  </div>
+                </div>
+
+                {errorMsg && <p className="error-text">{errorMsg}</p>}
+
+                {gamesToday >= dailyLimit ? (
+                  <div className="lockout-warning-box" style={{ marginTop: '20px', padding: '16px', background: 'rgba(231, 76, 60, 0.1)', border: '1px solid rgba(231, 76, 60, 0.3)', borderRadius: '12px', color: 'var(--clr-wrong)', textAlign: 'center' }}>
+                    <p style={{ fontWeight: '600', marginBottom: '8px' }}>⚠️ Daily Limit Reached!</p>
+                    <p style={{ fontSize: '0.92rem', opacity: 0.9, lineHeight: 1.4 }}>
+                      My mind reading energy is depleted for today! Please complete some curriculum lessons and try again tomorrow.
+                    </p>
+                  </div>
+                ) : (
+                  <button className="submit-btn start-game-btn" onClick={startGame} disabled={loading}>
+                    {loading ? 'Entering...' : 'Start Game →'}
+                  </button>
+                )}
+              </>
+            ) : (
+              <>
+                <h2>Tenali's Secret Challenge!</h2>
+                <p className="instruction-text">
+                  Tenali Raman has selected a secret mathematical concept. Use the query console to ask questions and guess his thoughts before running out of questions!
+                </p>
+
+                <div className="challenge-setup-controls" style={{ display: 'flex', flexDirection: 'column', gap: '16px', margin: '20px 0', padding: '16px', background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: '12px', textAlign: 'left' }}>
+                  <div>
+                    <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '0.9rem', color: 'var(--clr-text)' }}>Scope (Subject Area):</label>
+                    <select 
+                      value={challengeScopeType} 
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setChallengeScopeType(val);
+                        if (val === 'all') {
+                          setChallengeScopeValue('all');
+                        } else if (challengeMetadata?.scopes?.[val]?.length > 0) {
+                          setChallengeScopeValue(challengeMetadata.scopes[val][0]);
+                        } else {
+                          setChallengeScopeValue('all');
+                        }
+                      }}
+                      style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--clr-border)', background: 'var(--clr-surface)', color: 'var(--clr-text)' }}
+                    >
+                      <option value="all">All Concepts</option>
+                      <option value="grade">Grade Level</option>
+                      <option value="category">Math Category</option>
+                    </select>
+                  </div>
+
+                  {challengeScopeType !== 'all' && challengeMetadata?.scopes?.[challengeScopeType] && (
+                    <div>
+                      <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '0.9rem', color: 'var(--clr-text)' }}>Choose Specific {challengeScopeType === 'grade' ? 'Grade' : 'Category'}:</label>
+                      <select 
+                        value={challengeScopeValue} 
+                        onChange={(e) => setChallengeScopeValue(e.target.value)}
+                        style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--clr-border)', background: 'var(--clr-surface)', color: 'var(--clr-text)' }}
+                      >
+                        {challengeMetadata.scopes[challengeScopeType].map((val, idx) => (
+                          <option key={idx} value={val}>{val}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  <div>
+                    <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '0.9rem', color: 'var(--clr-text)' }}>Max Questions Allowance:</label>
+                    <select 
+                      value={challengeMaxQuestions} 
+                      onChange={(e) => setChallengeMaxQuestions(parseInt(e.target.value, 10))}
+                      style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--clr-border)', background: 'var(--clr-surface)', color: 'var(--clr-text)' }}
+                    >
+                      <option value={10}>10 Questions (Hard Mode - +25 MRR / -3 MRR)</option>
+                      <option value={15}>15 Questions (Normal Mode - +20 MRR / -5 MRR)</option>
+                      <option value={20}>20 Questions (Easy Mode - +15 MRR / -7 MRR)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="mrr-badge-row" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '20px' }}>
+                  <div className="mrr-badge">
+                    <span className="badge-label">CHALLENGE RATING</span>
+                    <span className="badge-value">🔮 {mrr}</span>
+                  </div>
+                  <div className="mrr-badge">
+                    <span className="badge-label">DAILY LIMIT LEFT</span>
+                    <span className="badge-value">⚡ {Math.max(0, dailyLimit - gamesToday)} / {dailyLimit}</span>
+                  </div>
+                </div>
+
+                {errorMsg && <p className="error-text">{errorMsg}</p>}
+
+                {gamesToday >= dailyLimit ? (
+                  <div className="lockout-warning-box" style={{ marginTop: '20px', padding: '16px', background: 'rgba(231, 76, 60, 0.1)', border: '1px solid rgba(231, 76, 60, 0.3)', borderRadius: '12px', color: 'var(--clr-wrong)', textAlign: 'center' }}>
+                    <p style={{ fontWeight: '600', marginBottom: '8px' }}>⚠️ Daily Limit Reached!</p>
+                    <p style={{ fontSize: '0.92rem', opacity: 0.9, lineHeight: 1.4 }}>
+                      My energies are depleted for today! Please complete some curriculum lessons and try again tomorrow.
+                    </p>
+                  </div>
+                ) : (
+                  <button className="submit-btn start-game-btn" onClick={startChallengeGame} disabled={loading}>
+                    {loading ? 'Entering Challenge...' : 'Start Challenge →'}
+                  </button>
+                )}
+              </>
             )}
           </div>
         )}
 
-        {phase === 'playing' && (
+        {phase === 'playing' && gameMode === 'tenali-guesses' && (
           <div className="mr-card playing-card">
             <div className="game-hud">
               <div className="chances-display">
@@ -55932,7 +56404,153 @@ function MindReaderApp({ onBack }) {
           </div>
         )}
 
-        {phase === 'gameover' && (
+        {phase === 'playing' && gameMode === 'you-guess' && (
+          <div className="mr-card challenge-playing-card">
+            {/* Left Pane: Query Console */}
+            <div className="challenge-query-pane" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ margin: 0, color: 'var(--clr-text)' }}>Query Console</h3>
+                <span className="remaining-count-pill" style={{ background: 'var(--clr-accent)', color: 'white', border: 'none', padding: '6px 12px', fontSize: '0.82rem', fontWeight: 'bold' }}>
+                  Questions Remaining: {challengeMaxQuestions - challengeQuestions.length}
+                </span>
+              </div>
+              
+              {/* Asked Questions Audit Log */}
+              <div className="asked-questions-log" style={{ background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '14px', height: '140px', overflowY: 'auto' }}>
+                <h4 style={{ marginTop: 0, marginBottom: '8px', fontSize: '0.85rem', color: 'var(--clr-text-soft)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Asked Log</h4>
+                {challengeQuestions.length === 0 ? (
+                  <p style={{ fontStyle: 'italic', fontSize: '0.82rem', color: 'var(--clr-text-soft)', margin: 0 }}>No queries recorded yet. Select from the options below!</p>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    {challengeQuestions.map((q, idx) => (
+                      <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 10px', background: 'var(--clr-surface-soft)', border: '1px solid var(--clr-border)', borderRadius: '6px', fontSize: '0.85rem' }}>
+                        <span style={{ fontWeight: '500', color: 'var(--clr-text)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', maxWidth: '80%' }}>{q.text}</span>
+                        <span style={{
+                          padding: '2px 8px',
+                          borderRadius: '4px',
+                          fontWeight: 'bold',
+                          fontSize: '0.75rem',
+                          background: q.answer === 'yes' ? 'rgba(46, 204, 113, 0.15)' : q.answer === 'no' ? 'rgba(231, 76, 60, 0.15)' : 'rgba(127, 140, 141, 0.15)',
+                          color: q.answer === 'yes' ? '#2ecc71' : q.answer === 'no' ? '#e74c3c' : '#95a5a6'
+                        }}>
+                          {q.answer.toUpperCase()}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Question Selector Library */}
+              <div className="question-library" style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h4 style={{ margin: 0, fontSize: '0.9rem', color: 'var(--clr-text)' }}>Select a Query:</h4>
+                  <select 
+                    value={challengeFilterCategory} 
+                    onChange={(e) => setChallengeFilterCategory(e.target.value)}
+                    style={{ padding: '4px 8px', borderRadius: '6px', border: '1px solid var(--clr-border)', background: 'var(--clr-surface)', color: 'var(--clr-text)', fontSize: '0.8rem' }}
+                  >
+                    <option value="all">All Categories</option>
+                    {Array.from(new Set(challengeMetadata?.questions?.map(q => q.category) || [])).map((cat, idx) => (
+                      <option key={idx} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="question-library-list" style={{ display: 'flex', flexDirection: 'column', gap: '6px', height: '200px', overflowY: 'auto', paddingRight: '4px' }}>
+                  {challengeMetadata?.questions
+                    ?.filter(q => challengeFilterCategory === 'all' || q.category === challengeFilterCategory)
+                    .map((q) => {
+                      const alreadyAsked = challengeQuestions.some(asked => asked.qId === q.id);
+                      return (
+                        <button
+                          key={q.id}
+                          className="challenge-q-item"
+                          onClick={() => askChallengeQuestion(q.id, q.text)}
+                          disabled={loading || alreadyAsked}
+                          style={{
+                            textAlign: 'left',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            border: '1px solid var(--clr-border)',
+                            background: alreadyAsked ? 'rgba(0,0,0,0.03)' : 'var(--clr-surface)',
+                            color: alreadyAsked ? 'var(--clr-text-soft)' : 'var(--clr-text)',
+                            cursor: alreadyAsked ? 'not-allowed' : 'pointer',
+                            fontSize: '0.82rem',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            opacity: alreadyAsked ? 0.6 : 1
+                          }}
+                        >
+                          <span style={{ paddingRight: '8px' }}>{q.text}</span>
+                          <span style={{ fontSize: '0.7rem', opacity: 0.6, background: 'rgba(0,0,0,0.05)', padding: '2px 6px', borderRadius: '4px', whiteSpace: 'nowrap' }}>{q.category}</span>
+                        </button>
+                      );
+                    })}
+                </div>
+              </div>
+              
+              <button 
+                onClick={() => endChallengeGame(true)} 
+                disabled={loading}
+                className="submit-btn wrong-btn"
+                style={{ marginTop: '12px', padding: '10px' }}
+              >
+                🏳️ Give Up
+              </button>
+            </div>
+
+            {/* Right Pane: Candidates Board */}
+            <div className="challenge-candidates-pane" style={{ display: 'flex', flexDirection: 'column', gap: '12px', borderLeft: '1px solid var(--clr-border)', paddingLeft: '16px' }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--clr-text)' }}>Candidates Board</h3>
+                <p style={{ fontSize: '0.8rem', color: 'var(--clr-text-soft)', marginTop: '2px', marginBottom: '8px' }}>
+                  Click to guess! Inconsistent concepts auto-dim.
+                </p>
+              </div>
+
+              {challengeGuessHistory.length > 0 && (
+                <div style={{ background: 'rgba(231, 76, 60, 0.08)', border: '1px solid rgba(231, 76, 60, 0.15)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.8rem', color: 'var(--clr-wrong)' }}>
+                  <strong>Incorrect:</strong> {challengeGuessHistory.join(', ')}
+                </div>
+              )}
+
+              <div className="challenge-candidates-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: '6px', height: '360px', overflowY: 'auto', paddingRight: '4px' }}>
+                {challengeCandidates.map((c) => {
+                  const eliminated = isCandidateEliminated(c);
+                  const isWrongGuess = challengeGuessHistory.includes(c.name);
+                  return (
+                    <button
+                      key={c.id}
+                      className="challenge-candidate-btn"
+                      onClick={() => makeChallengeGuess(c.id)}
+                      disabled={loading || isWrongGuess}
+                      style={{
+                        padding: '8px 6px',
+                        borderRadius: '6px',
+                        border: isWrongGuess ? '1px solid #e74c3c' : eliminated ? '1px dashed var(--clr-border)' : '1px solid var(--clr-accent)',
+                        background: isWrongGuess ? 'rgba(231, 76, 60, 0.1)' : eliminated ? 'rgba(0,0,0,0.02)' : 'rgba(74, 144, 226, 0.05)',
+                        color: isWrongGuess ? '#e74c3c' : eliminated ? 'var(--clr-text-soft)' : 'var(--clr-text)',
+                        opacity: isWrongGuess ? 0.6 : eliminated ? 0.4 : 1,
+                        cursor: isWrongGuess ? 'not-allowed' : 'pointer',
+                        fontSize: '0.8rem',
+                        fontWeight: eliminated ? 'normal' : '600',
+                        textDecoration: eliminated || isWrongGuess ? 'line-through' : 'none',
+                        wordBreak: 'break-word',
+                        textAlign: 'center'
+                      }}
+                    >
+                      {c.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {phase === 'gameover' && gameMode === 'tenali-guesses' && (
           <div className="mr-card gameover-card">
             {royalChances <= 0 || (nextQuestion === null && prediction === null && incorrectPredictions.length > 0) ? (
               <div className="win-display">
@@ -55998,6 +56616,65 @@ function MindReaderApp({ onBack }) {
                 <p style={{ margin: '8px 0' }}><strong>Related Concepts:</strong> {recommendations.related.join(', ')}</p>
                 <p style={{ margin: '8px 0' }}><strong>Prerequisite Topics:</strong> {recommendations.prerequisites.join(', ')}</p>
                 <p style={{ margin: '8px 0' }}><strong>Exercises:</strong> {recommendations.exercises.join(', ')}</p>
+              </div>
+            )}
+
+            <button className="submit-btn restart-btn" onClick={handlePlayAgain} style={{ marginTop: 24 }} disabled={loading}>
+              {loading ? 'Logging game...' : 'Play Again'}
+            </button>
+          </div>
+        )}
+
+        {phase === 'gameover' && gameMode === 'you-guess' && (
+          <div className="mr-card gameover-card">
+            {challengeOutcome === 'win' ? (
+              <div className="win-display">
+                <h2>👑 CHALLENGE VICTORY! 👑</h2>
+                <p className="outcome-desc">
+                  You successfully deduced Tenali's secret concept: <strong>{actualConcept?.name}</strong> in {challengeQuestions.length} questions!
+                </p>
+                {mrrChange > 0 && <div className="mrr-up-anim" style={{ color: '#2ecc71', fontWeight: 700, padding: '8px', background: 'rgba(46, 204, 113, 0.1)', borderRadius: '8px', display: 'inline-block', margin: '0 auto' }}>Rating: {mrr - mrrChange} ➔ {mrr} (+{mrrChange})!</div>}
+              </div>
+            ) : (
+              <div className="loss-display">
+                <h2>🔮 DEFEATED BY TENALI! 🔮</h2>
+                <p className="outcome-desc">
+                  You ran out of questions or surrendered! Tenali's secret concept was: <strong>{actualConcept?.name}</strong>
+                </p>
+                {mrrChange < 0 ? (
+                  <div className="mrr-down-anim" style={{ color: 'var(--clr-wrong)', fontWeight: 700, padding: '8px', background: 'rgba(231, 76, 60, 0.1)', borderRadius: '8px', display: 'inline-block', margin: '0 auto' }}>
+                    Rating: {mrr - mrrChange} ➔ {mrr} ({mrrChange})!
+                  </div>
+                ) : (
+                  <div className="mrr-no-change">Rating: {mrr} (+0)</div>
+                )}
+              </div>
+            )}
+
+            {/* Optimal Question Analysis */}
+            {challengeBestQuestions && challengeBestQuestions.length > 0 && (
+              <div className="reasoning-box" style={{ marginTop: '20px', textAlign: 'left', padding: '16px', background: 'var(--clr-surface)', border: '1px solid var(--clr-border)', borderRadius: '12px' }}>
+                <h4 style={{ color: 'var(--clr-accent)', marginTop: 0, marginBottom: '8px', fontSize: '0.92rem' }}>🔍 Optimal Question Analysis</h4>
+                <p style={{ fontSize: '0.82rem', color: 'var(--clr-text-soft)', marginBottom: '10px' }}>
+                  The most efficient questions to ask at the start of this search space (based on maximum information gain / closest to 50/50 partition):
+                </p>
+                <ul style={{ paddingLeft: '20px', fontSize: '0.85rem', lineHeight: '1.4', margin: 0 }}>
+                  {challengeBestQuestions.slice(0, 5).map((q, idx) => (
+                    <li key={idx} style={{ marginBottom: '4px' }}>
+                      <strong>{q.text}</strong> <span style={{ opacity: 0.7, fontSize: '0.75rem' }}>(Split Score: {(q.splitScore * 100).toFixed(1)}% optimal split)</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {recommendations && (
+              <div className="recommendations-box" style={{ marginTop: 20, textAlign: 'left', padding: '16px', background: 'var(--clr-surface)', borderRadius: '10px', border: '1px solid var(--clr-border)' }}>
+                <h3>Recommendations & Review</h3>
+                <p style={{ margin: '8px 0' }}><strong>Description:</strong> {actualConcept?.description}</p>
+                <p style={{ margin: '8px 0' }}><strong>Related Concepts:</strong> {recommendations.related?.join(', ') || ''}</p>
+                <p style={{ margin: '8px 0' }}><strong>Prerequisite Topics:</strong> {recommendations.prerequisites?.join(', ') || ''}</p>
+                <p style={{ margin: '8px 0' }}><strong>Exercises:</strong> {recommendations.exercises?.join(', ') || ''}</p>
               </div>
             )}
 
