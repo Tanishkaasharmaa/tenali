@@ -9204,11 +9204,20 @@ setInterval(() => {
 
 app.post('/api/game/start', express.json(), async (req, res) => {
   try {
-    const { difficulty } = req.body;
+    const { difficulty, allowedCategories } = req.body;
     const diff = (difficulty || 'easy').toLowerCase();
     
     // Filter concepts by chosen difficulty level
-    const pool = REVERSE_CONCEPTS.filter(c => c.difficulty === diff);
+    let pool = REVERSE_CONCEPTS.filter(c => c.difficulty === diff);
+    
+    // Additionally filter by allowed categories if provided
+    if (allowedCategories && Array.isArray(allowedCategories) && allowedCategories.length > 0) {
+      const filtered = pool.filter(c => allowedCategories.includes(c.category));
+      if (filtered.length > 0) {
+        pool = filtered;
+      }
+    }
+    
     const selectedPool = pool.length > 0 ? pool : REVERSE_CONCEPTS;
     
     const randomIndex = Math.floor(Math.random() * selectedPool.length);
@@ -9237,7 +9246,7 @@ app.post('/api/game/start', express.json(), async (req, res) => {
     
     reverseSessions.set(gameId, session);
     
-    console.log(`[ReverseMindReader] Started session ${gameId} with concept "${concept.name}" [Level: ${diff}]`);
+    console.log(`[ReverseMindReader] Started session ${gameId} with concept "${concept.name}" [Level: ${diff}] [Allowed Cats: ${allowedCategories ? allowedCategories.join(',') : 'all'}]`);
     res.json({
       gameId,
       questionsRemaining: session.questionsRemaining,

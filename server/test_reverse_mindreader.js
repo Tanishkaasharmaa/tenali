@@ -92,7 +92,7 @@ async function runTests() {
     const startResHard = await fetch(`${BASE_URL}/api/game/start`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ difficulty: 'hard' })
+      body: JSON.stringify({ difficulty: 'hard', allowedCategories: ['Geometry'] })
     });
 
     if (!startResHard.ok) {
@@ -105,7 +105,7 @@ async function runTests() {
     if (!gameId || questionsRemaining !== 6 || hintsRemaining !== 1 || state !== 'PLAYING' || difficulty !== 'hard') {
       throw new Error('Hard level start parameters are invalid.');
     }
-    console.log('✓ Hard level start game checks passed.');
+    console.log('✓ Hard level start game checks passed (with category filtering).');
 
     console.log('\n--- 2. Testing /api/game/question ---');
     // Ask a valid question: q_is_number
@@ -177,9 +177,9 @@ async function runTests() {
 
     console.log('\n--- 5. Testing /api/game/guess ---');
     // Extract the secret concept name from stdoutData
-    const startedMatch = stdoutData.match(/Started session sess_\w+ with concept "([^"]+)" \[Level: hard\]/);
+    const startedMatch = stdoutData.match(/Started session sess_\w+ with concept "([^"]+)" \[Level: hard\] \[Allowed Cats: Geometry\]/);
     if (!startedMatch) {
-      throw new Error('Could not find secret concept name in server stdout logs.');
+      throw new Error('Could not find secret concept name with Category filter "Geometry" in server stdout logs.');
     }
     const secretConcept = startedMatch[1];
     console.log(`Detected secret concept from logs: "${secretConcept}"`);

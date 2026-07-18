@@ -20,15 +20,36 @@ function authGetToken() {
   }
 }
 
-// Predefined 25 math concepts for selection
-const CONCEPT_POOL = [
-  'Prime Number', 'HCF (Highest Common Factor)', 'LCM (Lowest Common Multiple)',
-  'Square Root', 'Equivalent Fractions', 'Percentage', 'Linear Equation',
-  'Quadratic Equation', 'Matrix', 'Vector', 'Right Triangle',
-  "Pythagoras' Theorem", 'Venn Diagram', 'Mean', 'Probability',
-  'Ratio', 'Decimal', 'Integers', 'Polygon', 'Circle',
-  'Perimeter', 'Area', 'Exponent', 'Median', 'Mode'
+// Predefined 25 math concepts with metadata for interactive topic filtering
+const CONCEPTS_DATA = [
+  { name: 'Prime Number', category: 'Number Theory', difficulty: 'easy' },
+  { name: 'HCF (Highest Common Factor)', category: 'Number Theory', difficulty: 'easy' },
+  { name: 'LCM (Lowest Common Multiple)', category: 'Number Theory', difficulty: 'easy' },
+  { name: 'Square Root', category: 'Arithmetic', difficulty: 'medium' },
+  { name: 'Equivalent Fractions', category: 'Arithmetic', difficulty: 'easy' },
+  { name: 'Percentage', category: 'Arithmetic', difficulty: 'easy' },
+  { name: 'Linear Equation', category: 'Algebra', difficulty: 'medium' },
+  { name: 'Quadratic Equation', category: 'Algebra', difficulty: 'hard' },
+  { name: 'Matrix', category: 'Algebra', difficulty: 'hard' },
+  { name: 'Vector', category: 'Geometry', difficulty: 'hard' },
+  { name: 'Right Triangle', category: 'Geometry', difficulty: 'medium' },
+  { name: "Pythagoras' Theorem", category: 'Geometry', difficulty: 'medium' },
+  { name: 'Venn Diagram', category: 'Logic', difficulty: 'medium' },
+  { name: 'Mean', category: 'Statistics', difficulty: 'easy' },
+  { name: 'Probability', category: 'Statistics', difficulty: 'medium' },
+  { name: 'Ratio', category: 'Arithmetic', difficulty: 'easy' },
+  { name: 'Decimal', category: 'Arithmetic', difficulty: 'easy' },
+  { name: 'Integers', category: 'Arithmetic', difficulty: 'easy' },
+  { name: 'Polygon', category: 'Geometry', difficulty: 'easy' },
+  { name: 'Circle', category: 'Geometry', difficulty: 'medium' },
+  { name: 'Perimeter', category: 'Geometry', difficulty: 'easy' },
+  { name: 'Area', category: 'Geometry', difficulty: 'easy' },
+  { name: 'Exponent', category: 'Arithmetic', difficulty: 'medium' },
+  { name: 'Median', category: 'Statistics', difficulty: 'easy' },
+  { name: 'Mode', category: 'Statistics', difficulty: 'easy' }
 ];
+
+const ALL_CATEGORIES = ['Number Theory', 'Arithmetic', 'Algebra', 'Geometry', 'Statistics', 'Logic'];
 
 const CATEGORIES = ["Definition", "Category", "Properties", "Applications"];
 
@@ -83,6 +104,9 @@ export default function MindReaderApp2({ onBack }) {
   const [showCabinet, setShowCabinet] = useState(false);
   const [winStreak, setWinStreak] = useState(0);
   const [gameDifficulty, setGameDifficulty] = useState('easy');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('easy');
+  const [topicFilter, setTopicFilter] = useState('whole');
+  const [selectedCategories, setSelectedCategories] = useState(ALL_CATEGORIES);
 
   // Gameplay panels
   const [activeCategory, setActiveCategory] = useState('Definition');
@@ -214,24 +238,65 @@ export default function MindReaderApp2({ onBack }) {
     }
   };
 
+  const getCurrentAllowedCategories = () => {
+    if (topicFilter === 'whole') {
+      return ALL_CATEGORIES;
+    }
+    if (topicFilter === 'selected') {
+      return selectedCategories;
+    }
+    if (topicFilter === 'studied') {
+      const studied = [];
+      try {
+        if (localStorage.getItem('tenali-chapter1-progress') && localStorage.getItem('tenali-chapter1-progress') !== '{}') studied.push('Number Theory');
+        if (localStorage.getItem('tenali-chapter2-progress') && localStorage.getItem('tenali-chapter2-progress') !== '{}') studied.push('Arithmetic');
+        if (localStorage.getItem('tenali-chapter3-progress') && localStorage.getItem('tenali-chapter3-progress') !== '{}') studied.push('Algebra');
+        if (localStorage.getItem('tenali-chapter4-progress') && localStorage.getItem('tenali-chapter4-progress') !== '{}') studied.push('Geometry');
+        if (localStorage.getItem('tenali-chapter5-progress') && localStorage.getItem('tenali-chapter5-progress') !== '{}') studied.push('Statistics', 'Logic');
+        if (localStorage.getItem('tenali-chapter6-progress') && localStorage.getItem('tenali-chapter6-progress') !== '{}') studied.push('Algebra', 'Geometry');
+      } catch (e) {
+        console.error(e);
+      }
+      if (studied.length === 0) {
+        studied.push('Number Theory', 'Arithmetic');
+      }
+      return [...new Set(studied)];
+    }
+    if (topicFilter === 'daily') {
+      const day = new Date().getDate();
+      const index = day % ALL_CATEGORIES.length;
+      return [ALL_CATEGORIES[index]];
+    }
+    if (topicFilter === 'weakest') {
+      return ['Geometry', 'Algebra'];
+    }
+    return ALL_CATEGORIES;
+  };
+
+  const getActiveConcepts = (diff) => {
+    const cats = getCurrentAllowedCategories();
+    return CONCEPTS_DATA.filter(c => c.difficulty === diff && cats.includes(c.category)).map(c => c.name);
+  };
+
   const handleStartGame = (difficulty = 'easy') => {
     setPhase('preparing');
     setLoading(true);
     setErrorMsg('');
 
-    // Fetch the start API
     const token = authGetToken();
     const headers = { 'Content-Type': 'application/json' };
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
+    const allowedCategories = getCurrentAllowedCategories();
+
     setTimeout(async () => {
       try {
         const res = await fetch(`${API}/api/game/start`, {
           method: 'POST',
           headers,
-          body: JSON.stringify({ difficulty })
+          body: JSON.stringify({ difficulty, allowedCategories })
         });
 
         if (!res.ok) throw new Error("Failed to start session.");
@@ -449,66 +514,181 @@ export default function MindReaderApp2({ onBack }) {
               </div>
             </div>
 
-            <h3 style={{ marginTop: '30px', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>SECRET CONCEPT POOL (V2 MVP)</h3>
-            <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.9rem', marginBottom: '12px' }}>
-              Tenali will pick one mathematical secret from the list below. Study the topics and prepare your questions!
-            </p>
-            <div className="mr2-concept-grid">
-              {CONCEPT_POOL.map((concept, idx) => (
-                <span key={idx} className="mr2-concept-chip">{concept}</span>
-              ))}
-            </div>
-
-            <h3 style={{ marginTop: '35px', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>CHOOSE DIFFICULTY LEVEL</h3>
-            <div className="difficulty-grid-selector" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', marginTop: '15px', marginBottom: '10px' }}>
+            {/* Section 1: Difficulty Levels Selection */}
+            <h3 style={{ marginTop: '30px', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>CHOOSE DIFFICULTY LEVEL</h3>
+            <div className="difficulty-grid-selector" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', marginTop: '12px', marginBottom: '20px' }}>
               <button 
-                onClick={() => handleStartGame('easy')}
+                onClick={() => setSelectedDifficulty('easy')}
                 disabled={loading}
                 className="difficulty-btn-card"
                 style={{
-                  background: 'rgba(46, 204, 113, 0.08)', border: '2px solid #2ecc71', borderRadius: '12px', padding: '16px 10px',
-                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)'
+                  background: selectedDifficulty === 'easy' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(46, 204, 113, 0.04)', 
+                  border: selectedDifficulty === 'easy' ? '2.5px solid #2ecc71' : '1.5px solid rgba(46, 204, 113, 0.25)', 
+                  borderRadius: '12px', padding: '16px 10px',
+                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
+                  boxShadow: selectedDifficulty === 'easy' ? '0 0 15px rgba(46, 204, 113, 0.25)' : 'none'
                 }}
               >
                 <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '6px' }}>🟢</span>
-                <strong style={{ display: 'block', color: '#2ecc71', fontSize: '1.05rem' }}>Easy Level</strong>
+                <strong style={{ display: 'block', color: '#2ecc71', fontSize: '1.05rem' }}>Easy Mode</strong>
                 <span style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '6px', lineHeight: '1.3' }}>
-                  15 Questions | 3 Hints<br/>Grade 5 & below topics
+                  15 Questions | 3 Hints<br/>Standard rewards
                 </span>
               </button>
 
               <button 
-                onClick={() => handleStartGame('medium')}
+                onClick={() => setSelectedDifficulty('medium')}
                 disabled={loading}
                 className="difficulty-btn-card"
                 style={{
-                  background: 'rgba(241, 196, 15, 0.08)', border: '2px solid #f1c40f', borderRadius: '12px', padding: '16px 10px',
-                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)'
+                  background: selectedDifficulty === 'medium' ? 'rgba(241, 196, 15, 0.15)' : 'rgba(241, 196, 15, 0.04)', 
+                  border: selectedDifficulty === 'medium' ? '2.5px solid #f1c40f' : '1.5px solid rgba(241, 196, 15, 0.25)', 
+                  borderRadius: '12px', padding: '16px 10px',
+                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
+                  boxShadow: selectedDifficulty === 'medium' ? '0 0 15px rgba(241, 196, 15, 0.25)' : 'none'
                 }}
               >
                 <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '6px' }}>🟡</span>
-                <strong style={{ display: 'block', color: '#f1c40f', fontSize: '1.05rem' }}>Medium Level</strong>
+                <strong style={{ display: 'block', color: '#f1c40f', fontSize: '1.05rem' }}>Medium Mode</strong>
                 <span style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '6px', lineHeight: '1.3' }}>
-                  10 Questions | 2 Hints<br/>Grade 6-8 (+10 MRR)
+                  10 Questions | 2 Hints<br/>(+10 MRR level bonus)
                 </span>
               </button>
 
               <button 
-                onClick={() => handleStartGame('hard')}
+                onClick={() => setSelectedDifficulty('hard')}
                 disabled={loading}
                 className="difficulty-btn-card"
                 style={{
-                  background: 'rgba(231, 76, 60, 0.08)', border: '2px solid #e74c3c', borderRadius: '12px', padding: '16px 10px',
-                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)'
+                  background: selectedDifficulty === 'hard' ? 'rgba(231, 76, 60, 0.15)' : 'rgba(231, 76, 60, 0.04)', 
+                  border: selectedDifficulty === 'hard' ? '2.5px solid #e74c3c' : '1.5px solid rgba(231, 76, 60, 0.25)', 
+                  borderRadius: '12px', padding: '16px 10px',
+                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
+                  boxShadow: selectedDifficulty === 'hard' ? '0 0 15px rgba(231, 76, 60, 0.25)' : 'none'
                 }}
               >
                 <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '6px' }}>🔴</span>
-                <strong style={{ display: 'block', color: '#e74c3c', fontSize: '1.05rem' }}>Hard Level</strong>
+                <strong style={{ display: 'block', color: '#e74c3c', fontSize: '1.05rem' }}>Hard Mode</strong>
                 <span style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '6px', lineHeight: '1.3' }}>
-                  6 Questions | 1 Hint<br/>Grade 9-10 (+25 MRR)
+                  6 Questions | 1 Hint<br/>(+25 MRR level bonus)
                 </span>
               </button>
             </div>
+
+            {/* Section 2: Topic / Curriculum Selectors */}
+            <h3 style={{ marginTop: '25px', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>CHOOSE TOPIC FILTER</h3>
+            <div className="topic-selector-tabs" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '10px', marginBottom: '15px' }}>
+              <button 
+                onClick={() => setTopicFilter('studied')}
+                style={{
+                  background: topicFilter === 'studied' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '20px', padding: '8px 16px',
+                  cursor: 'pointer', fontSize: '0.88rem', fontWeight: '500', transition: 'all 0.2s'
+                }}
+              >
+                📖 Studied Curriculum
+              </button>
+              <button 
+                onClick={() => setTopicFilter('whole')}
+                style={{
+                  background: topicFilter === 'whole' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '20px', padding: '8px 16px',
+                  cursor: 'pointer', fontSize: '0.88rem', fontWeight: '500', transition: 'all 0.2s'
+                }}
+              >
+                🌐 Whole Curriculum
+              </button>
+              <button 
+                onClick={() => setTopicFilter('selected')}
+                style={{
+                  background: topicFilter === 'selected' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '20px', padding: '8px 16px',
+                  cursor: 'pointer', fontSize: '0.88rem', fontWeight: '500', transition: 'all 0.2s'
+                }}
+              >
+                🎯 Selected Categories
+              </button>
+              <button 
+                onClick={() => setTopicFilter('daily')}
+                style={{
+                  background: topicFilter === 'daily' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '20px', padding: '8px 16px',
+                  cursor: 'pointer', fontSize: '0.88rem', fontWeight: '500', transition: 'all 0.2s'
+                }}
+              >
+                🔮 Daily Mystery Pack
+              </button>
+              <button 
+                onClick={() => setTopicFilter('weakest')}
+                style={{
+                  background: topicFilter === 'weakest' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '20px', padding: '8px 16px',
+                  cursor: 'pointer', fontSize: '0.88rem', fontWeight: '500', transition: 'all 0.2s'
+                }}
+              >
+                🧠 Weakest Category Practice
+              </button>
+            </div>
+
+            {/* Expand Category Chip Selector if Selected Curriculum is Active */}
+            {topicFilter === 'selected' && (
+              <div className="categories-chips-selector" style={{ background: 'rgba(0,0,0,0.15)', borderRadius: '12px', padding: '12px', marginBottom: '15px' }}>
+                <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.8rem', marginBottom: '8px', marginTop: 0 }}>Select which categories Tenali should choose from:</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {ALL_CATEGORIES.map((cat, idx) => {
+                    const isActive = selectedCategories.includes(cat);
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          if (isActive) {
+                            setSelectedCategories(selectedCategories.filter(c => c !== cat));
+                          } else {
+                            setSelectedCategories([...selectedCategories, cat]);
+                          }
+                        }}
+                        style={{
+                          background: isActive ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          color: isActive ? 'white' : 'var(--clr-text-soft)',
+                          borderRadius: '16px', padding: '6px 14px', cursor: 'pointer',
+                          fontSize: '0.82rem', transition: 'all 0.15s'
+                        }}
+                      >
+                        {cat}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Section 3: Dynamic Preview Pool */}
+            <h3 style={{ marginTop: '25px', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>SECRET CONCEPT POOL PREVIEW</h3>
+            <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.88rem', marginBottom: '10px' }}>
+              Based on your filters, Tenali will secretly select one topic from the active list below:
+            </p>
+            <div className="mr2-concept-grid" style={{ marginBottom: '25px' }}>
+              {getActiveConcepts(selectedDifficulty).length > 0 ? (
+                getActiveConcepts(selectedDifficulty).map((concept, idx) => (
+                  <span key={idx} className="mr2-concept-chip">{concept}</span>
+                ))
+              ) : (
+                <div style={{ color: '#e74c3c', fontSize: '0.88rem', padding: '10px 0', fontWeight: '500' }}>
+                  ⚠️ No concepts match your current difficulty & topic filters. Please enable more category checks!
+                </div>
+              )}
+            </div>
+
+            {/* Section 4: Main Start Trigger Button */}
+            <button 
+              className="mr2-guess-trigger-btn" 
+              onClick={() => handleStartGame(selectedDifficulty)} 
+              disabled={loading || getActiveConcepts(selectedDifficulty).length === 0}
+              style={{ marginTop: '10px', padding: '14px 32px', fontSize: '1.05rem', textTransform: 'uppercase', letterSpacing: '1px', width: '100%', borderRadius: '12px' }}
+            >
+              {loading ? 'Starting...' : 'Start Game Challenge'}
+            </button>
           </div>
         )}
 
