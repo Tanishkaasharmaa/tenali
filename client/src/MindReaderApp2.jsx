@@ -618,26 +618,6 @@ export default function MindReaderApp2({ onBack }) {
                     >
                       🎯 Select Topics
                     </button>
-                    <button 
-                      onClick={() => setTopicFilter('daily')}
-                      style={{
-                        background: topicFilter === 'daily' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '15px', padding: '6px 12px',
-                        cursor: 'pointer', fontSize: '0.78rem', fontWeight: '500', transition: 'all 0.2s'
-                      }}
-                    >
-                      🔮 Daily Pack
-                    </button>
-                    <button 
-                      onClick={() => setTopicFilter('weakest')}
-                      style={{
-                        background: topicFilter === 'weakest' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '15px', padding: '6px 12px',
-                        cursor: 'pointer', fontSize: '0.78rem', fontWeight: '500', transition: 'all 0.2s'
-                      }}
-                    >
-                      🧠 Focus Mode
-                    </button>
                   </div>
 
                   {topicFilter === 'selected' && (
