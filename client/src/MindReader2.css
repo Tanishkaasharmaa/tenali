@@ -633,3 +633,82 @@
   from { height: 5px; }
   to { height: 38px; }
 }
+
+/* Lobby Dashboard Styles */
+.mr2-lobby-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mr2-lobby-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.mr2-lobby-columns {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.mr2-lobby-panel-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mr2-lobby-section-card {
+  padding: 20px;
+}
+
+.mr2-lobby-section-card h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: var(--clr-accent);
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.mr2-lobby-panel-right {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  min-height: 520px;
+}
+
+.dictionary-scrollable-pool {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  max-height: 440px;
+}
+
+.dictionary-scrollable-pool::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dictionary-scrollable-pool::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+@media (max-width: 850px) {
+  .mr2-lobby-columns {
+    grid-template-columns: 1fr;
+  }
+  .mr2-lobby-panel-right {
+    min-height: auto;
+  }
+}

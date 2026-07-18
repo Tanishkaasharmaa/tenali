@@ -501,11 +501,13 @@ export default function MindReaderApp2({ onBack }) {
 
         {/* LOBBY / SETUP SCREEN */}
         {phase === 'setup' && (
-          <div className="mr2-card">
-            <div className="mr2-char-hub-horizontal">
+          <div className="mr2-lobby-layout">
+            
+            {/* Top row: Avatar & Dialogue */}
+            <div className="mr2-card mr2-lobby-hero">
               <TenaliAvatar expression={expression} skin={equippedSkin} />
               
-              <div className="mr2-speech-bubble">
+              <div className="mr2-speech-bubble" style={{ flexGrow: 1 }}>
                 <div className="mr2-speech-header">
                   <span className="mr2-char-name">Tenali Raman</span>
                   <span className="mr2-char-title">{equippedTitle}</span>
@@ -514,181 +516,195 @@ export default function MindReaderApp2({ onBack }) {
               </div>
             </div>
 
-            {/* Section 1: Difficulty Levels Selection */}
-            <h3 style={{ marginTop: '30px', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>CHOOSE DIFFICULTY LEVEL</h3>
-            <div className="difficulty-grid-selector" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', marginTop: '12px', marginBottom: '20px' }}>
-              <button 
-                onClick={() => setSelectedDifficulty('easy')}
-                disabled={loading}
-                className="difficulty-btn-card"
-                style={{
-                  background: selectedDifficulty === 'easy' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(46, 204, 113, 0.04)', 
-                  border: selectedDifficulty === 'easy' ? '2.5px solid #2ecc71' : '1.5px solid rgba(46, 204, 113, 0.25)', 
-                  borderRadius: '12px', padding: '16px 10px',
-                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
-                  boxShadow: selectedDifficulty === 'easy' ? '0 0 15px rgba(46, 204, 113, 0.25)' : 'none'
-                }}
-              >
-                <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '6px' }}>🟢</span>
-                <strong style={{ display: 'block', color: '#2ecc71', fontSize: '1.05rem' }}>Easy Mode</strong>
-                <span style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '6px', lineHeight: '1.3' }}>
-                  15 Questions | 3 Hints<br/>Standard rewards
-                </span>
-              </button>
+            <div className="mr2-lobby-columns">
+              
+              {/* Left Column: Settings Panel */}
+              <div className="mr2-lobby-panel-left">
+                
+                {/* Panel Card 1: Difficulty */}
+                <div className="mr2-card mr2-lobby-section-card">
+                  <h3>Difficulty Mode</h3>
+                  <div className="difficulty-grid-selector" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginTop: '5px' }}>
+                    <button 
+                      onClick={() => setSelectedDifficulty('easy')}
+                      disabled={loading}
+                      className="difficulty-btn-card"
+                      style={{
+                        background: selectedDifficulty === 'easy' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(46, 204, 113, 0.04)', 
+                        border: selectedDifficulty === 'easy' ? '2.5px solid #2ecc71' : '1.5px solid rgba(46, 204, 113, 0.25)', 
+                        borderRadius: '12px', padding: '12px 6px',
+                        cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
+                        boxShadow: selectedDifficulty === 'easy' ? '0 0 15px rgba(46, 204, 113, 0.25)' : 'none'
+                      }}
+                    >
+                      <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: '4px' }}>🟢</span>
+                      <strong style={{ display: 'block', color: '#2ecc71', fontSize: '0.92rem' }}>Easy</strong>
+                      <span style={{ fontSize: '0.72rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '4px', lineHeight: '1.25' }}>
+                        15 Qs | 3 Hints
+                      </span>
+                    </button>
 
-              <button 
-                onClick={() => setSelectedDifficulty('medium')}
-                disabled={loading}
-                className="difficulty-btn-card"
-                style={{
-                  background: selectedDifficulty === 'medium' ? 'rgba(241, 196, 15, 0.15)' : 'rgba(241, 196, 15, 0.04)', 
-                  border: selectedDifficulty === 'medium' ? '2.5px solid #f1c40f' : '1.5px solid rgba(241, 196, 15, 0.25)', 
-                  borderRadius: '12px', padding: '16px 10px',
-                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
-                  boxShadow: selectedDifficulty === 'medium' ? '0 0 15px rgba(241, 196, 15, 0.25)' : 'none'
-                }}
-              >
-                <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '6px' }}>🟡</span>
-                <strong style={{ display: 'block', color: '#f1c40f', fontSize: '1.05rem' }}>Medium Mode</strong>
-                <span style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '6px', lineHeight: '1.3' }}>
-                  10 Questions | 2 Hints<br/>(+10 MRR level bonus)
-                </span>
-              </button>
+                    <button 
+                      onClick={() => setSelectedDifficulty('medium')}
+                      disabled={loading}
+                      className="difficulty-btn-card"
+                      style={{
+                        background: selectedDifficulty === 'medium' ? 'rgba(241, 196, 15, 0.15)' : 'rgba(241, 196, 15, 0.04)', 
+                        border: selectedDifficulty === 'medium' ? '2.5px solid #f1c40f' : '1.5px solid rgba(241, 196, 15, 0.25)', 
+                        borderRadius: '12px', padding: '12px 6px',
+                        cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
+                        boxShadow: selectedDifficulty === 'medium' ? '0 0 15px rgba(241, 196, 15, 0.25)' : 'none'
+                      }}
+                    >
+                      <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: '4px' }}>🟡</span>
+                      <strong style={{ display: 'block', color: '#f1c40f', fontSize: '0.92rem' }}>Medium</strong>
+                      <span style={{ fontSize: '0.72rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '4px', lineHeight: '1.25' }}>
+                        10 Qs | 2 Hints (+10)
+                      </span>
+                    </button>
 
-              <button 
-                onClick={() => setSelectedDifficulty('hard')}
-                disabled={loading}
-                className="difficulty-btn-card"
-                style={{
-                  background: selectedDifficulty === 'hard' ? 'rgba(231, 76, 60, 0.15)' : 'rgba(231, 76, 60, 0.04)', 
-                  border: selectedDifficulty === 'hard' ? '2.5px solid #e74c3c' : '1.5px solid rgba(231, 76, 60, 0.25)', 
-                  borderRadius: '12px', padding: '16px 10px',
-                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
-                  boxShadow: selectedDifficulty === 'hard' ? '0 0 15px rgba(231, 76, 60, 0.25)' : 'none'
-                }}
-              >
-                <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '6px' }}>🔴</span>
-                <strong style={{ display: 'block', color: '#e74c3c', fontSize: '1.05rem' }}>Hard Mode</strong>
-                <span style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '6px', lineHeight: '1.3' }}>
-                  6 Questions | 1 Hint<br/>(+25 MRR level bonus)
-                </span>
-              </button>
-            </div>
+                    <button 
+                      onClick={() => setSelectedDifficulty('hard')}
+                      disabled={loading}
+                      className="difficulty-btn-card"
+                      style={{
+                        background: selectedDifficulty === 'hard' ? 'rgba(231, 76, 60, 0.15)' : 'rgba(231, 76, 60, 0.04)', 
+                        border: selectedDifficulty === 'hard' ? '2.5px solid #e74c3c' : '1.5px solid rgba(231, 76, 60, 0.25)', 
+                        borderRadius: '12px', padding: '12px 6px',
+                        cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
+                        boxShadow: selectedDifficulty === 'hard' ? '0 0 15px rgba(231, 76, 60, 0.25)' : 'none'
+                      }}
+                    >
+                      <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: '4px' }}>🔴</span>
+                      <strong style={{ display: 'block', color: '#e74c3c', fontSize: '0.92rem' }}>Hard</strong>
+                      <span style={{ fontSize: '0.72rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '4px', lineHeight: '1.25' }}>
+                        6 Qs | 1 Hint (+25)
+                      </span>
+                    </button>
+                  </div>
+                </div>
 
-            {/* Section 2: Topic / Curriculum Selectors */}
-            <h3 style={{ marginTop: '25px', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>CHOOSE TOPIC FILTER</h3>
-            <div className="topic-selector-tabs" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '10px', marginBottom: '15px' }}>
-              <button 
-                onClick={() => setTopicFilter('studied')}
-                style={{
-                  background: topicFilter === 'studied' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '20px', padding: '8px 16px',
-                  cursor: 'pointer', fontSize: '0.88rem', fontWeight: '500', transition: 'all 0.2s'
-                }}
-              >
-                📖 Studied Curriculum
-              </button>
-              <button 
-                onClick={() => setTopicFilter('whole')}
-                style={{
-                  background: topicFilter === 'whole' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '20px', padding: '8px 16px',
-                  cursor: 'pointer', fontSize: '0.88rem', fontWeight: '500', transition: 'all 0.2s'
-                }}
-              >
-                🌐 Whole Curriculum
-              </button>
-              <button 
-                onClick={() => setTopicFilter('selected')}
-                style={{
-                  background: topicFilter === 'selected' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '20px', padding: '8px 16px',
-                  cursor: 'pointer', fontSize: '0.88rem', fontWeight: '500', transition: 'all 0.2s'
-                }}
-              >
-                🎯 Selected Categories
-              </button>
-              <button 
-                onClick={() => setTopicFilter('daily')}
-                style={{
-                  background: topicFilter === 'daily' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '20px', padding: '8px 16px',
-                  cursor: 'pointer', fontSize: '0.88rem', fontWeight: '500', transition: 'all 0.2s'
-                }}
-              >
-                🔮 Daily Mystery Pack
-              </button>
-              <button 
-                onClick={() => setTopicFilter('weakest')}
-                style={{
-                  background: topicFilter === 'weakest' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '20px', padding: '8px 16px',
-                  cursor: 'pointer', fontSize: '0.88rem', fontWeight: '500', transition: 'all 0.2s'
-                }}
-              >
-                🧠 Weakest Category Practice
-              </button>
-            </div>
+                {/* Panel Card 2: Topic Filter */}
+                <div className="mr2-card mr2-lobby-section-card">
+                  <h3>Topic Filter</h3>
+                  <div className="topic-selector-tabs" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '5px', marginBottom: '12px' }}>
+                    <button 
+                      onClick={() => setTopicFilter('studied')}
+                      style={{
+                        background: topicFilter === 'studied' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                        border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '15px', padding: '6px 12px',
+                        cursor: 'pointer', fontSize: '0.78rem', fontWeight: '500', transition: 'all 0.2s'
+                      }}
+                    >
+                      📖 Studied
+                    </button>
+                    <button 
+                      onClick={() => setTopicFilter('whole')}
+                      style={{
+                        background: topicFilter === 'whole' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                        border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '15px', padding: '6px 12px',
+                        cursor: 'pointer', fontSize: '0.78rem', fontWeight: '500', transition: 'all 0.2s'
+                      }}
+                    >
+                      🌐 Whole Pool
+                    </button>
+                    <button 
+                      onClick={() => setTopicFilter('selected')}
+                      style={{
+                        background: topicFilter === 'selected' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                        border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '15px', padding: '6px 12px',
+                        cursor: 'pointer', fontSize: '0.78rem', fontWeight: '500', transition: 'all 0.2s'
+                      }}
+                    >
+                      🎯 Select Topics
+                    </button>
+                    <button 
+                      onClick={() => setTopicFilter('daily')}
+                      style={{
+                        background: topicFilter === 'daily' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                        border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '15px', padding: '6px 12px',
+                        cursor: 'pointer', fontSize: '0.78rem', fontWeight: '500', transition: 'all 0.2s'
+                      }}
+                    >
+                      🔮 Daily Pack
+                    </button>
+                    <button 
+                      onClick={() => setTopicFilter('weakest')}
+                      style={{
+                        background: topicFilter === 'weakest' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                        border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '15px', padding: '6px 12px',
+                        cursor: 'pointer', fontSize: '0.78rem', fontWeight: '500', transition: 'all 0.2s'
+                      }}
+                    >
+                      🧠 Focus Mode
+                    </button>
+                  </div>
 
-            {/* Expand Category Chip Selector if Selected Curriculum is Active */}
-            {topicFilter === 'selected' && (
-              <div className="categories-chips-selector" style={{ background: 'rgba(0,0,0,0.15)', borderRadius: '12px', padding: '12px', marginBottom: '15px' }}>
-                <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.8rem', marginBottom: '8px', marginTop: 0 }}>Select which categories Tenali should choose from:</p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {ALL_CATEGORIES.map((cat, idx) => {
-                    const isActive = selectedCategories.includes(cat);
-                    return (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          if (isActive) {
-                            setSelectedCategories(selectedCategories.filter(c => c !== cat));
-                          } else {
-                            setSelectedCategories([...selectedCategories, cat]);
-                          }
-                        }}
-                        style={{
-                          background: isActive ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                          border: '1px solid rgba(255,255,255,0.1)',
-                          color: isActive ? 'white' : 'var(--clr-text-soft)',
-                          borderRadius: '16px', padding: '6px 14px', cursor: 'pointer',
-                          fontSize: '0.82rem', transition: 'all 0.15s'
-                        }}
-                      >
-                        {cat}
-                      </button>
-                    );
-                  })}
+                  {topicFilter === 'selected' && (
+                    <div className="categories-chips-selector" style={{ background: 'rgba(0,0,0,0.15)', borderRadius: '10px', padding: '10px' }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                        {ALL_CATEGORIES.map((cat, idx) => {
+                          const isActive = selectedCategories.includes(cat);
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => {
+                                if (isActive) {
+                                  setSelectedCategories(selectedCategories.filter(c => c !== cat));
+                                } else {
+                                  setSelectedCategories([...selectedCategories, cat]);
+                                }
+                              }}
+                              style={{
+                                background: isActive ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                color: isActive ? 'white' : 'var(--clr-text-soft)',
+                                borderRadius: '12px', padding: '5px 10px', cursor: 'pointer',
+                                fontSize: '0.75rem', transition: 'all 0.15s'
+                              }}
+                            >
+                              {cat}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Start Button */}
+                <button 
+                  className="mr2-guess-trigger-btn" 
+                  onClick={() => handleStartGame(selectedDifficulty)} 
+                  disabled={loading || getActiveConcepts(selectedDifficulty).length === 0}
+                  style={{ padding: '14px', fontSize: '1.05rem', textTransform: 'uppercase', letterSpacing: '1px', borderRadius: '12px', width: '100%', border: 'none', fontWeight: 'bold' }}
+                >
+                  {loading ? 'Starting...' : 'Start Game Challenge'}
+                </button>
+              </div>
+
+              {/* Right Column: Reference Dictionary Card */}
+              <div className="mr2-lobby-panel-right mr2-card">
+                <h3 style={{ margin: 0, color: 'var(--clr-accent)', fontSize: '1.05rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                  Concept Dictionary ({getActiveConcepts(selectedDifficulty).length})
+                </h3>
+                <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.85rem', margin: '0 0 5px 0', lineHeight: 1.3 }}>
+                  Tenali will secretly pick a topic from this live list based on your filters:
+                </p>
+                <div className="dictionary-scrollable-pool">
+                  {getActiveConcepts(selectedDifficulty).length > 0 ? (
+                    getActiveConcepts(selectedDifficulty).map((concept, idx) => (
+                      <span key={idx} className="mr2-concept-chip" style={{ fontSize: '0.82rem', padding: '5px 10px' }}>{concept}</span>
+                    ))
+                  ) : (
+                    <div style={{ color: '#e74c3c', fontSize: '0.82rem', padding: '10px 0', fontWeight: '500', width: '100%', textAlign: 'center' }}>
+                      ⚠️ No topics match the current filter set.
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
 
-            {/* Section 3: Dynamic Preview Pool */}
-            <h3 style={{ marginTop: '25px', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>SECRET CONCEPT POOL PREVIEW</h3>
-            <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.88rem', marginBottom: '10px' }}>
-              Based on your filters, Tenali will secretly select one topic from the active list below:
-            </p>
-            <div className="mr2-concept-grid" style={{ marginBottom: '25px' }}>
-              {getActiveConcepts(selectedDifficulty).length > 0 ? (
-                getActiveConcepts(selectedDifficulty).map((concept, idx) => (
-                  <span key={idx} className="mr2-concept-chip">{concept}</span>
-                ))
-              ) : (
-                <div style={{ color: '#e74c3c', fontSize: '0.88rem', padding: '10px 0', fontWeight: '500' }}>
-                  ⚠️ No concepts match your current difficulty & topic filters. Please enable more category checks!
-                </div>
-              )}
             </div>
-
-            {/* Section 4: Main Start Trigger Button */}
-            <button 
-              className="mr2-guess-trigger-btn" 
-              onClick={() => handleStartGame(selectedDifficulty)} 
-              disabled={loading || getActiveConcepts(selectedDifficulty).length === 0}
-              style={{ marginTop: '10px', padding: '14px 32px', fontSize: '1.05rem', textTransform: 'uppercase', letterSpacing: '1px', width: '100%', borderRadius: '12px' }}
-            >
-              {loading ? 'Starting...' : 'Start Game Challenge'}
-            </button>
           </div>
         )}
 
