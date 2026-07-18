@@ -714,15 +714,12 @@ export default function MindReaderApp2({ onBack }) {
             {/* Left Column: controls, categories, questions */}
             <div className="mr2-control-panel">
               
-              <div className="mr2-card mr2-char-hub-vertical">
-                <div className="mr2-speech-bubble">
-                  <div className="mr2-speech-header">
-                    <span className="mr2-char-name">Tenali Raman</span>
-                    <span className="mr2-char-title">{equippedTitle}</span>
-                  </div>
-                  <div className="mr2-dialogue-text">"{tenaliSpeech}"</div>
-                </div>
+              <div className="mr2-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
                 <TenaliAvatar expression={expression} skin={equippedSkin} />
+                <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                  <div style={{ fontWeight: 'bold', color: 'var(--clr-text)' }}>Tenali Raman</div>
+                  <div style={{ fontSize: '0.82rem', color: 'var(--clr-accent)' }}>{equippedTitle}</div>
+                </div>
               </div>
 
               {/* Predefined Categories & Questions Panel */}
@@ -780,34 +777,44 @@ export default function MindReaderApp2({ onBack }) {
 
             </div>
 
-            {/* Right Column: Chat Transcript Transcript */}
-            <div className="mr2-transcript-panel" style={{ display: 'flex', flexDirection: 'column' }}>
-              <div className="mr2-transcript-title">📜 Conversation History</div>
-              <div className="mr2-transcript-history" style={{ flex: 1, minHeight: '180px' }}>
-                {history.length === 0 ? (
-                  <div style={{ color: 'var(--clr-text-soft)', fontStyle: 'italic', fontSize: '0.9rem', textAlign: 'center', marginTop: '40px' }}>
-                    No questions asked yet. Choose a question from the categories block!
-                  </div>
-                ) : (
-                  history.map((msg, idx) => {
-                    let bubbleClass = 'mr2-chat-tenali';
-                    if (msg.sender === 'student') bubbleClass = 'mr2-chat-student';
-                    if (msg.sender === 'hint') bubbleClass = 'mr2-chat-hint';
-                    return (
-                      <div key={idx} className={`mr2-chat-bubble ${bubbleClass}`}>
-                        {msg.sender === 'student' ? '🙋‍♂️ Student: ' : msg.sender === 'hint' ? '💡 Clue: ' : '😈 Tenali: '}
-                        {msg.text}
-                      </div>
-                    );
-                  })
-                )}
-                <div ref={historyEndRef} />
+            {/* Right Column: Chat Transcript & Topics Pool */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              
+              {/* Mind Cloud History */}
+              <div className="mr2-transcript-panel-cloud" style={{ height: '360px' }}>
+                <div className="mr2-thought-dot-1" />
+                <div className="mr2-thought-dot-2" />
+                
+                <div className="mr2-transcript-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span>💭 Tenali's Mind Cloud (History)</span>
+                </div>
+                
+                <div className="mr2-transcript-history" style={{ flex: 1, minHeight: '150px' }}>
+                  {history.length === 0 ? (
+                    <div style={{ color: 'var(--clr-text-soft)', fontStyle: 'italic', fontSize: '0.9rem', textAlign: 'center', marginTop: '40px' }}>
+                      No questions asked yet. Choose a question from the categories block!
+                    </div>
+                  ) : (
+                    history.map((msg, idx) => {
+                      let bubbleClass = 'mr2-chat-tenali';
+                      if (msg.sender === 'student') bubbleClass = 'mr2-chat-student';
+                      if (msg.sender === 'hint') bubbleClass = 'mr2-chat-hint';
+                      return (
+                        <div key={idx} className={`mr2-chat-bubble ${bubbleClass}`}>
+                          {msg.sender === 'student' ? '🙋‍♂️ Student: ' : msg.sender === 'hint' ? '💡 Clue: ' : '😈 Tenali: '}
+                          {msg.text}
+                        </div>
+                      );
+                    })
+                  )}
+                  <div ref={historyEndRef} />
+                </div>
               </div>
 
-              {/* Active list dictionary below conversation history */}
-              <div className="mr2-transcript-pool-card" style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <span style={{ color: 'var(--clr-accent)', fontWeight: 'bold', fontSize: '0.82rem', letterSpacing: '0.5px' }}>
+              {/* Separate Possible Topics Card */}
+              <div className="mr2-card" style={{ padding: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <span style={{ color: 'var(--clr-accent)', fontWeight: 'bold', fontSize: '0.85rem', letterSpacing: '0.5px' }}>
                     🎯 POSSIBLE TOPICS ({getActiveConcepts(gameDifficulty).length})
                   </span>
                   <span style={{ fontSize: '0.72rem', color: 'var(--clr-text-soft)', fontStyle: 'italic' }}>
@@ -815,9 +822,9 @@ export default function MindReaderApp2({ onBack }) {
                   </span>
                 </div>
                 <div style={{
-                  display: 'flex', flexWrap: 'wrap', gap: '5px', maxHeight: '100px', overflowY: 'auto',
+                  display: 'flex', flexWrap: 'wrap', gap: '5px', maxHeight: '110px', overflowY: 'auto',
                   background: 'rgba(0, 0, 0, 0.25)', border: '1px solid rgba(255, 255, 255, 0.04)',
-                  padding: '6px', borderRadius: '8px'
+                  padding: '8px', borderRadius: '8px'
                 }}>
                   {getActiveConcepts(gameDifficulty).map((concept, idx) => (
                     <span 
@@ -828,13 +835,14 @@ export default function MindReaderApp2({ onBack }) {
                         setSearchQuery(concept);
                         setShowGuessDialog(true);
                       }}
-                      style={{ fontSize: '0.75rem', padding: '3px 6px', cursor: 'pointer', margin: 0 }}
+                      style={{ fontSize: '0.76rem', padding: '4px 8px', cursor: 'pointer', margin: 0 }}
                     >
                       {concept}
                     </span>
                   ))}
                 </div>
               </div>
+
             </div>
 
           </div>

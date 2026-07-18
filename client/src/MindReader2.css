@@ -712,3 +712,49 @@
     min-height: auto;
   }
 }
+
+/* Thought Cloud Bubble for Gameplay transcript */
+.mr2-transcript-panel-cloud {
+  position: relative;
+  background: rgba(30, 39, 46, 0.4);
+  border: 2px solid var(--clr-accent);
+  border-radius: 24px;
+  padding: 20px;
+  height: 380px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 32px rgba(232, 134, 74, 0.1);
+  animation: mr2-float-cloud 4s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+}
+
+.mr2-thought-dot-1 {
+  position: absolute;
+  left: -14px;
+  top: 15%;
+  width: 12px;
+  height: 12px;
+  background: #1e272e;
+  border: 2px solid var(--clr-accent);
+  border-radius: 50%;
+  animation: mr2-float-cloud 4s ease-in-out infinite;
+  animation-delay: 0.2s;
+}
+
+.mr2-thought-dot-2 {
+  position: absolute;
+  left: -24px;
+  top: 13%;
+  width: 8px;
+  height: 8px;
+  background: #1e272e;
+  border: 2px solid var(--clr-accent);
+  border-radius: 50%;
+  animation: mr2-float-cloud 4s ease-in-out infinite;
+  animation-delay: 0.4s;
+}
+
+@keyframes mr2-float-cloud {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
