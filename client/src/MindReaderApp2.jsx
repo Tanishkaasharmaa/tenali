@@ -714,11 +714,13 @@ export default function MindReaderApp2({ onBack }) {
             {/* Left Column: controls, categories, questions */}
             <div className="mr2-control-panel">
               
-              <div className="mr2-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
-                <TenaliAvatar expression={expression} skin={equippedSkin} />
-                <div style={{ marginTop: '10px', textAlign: 'center' }}>
-                  <div style={{ fontWeight: 'bold', color: 'var(--clr-text)' }}>Tenali Raman</div>
-                  <div style={{ fontSize: '0.82rem', color: 'var(--clr-accent)' }}>{equippedTitle}</div>
+              <div className="mr2-card" style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px 16px' }}>
+                <div style={{ transform: 'scale(0.65)', transformOrigin: 'center center', width: '80px', height: '94px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <TenaliAvatar expression={expression} skin={equippedSkin} />
+                </div>
+                <div>
+                  <div style={{ fontWeight: 'bold', color: 'var(--clr-text)', fontSize: '0.95rem' }}>Tenali Raman</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--clr-accent)', fontWeight: '500' }}>{equippedTitle}</div>
                 </div>
               </div>
 
