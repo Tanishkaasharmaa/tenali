@@ -55,35 +55,35 @@ const REVERSE_QUESTIONS = [
   {
     id: "q_is_number",
     category: "Definition",
-    text: "Is it a type of number?",
+    text: "Is it a type of number (like prime numbers or integers)?",
     attribute: "isNumber",
     expectedValue: true
   },
   {
     id: "q_is_theorem",
     category: "Definition",
-    text: "Is it a mathematical theorem?",
+    text: "Is it a mathematical theorem (like Pythagoras' Theorem)?",
     attribute: "isTheorem",
     expectedValue: true
   },
   {
     id: "q_is_formula",
     category: "Definition",
-    text: "Is it a specific formula or equation?",
+    text: "Is it an equation or formula (like y = mx + c)?",
     attribute: "isFormula",
     expectedValue: true
   },
   {
     id: "q_is_operation",
     category: "Definition",
-    text: "Is it an operation or step-by-step process?",
+    text: "Is it a calculation process (like finding the HCF or LCM)?",
     attribute: "isOperation",
     expectedValue: true
   },
   {
     id: "q_is_not_operation",
     category: "Definition",
-    text: "Is it a static concept rather than an operation?",
+    text: "Is it a concept/idea rather than an operation?",
     attribute: "isOperation",
     expectedValue: false
   },
@@ -99,21 +99,21 @@ const REVERSE_QUESTIONS = [
   {
     id: "q_cat_geometry",
     category: "Category",
-    text: "Does it belong to Geometry?",
+    text: "Does it belong to Geometry (shapes, lines, area)?",
     attribute: "isGeometry",
     expectedValue: true
   },
   {
     id: "q_cat_algebra",
     category: "Category",
-    text: "Does it belong to Algebra?",
+    text: "Does it belong to Algebra (using letters like x and y)?",
     attribute: "isAlgebra",
     expectedValue: true
   },
   {
     id: "q_cat_number_theory",
     category: "Category",
-    text: "Does it belong to Arithmetic or Number Theory?",
+    text: "Does it belong to Arithmetic/Number Theory (integers, factors)?",
     attribute: "isNumber",
     expectedValue: true
   },
@@ -136,14 +136,14 @@ const REVERSE_QUESTIONS = [
   {
     id: "q_prop_diagrams",
     category: "Properties",
-    text: "Does it require or typically use diagrams/visuals?",
+    text: "Do we usually draw a diagram or shape to show it?",
     attribute: "usesDiagram",
     expectedValue: true
   },
   {
     id: "q_prop_variables",
     category: "Properties",
-    text: "Does it involve variables (like x and y)?",
+    text: "Does it use variables/letters (like x and y)?",
     attribute: "containsVariables",
     expectedValue: true
   },
@@ -164,14 +164,14 @@ const REVERSE_QUESTIONS = [
   {
     id: "q_prop_calculation",
     category: "Properties",
-    text: "Does it require calculation/computation to find?",
+    text: "Do we need to do calculations to find it?",
     attribute: "requiresCalculation",
     expectedValue: true
   },
   {
     id: "q_prop_no_calculation",
     category: "Properties",
-    text: "Is it a qualitative concept rather than a calculation?",
+    text: "Is it a qualitative concept (not requiring calculations)?",
     attribute: "requiresCalculation",
     expectedValue: false
   },
@@ -185,7 +185,7 @@ const REVERSE_QUESTIONS = [
   {
     id: "q_grade_elementary",
     category: "Properties",
-    text: "Is it typically introduced in elementary school (Grade 5 or below)?",
+    text: "Is it taught in primary school (Grade 5 or below)?",
     attribute: "gradeLevel",
     operator: "lte",
     expectedValue: 5
@@ -193,7 +193,7 @@ const REVERSE_QUESTIONS = [
   {
     id: "q_grade_middle",
     category: "Properties",
-    text: "Is it introduced in middle school (Grade 6 or above)?",
+    text: "Is it taught in middle school (Grade 6 to 8)?",
     attribute: "gradeLevel",
     operator: "gte",
     expectedValue: 6
@@ -201,7 +201,7 @@ const REVERSE_QUESTIONS = [
   {
     id: "q_grade_high",
     category: "Properties",
-    text: "Is it advanced high school math (Grade 9 or above)?",
+    text: "Is it taught in high school (Grade 9 or above)?",
     attribute: "gradeLevel",
     operator: "gte",
     expectedValue: 9
@@ -211,7 +211,7 @@ const REVERSE_QUESTIONS = [
   {
     id: "q_app_real_world",
     category: "Applications",
-    text: "Does it have direct, common real-world applications?",
+    text: "Does it have common real-world applications?",
     attribute: "realWorldApplication",
     expectedValue: true
   },
@@ -320,7 +320,7 @@ const REVERSE_CONCEPTS = [
     id: "square_root",
     name: "Square Root",
     category: "Arithmetic",
-    difficulty: "easy",
+    difficulty: "medium",
     definition: "A value that, when multiplied by itself, gives the original number.",
     examples: ["Square root of 9 is 3", "Square root of 16 is 4"],
     attributes: {
@@ -410,7 +410,7 @@ const REVERSE_CONCEPTS = [
     id: "linear_equation",
     name: "Linear Equation",
     category: "Algebra",
-    difficulty: "easy",
+    difficulty: "medium",
     definition: "An equation between two variables that gives a straight line when plotted on a graph, with variables raised to the power of 1.",
     examples: ["y = 2x + 1", "3x - 5 = 10"],
     attributes: {
@@ -440,7 +440,7 @@ const REVERSE_CONCEPTS = [
     id: "quadratic_equation",
     name: "Quadratic Equation",
     category: "Algebra",
-    difficulty: "medium",
+    difficulty: "hard",
     definition: "An equation of degree 2, typically written as ax² + bx + c = 0, representing a curved path (parabola).",
     examples: ["x² - 5x + 6 = 0", "y = 2x² + 3"],
     attributes: {
@@ -500,7 +500,7 @@ const REVERSE_CONCEPTS = [
     id: "vector",
     name: "Vector",
     category: "Geometry",
-    difficulty: "medium",
+    difficulty: "hard",
     definition: "A quantity having direction as well as magnitude, especially as determining the position of one point in space relative to another.",
     examples: ["Moving 3 steps right and 4 steps up: [3, 4]", "Velocity vector showing speed and direction"],
     attributes: {
@@ -530,7 +530,7 @@ const REVERSE_CONCEPTS = [
     id: "right_triangle",
     name: "Right Triangle",
     category: "Geometry",
-    difficulty: "easy",
+    difficulty: "medium",
     definition: "A triangle in which one angle is a right angle (exactly 90 degrees).",
     examples: ["A triangle with angles 90, 45, and 45 degrees", "A 3-4-5 sided triangle"],
     attributes: {
@@ -560,7 +560,7 @@ const REVERSE_CONCEPTS = [
     id: "pythagoras_theorem",
     name: "Pythagoras' Theorem",
     category: "Geometry",
-    difficulty: "easy",
+    difficulty: "medium",
     definition: "The theorem stating that in a right-angled triangle, the square of the hypotenuse is equal to the sum of the squares of the other two sides (a² + b² = c²).",
     examples: ["3² + 4² = 5²", "In a right triangle with sides 6 and 8, hypotenuse is 10"],
     attributes: {
@@ -590,7 +590,7 @@ const REVERSE_CONCEPTS = [
     id: "venn_diagram",
     name: "Venn Diagram",
     category: "Logic",
-    difficulty: "easy",
+    difficulty: "medium",
     definition: "A diagram that shows all possible logical relations between a finite collection of different sets, typically using overlapping circles.",
     examples: ["Overlapping circles showing prime numbers and odd numbers", "Sorting animals into mammals and flying creatures"],
     attributes: {
@@ -650,7 +650,7 @@ const REVERSE_CONCEPTS = [
     id: "probability",
     name: "Probability",
     category: "Statistics",
-    difficulty: "easy",
+    difficulty: "medium",
     definition: "The branch of mathematics concerning numerical descriptions of how likely an event is to occur.",
     examples: ["Probability of rolling a 6 is 1/6", "Probability of flipping heads is 0.5 (or 50%)"],
     attributes: {
@@ -800,7 +800,7 @@ const REVERSE_CONCEPTS = [
     id: "circle",
     name: "Circle",
     category: "Geometry",
-    difficulty: "easy",
+    difficulty: "medium",
     definition: "A round plane figure whose boundary consists of points equidistant from a fixed center point.",
     examples: ["A coin", "A wheel", "A clock face"],
     attributes: {

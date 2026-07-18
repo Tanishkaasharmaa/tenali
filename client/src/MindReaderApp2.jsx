@@ -34,31 +34,31 @@ const CATEGORIES = ["Definition", "Category", "Properties", "Applications"];
 
 const QUESTIONS_LIBRARY = [
   // --- Definition ---
-  { id: "q_is_number", category: "Definition", text: "Is it a type of number?" },
-  { id: "q_is_theorem", category: "Definition", text: "Is it a mathematical theorem?" },
-  { id: "q_is_formula", category: "Definition", text: "Is it a specific formula or equation?" },
-  { id: "q_is_operation", category: "Definition", text: "Is it an operation or step-by-step process?" },
-  { id: "q_is_not_operation", category: "Definition", text: "Is it a static concept rather than an operation?" },
+  { id: "q_is_number", category: "Definition", text: "Is it a type of number (like prime numbers or integers)?" },
+  { id: "q_is_theorem", category: "Definition", text: "Is it a mathematical theorem (like Pythagoras' Theorem)?" },
+  { id: "q_is_formula", category: "Definition", text: "Is it an equation or formula (like y = mx + c)?" },
+  { id: "q_is_operation", category: "Definition", text: "Is it a calculation process (like finding the HCF or LCM)?" },
+  { id: "q_is_not_operation", category: "Definition", text: "Is it a concept/idea rather than an operation?" },
   { id: "q_is_not_number", category: "Definition", text: "Is it something other than a type of number?" },
   // --- Category ---
-  { id: "q_cat_geometry", category: "Category", text: "Does it belong to Geometry?" },
-  { id: "q_cat_algebra", category: "Category", text: "Does it belong to Algebra?" },
-  { id: "q_cat_number_theory", category: "Category", text: "Does it belong to Arithmetic or Number Theory?" },
+  { id: "q_cat_geometry", category: "Category", text: "Does it belong to Geometry (shapes, lines, area)?" },
+  { id: "q_cat_algebra", category: "Category", text: "Does it belong to Algebra (using letters like x and y)?" },
+  { id: "q_cat_number_theory", category: "Category", text: "Does it belong to Arithmetic/Number Theory (integers, factors)?" },
   { id: "q_cat_not_geometry", category: "Category", text: "Is it outside the scope of Geometry?" },
   { id: "q_cat_not_algebra", category: "Category", text: "Is it outside the scope of Algebra?" },
   // --- Properties ---
-  { id: "q_prop_diagrams", category: "Properties", text: "Does it require or typically use diagrams/visuals?" },
-  { id: "q_prop_variables", category: "Properties", text: "Does it involve variables (like x and y)?" },
+  { id: "q_prop_diagrams", category: "Properties", text: "Do we usually draw a diagram or shape to show it?" },
+  { id: "q_prop_variables", category: "Properties", text: "Does it use variables/letters (like x and y)?" },
   { id: "q_prop_fractions", category: "Properties", text: "Does it use fractions, decimals, or ratios?" },
   { id: "q_prop_graphs", category: "Properties", text: "Does it involve coordinates, grids, or graphs?" },
-  { id: "q_prop_calculation", category: "Properties", text: "Does it require calculation/computation to find?" },
-  { id: "q_prop_no_calculation", category: "Properties", text: "Is it a qualitative concept rather than a calculation?" },
+  { id: "q_prop_calculation", category: "Properties", text: "Do we need to do calculations to find it?" },
+  { id: "q_prop_no_calculation", category: "Properties", text: "Is it a qualitative concept (not requiring calculations)?" },
   { id: "q_prop_no_variables", category: "Properties", text: "Does it avoid algebraic variables?" },
-  { id: "q_grade_elementary", category: "Properties", text: "Is it typically introduced in elementary school (Grade 5 or below)?" },
-  { id: "q_grade_middle", category: "Properties", text: "Is it introduced in middle school (Grade 6 or above)?" },
-  { id: "q_grade_high", category: "Properties", text: "Is it advanced high school math (Grade 9 or above)?" },
+  { id: "q_grade_elementary", category: "Properties", text: "Is it taught in primary school (Grade 5 or below)?" },
+  { id: "q_grade_middle", category: "Properties", text: "Is it taught in middle school (Grade 6 to 8)?" },
+  { id: "q_grade_high", category: "Properties", text: "Is it taught in high school (Grade 9 or above)?" },
   // --- Applications ---
-  { id: "q_app_real_world", category: "Applications", text: "Does it have direct, common real-world applications?" },
+  { id: "q_app_real_world", category: "Applications", text: "Does it have common real-world applications?" },
   { id: "q_app_no_real_world", category: "Applications", text: "Is it mostly theoretical or abstract math?" }
 ];
 
@@ -82,6 +82,7 @@ export default function MindReaderApp2({ onBack }) {
   const [equippedTitle, setEquippedTitle] = useState('Novice Reader');
   const [showCabinet, setShowCabinet] = useState(false);
   const [winStreak, setWinStreak] = useState(0);
+  const [gameDifficulty, setGameDifficulty] = useState('easy');
 
   // Gameplay panels
   const [activeCategory, setActiveCategory] = useState('Definition');
@@ -213,7 +214,7 @@ export default function MindReaderApp2({ onBack }) {
     }
   };
 
-  const handleStartGame = () => {
+  const handleStartGame = (difficulty = 'easy') => {
     setPhase('preparing');
     setLoading(true);
     setErrorMsg('');
@@ -229,7 +230,8 @@ export default function MindReaderApp2({ onBack }) {
       try {
         const res = await fetch(`${API}/api/game/start`, {
           method: 'POST',
-          headers
+          headers,
+          body: JSON.stringify({ difficulty })
         });
 
         if (!res.ok) throw new Error("Failed to start session.");
@@ -238,6 +240,7 @@ export default function MindReaderApp2({ onBack }) {
         setGameId(data.gameId);
         setQuestionsRemaining(data.questionsRemaining);
         setHintsRemaining(data.hintsRemaining);
+        setGameDifficulty(data.difficulty || difficulty);
         setAskedQuestions([]);
         setHistory([]);
         setExpression('thinking');
@@ -395,7 +398,7 @@ export default function MindReaderApp2({ onBack }) {
       {/* Header with home navigation */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <button className="back-button" onClick={onBack}>← Home</button>
-        <h1>Tenali Reverse Mind Reader</h1>
+        <h1>Read Tenali's Mind</h1>
         <div style={{ width: '80px' }} /> {/* alignment balance */}
       </div>
 
@@ -409,8 +412,11 @@ export default function MindReaderApp2({ onBack }) {
             {winStreak > 0 && <div className="mr2-hud-pill" style={{ color: '#e67e22', border: '1px solid #e67e22' }}>🔥 Streak: <strong>{winStreak}</strong></div>}
             {phase === 'playing' ? (
               <>
-                <div className="mr2-hud-pill">💬 Questions: <strong>{questionsRemaining} / 10</strong></div>
-                <div className="mr2-hud-pill">💡 Hints: <strong>{hintsRemaining} / 2</strong></div>
+                <div className="mr2-hud-pill" style={{ textTransform: 'capitalize', color: gameDifficulty === 'easy' ? '#2ecc71' : gameDifficulty === 'medium' ? '#f1c40f' : '#e74c3c', borderColor: gameDifficulty === 'easy' ? '#2ecc71' : gameDifficulty === 'medium' ? '#f1c40f' : '#e74c3c' }}>
+                  {gameDifficulty === 'easy' ? '🟢 Easy' : gameDifficulty === 'medium' ? '🟡 Medium' : '🔴 Hard'}
+                </div>
+                <div className="mr2-hud-pill">💬 Questions: <strong>{questionsRemaining} / {gameDifficulty === 'easy' ? 15 : gameDifficulty === 'medium' ? 10 : 6}</strong></div>
+                <div className="mr2-hud-pill">💡 Hints: <strong>{hintsRemaining} / {gameDifficulty === 'easy' ? 3 : gameDifficulty === 'medium' ? 2 : 1}</strong></div>
               </>
             ) : (
               <button 
@@ -453,14 +459,56 @@ export default function MindReaderApp2({ onBack }) {
               ))}
             </div>
 
-            <button 
-              className="mr2-guess-trigger-btn" 
-              onClick={handleStartGame} 
-              disabled={loading}
-              style={{ marginTop: '20px', padding: '14px 28px', fontSize: '1.05rem', textTransform: 'uppercase', letterSpacing: '1px' }}
-            >
-              {loading ? 'Starting...' : 'Start Game Challenge'}
-            </button>
+            <h3 style={{ marginTop: '35px', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>CHOOSE DIFFICULTY LEVEL</h3>
+            <div className="difficulty-grid-selector" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', marginTop: '15px', marginBottom: '10px' }}>
+              <button 
+                onClick={() => handleStartGame('easy')}
+                disabled={loading}
+                className="difficulty-btn-card"
+                style={{
+                  background: 'rgba(46, 204, 113, 0.08)', border: '2px solid #2ecc71', borderRadius: '12px', padding: '16px 10px',
+                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)'
+                }}
+              >
+                <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '6px' }}>🟢</span>
+                <strong style={{ display: 'block', color: '#2ecc71', fontSize: '1.05rem' }}>Easy Level</strong>
+                <span style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '6px', lineHeight: '1.3' }}>
+                  15 Questions | 3 Hints<br/>Grade 5 & below topics
+                </span>
+              </button>
+
+              <button 
+                onClick={() => handleStartGame('medium')}
+                disabled={loading}
+                className="difficulty-btn-card"
+                style={{
+                  background: 'rgba(241, 196, 15, 0.08)', border: '2px solid #f1c40f', borderRadius: '12px', padding: '16px 10px',
+                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)'
+                }}
+              >
+                <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '6px' }}>🟡</span>
+                <strong style={{ display: 'block', color: '#f1c40f', fontSize: '1.05rem' }}>Medium Level</strong>
+                <span style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '6px', lineHeight: '1.3' }}>
+                  10 Questions | 2 Hints<br/>Grade 6-8 (+10 MRR)
+                </span>
+              </button>
+
+              <button 
+                onClick={() => handleStartGame('hard')}
+                disabled={loading}
+                className="difficulty-btn-card"
+                style={{
+                  background: 'rgba(231, 76, 60, 0.08)', border: '2px solid #e74c3c', borderRadius: '12px', padding: '16px 10px',
+                  cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)'
+                }}
+              >
+                <span style={{ fontSize: '1.8rem', display: 'block', marginBottom: '6px' }}>🔴</span>
+                <strong style={{ display: 'block', color: '#e74c3c', fontSize: '1.05rem' }}>Hard Level</strong>
+                <span style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '6px', lineHeight: '1.3' }}>
+                  6 Questions | 1 Hint<br/>Grade 9-10 (+25 MRR)
+                </span>
+              </button>
+            </div>
           </div>
         )}
 

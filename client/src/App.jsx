@@ -40653,7 +40653,7 @@ function MindReaderWrapper({ onBack }) {
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.transform = 'none' }}
         >
           <span style={{ fontSize: '3rem', display: 'block', marginBottom: '15px' }}>🙋‍♂️</span>
-          <h3 style={{ color: 'var(--clr-accent)', margin: '0 0 10px 0', fontSize: '1.25rem' }}>You want to guess</h3>
+          <h3 style={{ color: 'var(--clr-accent)', margin: '0 0 10px 0', fontSize: '1.25rem' }}>Read Tenali's Mind</h3>
           <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.85rem', lineHeight: '1.4', margin: 0 }}>
             Tenali secretly selects a mathematical concept. Ask him questions, collect hints, and make your guess!
           </p>
@@ -41491,7 +41491,7 @@ function Home({ onSelect }) {
                           fontFamily: 'var(--font-body)', fontSize: '0.88rem', transition: 'color 0.15s'
                         }} onMouseEnter={e => e.target.style.color = 'var(--clr-accent)'}
                           onMouseLeave={e => e.target.style.color = 'var(--clr-text-soft)'}>
-                          🙋‍♂️ You want to guess
+                          🙋‍♂️ Read Tenali's Mind
                         </button>
                       </div>
                     )}

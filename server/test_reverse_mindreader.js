@@ -71,24 +71,41 @@ async function runTests() {
       throw new Error(`Server crashed on startup with code ${exitCode} and signal ${exitSignal}`);
     }
 
-    console.log('\n--- 1. Testing /api/game/start ---');
-    const startRes = await fetch(`${BASE_URL}/api/game/start`, {
+    console.log('\n--- 1. Testing /api/game/start (Easy - Default) ---');
+    const startResEasy = await fetch(`${BASE_URL}/api/game/start`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' }
     });
     
-    if (!startRes.ok) {
-      throw new Error(`Failed to start game: ${startRes.statusText}`);
+    if (!startResEasy.ok) {
+      throw new Error(`Failed to start game Easy: ${startResEasy.statusText}`);
     }
     
-    const startData = await startRes.json();
-    console.log('Start Game Response:', startData);
-    
-    const { gameId, questionsRemaining, hintsRemaining, state } = startData;
-    if (!gameId || questionsRemaining !== 10 || hintsRemaining !== 2 || state !== 'PLAYING') {
-      throw new Error('Start game response properties are invalid.');
+    const startDataEasy = await startResEasy.json();
+    console.log('Start Game Easy Response:', startDataEasy);
+    if (startDataEasy.questionsRemaining !== 15 || startDataEasy.hintsRemaining !== 3 || startDataEasy.difficulty !== 'easy') {
+      throw new Error('Default start game parameters are invalid (expected Easy).');
     }
-    console.log('✓ Start game checks passed.');
+    console.log('✓ Default (Easy) start game checks passed.');
+
+    console.log('\n--- 1b. Testing /api/game/start (Hard Level) ---');
+    const startResHard = await fetch(`${BASE_URL}/api/game/start`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ difficulty: 'hard' })
+    });
+
+    if (!startResHard.ok) {
+      throw new Error(`Failed to start game Hard: ${startResHard.statusText}`);
+    }
+
+    const startDataHard = await startResHard.json();
+    console.log('Start Game Hard Response:', startDataHard);
+    const { gameId, questionsRemaining, hintsRemaining, state, difficulty } = startDataHard;
+    if (!gameId || questionsRemaining !== 6 || hintsRemaining !== 1 || state !== 'PLAYING' || difficulty !== 'hard') {
+      throw new Error('Hard level start parameters are invalid.');
+    }
+    console.log('✓ Hard level start game checks passed.');
 
     console.log('\n--- 2. Testing /api/game/question ---');
     // Ask a valid question: q_is_number
@@ -105,7 +122,7 @@ async function runTests() {
     const q1Data = await q1Res.json();
     console.log('Question 1 Response:', q1Data);
     
-    if (!q1Data.dialogue || !['yes', 'no', 'dontknow'].includes(q1Data.answer) || q1Data.questionsRemaining !== 9) {
+    if (!q1Data.dialogue || !['yes', 'no', 'dontknow'].includes(q1Data.answer) || q1Data.questionsRemaining !== 5) {
       throw new Error('Question 1 response properties are invalid.');
     }
     console.log('✓ Question 1 checks passed.');
@@ -127,7 +144,7 @@ async function runTests() {
     console.log('✓ Duplicate question prevention checked.');
 
     console.log('\n--- 4. Testing /api/game/hint ---');
-    // Ask for hint 1
+    // Ask for hint 1 (max allowed for Hard is 1)
     const h1Res = await fetch(`${BASE_URL}/api/game/hint`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -140,45 +157,27 @@ async function runTests() {
     
     const h1Data = await h1Res.json();
     console.log('Hint 1 Response:', h1Data);
-    if (!h1Data.dialogue || !h1Data.hint || h1Data.hintsRemaining !== 1) {
+    if (!h1Data.dialogue || !h1Data.hint || h1Data.hintsRemaining !== 0) {
       throw new Error('Hint 1 response properties are invalid.');
     }
     console.log('✓ Hint 1 checks passed.');
 
-    // Ask for hint 2
+    // Ask for hint 2 -> should fail because Hard level limits to 1 hint
     const h2Res = await fetch(`${BASE_URL}/api/game/hint`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ gameId })
     });
     
-    if (!h2Res.ok) {
-      throw new Error(`Failed to get hint 2: ${h2Res.statusText}`);
-    }
-    
-    const h2Data = await h2Res.json();
-    console.log('Hint 2 Response:', h2Data);
-    if (!h2Data.dialogue || !h2Data.hint || h2Data.hintsRemaining !== 0) {
-      throw new Error('Hint 2 response properties are invalid.');
-    }
-    console.log('✓ Hint 2 checks passed.');
-
-    // Ask for hint 3 -> should fail
-    const h3Res = await fetch(`${BASE_URL}/api/game/hint`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gameId })
-    });
-    
-    console.log(`Hint 3 (exceeded) status code: ${h3Res.status}`);
-    if (h3Res.status !== 400) {
-      throw new Error('Server allowed asking for more hints than limit.');
+    console.log(`Hint 2 (exceeded) status code: ${h2Res.status}`);
+    if (h2Res.status !== 400) {
+      throw new Error('Server allowed asking for more hints than Hard limit.');
     }
     console.log('✓ Hint limit checks passed.');
 
     console.log('\n--- 5. Testing /api/game/guess ---');
     // Extract the secret concept name from stdoutData
-    const startedMatch = stdoutData.match(/Started session sess_\w+ with concept "([^"]+)"/);
+    const startedMatch = stdoutData.match(/Started session sess_\w+ with concept "([^"]+)" \[Level: hard\]/);
     if (!startedMatch) {
       throw new Error('Could not find secret concept name in server stdout logs.');
     }
@@ -208,14 +207,20 @@ async function runTests() {
       throw new Error(`Expected winStreak to be 3, got ${guessData.reward.winStreak}`);
     }
     
-    if (guessData.reward.mrrChange !== 46) {
-      throw new Error(`Expected mrrChange to be 46 (38 base * 1.2 multiplier), got ${guessData.reward.mrrChange}`);
+    // Hard Level base: 20 points
+    // Questions remaining: 5 (5 * 2 = 10 bonus)
+    // Hints remaining: 0 (0 * 5 = 0 bonus)
+    // Hard level bonus: 25 points
+    // Base total = 20 + 10 + 0 + 25 = 55 points
+    // Streak multiplier: 1.2x -> expected: Math.round(55 * 1.2) = 66
+    if (guessData.reward.mrrChange !== 66) {
+      throw new Error(`Expected mrrChange to be 66 (55 base * 1.2 multiplier), got ${guessData.reward.mrrChange}`);
     }
 
     console.log(`✓ Guess completed. Was guess correct? ${guessData.correct}`);
     console.log(`✓ Secret Concept was: ${guessData.concept.name}`);
     console.log(`✓ Win Streak reached: ${guessData.reward.winStreak}`);
-    console.log(`✓ MRR Change (including 1.2x streak multiplier): +${guessData.reward.mrrChange}`);
+    console.log(`✓ MRR Change (including 1.2x streak multiplier & Hard Level bonus): +${guessData.reward.mrrChange}`);
 
     // Verify Telemetry Output
     console.log('\n--- 6. Verify Telemetry Output ---');

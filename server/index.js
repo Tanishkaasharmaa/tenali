@@ -9183,6 +9183,8 @@ class GameSession {
     this.difficulty = difficulty;
     this.questionsRemaining = 10;
     this.hintsRemaining = 2;
+    this.maxQuestions = 10;
+    this.maxHints = 2;
     this.askedQuestions = [];
     this.guessed = false;
     this.createdAt = new Date();
@@ -9202,19 +9204,46 @@ setInterval(() => {
 
 app.post('/api/game/start', express.json(), async (req, res) => {
   try {
-    const randomIndex = Math.floor(Math.random() * REVERSE_CONCEPTS.length);
-    const concept = REVERSE_CONCEPTS[randomIndex];
+    const { difficulty } = req.body;
+    const diff = (difficulty || 'easy').toLowerCase();
+    
+    // Filter concepts by chosen difficulty level
+    const pool = REVERSE_CONCEPTS.filter(c => c.difficulty === diff);
+    const selectedPool = pool.length > 0 ? pool : REVERSE_CONCEPTS;
+    
+    const randomIndex = Math.floor(Math.random() * selectedPool.length);
+    const concept = selectedPool[randomIndex];
     const gameId = 'sess_' + crypto.randomUUID().replace(/-/g, '');
     
-    const session = new GameSession(gameId, concept);
+    // Configure question and hint resource limits by difficulty
+    let questionsAllowed = 10;
+    let hintsAllowed = 2;
+    if (diff === 'easy') {
+      questionsAllowed = 15;
+      hintsAllowed = 3;
+    } else if (diff === 'medium') {
+      questionsAllowed = 10;
+      hintsAllowed = 2;
+    } else if (diff === 'hard') {
+      questionsAllowed = 6;
+      hintsAllowed = 1;
+    }
+    
+    const session = new GameSession(gameId, concept, diff);
+    session.questionsRemaining = questionsAllowed;
+    session.hintsRemaining = hintsAllowed;
+    session.maxQuestions = questionsAllowed;
+    session.maxHints = hintsAllowed;
+    
     reverseSessions.set(gameId, session);
     
-    console.log(`[ReverseMindReader] Started session ${gameId} with concept "${concept.name}"`);
+    console.log(`[ReverseMindReader] Started session ${gameId} with concept "${concept.name}" [Level: ${diff}]`);
     res.json({
       gameId,
       questionsRemaining: session.questionsRemaining,
       hintsRemaining: session.hintsRemaining,
-      state: 'PLAYING'
+      state: 'PLAYING',
+      difficulty: diff
     });
   } catch (err) {
     console.error('[ReverseMindReader] Start game error:', err);
@@ -9344,7 +9373,15 @@ app.post('/api/game/guess', express.json(), async (req, res) => {
       currentStreak = parseInt(winStreak || 0, 10) + 1;
     }
     const multiplier = Math.min(1.5, 1.0 + Math.max(0, currentStreak - 1) * 0.1);
-    rewardPoints = Math.round((20 + (session.questionsRemaining * 2) + (session.hintsRemaining * 5)) * multiplier);
+    
+    let difficultyBonus = 0;
+    if (session.difficulty === 'medium') {
+      difficultyBonus = 10;
+    } else if (session.difficulty === 'hard') {
+      difficultyBonus = 25;
+    }
+    
+    rewardPoints = Math.round((20 + (session.questionsRemaining * 2) + (session.hintsRemaining * 5) + difficultyBonus) * multiplier);
   } else {
     if (user) {
       user.reverseMindReaderWinStreak = 0;
