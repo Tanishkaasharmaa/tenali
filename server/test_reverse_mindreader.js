@@ -65,7 +65,7 @@ async function runTests() {
 
   try {
     // Wait for server to bind to port and print startup logs
-    await sleep(6000);
+    await sleep(9000);
 
     if (hasExited) {
       throw new Error(`Server crashed on startup with code ${exitCode} and signal ${exitSignal}`);

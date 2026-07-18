@@ -781,9 +781,9 @@ export default function MindReaderApp2({ onBack }) {
             </div>
 
             {/* Right Column: Chat Transcript Transcript */}
-            <div className="mr2-transcript-panel">
+            <div className="mr2-transcript-panel" style={{ display: 'flex', flexDirection: 'column' }}>
               <div className="mr2-transcript-title">📜 Conversation History</div>
-              <div className="mr2-transcript-history">
+              <div className="mr2-transcript-history" style={{ flex: 1, minHeight: '180px' }}>
                 {history.length === 0 ? (
                   <div style={{ color: 'var(--clr-text-soft)', fontStyle: 'italic', fontSize: '0.9rem', textAlign: 'center', marginTop: '40px' }}>
                     No questions asked yet. Choose a question from the categories block!
@@ -802,6 +802,36 @@ export default function MindReaderApp2({ onBack }) {
                   })
                 )}
                 <div ref={historyEndRef} />
+              </div>
+
+              {/* Active list dictionary below conversation history */}
+              <div className="mr2-transcript-pool-card" style={{ marginTop: '15px', paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div style={{ color: 'var(--clr-accent)', fontWeight: 'bold', fontSize: '0.88rem', letterSpacing: '0.5px', marginBottom: '8px' }}>
+                  🎯 POSSIBLE SECRET CONCEPTS ({getActiveConcepts(gameDifficulty).length})
+                </div>
+                <div style={{
+                  display: 'flex', flexWrap: 'wrap', gap: '6px', maxHeight: '160px', overflowY: 'auto',
+                  background: 'rgba(0, 0, 0, 0.25)', border: '1px solid rgba(255, 255, 255, 0.04)',
+                  padding: '8px', borderRadius: '8px'
+                }}>
+                  {getActiveConcepts(gameDifficulty).map((concept, idx) => (
+                    <span 
+                      key={idx} 
+                      className="mr2-concept-chip" 
+                      onClick={() => {
+                        setSelectedConcept(concept);
+                        setSearchQuery(concept);
+                        setShowGuessDialog(true);
+                      }}
+                      style={{ fontSize: '0.78rem', padding: '4px 8px', cursor: 'pointer', margin: 0 }}
+                    >
+                      {concept}
+                    </span>
+                  ))}
+                </div>
+                <p style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', margin: '4px 0 0 0', fontStyle: 'italic' }}>
+                  💡 Tip: Click any topic chip to make it your final guess!
+                </p>
               </div>
             </div>
 
