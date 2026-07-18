@@ -5,7 +5,7 @@ import Stage3Guided from './Stage3Guided';
 import Stage4Independent from './Stage4Independent';
 import Stage5Review from './Stage5Review';
 import CompletionScreen from './CompletionScreen';
-import MasteryBadge from '../MasteryBadge';
+
 
 // Get or create anonymous learner ID
 const getLearnerId = () => {
@@ -94,7 +94,6 @@ export default function QFormulaConceptApp({ onBack, QFormulaApp }) {
         <button className="back-btn" onClick={onBack}>← Back</button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ fontWeight: 'bold' }}>Quadratic Formula: Concept Mastery</div>
-          <MasteryBadge mastery={mastery} label="BKT" size={52} />
         </div>
         <div style={{ width: '60px' }}></div>
       </div>
