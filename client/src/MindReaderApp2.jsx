@@ -805,14 +805,19 @@ export default function MindReaderApp2({ onBack }) {
               </div>
 
               {/* Active list dictionary below conversation history */}
-              <div className="mr2-transcript-pool-card" style={{ marginTop: '15px', paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                <div style={{ color: 'var(--clr-accent)', fontWeight: 'bold', fontSize: '0.88rem', letterSpacing: '0.5px', marginBottom: '8px' }}>
-                  🎯 POSSIBLE SECRET CONCEPTS ({getActiveConcepts(gameDifficulty).length})
+              <div className="mr2-transcript-pool-card" style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <span style={{ color: 'var(--clr-accent)', fontWeight: 'bold', fontSize: '0.82rem', letterSpacing: '0.5px' }}>
+                    🎯 POSSIBLE TOPICS ({getActiveConcepts(gameDifficulty).length})
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--clr-text-soft)', fontStyle: 'italic' }}>
+                    💡 Click to Guess
+                  </span>
                 </div>
                 <div style={{
-                  display: 'flex', flexWrap: 'wrap', gap: '6px', maxHeight: '160px', overflowY: 'auto',
+                  display: 'flex', flexWrap: 'wrap', gap: '5px', maxHeight: '100px', overflowY: 'auto',
                   background: 'rgba(0, 0, 0, 0.25)', border: '1px solid rgba(255, 255, 255, 0.04)',
-                  padding: '8px', borderRadius: '8px'
+                  padding: '6px', borderRadius: '8px'
                 }}>
                   {getActiveConcepts(gameDifficulty).map((concept, idx) => (
                     <span 
@@ -823,15 +828,12 @@ export default function MindReaderApp2({ onBack }) {
                         setSearchQuery(concept);
                         setShowGuessDialog(true);
                       }}
-                      style={{ fontSize: '0.78rem', padding: '4px 8px', cursor: 'pointer', margin: 0 }}
+                      style={{ fontSize: '0.75rem', padding: '3px 6px', cursor: 'pointer', margin: 0 }}
                     >
                       {concept}
                     </span>
                   ))}
                 </div>
-                <p style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', margin: '4px 0 0 0', fontStyle: 'italic' }}>
-                  💡 Tip: Click any topic chip to make it your final guess!
-                </p>
               </div>
             </div>
 
