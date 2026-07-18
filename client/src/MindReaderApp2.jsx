@@ -453,7 +453,7 @@ export default function MindReaderApp2({ onBack }) {
     }
   };
 
-  const filteredConcepts = CONCEPT_POOL.filter(concept =>
+  const filteredConcepts = CONCEPTS_DATA.map(c => c.name).filter(concept =>
     concept.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
