@@ -8941,6 +8941,23 @@ app.post('/api/mindreader/next', express.json(), (req, res) => {
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'tenali-dev-secret-change-me';
 
+// Helper to automatically unlock skins based on MRR threshold
+function updateUnlockedSkins(user) {
+  if (!user.unlockedSkins) {
+    user.unlockedSkins = ["Classic Tenali"];
+  }
+  let updated = false;
+  if (user.mrr >= 1150 && !user.unlockedSkins.includes("Royal Robes")) {
+    user.unlockedSkins.push("Royal Robes");
+    updated = true;
+  }
+  if (user.mrr >= 1300 && !user.unlockedSkins.includes("Sage Scholar")) {
+    user.unlockedSkins.push("Sage Scholar");
+    updated = true;
+  }
+  return updated;
+}
+
 // In-memory profiles fallback when MongoDB is down
 const inMemoryProfiles = {}; // Keyed by username -> { username, mrr, mindReaderGamesToday, lastMindReaderGameDate, unlockedSkins }
 
@@ -9001,6 +9018,9 @@ app.get('/api/mindreader/profile', async (req, res) => {
         user.lastMindReaderGameDate = todayStr;
         needsSave = true;
       }
+      if (updateUnlockedSkins(user)) {
+        needsSave = true;
+      }
       if (needsSave && !user.isInMemory) {
         await user.save();
       }
@@ -9011,6 +9031,7 @@ app.get('/api/mindreader/profile', async (req, res) => {
         unlockedSkins: user.unlockedSkins || ["Classic Tenali"],
         equippedSkin: user.equippedSkin || 'classic',
         equippedTitle: user.equippedTitle || 'Novice Reader',
+        winStreak: user.reverseMindReaderWinStreak || 0,
         authenticated: true,
         username: user.username
       });
@@ -9084,6 +9105,8 @@ app.post('/api/mindreader/end', express.json(), async (req, res) => {
       } else {
         user.mrr = Math.max(1000, (user.mrr || 1000) - 5);
       }
+
+      updateUnlockedSkins(user);
 
       user.mindReaderGamesToday += 1;
 
@@ -9288,7 +9311,7 @@ app.post('/api/game/hint', express.json(), (req, res) => {
 });
 
 app.post('/api/game/guess', express.json(), async (req, res) => {
-  const { gameId, guess } = req.body;
+  const { gameId, guess, winStreak } = req.body;
   if (!gameId || !guess) {
     return res.status(400).json({ error: 'Missing gameId or guess' });
   }
@@ -9312,9 +9335,21 @@ app.post('/api/game/guess', express.json(), async (req, res) => {
     console.error('[ReverseMindReader] Error fetching optional user for guess:', err);
   }
   
+  let currentStreak = 0;
   if (isCorrect) {
-    rewardPoints = 20 + (session.questionsRemaining * 2) + (session.hintsRemaining * 5);
+    if (user) {
+      user.reverseMindReaderWinStreak = (user.reverseMindReaderWinStreak || 0) + 1;
+      currentStreak = user.reverseMindReaderWinStreak;
+    } else {
+      currentStreak = parseInt(winStreak || 0, 10) + 1;
+    }
+    const multiplier = Math.min(1.5, 1.0 + Math.max(0, currentStreak - 1) * 0.1);
+    rewardPoints = Math.round((20 + (session.questionsRemaining * 2) + (session.hintsRemaining * 5)) * multiplier);
   } else {
+    if (user) {
+      user.reverseMindReaderWinStreak = 0;
+    }
+    currentStreak = 0;
     rewardPoints = -5;
   }
   
@@ -9333,6 +9368,7 @@ app.post('/api/game/guess', express.json(), async (req, res) => {
     }
     
     user.mrr = Math.max(1000, (user.mrr || 1000) + rewardPoints);
+    updateUnlockedSkins(user);
     user.mindReaderGamesToday += 1;
     
     if (!user.isInMemory) {
@@ -9385,6 +9421,7 @@ app.post('/api/game/guess', express.json(), async (req, res) => {
       unlockedSkins: finalSkins,
       equippedSkin: user ? user.equippedSkin : 'classic',
       equippedTitle: user ? user.equippedTitle : 'Novice Reader',
+      winStreak: currentStreak,
       authenticated
     },
     concept: {

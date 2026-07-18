@@ -81,6 +81,7 @@ export default function MindReaderApp2({ onBack }) {
   const [equippedSkin, setEquippedSkin] = useState('classic');
   const [equippedTitle, setEquippedTitle] = useState('Novice Reader');
   const [showCabinet, setShowCabinet] = useState(false);
+  const [winStreak, setWinStreak] = useState(0);
 
   // Gameplay panels
   const [activeCategory, setActiveCategory] = useState('Definition');
@@ -135,6 +136,7 @@ export default function MindReaderApp2({ onBack }) {
             setUnlockedSkins(profileData.unlockedSkins || ['Classic Tenali']);
             setEquippedSkin(profileData.equippedSkin || 'classic');
             setEquippedTitle(profileData.equippedTitle || 'Novice Reader');
+            setWinStreak(profileData.winStreak || 0);
             setAuthenticated(true);
           } else {
             setAuthenticated(false);
@@ -143,6 +145,7 @@ export default function MindReaderApp2({ onBack }) {
             setEquippedSkin(localStorage.getItem('tenali-mindreader-skin') || 'classic');
             setEquippedTitle(localStorage.getItem('tenali-mindreader-title') || 'Novice Reader');
             setGamesToday(parseInt(localStorage.getItem('tenali-mindreader-games-today') || '0', 10));
+            setWinStreak(parseInt(localStorage.getItem('tenali-mindreader-streak') || '0', 10));
           }
         }
       } catch (err) {
@@ -336,7 +339,7 @@ export default function MindReaderApp2({ onBack }) {
       const res = await fetch(`${API}/api/game/guess`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ gameId, guess: selectedConcept })
+        body: JSON.stringify({ gameId, guess: selectedConcept, winStreak })
       });
 
       if (!res.ok) throw new Error("Failed to process guess.");
@@ -349,6 +352,7 @@ export default function MindReaderApp2({ onBack }) {
       if (data.reward.authenticated) {
         setMrr(data.reward.mrr);
         setGamesToday(data.reward.mindReaderGamesToday);
+        setWinStreak(data.reward.winStreak || 0);
       } else {
         const localMrr = parseInt(localStorage.getItem('tenali-mindreader-mrr') || '1000', 10);
         const newMrr = Math.max(1000, localMrr + data.reward.mrrChange);
@@ -358,6 +362,10 @@ export default function MindReaderApp2({ onBack }) {
         const newGames = gamesToday + 1;
         setGamesToday(newGames);
         localStorage.setItem('tenali-mindreader-games-today', String(newGames));
+
+        const newStreak = data.correct ? winStreak + 1 : 0;
+        setWinStreak(newStreak);
+        localStorage.setItem('tenali-mindreader-streak', String(newStreak));
       }
 
       if (data.correct) {
@@ -398,6 +406,7 @@ export default function MindReaderApp2({ onBack }) {
           <div className="mr2-card mr2-hud">
             <div className="mr2-hud-pill">🔮 MRR: <strong>{mrr}</strong></div>
             <div className="mr2-hud-pill">🏷️ Title: <strong>{equippedTitle}</strong></div>
+            {winStreak > 0 && <div className="mr2-hud-pill" style={{ color: '#e67e22', border: '1px solid #e67e22' }}>🔥 Streak: <strong>{winStreak}</strong></div>}
             {phase === 'playing' ? (
               <>
                 <div className="mr2-hud-pill">💬 Questions: <strong>{questionsRemaining} / 10</strong></div>

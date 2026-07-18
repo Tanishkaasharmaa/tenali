@@ -34,6 +34,7 @@ const UserSchema = new mongoose.Schema({
   unlockedSkins: [{ type: String, default: ["Classic Tenali"] }],
   equippedSkin: { type: String, default: 'classic' },
   equippedTitle: { type: String, default: 'Novice Reader' },
+  reverseMindReaderWinStreak: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
 });
 

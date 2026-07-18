@@ -177,13 +177,19 @@ async function runTests() {
     console.log('✓ Hint limit checks passed.');
 
     console.log('\n--- 5. Testing /api/game/guess ---');
-    // Let's guess the concept. Since it is chosen randomly, we will guess "Prime Number".
-    // If correct, reward calculations will show true. If wrong, correct is false.
-    // Both are successful API results.
+    // Extract the secret concept name from stdoutData
+    const startedMatch = stdoutData.match(/Started session sess_\w+ with concept "([^"]+)"/);
+    if (!startedMatch) {
+      throw new Error('Could not find secret concept name in server stdout logs.');
+    }
+    const secretConcept = startedMatch[1];
+    console.log(`Detected secret concept from logs: "${secretConcept}"`);
+
+    // Guess the correct concept and pass winStreak: 2
     const guessRes = await fetch(`${BASE_URL}/api/game/guess`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gameId, guess: 'Prime Number' })
+      body: JSON.stringify({ gameId, guess: secretConcept, winStreak: 2 })
     });
     
     if (!guessRes.ok) {
@@ -193,12 +199,23 @@ async function runTests() {
     const guessData = await guessRes.json();
     console.log('Guess Response:', guessData);
     
-    if (guessData.correct === undefined || !guessData.reward || !guessData.concept) {
+    if (guessData.correct !== true || !guessData.reward || !guessData.concept) {
       throw new Error('Guess response properties are invalid.');
     }
+    
+    // Assert streak multiplier calculations
+    if (guessData.reward.winStreak !== 3) {
+      throw new Error(`Expected winStreak to be 3, got ${guessData.reward.winStreak}`);
+    }
+    
+    if (guessData.reward.mrrChange !== 46) {
+      throw new Error(`Expected mrrChange to be 46 (38 base * 1.2 multiplier), got ${guessData.reward.mrrChange}`);
+    }
+
     console.log(`✓ Guess completed. Was guess correct? ${guessData.correct}`);
     console.log(`✓ Secret Concept was: ${guessData.concept.name}`);
-    console.log(`✓ Description: ${guessData.concept.definition}`);
+    console.log(`✓ Win Streak reached: ${guessData.reward.winStreak}`);
+    console.log(`✓ MRR Change (including 1.2x streak multiplier): +${guessData.reward.mrrChange}`);
 
     // Verify Telemetry Output
     console.log('\n--- 6. Verify Telemetry Output ---');
