@@ -45,6 +45,10 @@ const MindReaderAnalyticSchema = new mongoose.Schema({
   questionsCount: { type: Number, required: true },
   scope: { type: String, required: true },
   predictionsMade: [{ type: String }],
+  questionsAsked: [{ type: String }],
+  hintsRequested: { type: Number, default: 0 },
+  completionTime: { type: Number }, // in seconds
+  incorrectGuessesCount: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -14,7 +14,7 @@ const path = require('path');
 
 // Port to run the test server on
 const TEST_PORT = 4001;
-const BASE_URL = `http://localhost:${TEST_PORT}`;
+const BASE_URL = `http://127.0.0.1:${TEST_PORT}`;
 
 // Helper to delay execution
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -27,10 +27,21 @@ async function runTests() {
   let exitCode = null;
   let exitSignal = null;
 
+  let stdoutData = '';
   const serverProc = fork(path.join(__dirname, 'index.js'), [], {
     cwd: __dirname,
     env: { ...process.env, PORT: TEST_PORT, MONGO_URI: 'mongodb://127.0.0.1:27017/tenali_test' },
-    silent: false
+    silent: true
+  });
+
+  serverProc.stdout.on('data', (data) => {
+    const chunk = data.toString();
+    stdoutData += chunk;
+    process.stdout.write(chunk);
+  });
+
+  serverProc.stderr.on('data', (data) => {
+    process.stderr.write(data);
   });
 
   serverProc.on('exit', (code, signal) => {
@@ -54,7 +65,7 @@ async function runTests() {
 
   try {
     // Wait for server to bind to port and print startup logs
-    await sleep(3500);
+    await sleep(6000);
 
     if (hasExited) {
       throw new Error(`Server crashed on startup with code ${exitCode} and signal ${exitSignal}`);
@@ -189,8 +200,15 @@ async function runTests() {
     console.log(`✓ Secret Concept was: ${guessData.concept.name}`);
     console.log(`✓ Description: ${guessData.concept.definition}`);
 
+    // Verify Telemetry Output
+    console.log('\n--- 6. Verify Telemetry Output ---');
+    if (!stdoutData.includes('[ReverseMindReader] Telemetry prepared:')) {
+      throw new Error('Telemetry prepared log was not found in server stdout.');
+    }
+    console.log('✓ Telemetry data verified in server stdout.');
+
     // Verify session was cleared
-    console.log('\n--- 6. Verify Session Cleanup ---');
+    console.log('\n--- 7. Verify Session Cleanup ---');
     const followUpRes = await fetch(`${BASE_URL}/api/game/guess`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

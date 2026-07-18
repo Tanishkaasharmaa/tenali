@@ -9355,13 +9355,26 @@ app.post('/api/game/guess', express.json(), async (req, res) => {
       concept: concept.name,
       questionsCount: 10 - session.questionsRemaining,
       scope: 'reverse_mindreader',
-      predictionsMade: [guess]
+      predictionsMade: [guess],
+      questionsAsked: session.askedQuestions,
+      hintsRequested: 2 - session.hintsRemaining,
+      completionTime: Math.round((new Date() - session.createdAt) / 1000),
+      incorrectGuessesCount: isCorrect ? 0 : 1
     }).catch(err => console.error('[ReverseMindReader] Failed to save analytic:', err));
   }
   
   reverseSessions.delete(gameId);
   
   console.log(`[ReverseMindReader] Session ${gameId} guess: "${guess}" | Secret: "${concept.name}" | Correct: ${isCorrect} | Reward: ${rewardPoints} MRR`);
+  console.log('[ReverseMindReader] Telemetry prepared:', {
+    outcome: isCorrect ? 'win' : 'loss',
+    concept: concept.name,
+    questionsCount: 10 - session.questionsRemaining,
+    questionsAsked: session.askedQuestions,
+    hintsRequested: 2 - session.hintsRemaining,
+    completionTime: Math.round((new Date() - session.createdAt) / 1000),
+    incorrectGuessesCount: isCorrect ? 0 : 1
+  });
   
   res.json({
     correct: isCorrect,
