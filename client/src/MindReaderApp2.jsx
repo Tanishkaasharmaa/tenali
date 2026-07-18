@@ -711,19 +711,9 @@ export default function MindReaderApp2({ onBack }) {
         {phase === 'playing' && (
           <div className="mr2-gameplay-layout">
             
-            {/* Left Column: controls, categories, questions */}
+            {/* Left Column: questions, possible topics, and action triggers */}
             <div className="mr2-control-panel">
               
-              <div className="mr2-card" style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px 16px' }}>
-                <div style={{ transform: 'scale(0.65)', transformOrigin: 'center center', width: '80px', height: '94px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <TenaliAvatar expression={expression} skin={equippedSkin} />
-                </div>
-                <div>
-                  <div style={{ fontWeight: 'bold', color: 'var(--clr-text)', fontSize: '0.95rem' }}>Tenali Raman</div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--clr-accent)', fontWeight: '500' }}>{equippedTitle}</div>
-                </div>
-              </div>
-
               {/* Predefined Categories & Questions Panel */}
               <div className="mr2-card" style={{ padding: '16px' }}>
                 <div className="mr2-category-tabs">
@@ -757,6 +747,38 @@ export default function MindReaderApp2({ onBack }) {
                 </div>
               </div>
 
+              {/* Separate Possible Topics Card */}
+              <div className="mr2-card" style={{ padding: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <span style={{ color: 'var(--clr-accent)', fontWeight: 'bold', fontSize: '0.85rem', letterSpacing: '0.5px' }}>
+                    🎯 POSSIBLE TOPICS ({getActiveConcepts(gameDifficulty).length})
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--clr-text-soft)', fontStyle: 'italic' }}>
+                    💡 Click to Guess
+                  </span>
+                </div>
+                <div style={{
+                  display: 'flex', flexWrap: 'wrap', gap: '5px', maxHeight: '110px', overflowY: 'auto',
+                  background: 'rgba(0, 0, 0, 0.25)', border: '1px solid rgba(255, 255, 255, 0.04)',
+                  padding: '8px', borderRadius: '8px'
+                }}>
+                  {getActiveConcepts(gameDifficulty).map((concept, idx) => (
+                    <span 
+                      key={idx} 
+                      className="mr2-concept-chip" 
+                      onClick={() => {
+                        setSelectedConcept(concept);
+                        setSearchQuery(concept);
+                        setShowGuessDialog(true);
+                      }}
+                      style={{ fontSize: '0.76rem', padding: '4px 8px', cursor: 'pointer', margin: 0 }}
+                    >
+                      {concept}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
               {/* Action Rows */}
               {errorMsg && <p className="error-text" style={{ margin: '5px 0 0 0', textAlign: 'center' }}>{errorMsg}</p>}
               
@@ -779,7 +801,7 @@ export default function MindReaderApp2({ onBack }) {
 
             </div>
 
-            {/* Right Column: Chat Transcript & Topics Pool */}
+            {/* Right Column: Mind Cloud & Tenali Avatar */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               
               {/* Mind Cloud History */}
@@ -813,35 +835,14 @@ export default function MindReaderApp2({ onBack }) {
                 </div>
               </div>
 
-              {/* Separate Possible Topics Card */}
-              <div className="mr2-card" style={{ padding: '16px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ color: 'var(--clr-accent)', fontWeight: 'bold', fontSize: '0.85rem', letterSpacing: '0.5px' }}>
-                    🎯 POSSIBLE TOPICS ({getActiveConcepts(gameDifficulty).length})
-                  </span>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--clr-text-soft)', fontStyle: 'italic' }}>
-                    💡 Click to Guess
-                  </span>
+              {/* Tenali Avatar card below Mind Cloud */}
+              <div className="mr2-card" style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px 16px' }}>
+                <div style={{ transform: 'scale(0.65)', transformOrigin: 'center center', width: '80px', height: '94px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <TenaliAvatar expression={expression} skin={equippedSkin} />
                 </div>
-                <div style={{
-                  display: 'flex', flexWrap: 'wrap', gap: '5px', maxHeight: '110px', overflowY: 'auto',
-                  background: 'rgba(0, 0, 0, 0.25)', border: '1px solid rgba(255, 255, 255, 0.04)',
-                  padding: '8px', borderRadius: '8px'
-                }}>
-                  {getActiveConcepts(gameDifficulty).map((concept, idx) => (
-                    <span 
-                      key={idx} 
-                      className="mr2-concept-chip" 
-                      onClick={() => {
-                        setSelectedConcept(concept);
-                        setSearchQuery(concept);
-                        setShowGuessDialog(true);
-                      }}
-                      style={{ fontSize: '0.76rem', padding: '4px 8px', cursor: 'pointer', margin: 0 }}
-                    >
-                      {concept}
-                    </span>
-                  ))}
+                <div>
+                  <div style={{ fontWeight: 'bold', color: 'var(--clr-text)', fontSize: '0.95rem' }}>Tenali Raman</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--clr-accent)', fontWeight: '500' }}>{equippedTitle}</div>
                 </div>
               </div>
 

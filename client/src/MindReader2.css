@@ -730,8 +730,8 @@
 
 .mr2-thought-dot-1 {
   position: absolute;
-  left: -14px;
-  top: 15%;
+  bottom: -12px;
+  right: 25%;
   width: 12px;
   height: 12px;
   background: #1e272e;
@@ -743,8 +743,8 @@
 
 .mr2-thought-dot-2 {
   position: absolute;
-  left: -24px;
-  top: 13%;
+  bottom: -22px;
+  right: 23%;
   width: 8px;
   height: 8px;
   background: #1e272e;
