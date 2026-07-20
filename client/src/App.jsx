@@ -21,6 +21,8 @@
  * Progress persistence: Adaptive tables app saves current table progress in localStorage
  */
 
+
+
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import VoiceAssistant from './components/VoiceAssistant';
 import { motion } from 'framer-motion';
@@ -56,7 +58,12 @@ function useProgressSubmit(revealed, isCorrect, topic, questionId) {
     }).catch(err => console.error('Failed to update progress', err));
   }, [revealed, isCorrect, topic, questionId]);
 }
+
+
 import Vachana from './vachana'
+import 'chart.js/auto'
+import { Line } from 'react-chartjs-2'
+
 import './App.css'
 import EnhancedMathDetectiveApp from './detective-app'
 import GlossaryText from './components/GlossaryText'
@@ -198,8 +205,15 @@ function AuthMenu({ t = (s) => s }) {
   useEffect(() => {
     const onKey = e => { if (e.key === 'Escape') { setOpen(false); setShowLogin(false); setError('') } }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    const onNav = e => { setOpen(false) }
+    window.addEventListener('tenali-navigate', onNav)
+    return () => { window.removeEventListener('keydown', onKey); window.removeEventListener('tenali-navigate', onNav) }
   }, [])
+
+  const navigateTo = (mode) => {
+    window.dispatchEvent(new CustomEvent('tenali-navigate', { detail: { mode } }))
+    setOpen(false)
+  }
 
   const submit = async (e) => {
     if (e && e.preventDefault) e.preventDefault()
@@ -288,6 +302,18 @@ function AuthMenu({ t = (s) => s }) {
                     <hr style={{ border: 'none', borderTop: '1px solid var(--clr-border, #444)', margin: '4px 0' }} />
                   </>
                 )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false)
+                    navigateTo('trackProgress')
+                  }}
+                  style={{ width: '100%', textAlign: 'left', padding: '8px 12px', borderRadius: 6, background: 'transparent', border: 'none', color: 'var(--clr-text)', cursor: 'pointer', fontSize: '0.95rem' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+                >
+                  Track Progress
+                </button>
                 <button
                   type="button"
                   onClick={() => { logout(); setOpen(false) }}
@@ -518,6 +544,47 @@ export function useTimer() {
  *   Array of result objects from quiz attempts. Each has question text, user answer, correct answer, correctness flag, and time in seconds.
  * @returns {ReactElement|null} Table element or null if no results
  */
+const STORAGE_KEY = 'gymQuizHistory_v1'
+const MAX_HISTORY = 500
+const SUPPORTED_GYMS = [
+  'Gym Decimals',
+  'Functions Gym',
+  'DotProducts Gym',
+  'Fractions-add-gym',
+  'LinearEquations-Gym',
+  'Indices-Gym',
+  'Polynomials Gym',
+]
+
+function loadHistory() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') } catch { return [] }
+}
+
+function saveHistory(record) {
+  const history = loadHistory()
+  history.unshift(record)
+  if (history.length > MAX_HISTORY) history.splice(MAX_HISTORY)
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(history))
+}
+
+function saveGymResult({ gymName, totalQuestions, correctAnswers, timeTakenSeconds, questionSummary = { easy: 0, medium: 0, hard: 0, extrahard: 0 } }) {
+  if (totalQuestions === 0) return
+  const accuracy = parseFloat(((correctAnswers / totalQuestions) * 100).toFixed(2))
+  const record = {
+    id: typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : Math.random().toString(36).slice(2) + Date.now().toString(36),
+    date: new Date().toISOString(),
+    gymName,
+    questionSummary,
+    totalQuestions,
+    correctAnswers,
+    accuracy,
+    timeTakenSeconds,
+  }
+  saveHistory(record)
+}
+
 function ResultsTable({ results }) {
   const processedRef = useRef(false);
   useEffect(() => {
@@ -42631,6 +42698,13 @@ function App() {
   }, [completedTopics, goldMastery, coins, totalSolved, mode]);
 
 
+  // Listen for navigation events from AuthMenu
+  useEffect(() => {
+    const onNav = (e) => { setMode(e.detail.mode) }
+    window.addEventListener('tenali-navigate', onNav)
+    return () => window.removeEventListener('tenali-navigate', onNav)
+  }, [])
+
   // Current theme: 'dark' or 'light'
   // Initialized from localStorage with fallback to 'dark'
   const [theme, setTheme] = useState(() => {
@@ -44048,6 +44122,7 @@ function App() {
     lineqgym: LinEqGymApp,         // LinearEquations-Gym — solve linear equations (MCQ)
     indicesgym: IndicesGymApp,     // Indices-Gym — index laws (MCQ)
     polygym: PolyGymApp,           // Polynomials Gym — arithmetic → monomial algebra (MCQ)
+    trackProgress: null,
   }
 
   // Get the component to render (or null if mode not set)
@@ -44124,6 +44199,10 @@ function App() {
           }}
         />
       );
+    }
+
+    if (mode === 'trackProgress') {
+      return <ProgressTrackerApp onBack={() => setMode(null)} />;
     }
 
     if (ActiveApp) {
@@ -52456,11 +52535,26 @@ function makeMCQuizApp({ title, subtitle, apiPath, diffLabels, tip, adaptiveOnly
   }, [isGoalMode]);
     const [results, setResults] = useState([])
     const [correctOption, setCorrectOption] = useState('')
+    const [questionSummary, setQuestionSummary] = useState({ easy: 0, medium: 0, hard: 0, extrahard: 0 })
     const timer = useTimer()
     const advanceFnRef = useRef(null)
     const adaptScoreRef = useRef(0)
     const submittedRef = useRef(false)
     const advancedRef = useRef(false)
+
+    const savedRef = useRef(false)
+
+    useEffect(() => {
+      if (!finished || savedRef.current) return
+      savedRef.current = true
+      saveGymResult({
+        gymName: title,
+        totalQuestions: totalQ,
+        correctAnswers: score,
+        timeTakenSeconds: timer.elapsed || 0,
+        questionSummary,
+      })
+    }, [finished, questionSummary])
 
     const effectiveDifficulty = () => isAdaptive ? adaptiveLevel(adaptScoreRef.current) : difficulty
 
@@ -52483,6 +52577,11 @@ function makeMCQuizApp({ title, subtitle, apiPath, diffLabels, tip, adaptiveOnly
         if (!data || !data.options || !Array.isArray(data.options) || data.options.length < 2) {
           throw new Error('Question payload missing options array')
         }
+        // Track difficulty of this question
+        setQuestionSummary(prev => ({
+          ...prev,
+          [diff]: (prev[diff] || 0) + 1
+        }))
         setQuestion(data)
         setSelectedOption('')
         setCorrectOption('')
@@ -52505,6 +52604,7 @@ function makeMCQuizApp({ title, subtitle, apiPath, diffLabels, tip, adaptiveOnly
       setTotalQ(t); setScore(0); setQuestionNumber(1); setResults([]); setStarted(true); setFinished(false)
       setAdaptScore(0); adaptScoreRef.current = 0
       submittedRef.current = false; advancedRef.current = false
+      setQuestionSummary({ easy: 0, medium: 0, hard: 0, extrahard: 0 })
     }
 
     useEffect(() => { if (started && !finished && questionNumber > 0) loadQuestion() }, [started, questionNumber])
@@ -67238,6 +67338,273 @@ function LearningJourneyCheckpointQuizView({ topicId, onBack }) {
       </div>
     </div>
   );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ProgressTrackerApp — Gym Quiz History Visualization
+// ─────────────────────────────────────────────────────────────────────────────
+function ProgressTrackerApp({ onBack }) {
+  const [selectedGym, setSelectedGym] = useState(SUPPORTED_GYMS[0])
+  const [page, setPage] = useState(0)
+  const [selectedPoint, setSelectedPoint] = useState(null)
+  const [allHistory, setAllHistory] = useState([])
+
+  useEffect(() => { setAllHistory(loadHistory()) }, [])
+
+  const gymRecords = useMemo(
+    () => allHistory.filter(r => r.gymName === selectedGym),
+    [allHistory, selectedGym]
+  )
+
+  const sortedRecords = useMemo(
+    () => [...gymRecords].sort((a, b) => new Date(b.date) - new Date(a.date)),
+    [gymRecords]
+  )
+
+  const totalSessions = gymRecords.length
+  const avgAccuracy = totalSessions > 0
+    ? parseFloat((gymRecords.reduce((s, r) => s + r.accuracy, 0) / totalSessions).toFixed(1))
+    : 0
+  const bestAccuracy = totalSessions > 0
+    ? parseFloat(Math.max(...gymRecords.map(r => r.accuracy)).toFixed(1))
+    : 0
+  const avgSpeed = totalSessions > 0
+    ? parseFloat((gymRecords.reduce((s, r) => s + (r.correctAnswers * 60) / r.timeTakenSeconds, 0) / totalSessions).toFixed(1))
+    : 0
+
+  const accelData = gymRecords
+    .slice()
+    .reverse()
+    .map((r, i) => ({ session: i + 1, accuracy: r.accuracy, record: r }))
+  const speedData = gymRecords
+    .slice()
+    .reverse()
+    .map((r, i) => {
+      const spd = r.timeTakenSeconds > 0 ? parseFloat(((r.correctAnswers * 60) / r.timeTakenSeconds).toFixed(1)) : 0
+      return { session: i + 1, speed: spd, record: r }
+    })
+
+  const yPadding = (min, max) => {
+    const range = max - min
+    return Math.max(1, range * 0.15)
+  }
+  const accelDomain = accelData.length > 0
+    ? [Math.max(0, Math.min(...accelData.map(d => d.accuracy)) - yPadding(Math.min(...accelData.map(d => d.accuracy)), Math.max(...accelData.map(d => d.accuracy)))),
+       Math.min(100, Math.max(...accelData.map(d => d.accuracy)) + yPadding(Math.min(...accelData.map(d => d.accuracy)), Math.max(...accelData.map(d => d.accuracy))))]
+    : [0, 100]
+  const speedMin = speedData.length > 0 ? Math.min(...speedData.map(d => d.speed)) : 0
+  const speedMax = speedData.length > 0 ? Math.max(...speedData.map(d => d.speed)) : 5
+  const speedDomain = [Math.max(0, speedMin - yPadding(speedMin, speedMax)), speedMax + yPadding(speedMin, speedMax)]
+
+  const makeChartOptions = (yLabel, ySuffix, yMin, yMax) => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'var(--clr-surface)',
+        titleColor: 'var(--clr-text)',
+        bodyColor: 'var(--clr-text)',
+        borderColor: 'var(--clr-border)',
+        borderWidth: 1,
+        padding: 10,
+        displayColors: false,
+        callbacks: {
+          label: context => {
+            const value = context.parsed.y
+            return ySuffix ? `${value}${ySuffix}` : `${value}`
+          }
+        }
+      }
+    },
+    interaction: {
+      mode: 'index',
+      intersect: false
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Session Number', color: 'var(--clr-dim)' },
+        ticks: { color: 'var(--clr-dim)', font: { size: 13 } },
+        grid: { color: 'rgba(0, 0, 0, 0.08)' }
+      },
+      y: {
+        min: yMin,
+        max: yMax,
+        title: { display: true, text: yLabel, color: 'var(--clr-dim)' },
+        ticks: { color: 'var(--clr-dim)', font: { size: 13 }, callback: v => ySuffix ? `${v}${ySuffix}` : `${v}` },
+        grid: { color: 'rgba(0, 0, 0, 0.08)' }
+      }
+    }
+  })
+
+  const accuracyChartData = {
+    labels: accelData.map(d => d.session),
+    datasets: [{
+      label: 'Accuracy (%)',
+      data: accelData.map(d => d.accuracy),
+      borderColor: '#4caf50',
+      backgroundColor: 'rgba(76, 175, 80, 0.2)',
+      pointRadius: 4,
+      pointHoverRadius: 6,
+      tension: 0.4,
+      fill: false
+    }]
+  }
+
+  const speedChartData = {
+    labels: speedData.map(d => d.session),
+    datasets: [{
+      label: 'Correct answers/min',
+      data: speedData.map(d => d.speed),
+      borderColor: '#2196f3',
+      backgroundColor: 'rgba(33, 150, 243, 0.2)',
+      pointRadius: 4,
+      pointHoverRadius: 6,
+      tension: 0.4,
+      fill: false
+    }]
+  }
+
+  const accuracyChartOptions = makeChartOptions('Accuracy (%)', '%', accelDomain[0], accelDomain[1])
+  const speedChartOptions = makeChartOptions('Correct answers/min', '', speedDomain[0], speedDomain[1])
+
+  const PAGE_SIZE = 20
+  const paginated = sortedRecords.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
+
+  const formatDate = (iso) => {
+    const d = new Date(iso)
+    const dd = String(d.getDate()).padStart(2, '0')
+    const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]
+    const yy = d.getFullYear()
+    const hh = String(d.getHours()).padStart(2, '0')
+    const mm = String(d.getMinutes()).padStart(2, '0')
+    return `${dd}-${mo}-${yy} ${hh}:${mm}`
+  }
+
+  return (
+    <>
+      <div className="header-row">
+        <button className="back-button" onClick={onBack}>← Home</button>
+      </div>
+      <h1>Track Progress</h1>
+
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ display: 'block', fontWeight: 600, marginBottom: 6 }}>Select Gym to Plot</label>
+        <select
+          value={selectedGym}
+          onChange={e => { setSelectedGym(e.target.value); setPage(0); setSelectedPoint(null) }}
+          style={{ width: '100%', padding: '8px 12px', borderRadius: 6, background: 'var(--clr-surface)', color: 'var(--clr-text)', border: '1px solid var(--clr-border)', fontSize: '0.95rem' }}
+        >
+          {SUPPORTED_GYMS.map(g => <option key={g} value={g}>{g}</option>)}
+        </select>
+      </div>
+
+      {totalSessions === 0 ? (
+        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--clr-dim)' }}>
+          <div style={{ fontSize: '1.1rem', marginBottom: 8 }}>No progress history available for this Gym yet.</div>
+          <div>Complete a quiz to start tracking progress.</div>
+        </div>
+      ) : (
+        <>
+          {/* Summary Stats */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, marginBottom: 24 }}>
+            <div style={{ background: 'var(--clr-card)', border: '1px solid var(--clr-border)', borderRadius: 8, padding: '14px 16px', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.8rem', color: 'var(--clr-dim)', marginBottom: 4 }}>Total Sessions</div>
+              <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{totalSessions}</div>
+            </div>
+            <div style={{ background: 'var(--clr-card)', border: '1px solid var(--clr-border)', borderRadius: 8, padding: '14px 16px', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.8rem', color: 'var(--clr-dim)', marginBottom: 4 }}>Average Accuracy</div>
+              <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{avgAccuracy}%</div>
+            </div>
+            <div style={{ background: 'var(--clr-card)', border: '1px solid var(--clr-border)', borderRadius: 8, padding: '14px 16px', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.8rem', color: 'var(--clr-dim)', marginBottom: 4 }}>Best Accuracy</div>
+              <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{bestAccuracy}%</div>
+            </div>
+            <div style={{ background: 'var(--clr-card)', border: '1px solid var(--clr-border)', borderRadius: 8, padding: '14px 16px', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.8rem', color: 'var(--clr-dim)', marginBottom: 4 }}>Avg Speed</div>
+              <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{avgSpeed}/min</div>
+            </div>
+          </div>
+
+          {/* Accuracy Graph */}
+          <div style={{ background: 'var(--clr-card)', border: '1px solid var(--clr-border)', borderRadius: 10, padding: '16px', marginBottom: 16 }}>
+            <div style={{ fontSize: '1.05rem', fontWeight: 600, marginBottom: 12 }}>Accuracy vs Session Number</div>
+            <div style={{ width: '100%', height: 220 }}>
+              <Line data={accuracyChartData} options={accuracyChartOptions} />
+            </div>
+          </div>
+
+          {/* Speed Graph */}
+          <div style={{ background: 'var(--clr-card)', border: '1px solid var(--clr-border)', borderRadius: 10, padding: '16px', marginBottom: 16 }}>
+            <div style={{ fontSize: '1.05rem', fontWeight: 600, marginBottom: 12 }}>Speed vs Session Number</div>
+            <div style={{ width: '100%', height: 220 }}>
+              <Line data={speedChartData} options={speedChartOptions} />
+            </div>
+          </div>
+
+          {/* Session Table */}
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' }}>
+              <thead>
+                <tr style={{ background: 'var(--clr-card)', borderBottom: '2px solid var(--clr-border)' }}>
+                  <th style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--clr-dim)' }}>Date</th>
+                  <th style={{ padding: '8px 10px', textAlign: 'center', color: 'var(--clr-dim)' }}>Easy</th>
+                  <th style={{ padding: '8px 10px', textAlign: 'center', color: 'var(--clr-dim)' }}>Medium</th>
+                  <th style={{ padding: '8px 10px', textAlign: 'center', color: 'var(--clr-dim)' }}>Hard</th>
+                  <th style={{ padding: '8px 10px', textAlign: 'center', color: 'var(--clr-dim)' }}>Total</th>
+                  <th style={{ padding: '8px 10px', textAlign: 'center', color: 'var(--clr-dim)' }}>Correct</th>
+                  <th style={{ padding: '8px 10px', textAlign: 'center', color: 'var(--clr-dim)' }}>Accuracy</th>
+                  <th style={{ padding: '8px 10px', textAlign: 'center', color: 'var(--clr-dim)' }}>Correct/min</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginated.map(r => {
+                  const spd = r.timeTakenSeconds > 0 ? parseFloat(((r.correctAnswers * 60) / r.timeTakenSeconds).toFixed(1)) : 0
+                  return (
+                    <tr key={r.id} style={{ borderBottom: '1px solid var(--clr-border)' }}
+                      onClick={() => setSelectedPoint({ record: r, session: sortedRecords.indexOf(r) + 1 })}
+                      style={{ cursor: 'pointer' }}>
+                      <td style={{ padding: '8px 10px' }}>{formatDate(r.date)}</td>
+                      <td style={{ padding: '8px 10px', textAlign: 'center' }}>{r.questionSummary?.easy || 0}</td>
+                      <td style={{ padding: '8px 10px', textAlign: 'center' }}>{r.questionSummary?.medium || 0}</td>
+                      <td style={{ padding: '8px 10px', textAlign: 'center' }}>{r.questionSummary?.hard || 0}</td>
+                      <td style={{ padding: '8px 10px', textAlign: 'center' }}>{r.totalQuestions}</td>
+                      <td style={{ padding: '8px 10px', textAlign: 'center' }}>{r.correctAnswers}</td>
+                      <td style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 600, color: r.accuracy >= 80 ? '#4caf50' : r.accuracy >= 50 ? '#ff9800' : '#f44336' }}>{r.accuracy}%</td>
+                      <td style={{ padding: '8px 10px', textAlign: 'center' }}>{spd}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          {totalSessions > PAGE_SIZE && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, marginTop: 16 }}>
+              <button
+                onClick={() => setPage(p => Math.max(0, p - 1))}
+                disabled={page === 0}
+                style={{ padding: '6px 16px', borderRadius: 6, background: 'var(--clr-card)', border: '1px solid var(--clr-border)', color: 'var(--clr-text)', cursor: page === 0 ? 'not-allowed' : 'pointer', opacity: page === 0 ? 0.4 : 1 }}
+              >
+                Previous
+              </button>
+              <span style={{ color: 'var(--clr-dim)', fontSize: '0.9rem' }}>
+                Page {page + 1} of {Math.ceil(totalSessions / PAGE_SIZE)}
+              </span>
+              <button
+                onClick={() => setPage(p => Math.min(Math.ceil(totalSessions / PAGE_SIZE) - 1, p + 1))}
+                disabled={page >= Math.ceil(totalSessions / PAGE_SIZE) - 1}
+                style={{ padding: '6px 16px', borderRadius: 6, background: 'var(--clr-card)', border: '1px solid var(--clr-border)', color: 'var(--clr-text)', cursor: page >= Math.ceil(totalSessions / PAGE_SIZE) - 1 ? 'not-allowed' : 'pointer', opacity: page >= Math.ceil(totalSessions / PAGE_SIZE) - 1 ? 0.4 : 1 }}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </>
+  )
 }
 
 // Export main App component (entry point)
