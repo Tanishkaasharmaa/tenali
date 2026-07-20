@@ -1122,5 +1122,86 @@
   font-size: 0.95rem;
   line-height: 1.5;
   color: var(--clr-text);
+
+
+/* ─── VIEWPORT & ZOOM 100% COMPACTNESS OVERRIDES ───────────────────────────── */
+
+.gm-container .tenali-avatar-wrapper {
+  width: 70px !important;
+  height: 84px !important;
+}
+
+.gm-container .mr2-char-hub-vertical,
+.gm-container .mr2-char-hub-horizontal {
+  gap: 8px !important;
+  margin: 4px 0 !important;
+}
+
+.gm-container .mr2-speech-bubble {
+  padding: 10px 15px !important;
+  border-radius: 16px !important;
+  max-width: 360px !important;
+  box-shadow: 0 4px 12px rgba(232, 134, 74, 0.06) !important;
+}
+
+/* Hide speech bubble pointers to maximize vertical space */
+.gm-container .mr2-speech-bubble::before,
+.gm-container .mr2-speech-bubble::after {
+  display: none !important;
+}
+
+.gm-carousel-wrapper {
+  margin: 10px 0 !important;
+  gap: 10px !important;
+}
+
+.gm-world-card {
+  padding: 18px 14px !important;
+  max-width: 290px !important;
+}
+
+.gm-world-title {
+  font-size: 1.35rem !important;
+  margin-bottom: 6px !important;
+}
+
+.gm-world-badge {
+  margin-bottom: 12px !important;
+  padding: 3px 10px !important;
+  font-size: 0.75rem !important;
+}
+
+.gm-level-track {
+  padding: 10px 0 !important;
+}
+
+.gm-level-node-wrapper {
+  margin: 10px 0 !important;
+}
+
+.gm-level-node {
+  width: 44px !important;
+  height: 44px !important;
+  font-size: 1.05rem !important;
+}
+
+.gm-level-line {
+  top: 30px !important;
+  bottom: 30px !important;
+}
+
+.gm-dot-timeline {
+  margin-top: 6px !important;
+}
+
+.gm-dot {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+/* Ensure the outer container can scroll if the screen height is extremely small, preventing cut-offs */
+.mr2-container {
+  max-height: 100vh !important;
+  overflow-y: auto !important;
 }
 

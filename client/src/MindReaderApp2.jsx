@@ -282,7 +282,7 @@ export default function MindReaderApp2({ onBack }) {
   };
 
   return (
-    <div className="mr2-container" style={{ maxHeight: '90vh', overflow: 'hidden', padding: '10px 15px' }}>
+    <div className="mr2-container" style={{ padding: '10px 15px' }}>
       {/* 🔮 Sequential Game Header */}
       <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px' }}>
         <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>🏆 XP: <strong>{xp}</strong></div>
@@ -421,12 +421,8 @@ export default function MindReaderApp2({ onBack }) {
       {phase === 'playing' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '5px' }}>
           <div className="mr2-char-hub-vertical" style={{ margin: '5px 0', gap: '6px' }}>
-            <TenaliAvatar expression={avatarExpression} skin="classic" />
             <div className="mr2-speech-bubble" style={{ minWidth: '260px', maxWidth: '400px', padding: '10px 16px' }}>
-              <div className="mr2-speech-header" style={{ marginBottom: '4px' }}>
-                <span className="mr2-char-name" style={{ fontSize: '0.85rem' }}>Tenali Raman</span>
-              </div>
-              <p className="mr2-dialogue-text" style={{ fontStyle: 'italic', fontSize: '1.1rem', fontWeight: '500', margin: 0 }}>
+              <p className="mr2-dialogue-text" style={{ fontStyle: 'italic', fontSize: '1.25rem', fontWeight: '500', margin: 0, textAlign: 'center' }}>
                 "{clue}"
               </p>
             </div>
