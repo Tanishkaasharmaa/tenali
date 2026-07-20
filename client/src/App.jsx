@@ -945,7 +945,11 @@ function renderFeedback(feedback, isCorrect) {
   if (!feedback) return null
   const isSolve = isCorrect === false && feedback.startsWith('Solution:')
   if (!isSolve) {
-    return <div className={`feedback ${isCorrect ? 'correct' : 'wrong'}`}>{feedback}</div>
+    return (
+      <div className={`feedback ${isCorrect ? 'correct' : 'wrong'}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+        <span>{feedback}</span>
+      </div>
+    )
   }
   // Parse solve feedback: "Solution: ANSWER\nExplanation..."
   const lines = feedback.split('\n')
@@ -967,7 +971,9 @@ function renderFeedback(feedback, isCorrect) {
 
   return (
     <div className="feedback solve">
-      <div className="solve-answer-badge">{answerLine}</div>
+      <div className="solve-answer-badge" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+        <span>{answerLine}</span>
+      </div>
       {steps.length > 0 && (
         <div className="solve-timeline">
           {steps.map((step, i) => (
@@ -976,7 +982,9 @@ function renderFeedback(feedback, isCorrect) {
                 <div className="solve-step-dot" />
                 {i < steps.length - 1 && <div className="solve-step-line" />}
               </div>
-              <div className="solve-step-content">{step}</div>
+              <div className="solve-step-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', width: '100%' }}>
+                <span>{step}</span>
+              </div>
             </div>
           ))}
         </div>
@@ -44483,22 +44491,6 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
           </div>
         </>
       )}
-      {!search && !isGoalSelection && (
-        <div className="journey-banner-row">
-          <button className="journey-banner-btn" onClick={() => onSelect('learning_journey')}>
-            <div className="journey-banner-content">
-              <div className="journey-banner-header">
-                <span>⭐</span>
-                <h3 className="journey-banner-title">Guided Learning Journey</h3>
-              </div>
-              <p className="journey-banner-subtitle">
-                Embark on a structured, sequential math learning path with checkpoints.
-              </p>
-            </div>
-            <div className="journey-banner-arrow">➔</div>
-          </button>
-        </div>
-      )}
       <div className="search-bar-row">
         <input
           id="tour-search-bar"
@@ -48877,6 +48869,9 @@ const fetchQuestion = async (selectedDifficulty = difficulty) => {
     setRevealed(true)
   }
 
+  advanceFnRef.current = handleSubmitOrNext
+  useAutoAdvance(revealed, advanceFnRef, isCorrect)
+
   useEffect(() => {
     if (!revealed || isCorrect) return
     const h = (e) => { if (e.key === 'Enter') { e.preventDefault(); handleSubmitOrNext() } }
@@ -48904,8 +48899,8 @@ const fetchQuestion = async (selectedDifficulty = difficulty) => {
           <h1 style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontWeight: 700, fontSize: '48px', color: '#F4F1ED', margin: '0 0 12px', lineHeight: 1.1 }}>
             Addition
           </h1>
-          <p style={{ color: '#988D84', fontSize: '0.9rem', margin: '0 0 24px', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-            Practice addition!
+          <p style={{ color: '#988D84', fontSize: '0.9rem', margin: '0 0 24px', fontFamily: 'Inter, sans-serif', fontWeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <span>Practice addition!</span>
           </p>
           <KeyTerms topicKey="addition" />
 
@@ -48999,9 +48994,11 @@ const fetchQuestion = async (selectedDifficulty = difficulty) => {
         {/* Standard Mode View */}
         {additionMode === 'standard' && question && (
           <>
-            <div className="question-box">{loading || !question ? 'Loading question…' : `${question.prompt} = ?`}</div>
+            <div className="question-box" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <span>{loading || !question ? 'Loading question…' : `${question.prompt} = ?`}</span>
+            </div>
             <input className="answer-input" type="text" value={answer} onChange={(e) => { if (!revealed) { const v = e.target.value; if (v === '' || v === '-' || /^-?\d+$/.test(v)) setAnswer(v) } }} disabled={revealed} placeholder="Type your answer" />
-            <NumPad value={answer} onChange={(v) => !revealed && setAnswer(v)} disabled={revealed} />
+            {!revealed && <NumPad value={answer} onChange={(v) => !revealed && setAnswer(v)} disabled={revealed} />}
           </>
         )}
 
@@ -49166,7 +49163,6 @@ const fetchQuestion = async (selectedDifficulty = difficulty) => {
             </div>
           )
         })()}
-
         {renderFeedback(feedback, isCorrect)}
 
         {/* Action Controls */}
@@ -50324,6 +50320,9 @@ const fetchQuestion = async () => {
     setRevealed(true)
   }
 
+  advanceFnRef.current = handleSubmitOrNext
+  useAutoAdvance(revealed, advanceFnRef, isCorrect)
+
   useEffect(() => {
     if (!revealed || isCorrect) return
     const h = (e) => { if (e.key === 'Enter') { e.preventDefault(); handleSubmitOrNext() } }
@@ -50337,7 +50336,9 @@ const fetchQuestion = async () => {
   return (
     <QuizLayout title="Origin" subtitle="Add, subtract, multiply & divide positive & negative numbers" onBack={onBack} timer={started && !finished ? timer : null}>
       {!started && !finished && <div className="welcome-box">
-        <p className="welcome-text">Practice basic arithmetic!</p>
+        <p className="welcome-text" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          <span>Practice basic arithmetic!</span>
+        </p>
         <KeyTerms topicKey="basic-arithmetic" />
         <div className="checkbox-group" style={{ marginBottom: '12px' }}>
           {['easy', 'medium', 'hard', 'extrahard'].map(d => (
@@ -50405,7 +50406,9 @@ const fetchQuestion = async () => {
           {isAdaptive && <div className="progress-pill" style={{ background: ADAPT_COLORS[curAdaptLevel], color: '#fff' }}>{ADAPT_LABELS[curAdaptLevel]}</div>}
         </div>
         {isAdaptive && <DifficultySlider pct={adaptivePct(adaptScore)} onChange={(p) => { const v = (p / 100) * 3; setAdaptScore(v); adaptScoreRef.current = v }} />}
-        <div className="question-box">{loading || !question ? 'Loading question…' : `${question.prompt} = ?`}</div>
+        <div className="question-box" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          <span>{loading || !question ? 'Loading question…' : `${question.prompt} = ?`}</span>
+        </div>
         <input className="answer-input" type="text" value={answer} onChange={e => { if (!revealed) { const v = e.target.value; if (v === '' || v === '-' || /^-?\d+$/.test(v)) setAnswer(v) } }} disabled={revealed} placeholder="Type your answer" />
         <NumPad value={answer} onChange={v => !revealed && setAnswer(v)} disabled={revealed} />
         {renderFeedback(feedback, isCorrect)}
@@ -52621,7 +52624,9 @@ function makeMCQuizApp({ title, subtitle, apiPath, diffLabels, tip, adaptiveOnly
     return (
       <QuizLayout title={title} subtitle={subtitle} onBack={onBack} timer={started && !finished && sessionGoal !== 'perfect' ? timer : null} sessionGoal={sessionGoal}>
         {!started && !finished && <div className="welcome-box">
-          <p className="welcome-text">Practice {title.toLowerCase()}!</p>
+          <p className="welcome-text" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <span>Practice {title.toLowerCase()}!</span>
+          </p>
           {tip && <p style={{ fontSize: '0.85rem', color: 'var(--clr-dim)', marginBottom: '8px' }}>{tip}</p>}
           {topicKey && <KeyTerms topicKey={topicKey} />}
           {/* Difficulty selector — hidden entirely for adaptive-only puzzles
@@ -52696,7 +52701,9 @@ function makeMCQuizApp({ title, subtitle, apiPath, diffLabels, tip, adaptiveOnly
             {isAdaptive && <div className="progress-pill" style={{ background: ADAPT_COLORS[curAdaptLevel], color: '#fff' }}>{ADAPT_LABELS[curAdaptLevel]}</div>}
           </div>
           {question && <div style={{ textAlign: 'center' }}>
-            <div className="question-prompt" style={{ fontSize: '1.3rem', margin: '8px 0 4px', lineHeight: '1.4' }}><GlossaryText text={question.prompt} /></div>
+            <div className="question-prompt" style={{ fontSize: '1.3rem', margin: '8px 0 4px', lineHeight: '1.4', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <GlossaryText text={question.prompt} />
+            </div>
             <div className="options-grid" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: '12px', marginTop: '40px' }}>
               {question.options.map(opt => {
                 const isSelected = selectedOption === opt.option
@@ -53183,6 +53190,7 @@ function makeQuizApp({ title, subtitle, apiPath, diffLabels, placeholders, tip, 
     }
     advanceFnRef.current = advance
     useAutoAdvance(revealed, advanceFnRef, isCorrect)
+
     useEffect(() => {
       if (!revealed || isCorrect) return
       const h = (e) => { if (e.key === 'Enter') { e.preventDefault(); advance() } }
@@ -53307,8 +53315,8 @@ function makeQuizApp({ title, subtitle, apiPath, diffLabels, placeholders, tip, 
             <p style={{ color: '#988D84', fontSize: '0.9rem', margin: '0 0 40px', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
               {subtitle}
             </p>
-            <p style={{ color: '#988D84', fontSize: '0.9rem', margin: '0 0 24px', fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-              Practice {title.toLowerCase()}!
+            <p style={{ color: '#988D84', fontSize: '0.9rem', margin: '0 0 24px', fontFamily: 'Inter, sans-serif', fontWeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <span>Practice {title.toLowerCase()}!</span>
             </p>
             {tip && <p style={{ fontSize: '0.85rem', color: '#A89C93', marginBottom: '16px' }}>{tip}</p>}
             {topicKey && <KeyTerms topicKey={topicKey} />}
@@ -53399,7 +53407,9 @@ function makeQuizApp({ title, subtitle, apiPath, diffLabels, placeholders, tip, 
             <DifficultySlider pct={adaptivePct(adaptScore)} onChange={(p) => { const v = (p / 100) * 3; setAdaptScore(v); adaptScoreRef.current = v }} />
           )}
           {question && <div style={{ textAlign: 'center' }}>
-            <div className="question-prompt" style={{ fontSize: '1.3rem', margin: '20px 0', lineHeight: '1.6' }}><GlossaryText text={question.prompt} /></div>
+            <div className="question-prompt" style={{ fontSize: '1.3rem', margin: '20px 0', lineHeight: '1.6', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <GlossaryText text={question.prompt} />
+            </div>
             <input className="answer-input" type="text" value={answer} onChange={e => { if (!revealed) setAnswer(e.target.value) }} disabled={revealed} placeholder={getPlaceholder()} onKeyDown={handleKeyDown} autoFocus />
           </div>}
           {!question && loading && <div style={{ textAlign: 'center', padding: '24px', color: 'var(--clr-text-soft)' }}>Loading question…</div>}
