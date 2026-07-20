@@ -317,7 +317,7 @@ export default function MindReaderApp2({ onBack }) {
   };
 
   return (
-    <div className="mr2-container" style={{ background: 'var(--clr-bg)', padding: '10px 15px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className="mr2-container" style={{ background: 'transparent', padding: '10px 15px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* 🔮 Sequential Game Header */}
       {phase !== 'playing' && (
         <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px', width: '100%', maxWidth: '500px' }}>
