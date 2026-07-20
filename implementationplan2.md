@@ -40,7 +40,7 @@ Defines kingdoms, required completion criteria, and metadata.
   {
     "worldId": "geometry_kingdom",
     "worldName": "Geometry Kingdom",
-    "requiredUnlockXP": 500,
+    "requiredUnlockXP": 200,
     "themeColor": "#5cb87a",
     "levelRange": [6, 10]
   }
@@ -116,7 +116,7 @@ const UserSchema = new mongoose.Schema({
 
 ## 3. Sequential Game Flow & State Machine
 
-To minimize visual clutter and cognitive overload, the interface avoids side-by-side elements (like showing the notebook, clues list, and guess box simultaneously). Instead, the user transitions through a clean, one-screen-at-a-time sequence:
+To minimize visual clutter and cognitive overload, the interface avoids side-by-side elements. Instead, the user transitions through a clean, one-screen-at-a-time sequence:
 
 ```
 [ INTRO ]  --->  [ WORLD SELECT ]  --->  [ LEVEL SELECT ]  --->  [ GAMEPLAY: CLUE STEP ]
@@ -130,11 +130,10 @@ To minimize visual clutter and cognitive overload, the interface avoids side-by-
 2.  **`WORLD_SELECT`**: A minimal list of Kingdoms. Shows one active Kingdom at a time with horizontal swipe arrows, hiding locked worlds to avoid visual noise.
 3.  **`LEVEL_SELECT`**: A simple vertical track showing only the levels of the chosen Kingdom. Unlocked nodes are highlighted; locked levels are grayed out.
 4.  **`PLAYING_CLUES`**: A minimal clue dashboard:
-    *   *Single Active Clue*: Shows **only** the current clue card center-stage with large typography. Previous clues are hidden to prevent visual clutter.
-    *   *Next Clue Button*: Progresses to the next clue card.
-    *   *Toggleable Notebook Drawer*: Toggling slide-out sidebar for typing notes. Keeps the main screen clean.
+    *   *Speech Cloud Clue*: The active clue appears directly inside Tenali's mind speech cloud bubble, eliminating separate boxes.
     *   *Progress Dots*: Low-key timeline dots indicating which clue index is currently active.
-5.  **`GUESS_SCREEN`**: A dedicated overlay displaying only a fuzzy-search autocomplete search box.
+    *   *4 Blank Spaces (Thought Boxes)*: 4 inline text input spaces displayed below the bubble for the student to write guessed topics (notes drawer removed).
+5.  **`GUESS_SCREEN`**: A dedicated overlay displaying only a free-text input box where the student writes the answer (no autocomplete selection).
 6.  **`RESULT_OUTCOME`**: Minimal completion screen displaying stars earned, XP updates, and a "Review Concept Card" button.
 7.  **`EDUCATIONAL_REVIEW`**: Clean full-page reading card showing definitions, examples, mistakes, and practice questions.
 
@@ -248,8 +247,8 @@ Evaluates the final guess, commits changes to DB, and returns results.
 We will introduce a separate UI container `GuessMindApp` inside `App.jsx` composed of:
 1.  **`WorldSelector`**: Minimal horizontal sliding cards displaying one active world at a time.
 2.  **`LevelMap`**: Simple vertical path bubbles linked by clean SVG lines.
-3.  **`GameplayDashboard`**: Concentrates the active view onto a single Clue Card. Contains simple options to reveal clues, request a hint, type in a drawer-collapsible notebook, or initiate a guess.
-4.  **`ConceptSearchBox`**: Clean full-screen autocomplete input search layout.
+3.  **`GameplayDashboard`**: Concentrates the active view onto Tenali's Mind Cloud. Displays the current clue text inside the speech bubble. Renders 4 inline inputs for writing scratchpad notes.
+4.  **`ConceptSearchBox`**: Clean full-screen free-text entry guess card.
 5.  **`EducationalReviewCard`**: Clean scrollable card summarizing CBSE syllabus linkages.
 
 ---
@@ -257,14 +256,14 @@ We will introduce a separate UI container `GuessMindApp` inside `App.jsx` compos
 ## 7. Development Roadmap & Milestones
 
 ### Milestone 1 — Core Infrastructure
-*   **Task 1.1**: Define and structure database models in `auth.js` (worldProgress, levelProgress, xp).
-*   **Task 1.2**: Write JSON dataset files (`worlds.json`, `levels.json`, `concepts.json`) under `server/data/`.
-*   **Task 1.3**: Set up in-memory session mapping with automatic expiry sweeps inside `index.js`.
+*   **Task 1.1**: Define and structure database models in `auth.js` (worldProgress, levelProgress, xp). [x]
+*   **Task 1.2**: Write JSON dataset files (`worlds.json`, `levels.json`, `concepts.json`) under `server/data/`. [x]
+*   **Task 1.3**: Set up in-memory session mapping with automatic expiry sweeps inside `index.js`. [x]
 
 ### Milestone 2 — Gameplay Loops & Endpoints
-*   **Task 2.1**: Implement backend session APIs (`/start`, `/next-clue`, `/use-hint`, `/submit-guess`).
-*   **Task 2.2**: Integrate Tenali SVG expressions changing eyes/mouth depending on current clue count and victory states.
-*   **Task 2.3**: Build frontend game controller loop switching between Setup, Playing, and Results states.
+*   **Task 2.1**: Implement backend session APIs (`/start`, `/next-clue`, `/use-hint`, `/submit-guess`). [x]
+*   **Task 2.2**: Integrate Tenali SVG expressions changing eyes/mouth depending on current clue count and victory states. [x]
+*   **Task 2.3**: Build frontend game controller loop switching between Setup, Playing, and Results states. [/]
 
 ### Milestone 3 — Gamification & Progression
 *   **Task 3.1**: Implement backend XP rewards, star assessments, and MRR point additions.
@@ -276,7 +275,7 @@ We will introduce a separate UI container `GuessMindApp` inside `App.jsx` compos
 *   **Task 4.2**: Feed analytical indicators on successful/unsuccessful guess completions.
 
 ### Milestone 5 — Testing
-*   **Task 5.1**: Write a script `test_guess_mind.js` validating perfect runs, hint penalties, and incorrect guess locks.
+*   **Task 5.1**: Write a script `test_guess_mind.js` validating perfect runs, hint penalties, and incorrect guess locks. [x]
 *   **Task 5.2**: Test concurrent session initializations for multi-student safety.
 
 ### Milestone 6 — Deployment

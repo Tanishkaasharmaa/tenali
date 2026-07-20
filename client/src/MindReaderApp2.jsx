@@ -1,11 +1,11 @@
 /**
  * GUESS WHAT'S ON TENALI'S MIND — SEQUENTIAL GAME ENGINE
  * ══════════════════════════════════════════════════════
- * Renders kingdoms, sequential Candy Crush paths, focused clue cards,
- * slide-out notepad scratchpads, autocomplete guesses, and educational cards.
+ * Renders kingdoms, sequential Candy Crush paths, clues in Tenali's speech bubble,
+ * 4 inline thought guess inputs, and a free-text final guess screen.
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TenaliAvatar } from './App';
 import './MindReader2.css';
 
@@ -19,35 +19,6 @@ function authGetToken() {
     return null;
   }
 }
-
-// Complete list of all 25 curriculum concepts for guess fuzzy-matching
-const CONCEPTS_LIST = [
-  "Prime Number",
-  "Factors",
-  "Multiples",
-  "LCM",
-  "HCF",
-  "Right Triangle",
-  "Pythagoras' Theorem",
-  "Perimeter",
-  "Area",
-  "Volume",
-  "Linear Equation",
-  "Quadratic Equation",
-  "Variable",
-  "Expression",
-  "Inequality",
-  "Mean",
-  "Median",
-  "Mode",
-  "Probability",
-  "Venn Diagram",
-  "Sine",
-  "Cosine",
-  "Tangent",
-  "Hypotenuse",
-  "Angle of Elevation"
-];
 
 export default function MindReaderApp2({ onBack }) {
   // Game Phase: 'setup' | 'worlds' | 'levels' | 'playing' | 'gameover'
@@ -76,18 +47,16 @@ export default function MindReaderApp2({ onBack }) {
   const [avatarExpression, setAvatarExpression] = useState('thinking');
   const [tenaliSpeech, setTenaliSpeech] = useState('');
 
-  // Notebook Scratchpad
-  const [showNotebook, setShowNotebook] = useState(false);
-  const [notebookText, setNotebookText] = useState('');
+  // 4 Blank Thought Boxes for Student's guesses
+  const [thoughtGuesses, setThoughtGuesses] = useState(['', '', '', '']);
 
   // Hint Overlay Box
   const [showHintOverlay, setShowHintOverlay] = useState(false);
   const [hintText, setHintText] = useState('');
 
-  // Guess Modal Autocomplete Search
+  // Guess Modal Free-text Input
   const [showGuess, setShowGuess] = useState(false);
   const [guessQuery, setGuessQuery] = useState('');
-  const [selectedGuessConcept, setSelectedGuessConcept] = useState('');
 
   // Results & Educational Data
   const [isCorrectGuess, setIsCorrectGuess] = useState(false);
@@ -143,9 +112,6 @@ export default function MindReaderApp2({ onBack }) {
     const [start, end] = worldObj.levelRange;
     const list = [];
     for (let i = start; i <= end; i++) {
-      // Unlocked criteria:
-      // level 1 is always unlocked.
-      // level N is unlocked if level N-1 has a star rating > 0.
       let unlocked = false;
       if (i === 1) {
         unlocked = true;
@@ -198,12 +164,11 @@ export default function MindReaderApp2({ onBack }) {
         setClueIndex(data.clueIndex);
         setHintsRemaining(data.hintsRemaining);
         setCluesExhausted(false);
-        setShowNotebook(false);
+        setThoughtGuesses(['', '', '', '']);
         setShowHintOverlay(false);
         setHintText('');
-        setNotebookText('');
+        setGuessQuery('');
         setAvatarExpression('thinking');
-        setTenaliSpeech("Here is your first clue. Read it carefully!");
         setPhase('playing');
       } else {
         const errData = await res.json();
@@ -234,7 +199,6 @@ export default function MindReaderApp2({ onBack }) {
         setClueIndex(data.clueIndex);
         setCluesExhausted(data.cluesExhausted);
         setAvatarExpression('happy');
-        setTenaliSpeech("Aha! The next clue is revealed. Can you guess it now?");
       }
     } catch (err) {
       console.error(err);
@@ -260,7 +224,6 @@ export default function MindReaderApp2({ onBack }) {
         setHintsRemaining(data.hintsRemaining);
         setShowHintOverlay(true);
         setAvatarExpression('smirk');
-        setTenaliSpeech(`Lean in... here is your hint!`);
       }
     } catch (err) {
       console.error(err);
@@ -271,7 +234,7 @@ export default function MindReaderApp2({ onBack }) {
 
   // Submit Guess API
   const handleSubmitGuess = async () => {
-    if (!selectedGuessConcept) return;
+    if (!guessQuery.trim()) return;
     setLoading(true);
     try {
       const token = authGetToken();
@@ -281,7 +244,7 @@ export default function MindReaderApp2({ onBack }) {
       const res = await fetch(`${API}/api/mindreader/submit-guess`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ gameId, guess: selectedGuessConcept })
+        body: JSON.stringify({ gameId, guess: guessQuery })
       });
 
       if (res.ok) {
@@ -310,10 +273,11 @@ export default function MindReaderApp2({ onBack }) {
     }
   };
 
-  // Fuzzy autocomplete list filtering
-  const getFilteredConcepts = () => {
-    if (!guessQuery.trim()) return CONCEPTS_LIST;
-    return CONCEPTS_LIST.filter(c => c.toLowerCase().includes(guessQuery.toLowerCase()));
+  // Thought Box Change Handler
+  const handleThoughtChange = (index, val) => {
+    const updated = [...thoughtGuesses];
+    updated[index] = val;
+    setThoughtGuesses(updated);
   };
 
   return (
@@ -472,24 +436,44 @@ export default function MindReaderApp2({ onBack }) {
         <div className="gm-container" style={{ position: 'relative' }}>
           <div className="mr2-char-hub-vertical">
             <TenaliAvatar expression={avatarExpression} skin="classic" />
-            <div className="mr2-speech-bubble">
+            <div className="mr2-speech-bubble" style={{ minWidth: '280px', maxWidth: '480px' }}>
               <div className="mr2-speech-header">
                 <span className="mr2-char-name">Tenali Raman</span>
               </div>
-              <p className="mr2-dialogue-text">{tenaliSpeech}</p>
+              <p className="mr2-dialogue-text" style={{ fontStyle: 'italic', fontSize: '1.25rem', fontWeight: '500' }}>
+                "{clue}"
+              </p>
             </div>
-          </div>
-
-          {/* Single Clue Presentation Card */}
-          <div className="gm-clue-card">
-            <p className="gm-clue-text">"{clue}"</p>
-            
             {/* Dots navigation timeline */}
-            <div className="gm-dot-timeline">
+            <div className="gm-dot-timeline" style={{ marginTop: '10px' }}>
               {Array.from({ length: 5 }).map((_, idx) => (
                 <div key={idx} className={`gm-dot ${idx <= clueIndex ? 'active' : ''}`}></div>
               ))}
             </div>
+          </div>
+
+          {/* 4 Thought Input Fields for Student's Guessed Topics */}
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px', margin: '20px 0' }}>
+            {thoughtGuesses.map((val, idx) => (
+              <input
+                key={idx}
+                type="text"
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  padding: '12px 16px',
+                  background: 'var(--clr-input)',
+                  border: '1.5px solid var(--clr-border)',
+                  borderRadius: '12px',
+                  color: 'var(--clr-text)',
+                  fontSize: '0.95rem',
+                  outline: 'none'
+                }}
+                placeholder={`Guessed Topic ${idx + 1}...`}
+                value={val}
+                onChange={(e) => handleThoughtChange(idx, e.target.value)}
+              />
+            ))}
           </div>
 
           {/* Clue Hint details popup if requested */}
@@ -500,15 +484,12 @@ export default function MindReaderApp2({ onBack }) {
           )}
 
           {/* Action Row */}
-          <div style={{ display: 'flex', gap: '10px', width: '100%', flexWrap: 'wrap', marginTop: '15px' }}>
-            <button className="btn-outline" style={{ flex: 1, minWidth: '120px' }} onClick={() => setShowNotebook(true)}>
-              📝 Notes
-            </button>
+          <div style={{ display: 'flex', gap: '10px', width: '100%', flexWrap: 'wrap', marginTop: '10px' }}>
             <button className="btn-outline" style={{ flex: 1, minWidth: '120px' }} onClick={handleUseHint} disabled={hintsRemaining <= 0}>
-              💡 Hint
+              💡 Get Hint
             </button>
             <button className="btn-primary" style={{ flex: 1.5, minWidth: '150px' }} onClick={() => setShowGuess(true)}>
-              🔎 Guess
+              🔎 Make Guess
             </button>
             <button 
               className="btn-secondary" 
@@ -520,66 +501,32 @@ export default function MindReaderApp2({ onBack }) {
             </button>
           </div>
 
-          {/* Notebook drawer slide-out */}
-          {showNotebook && (
-            <div className="gm-notebook-overlay">
-              <div className="gm-notebook-header">
-                <h3>Scratch Notepad</h3>
-                <button className="btn-outline" style={{ padding: '4px 10px' }} onClick={() => setShowNotebook(false)}>
-                  Close
-                </button>
-              </div>
-              <textarea
-                className="gm-notebook-textarea"
-                placeholder="Type your notes here. They will not be evaluated..."
-                value={notebookText}
-                onChange={(e) => setNotebookText(e.target.value)}
-              />
-            </div>
-          )}
-
-          {/* Fullscreen Autocomplete Guess Modal */}
+          {/* Fullscreen Free-text Guess Modal */}
           {showGuess && (
             <div className="gm-guess-modal">
-              <h2>Select Your Concept Guess</h2>
-              <p className="subtitle">Start typing to filter. Submit carefully — only 1 guess allowed!</p>
+              <h2>Type Your Concept Guess</h2>
+              <p className="subtitle">Type the answer below. Warning: Only 1 final guess attempt is allowed!</p>
 
               <input
                 className="gm-search-input"
                 type="text"
-                placeholder="Search mathematical concepts..."
+                placeholder="Type your guess here..."
                 value={guessQuery}
-                onChange={(e) => {
-                  setGuessQuery(e.target.value);
-                  setSelectedGuessConcept('');
-                }}
+                onChange={(e) => setGuessQuery(e.target.value)}
                 autoFocus
               />
 
-              <div className="gm-results-list">
-                {getFilteredConcepts().map((conceptName) => (
-                  <button
-                    key={conceptName}
-                    className={`gm-concept-row ${selectedGuessConcept === conceptName ? 'selected' : ''}`}
-                    onClick={() => setSelectedGuessConcept(conceptName)}
-                  >
-                    {conceptName}
-                  </button>
-                ))}
-              </div>
-
-              <div style={{ display: 'flex', gap: '15px', width: '100%', maxWidth: '500px', marginTop: '20px' }}>
+              <div style={{ display: 'flex', gap: '15px', width: '100%', maxWidth: '500px', marginTop: '30px' }}>
                 <button className="btn-outline" style={{ flex: 1 }} onClick={() => {
                   setShowGuess(false);
                   setGuessQuery('');
-                  setSelectedGuessConcept('');
                 }}>
-                  &larr; Back
+                  &larr; Close Guess Mode
                 </button>
                 <button 
                   className="btn-primary" 
                   style={{ flex: 1 }} 
-                  disabled={!selectedGuessConcept}
+                  disabled={!guessQuery.trim()}
                   onClick={handleSubmitGuess}
                 >
                   Confirm Guess
@@ -588,7 +535,7 @@ export default function MindReaderApp2({ onBack }) {
             </div>
           )}
 
-          <button className="btn-outline" style={{ marginTop: '30px', width: '100%' }} onClick={() => setPhase('levels')}>
+          <button className="btn-outline" style={{ marginTop: '25px', width: '100%' }} onClick={() => setPhase('levels')}>
             Quit Level
           </button>
         </div>

@@ -37,18 +37,19 @@ To ensure a clutter-free user experience, every view is rendered in a sequential
 graph TD
     A[Lobby Screen] -->|Start| B[World Carousel Select]
     B -->|Select World| C[Sequential Level Selector]
-    C -->|Select Level| D[Gameplay: Single Active Clue]
-    D -->|Toggle Notebook Drawer| E[Notebook Notes Drawer Overlay]
-    D -->|Make Guess| F[Fullscreen Autocomplete Search]
-    F -->|Incorrect Guess| G[Outcome Screen: Fail & Education Card]
-    F -->|Correct Guess| H[Outcome Screen: Stars & XP Animation]
+    C -->|Select Level| D[Gameplay: Clue In Mind Cloud & 4 Thought Boxes]
+    D -->|Make Guess| E[Fullscreen Free-Text Guess Input]
+    E -->|Incorrect Guess| F[Outcome Screen: Fail & Education Card]
+    E -->|Correct Guess| G[Outcome Screen: Stars & XP Animation]
 ```
 
 ### Game Rules
-1.  **Clues Timeline**: Every level contains exactly 5 progressive clues, starting with Clue 1. The user manually clicks to reveal subsequent clues, or guesses immediately.
-2.  **Clue-based Hints**: Up to 3 hints are available per level. Revealing a hint decreases the final reward payout.
-3.  **Single Final Guess**: The student has exactly one guess attempt. An incorrect guess immediately ends the level run, revealing the concept and its associated tutorial card.
-4.  **Locks & World Progression**:
+1.  **Mind Cloud Clues**: Clue sequences are revealed directly inside Tenali's mind speech cloud. There are no separate clue cards below.
+2.  **Guessed Topics (4 Thought Boxes)**: The student has 4 inline text input boxes on-screen to write candidate concepts as they narrow down their thoughts. No separate collapsible note section is used.
+3.  **Clue-based Hints**: Up to 3 hints are available per level. Revealing a hint decreases the final reward payout.
+4.  **Free-Text Guesses**: When the student clicks "Guess", they are presented with a simple input textbox to type their guess. No concept list or dropdown is provided.
+5.  **Single Final Guess**: The student has exactly one guess attempt. An incorrect guess immediately ends the level run, revealing the concept and its associated tutorial card.
+6.  **Locks & World Progression**:
     *   There are 5 worlds: *Arithmetic Kingdom, Geometry Kingdom, Algebra Kingdom, Statistics Kingdom, Trigonometry Kingdom*.
     *   Worlds unlock based on cumulative XP.
     *   Levels within a world unlock sequentially; level $N$ requires level $N-1$ completed with $\ge 1$ star.
@@ -169,35 +170,46 @@ Compares the guess with the secret concept, logs telemetry, updates user databas
                            |
                     ( Level 2 ) [⭐]
                            |
-                   ( Level 1 ) [⭐⭐⭐] (Prime Number)
+                   ( Level 1 ) [⭐⭐⭐]
 ==============================================================
 ```
 
-### Screen 3: Gameplay Clue Dashboard (One Clue Only)
+### Screen 3: Gameplay Clue Dashboard (Mind Cloud + Thought Fields)
 ```
 ==============================================================
   🏆 Level 1  |  💡 Hints: 2/3  |  ⭐ Stars Potential: 3
 ==============================================================
   
-    "I belong to the world of numbers." (Clue 1 of 5)
+                     (\_/)
+                     (o.o)
+                    (>   <)
+            
+         "I belong to the world of numbers."  <- Clue in Speech Bubble
     
             *  o  o  o  o  <- Progress Timeline
+            
+    [ Guessed Topic 1: Prime Number                  ]
+    [ Guessed Topic 2:                               ]
+    [ Guessed Topic 3:                               ]
+    [ Guessed Topic 4:                               ]
     
     --------------------------------------------------------
-    [📝 Notes] | [💡 Get Hint] | [🔎 Make Guess] | [Next Clue ->]
+    [💡 Get Hint]   |   [🔎 Make Guess]   |   [Next Clue ->]
 ==============================================================
 ```
 
-### Screen 4: Fullscreen Fuzzy Search Guess overlay
+### Screen 4: Fullscreen Free-Text Guess Input
 ```
 ==============================================================
                    [<- Close Guess Mode]
              
-             Type concept... [ Prime                      ]
+             Type your final guess here:
              
-             Matching Concepts:
-             - [Prime Number]
-             - [Prime Factorization]
+             [                                        ]
+             
+             (Warning: You have only 1 guess attempt!)
+             
+             [ Confirm Guess ]
 ==============================================================
 ```
 
