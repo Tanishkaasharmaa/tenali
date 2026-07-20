@@ -47,6 +47,8 @@ export default function MindReaderApp2({ onBack }) {
   const [cluesExhausted, setCluesExhausted] = useState(false);
   const [avatarExpression, setAvatarExpression] = useState('thinking');
   const [tenaliSpeech, setTenaliSpeech] = useState('');
+  const [revealedClues, setRevealedClues] = useState([]);
+  const [localClueIndex, setLocalClueIndex] = useState(0);
 
   // 4 Blank Thought Boxes (2x2 Grid Layout)
   const [thoughtGuesses, setThoughtGuesses] = useState(['', '', '', '']);
@@ -163,6 +165,8 @@ export default function MindReaderApp2({ onBack }) {
         setLevelNum(data.levelNum);
         setClue(data.clue);
         setClueIndex(data.clueIndex);
+        setRevealedClues([data.clue]);
+        setLocalClueIndex(0);
         setHintsRemaining(data.hintsRemaining);
         setCluesExhausted(false);
         setThoughtGuesses(['', '', '', '']);
@@ -185,6 +189,13 @@ export default function MindReaderApp2({ onBack }) {
 
   // Next Clue API
   const handleNextClue = async () => {
+    // Step forward locally if we navigated back
+    if (localClueIndex < revealedClues.length - 1) {
+      setLocalClueIndex(localClueIndex + 1);
+      setClue(revealedClues[localClueIndex + 1]);
+      return;
+    }
+
     if (cluesExhausted) return;
     setLoading(true);
     try {
@@ -198,6 +209,8 @@ export default function MindReaderApp2({ onBack }) {
         const data = await res.json();
         setClue(data.clue);
         setClueIndex(data.clueIndex);
+        setRevealedClues([...revealedClues, data.clue]);
+        setLocalClueIndex(localClueIndex + 1);
         setCluesExhausted(data.cluesExhausted);
         setAvatarExpression('happy');
       }
@@ -272,17 +285,19 @@ export default function MindReaderApp2({ onBack }) {
     } finally {
       setLoading(false);
     }
-  };
-
-  // Thought Box Change Handler
-  const handleThoughtChange = (index, val) => {
-    const updated = [...thoughtGuesses];
-    updated[index] = val;
+     updated[index] = val;
     setThoughtGuesses(updated);
   };
 
+  const handlePrevLocalClue = () => {
+    if (localClueIndex > 0) {
+      setLocalClueIndex(localClueIndex - 1);
+      setClue(revealedClues[localClueIndex - 1]);
+    }
+  };
+
   return (
-    <div className="mr2-container" style={{ padding: '10px 15px' }}>
+    <div className="mr2-container gm-dark-theme" style={{ padding: '10px 15px' }}>
       {/* 🔮 Sequential Game Header */}
       {phase !== 'playing' && (
         <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px' }}>
@@ -419,40 +434,44 @@ export default function MindReaderApp2({ onBack }) {
         </div>
       )}
 
-      {/* ─── PHASE 4: GAMEPLAY BOARD (SCROLL-FREE VIEWPORT FIT) ───────────────── */}
+      {/* ─── PHASE 4: GAMEPLAY BOARD (WORD CREATOR INSPIRATION) ────────────────── */}
       {phase === 'playing' && (
-        <div className="gm-container" style={{ minHeight: 'auto', gap: '5px' }}>
-          {/* Top Control Header Box */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '400px', marginBottom: '6px' }}>
-            <button 
-              className="btn-outline" 
-              style={{ padding: '6px 12px', fontSize: '0.85rem' }} 
-              onClick={handleUseHint} 
-              disabled={hintsRemaining <= 0}
-            >
-              💡 Hint ({hintsRemaining}/3)
-            </button>
-            <button 
-              className="btn-outline" 
-              style={{ padding: '6px 12px', fontSize: '0.85rem' }} 
-              onClick={() => setPhase('levels')}
-            >
-              🚪 Quit
-            </button>
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '4px' }}>
+          {/* Top Control Header Bar */}
+          <div className="gm-top-bar" style={{ width: '100%', maxWidth: '400px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button className="gm-pill-btn" onClick={() => setPhase('levels')}>
+                &larr; Map
+              </button>
+              <button 
+                className="gm-pill-btn" 
+                onClick={handleUseHint} 
+                disabled={hintsRemaining <= 0}
+              >
+                💡 Hint ({hintsRemaining}/3)
+              </button>
+            </div>
+            <span style={{ fontSize: '0.88rem', fontWeight: '700', color: '#fff' }}>
+              XP: <span className="gm-orange-text">{xp} XP</span>
+            </span>
           </div>
 
-          <div className="mr2-char-hub-vertical" style={{ margin: '5px 0', gap: '6px' }}>
-            <div className="mr2-speech-bubble" style={{ minWidth: '260px', maxWidth: '400px', padding: '10px 16px' }}>
-              <p className="mr2-dialogue-text" style={{ fontStyle: 'italic', fontSize: '1.25rem', fontWeight: '500', margin: 0, textAlign: 'center' }}>
-                "{clue}"
-              </p>
-            </div>
-            {/* Dots navigation timeline */}
-            <div className="gm-dot-timeline" style={{ marginTop: '6px' }}>
-              {Array.from({ length: 5 }).map((_, idx) => (
-                <div key={idx} className={`gm-dot ${idx <= clueIndex ? 'active' : ''}`} style={{ width: '8px', height: '8px' }}></div>
-              ))}
-            </div>
+          {/* Serif Level Display Header */}
+          <h2 className="gm-serif-display" style={{ fontSize: '1.75rem', margin: '10px 0 2px 0', textAlign: 'center' }}>
+            Tenali's Mind • Level {levelNum}
+          </h2>
+          <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+            <span className="gm-pill-badge">Clue {localClueIndex + 1} of 5</span>
+          </div>
+
+          {/* Focused Italic Clue Box */}
+          <div style={{ margin: '12px auto', maxWidth: '420px', textAlign: 'center' }}>
+            <p className="gm-serif-display" style={{ fontStyle: 'italic', fontSize: '1.35rem', lineHeight: '1.45', color: '#fff', margin: 0 }}>
+              "{clue}"
+            </p>
+            <p style={{ fontSize: '0.78rem', color: '#a89f95', margin: '8px 0 0 0', fontStyle: 'italic' }}>
+              💡 Tip: Fill the topic box(es) below with your candidates
+            </p>
           </div>
 
           {/* 4 Thought Input Fields in a Compact 2x2 Grid Layout */}
@@ -462,23 +481,13 @@ export default function MindReaderApp2({ onBack }) {
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: '8px',
-            margin: '12px 0'
+            margin: '10px 0'
           }}>
             {thoughtGuesses.map((val, idx) => (
               <input
                 key={idx}
                 type="text"
-                style={{
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  padding: '8px 12px',
-                  background: 'var(--clr-input)',
-                  border: '1px solid var(--clr-border)',
-                  borderRadius: '8px',
-                  color: 'var(--clr-text)',
-                  fontSize: '0.85rem',
-                  outline: 'none'
-                }}
+                className="gm-charcoal-input"
                 placeholder={`Topic ${idx + 1}...`}
                 value={val}
                 onChange={(e) => handleThoughtChange(idx, e.target.value)}
@@ -488,21 +497,31 @@ export default function MindReaderApp2({ onBack }) {
 
           {/* Clue Hint details popup if requested */}
           {showHintOverlay && (
-            <div className="feedback correct" style={{ width: '100%', maxWidth: '400px', padding: '6px', margin: '4px 0', textAlign: 'center', fontSize: '0.88rem' }}>
+            <div className="feedback correct" style={{ width: '100%', maxWidth: '400px', padding: '6px', margin: '4px 0', textAlign: 'center', fontSize: '0.85rem' }}>
               💡 Hint: <strong>{hintText}</strong>
             </div>
           )}
 
-          {/* Action Row */}
-          <div style={{ display: 'flex', gap: '8px', width: '100%', maxWidth: '400px', flexWrap: 'nowrap', marginTop: '5px' }}>
-            <button className="btn-primary" style={{ flex: 1.5, padding: '10px', fontSize: '0.88rem' }} onClick={() => setShowGuess(true)}>
-              🔎 Make Guess
+          {/* Primary Action Button (Centered) */}
+          <div style={{ textAlign: 'center', margin: '14px 0 8px 0' }}>
+            <button className="gm-primary-action-btn" onClick={() => setShowGuess(true)}>
+              Verify Guess
+            </button>
+          </div>
+
+          {/* Footer Navigation Row */}
+          <div className="gm-footer-nav" style={{ width: '100%', maxWidth: '400px', display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+            <button 
+              className="gm-pill-btn" 
+              disabled={localClueIndex === 0} 
+              onClick={handlePrevLocalClue}
+            >
+              &larr; Prev Clue
             </button>
             <button 
-              className="btn-secondary" 
-              style={{ flex: 1, padding: '10px', fontSize: '0.88rem' }} 
-              onClick={handleNextClue} 
-              disabled={cluesExhausted}
+              className="gm-pill-btn" 
+              disabled={cluesExhausted && localClueIndex === revealedClues.length - 1} 
+              onClick={handleNextClue}
             >
               Next Clue &rarr;
             </button>
