@@ -1,8 +1,9 @@
 /**
- * GUESS WHAT'S ON TENALI'S MIND — SEQUENTIAL GAME ENGINE
- * ══════════════════════════════════════════════════════
- * Renders kingdoms, sequential Candy Crush paths, clues in Tenali's speech bubble,
- * 4 inline thought guess inputs, and a free-text final guess screen.
+ * GUESS WHAT'S ON TENALI'S MIND — COMPACT SEQUENTIAL GAME ENGINE
+ * ══════════════════════════════════════════════════════════════
+ * Implements a scroll-free, minimal UI where every phase (Lobby, Worlds,
+ * Level select, Playing, GameOver) fits completely within the screen height.
+ * Uses a compact 2x2 grid for thought inputs and minimizes text descriptions.
  */
 
 import React, { useState, useEffect } from 'react';
@@ -47,7 +48,7 @@ export default function MindReaderApp2({ onBack }) {
   const [avatarExpression, setAvatarExpression] = useState('thinking');
   const [tenaliSpeech, setTenaliSpeech] = useState('');
 
-  // 4 Blank Thought Boxes for Student's guesses
+  // 4 Blank Thought Boxes (2x2 Grid Layout)
   const [thoughtGuesses, setThoughtGuesses] = useState(['', '', '', '']);
 
   // Hint Overlay Box
@@ -100,7 +101,7 @@ export default function MindReaderApp2({ onBack }) {
   useEffect(() => {
     if (phase === 'setup') {
       setAvatarExpression('thinking');
-      setTenaliSpeech("Greetings! I have hidden a mathematical secret in my mind. Can you discover it before the clues run out?");
+      setTenaliSpeech("I have hidden a mathematical concept inside my mind. Can you guess it in 5 clues?");
     }
   }, [phase]);
 
@@ -261,7 +262,7 @@ export default function MindReaderApp2({ onBack }) {
           setTenaliSpeech(`Outstanding! You correctly guessed "${data.actualConcept}"!`);
         } else {
           setAvatarExpression('loss');
-          setTenaliSpeech(`Alas! The correct concept was "${data.actualConcept}". Let's review it together.`);
+          setTenaliSpeech(`Alas! The correct concept was "${data.actualConcept}".`);
         }
         setShowGuess(false);
         setPhase('gameover');
@@ -281,82 +282,65 @@ export default function MindReaderApp2({ onBack }) {
   };
 
   return (
-    <div className="mr2-container">
+    <div className="mr2-container" style={{ maxHeight: '90vh', overflow: 'hidden', padding: '10px 15px' }}>
       {/* 🔮 Sequential Game Header */}
-      <div className="mr2-hud">
-        <div className="mr2-hud-pill">🏆 Total XP: <strong>{xp}</strong></div>
-        <div className="mr2-hud-pill">👑 Level: <strong>{levelNum}</strong></div>
-        <div className="mr2-hud-pill">💡 Hints: <strong>{hintsRemaining}/3</strong></div>
+      <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px' }}>
+        <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>🏆 XP: <strong>{xp}</strong></div>
+        <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>👑 Level: <strong>{levelNum}</strong></div>
+        <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>💡 Hints: <strong>{hintsRemaining}/3</strong></div>
       </div>
 
-      {errorMsg && <div className="feedback wrong" style={{ textAlign: 'center', margin: '15px 0' }}>{errorMsg}</div>}
+      {errorMsg && <div className="feedback wrong" style={{ textAlign: 'center', padding: '6px', margin: '4px 0', fontSize: '0.9rem' }}>{errorMsg}</div>}
 
-      {/* ─── PHASE 1: SETUP LOBBY SCREEN ──────────────────────────────────────── */}
+      {/* ─── PHASE 1: SETUP LOBBY SCREEN (MINIMAL TEXT) ────────────────────────── */}
       {phase === 'setup' && (
-        <div className="gm-container">
-          <div className="mr2-char-hub-horizontal">
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '15px' }}>
+          <h2 style={{ margin: '10px 0 0 0', fontFamily: 'var(--font-display)', fontSize: '2rem' }}>Read Tenali's Mind</h2>
+          
+          <div className="mr2-char-hub-vertical" style={{ margin: '10px 0', gap: '10px' }}>
             <TenaliAvatar expression={avatarExpression} skin="classic" />
-            <div className="mr2-speech-bubble" style={{ maxWidth: '400px' }}>
-              <div className="mr2-speech-header">
-                <span className="mr2-char-name">Tenali Raman</span>
-                <span className="mr2-char-title">Court Genius</span>
-              </div>
-              <p className="mr2-dialogue-text">{tenaliSpeech}</p>
+            <div className="mr2-speech-bubble" style={{ maxWidth: '320px', padding: '12px 18px' }}>
+              <p className="mr2-dialogue-text" style={{ fontSize: '1rem', margin: 0 }}>{tenaliSpeech}</p>
             </div>
           </div>
 
-          <div className="mr2-card" style={{ width: '100%', marginTop: '20px' }}>
-            <h3 style={{ marginTop: 0, color: 'var(--clr-accent)' }}>Gameplay Rules</h3>
-            <ul style={{ paddingLeft: '20px', lineHeight: '1.6', color: 'var(--clr-text-soft)' }}>
-              <li>Tenali thinks of a concept. Try to guess it using up to <strong>5 progressive clues</strong>.</li>
-              <li>Earlier guesses earn more stars:
-                <ul style={{ paddingLeft: '15px' }}>
-                  <li>⭐ ⭐ ⭐ Stars: Guessed at Clue 1 or 2.</li>
-                  <li>⭐ ⭐ Stars: Guessed at Clue 3 or 4.</li>
-                  <li>⭐ Star: Guessed at Clue 5.</li>
-                </ul>
-              </li>
-              <li>You have <strong>3 hints</strong> per level. Hint usage reduces your final MRR reward.</li>
-              <li>You have exactly <strong>1 guess</strong> attempt. An incorrect guess ends the level run.</li>
-            </ul>
-            <button className="btn-primary" style={{ width: '100%', padding: '14px', marginTop: '10px' }} onClick={() => setPhase('worlds')}>
-              Enter the Kingdoms
-            </button>
-          </div>
+          <button className="btn-primary" style={{ width: '100%', maxWidth: '320px', padding: '12px', marginTop: '10px' }} onClick={() => setPhase('worlds')}>
+            Enter the Kingdoms
+          </button>
         </div>
       )}
 
       {/* ─── PHASE 2: WORLD SELECT CAROUSEL ───────────────────────────────────── */}
       {phase === 'worlds' && (
-        <div className="gm-container">
-          <h2>Select a Learning World</h2>
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '10px' }}>
+          <h3 style={{ margin: '10px 0' }}>Select a World</h3>
           {worlds.length > 0 ? (
-            <div className="gm-carousel-wrapper">
+            <div className="gm-carousel-wrapper" style={{ margin: '15px 0', gap: '10px' }}>
               <button 
                 className="btn-secondary" 
                 onClick={prevWorld} 
                 disabled={activeWorldIndex === 0}
-                style={{ borderRadius: '50%', width: '45px', height: '45px', padding: 0 }}
+                style={{ borderRadius: '50%', width: '38px', height: '38px', padding: 0 }}
               >
                 &larr;
               </button>
 
-              <div className={`gm-world-card ${worlds[activeWorldIndex].unlocked ? 'active-world' : 'locked-world'}`}>
-                <div className="gm-world-header" style={{ color: worlds[activeWorldIndex].themeColor }}>
+              <div className={`gm-world-card ${worlds[activeWorldIndex].unlocked ? 'active-world' : 'locked-world'}`} style={{ padding: '20px 16px', maxWidth: '300px' }}>
+                <div className="gm-world-header" style={{ color: worlds[activeWorldIndex].themeColor, fontSize: '0.8rem' }}>
                   World {activeWorldIndex + 1} of {worlds.length}
                 </div>
-                <h3 className="gm-world-title">{worlds[activeWorldIndex].worldName}</h3>
+                <h4 className="gm-world-title" style={{ fontSize: '1.45rem', margin: '0 0 10px 0' }}>{worlds[activeWorldIndex].worldName}</h4>
                 
-                <div className="gm-world-badge">
-                  ⭐ {worlds[activeWorldIndex].stars} Stars Earned
+                <div className="gm-world-badge" style={{ padding: '2px 8px', fontSize: '0.75rem', marginBottom: '12px' }}>
+                  ⭐ {worlds[activeWorldIndex].stars} Stars
                 </div>
 
                 {!worlds[activeWorldIndex].unlocked ? (
-                  <div style={{ color: 'var(--clr-wrong)', marginBottom: '15px', fontWeight: 'bold' }}>
-                    🔒 Locked (Requires {worlds[activeWorldIndex].requiredUnlockXP} XP)
+                  <div style={{ color: 'var(--clr-wrong)', marginBottom: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+                    🔒 Locked ({worlds[activeWorldIndex].requiredUnlockXP} XP)
                   </div>
                 ) : (
-                  <div style={{ color: 'var(--clr-correct)', marginBottom: '15px', fontWeight: 'bold' }}>
+                  <div style={{ color: 'var(--clr-correct)', marginBottom: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}>
                     🔓 Unlocked
                   </div>
                 )}
@@ -364,6 +348,8 @@ export default function MindReaderApp2({ onBack }) {
                 <button 
                   className="gm-world-btn" 
                   style={{
+                    padding: '10px',
+                    fontSize: '0.9rem',
                     background: worlds[activeWorldIndex].unlocked ? 'var(--clr-accent)' : 'var(--clr-input)',
                     color: worlds[activeWorldIndex].unlocked ? '#fff' : 'var(--clr-text-soft)'
                   }}
@@ -381,7 +367,7 @@ export default function MindReaderApp2({ onBack }) {
                 className="btn-secondary" 
                 onClick={nextWorld} 
                 disabled={activeWorldIndex === worlds.length - 1}
-                style={{ borderRadius: '50%', width: '45px', height: '45px', padding: 0 }}
+                style={{ borderRadius: '50%', width: '38px', height: '38px', padding: 0 }}
               >
                 &rarr;
               </button>
@@ -390,32 +376,32 @@ export default function MindReaderApp2({ onBack }) {
             <div>Loading worlds...</div>
           )}
 
-          <button className="btn-outline" style={{ marginTop: '20px' }} onClick={() => setPhase('setup')}>
-            &larr; Back to Lobby
+          <button className="btn-outline" style={{ marginTop: '10px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('setup')}>
+            &larr; Lobby
           </button>
         </div>
       )}
 
-      {/* ─── PHASE 3: LEVEL SELECTION TRACK ───────────────────────────────────── */}
+      {/* ─── PHASE 3: LEVEL SELECTION MAP (SCROLL-FREE PATH) ──────────────────── */}
       {phase === 'levels' && (
-        <div className="gm-container">
-          <h2>{worlds[activeWorldIndex]?.worldName || 'Levels Map'}</h2>
-          <p className="subtitle">Complete levels sequentially. Earn stars to unlock the next level.</p>
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '5px' }}>
+          <h4 style={{ margin: '5px 0' }}>{worlds[activeWorldIndex]?.worldName}</h4>
 
-          <div className="gm-level-track">
-            <div className="gm-level-line"></div>
+          <div className="gm-level-track" style={{ padding: '15px 0', maxHeight: '320px', overflowY: 'auto', width: '100%', maxWidth: '280px' }}>
+            <div className="gm-level-line" style={{ top: '35px', bottom: '35px' }}></div>
             
             {getLevelsForActiveWorld().reverse().map((node) => (
-              <div key={node.levelNum} className="gm-level-node-wrapper">
+              <div key={node.levelNum} className="gm-level-node-wrapper" style={{ margin: '12px 0' }}>
                 <button
                   className={`gm-level-node ${node.unlocked ? 'unlocked' : ''} ${node.levelNum === levelNum ? 'active-node' : ''}`}
                   disabled={!node.unlocked}
+                  style={{ width: '46px', height: '46px', fontSize: '1.05rem' }}
                   onClick={() => handleStartLevel(node.levelNum)}
                 >
                   {node.unlocked ? node.levelNum : '🔒'}
                 </button>
                 {node.stars > 0 && (
-                  <div className="gm-level-stars">
+                  <div className="gm-level-stars" style={{ marginTop: '3px', fontSize: '0.7rem' }}>
                     {Array.from({ length: node.stars }).map((_, idx) => (
                       <span key={idx}>★</span>
                     ))}
@@ -425,35 +411,42 @@ export default function MindReaderApp2({ onBack }) {
             ))}
           </div>
 
-          <button className="btn-outline" style={{ marginTop: '20px' }} onClick={() => setPhase('worlds')}>
-            &larr; Back to Kingdoms
+          <button className="btn-outline" style={{ marginTop: '10px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('worlds')}>
+            &larr; Worlds
           </button>
         </div>
       )}
 
-      {/* ─── PHASE 4: GAMEPLAY BOARD ──────────────────────────────────────────── */}
+      {/* ─── PHASE 4: GAMEPLAY BOARD (SCROLL-FREE VIEWPORT FIT) ───────────────── */}
       {phase === 'playing' && (
-        <div className="gm-container" style={{ position: 'relative' }}>
-          <div className="mr2-char-hub-vertical">
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '5px' }}>
+          <div className="mr2-char-hub-vertical" style={{ margin: '5px 0', gap: '6px' }}>
             <TenaliAvatar expression={avatarExpression} skin="classic" />
-            <div className="mr2-speech-bubble" style={{ minWidth: '280px', maxWidth: '480px' }}>
-              <div className="mr2-speech-header">
-                <span className="mr2-char-name">Tenali Raman</span>
+            <div className="mr2-speech-bubble" style={{ minWidth: '260px', maxWidth: '400px', padding: '10px 16px' }}>
+              <div className="mr2-speech-header" style={{ marginBottom: '4px' }}>
+                <span className="mr2-char-name" style={{ fontSize: '0.85rem' }}>Tenali Raman</span>
               </div>
-              <p className="mr2-dialogue-text" style={{ fontStyle: 'italic', fontSize: '1.25rem', fontWeight: '500' }}>
+              <p className="mr2-dialogue-text" style={{ fontStyle: 'italic', fontSize: '1.1rem', fontWeight: '500', margin: 0 }}>
                 "{clue}"
               </p>
             </div>
             {/* Dots navigation timeline */}
-            <div className="gm-dot-timeline" style={{ marginTop: '10px' }}>
+            <div className="gm-dot-timeline" style={{ marginTop: '6px' }}>
               {Array.from({ length: 5 }).map((_, idx) => (
-                <div key={idx} className={`gm-dot ${idx <= clueIndex ? 'active' : ''}`}></div>
+                <div key={idx} className={`gm-dot ${idx <= clueIndex ? 'active' : ''}`} style={{ width: '8px', height: '8px' }}></div>
               ))}
             </div>
           </div>
 
-          {/* 4 Thought Input Fields for Student's Guessed Topics */}
-          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px', margin: '20px 0' }}>
+          {/* 4 Thought Input Fields in a Compact 2x2 Grid Layout */}
+          <div style={{
+            width: '100%',
+            maxWidth: '400px',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '8px',
+            margin: '12px 0'
+          }}>
             {thoughtGuesses.map((val, idx) => (
               <input
                 key={idx}
@@ -461,15 +454,15 @@ export default function MindReaderApp2({ onBack }) {
                 style={{
                   width: '100%',
                   boxSizing: 'border-box',
-                  padding: '12px 16px',
+                  padding: '8px 12px',
                   background: 'var(--clr-input)',
-                  border: '1.5px solid var(--clr-border)',
-                  borderRadius: '12px',
+                  border: '1px solid var(--clr-border)',
+                  borderRadius: '8px',
                   color: 'var(--clr-text)',
-                  fontSize: '0.95rem',
+                  fontSize: '0.85rem',
                   outline: 'none'
                 }}
-                placeholder={`Guessed Topic ${idx + 1}...`}
+                placeholder={`Topic ${idx + 1}...`}
                 value={val}
                 onChange={(e) => handleThoughtChange(idx, e.target.value)}
               />
@@ -478,22 +471,22 @@ export default function MindReaderApp2({ onBack }) {
 
           {/* Clue Hint details popup if requested */}
           {showHintOverlay && (
-            <div className="feedback correct" style={{ width: '100%', margin: '10px 0', textAlign: 'center' }}>
+            <div className="feedback correct" style={{ width: '100%', maxWidth: '400px', padding: '6px', margin: '4px 0', textAlign: 'center', fontSize: '0.88rem' }}>
               💡 Hint: <strong>{hintText}</strong>
             </div>
           )}
 
           {/* Action Row */}
-          <div style={{ display: 'flex', gap: '10px', width: '100%', flexWrap: 'wrap', marginTop: '10px' }}>
-            <button className="btn-outline" style={{ flex: 1, minWidth: '120px' }} onClick={handleUseHint} disabled={hintsRemaining <= 0}>
+          <div style={{ display: 'flex', gap: '8px', width: '100%', maxWidth: '400px', flexWrap: 'nowrap', marginTop: '5px' }}>
+            <button className="btn-outline" style={{ flex: 1, padding: '10px', fontSize: '0.88rem' }} onClick={handleUseHint} disabled={hintsRemaining <= 0}>
               💡 Get Hint
             </button>
-            <button className="btn-primary" style={{ flex: 1.5, minWidth: '150px' }} onClick={() => setShowGuess(true)}>
+            <button className="btn-primary" style={{ flex: 1.5, padding: '10px', fontSize: '0.88rem' }} onClick={() => setShowGuess(true)}>
               🔎 Make Guess
             </button>
             <button 
               className="btn-secondary" 
-              style={{ flex: 1, minWidth: '120px' }} 
+              style={{ flex: 1, padding: '10px', fontSize: '0.88rem' }} 
               onClick={handleNextClue} 
               disabled={cluesExhausted}
             >
@@ -501,31 +494,32 @@ export default function MindReaderApp2({ onBack }) {
             </button>
           </div>
 
-          {/* Fullscreen Free-text Guess Modal */}
+          {/* Fullscreen Free-text Guess Modal (Compact) */}
           {showGuess && (
-            <div className="gm-guess-modal">
-              <h2>Type Your Concept Guess</h2>
-              <p className="subtitle">Type the answer below. Warning: Only 1 final guess attempt is allowed!</p>
+            <div className="gm-guess-modal" style={{ padding: '20px' }}>
+              <h3 style={{ margin: '20px 0 10px 0' }}>Type Your Guess</h3>
+              <p className="subtitle" style={{ fontSize: '0.88rem', margin: 0 }}>Warning: Only 1 final attempt allowed!</p>
 
               <input
                 className="gm-search-input"
                 type="text"
+                style={{ margin: '20px 0 15px 0', padding: '12px 16px', fontSize: '1rem', width: '100%', maxWidth: '400px' }}
                 placeholder="Type your guess here..."
                 value={guessQuery}
                 onChange={(e) => setGuessQuery(e.target.value)}
                 autoFocus
               />
 
-              <div style={{ display: 'flex', gap: '15px', width: '100%', maxWidth: '500px', marginTop: '30px' }}>
-                <button className="btn-outline" style={{ flex: 1 }} onClick={() => {
+              <div style={{ display: 'flex', gap: '12px', width: '100%', maxWidth: '400px', marginTop: '20px' }}>
+                <button className="btn-outline" style={{ flex: 1, padding: '10px', fontSize: '0.9rem' }} onClick={() => {
                   setShowGuess(false);
                   setGuessQuery('');
                 }}>
-                  &larr; Close Guess Mode
+                  &larr; Close
                 </button>
                 <button 
                   className="btn-primary" 
-                  style={{ flex: 1 }} 
+                  style={{ flex: 1, padding: '10px', fontSize: '0.9rem' }} 
                   disabled={!guessQuery.trim()}
                   onClick={handleSubmitGuess}
                 >
@@ -535,29 +529,29 @@ export default function MindReaderApp2({ onBack }) {
             </div>
           )}
 
-          <button className="btn-outline" style={{ marginTop: '25px', width: '100%' }} onClick={() => setPhase('levels')}>
+          <button className="btn-outline" style={{ marginTop: '15px', width: '100%', maxWidth: '400px', padding: '8px', fontSize: '0.85rem' }} onClick={() => setPhase('levels')}>
             Quit Level
           </button>
         </div>
       )}
 
-      {/* ─── PHASE 5: GAMEOVER RESULT SCREEN ───────────────────────────────────── */}
+      {/* ─── PHASE 5: GAMEOVER RESULT SCREEN (SCROLL-FREE OVERVIEW + REVIEW) ──── */}
       {phase === 'gameover' && (
-        <div className="gm-container">
-          <div className="mr2-char-hub-vertical">
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '5px', maxHeight: '80vh', overflowY: 'auto', paddingRight: '5px' }}>
+          <div className="mr2-char-hub-vertical" style={{ margin: '5px 0', gap: '6px' }}>
             <TenaliAvatar expression={avatarExpression} skin="classic" />
-            <div className="mr2-speech-bubble">
-              <p className="mr2-dialogue-text">{tenaliSpeech}</p>
+            <div className="mr2-speech-bubble" style={{ padding: '8px 16px' }}>
+              <p className="mr2-dialogue-text" style={{ margin: 0, fontSize: '0.95rem' }}>{tenaliSpeech}</p>
             </div>
           </div>
 
-          <div className="mr2-card" style={{ width: '100%', textAlign: 'center', margin: '20px 0' }}>
-            <h2 style={{ margin: '0 0 15px 0', color: isCorrectGuess ? 'var(--clr-correct)' : 'var(--clr-wrong)' }}>
-              {isCorrectGuess ? '🎉 Correct Guess!' : '❌ Incorrect guess'}
-            </h2>
+          <div className="mr2-card" style={{ width: '100%', textAlign: 'center', padding: '12px', margin: '10px 0' }}>
+            <h3 style={{ margin: '0 0 8px 0', color: isCorrectGuess ? 'var(--clr-correct)' : 'var(--clr-wrong)', fontSize: '1.25rem' }}>
+              {isCorrectGuess ? '🎉 Correct!' : '❌ Game Over'}
+            </h3>
 
             {isCorrectGuess && (
-              <div style={{ fontSize: '2.5rem', color: '#f1c40f', margin: '15px 0' }}>
+              <div style={{ fontSize: '1.85rem', color: '#f1c40f', margin: '8px 0' }}>
                 {Array.from({ length: starsEarned }).map((_, idx) => (
                   <span key={idx}>★</span>
                 ))}
@@ -567,51 +561,37 @@ export default function MindReaderApp2({ onBack }) {
               </div>
             )}
 
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
-              <div className="mr2-hud-pill">XP: <strong>+{xpEarned}</strong></div>
-              <div className="mr2-hud-pill">Rating: <strong>{mrrChange >= 0 ? `+${mrrChange}` : mrrChange} MRR</strong></div>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
+              <div className="mr2-hud-pill" style={{ padding: '4px 10px', fontSize: '0.8rem' }}>XP: <strong>+{xpEarned}</strong></div>
+              <div className="mr2-hud-pill" style={{ padding: '4px 10px', fontSize: '0.8rem' }}>Rating: <strong>{mrrChange >= 0 ? `+${mrrChange}` : mrrChange}</strong></div>
             </div>
           </div>
 
-          {/* Educational review sheet */}
+          {/* Compact Educational Revision Card */}
           {educationalInfo && (
-            <div className="gm-educational-card">
-              <h3 style={{ margin: 0, color: 'var(--clr-accent)', borderBottom: '1px solid var(--clr-border)', paddingBottom: '10px' }}>
+            <div className="gm-educational-card" style={{ padding: '16px', margin: 0, gap: '10px', fontSize: '0.88rem' }}>
+              <h4 style={{ margin: 0, color: 'var(--clr-accent)', borderBottom: '1px solid var(--clr-border)', paddingBottom: '6px' }}>
                 Revision Card: {actualConcept}
-              </h3>
+              </h4>
 
-              <div className="gm-edu-section">
-                <span className="gm-edu-label">Definition</span>
+              <div className="gm-edu-section" style={{ gap: '2px' }}>
+                <span className="gm-edu-label" style={{ fontSize: '0.72rem' }}>Definition</span>
                 <span className="gm-edu-value">{educationalInfo.definition}</span>
               </div>
 
-              <div className="gm-edu-section">
-                <span className="gm-edu-label">Worked Examples</span>
-                <ul style={{ margin: 0, paddingLeft: '20px', color: 'var(--clr-text)' }}>
-                  {educationalInfo.examples.map((ex, idx) => (
-                    <li key={idx} style={{ marginBottom: '4px' }}>{ex}</li>
-                  ))}
-                </ul>
+              <div className="gm-edu-section" style={{ gap: '2px' }}>
+                <span className="gm-edu-label" style={{ fontSize: '0.72rem' }}>Examples</span>
+                <span className="gm-edu-value">{educationalInfo.examples.join(', ')}</span>
               </div>
 
-              <div className="gm-edu-section">
-                <span className="gm-edu-label">Common Mistakes</span>
+              <div className="gm-edu-section" style={{ gap: '2px' }}>
+                <span className="gm-edu-label" style={{ fontSize: '0.72rem' }}>Common Mistakes</span>
                 <span className="gm-edu-value" style={{ color: 'var(--clr-wrong)' }}>{educationalInfo.commonMistakes}</span>
-              </div>
-
-              <div className="gm-edu-section">
-                <span className="gm-edu-label">Fun Fact</span>
-                <span className="gm-edu-value" style={{ fontStyle: 'italic' }}>{educationalInfo.funFact}</span>
-              </div>
-
-              <div className="gm-edu-section">
-                <span className="gm-edu-label">Related Lesson</span>
-                <span className="gm-edu-value">{educationalInfo.relatedLesson}</span>
               </div>
             </div>
           )}
 
-          <button className="btn-primary" style={{ width: '100%', padding: '14px', marginTop: '20px' }} onClick={() => setPhase('levels')}>
+          <button className="btn-primary" style={{ width: '100%', padding: '12px', marginTop: '10px' }} onClick={() => setPhase('levels')}>
             Next Level Map &rarr;
           </button>
         </div>
