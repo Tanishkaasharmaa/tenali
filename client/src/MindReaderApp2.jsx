@@ -427,14 +427,14 @@ export default function MindReaderApp2({ onBack }) {
           </h4>
 
           {/* Coordinate-Mapped Snake Track */}
-          <div style={{ position: 'relative', width: '360px', height: '280px', margin: '10px 0' }}>
+          <div style={{ position: 'relative', width: '340px', height: '280px', margin: '10px 0' }}>
             {/* SVG Winding Dotted Connector Line */}
             <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
               <path 
-                d="M 60 30 L 300 90 L 60 150 L 300 210 L 180 260" 
-                stroke="rgba(217, 120, 62, 0.45)" 
-                strokeWidth="2.5" 
-                strokeDasharray="6,6" 
+                d="M 80 30 L 260 90 L 80 150 L 260 210 L 170 260" 
+                stroke="rgba(217, 120, 62, 0.4)" 
+                strokeWidth="2" 
+                strokeDasharray="5,5" 
                 fill="none" 
               />
             </svg>
@@ -442,14 +442,14 @@ export default function MindReaderApp2({ onBack }) {
             {/* Absolutely Positioned Level Nodes */}
             {(() => {
               const coords = [
-                { x: 60,  y: 30 },
-                { x: 300, y: 90 },
-                { x: 60,  y: 150 },
-                { x: 300, y: 210 },
-                { x: 180, y: 260 }
+                { x: 80,  y: 30 },
+                { x: 260, y: 90 },
+                { x: 80,  y: 150 },
+                { x: 260, y: 210 },
+                { x: 170, y: 260 }
               ];
               return getLevelsForActiveWorld().map((node, idx) => {
-                const pt = coords[idx] || { x: 180, y: 140 };
+                const pt = coords[idx] || { x: 170, y: 140 };
                 const leftPos = pt.x - 23; // Center a 46px bubble
                 const topPos = pt.y - 23;
                 return (
@@ -473,7 +473,7 @@ export default function MindReaderApp2({ onBack }) {
                         height: '46px', 
                         fontSize: '1.05rem', 
                         borderRadius: '50%',
-                        border: node.unlocked ? '1.5px solid #d9783e' : '1.5px solid rgba(255,255,255,0.1)',
+                        border: node.unlocked ? '1.5px solid #d9783e' : '1.5px solid rgba(255,255,255,0.08)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -514,10 +514,10 @@ export default function MindReaderApp2({ onBack }) {
 
       {/* ─── PHASE 4: GAMEPLAY BOARD (WORD CREATOR INSPIRATION) ────────────────── */}
       {phase === 'playing' && (
-        <div className="gm-container" style={{ minHeight: 'auto', gap: '4px', width: '100%', maxWidth: '450px' }}>
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '4px', width: '100%', maxWidth: '420px' }}>
           {/* Top Control Header Bar */}
-          <div className="gm-top-bar" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="gm-top-bar" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               <button 
                 style={outlineBtnStyle}
                 onClick={() => setPhase('levels')}
@@ -532,28 +532,25 @@ export default function MindReaderApp2({ onBack }) {
                 💡 Hint ({hintsRemaining}/3)
               </button>
             </div>
-            <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#fff' }}>
-              XP: <span style={{ color: '#d9783e' }}>{xp} XP</span>
+            <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#ffd8c2', display: 'flex', alignItems: 'center' }}>
+              XP: <span style={{ color: '#d9783e', marginLeft: '4px' }}>{xp} XP</span>
             </span>
           </div>
 
           {/* Serif Level Display Header */}
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '2.1rem', margin: '15px 0 2px 0', textAlign: 'center', fontWeight: 'bold' }}>
+          <h2 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '2.1rem', margin: '5px 0 2px 0', textAlign: 'center', fontWeight: 'bold' }}>
             Tenali's Mind • Level {levelNum}
           </h2>
-          <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-            <span className="gm-pill-badge" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '4px 12px', fontSize: '0.78rem', color: '#a89f95' }}>
+          <div style={{ textAlign: 'center', marginBottom: '15px' }}>
+            <span className="gm-pill-badge" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '4px 12px', fontSize: '0.78rem', color: '#a89f95' }}>
               Clue {localClueIndex + 1} of 5
             </span>
           </div>
 
-          {/* Focused Italic Clue Box */}
-          <div style={{ margin: '12px auto', maxWidth: '420px', textAlign: 'center' }}>
+          {/* Focused Italic Clue Box (No Tip Text) */}
+          <div style={{ margin: '15px auto 25px auto', maxWidth: '400px', textAlign: 'center' }}>
             <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '1.48rem', lineHeight: '1.45', color: '#ffffff', margin: 0 }}>
               "{clue}"
-            </p>
-            <p style={{ fontSize: '0.78rem', color: '#a89f95', margin: '8px 0 0 0', fontStyle: 'italic' }}>
-              💡 Tip: Fill the topic box(es) below with your candidates
             </p>
           </div>
 
@@ -563,7 +560,7 @@ export default function MindReaderApp2({ onBack }) {
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: '8px',
-            margin: '10px 0'
+            margin: '10px 0 15px 0'
           }}>
             {thoughtGuesses.map((val, idx) => (
               <input
