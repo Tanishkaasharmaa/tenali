@@ -9525,6 +9525,317 @@ app.post('/api/game/guess', express.json(), async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
+// GUESS WHAT'S ON TENALI'S MIND (MVP API)
+// ═══════════════════════════════════════════════════════════════════════════
+
+app.get('/api/mindreader/worlds', async (req, res) => {
+  try {
+    const user = await getOptionalUser(req);
+    let xp = 0;
+    let unlockedWorlds = ['arithmetic_kingdom'];
+    let levelProgressList = [];
+
+    if (user) {
+      xp = user.xp || 0;
+      // Ensure world progress exists
+      if (!user.worldProgress || user.worldProgress.length === 0) {
+        user.worldProgress = [{ worldId: 'arithmetic_kingdom', unlocked: true }];
+      }
+      // Re-calculate unlocks based on current XP
+      for (const w of worldsConfig) {
+        if (xp >= w.requiredUnlockXP) {
+          const exists = user.worldProgress.find(wp => wp.worldId === w.worldId);
+          if (!exists) {
+            user.worldProgress.push({ worldId: w.worldId, unlocked: true });
+          }
+        }
+      }
+      unlockedWorlds = user.worldProgress.filter(wp => wp.unlocked).map(wp => wp.worldId);
+      levelProgressList = user.levelProgress || [];
+    }
+
+    // Map worlds and add aggregate star counts
+    const worlds = worldsConfig.map(w => {
+      const isUnlocked = unlockedWorlds.includes(w.worldId);
+      // levels in this world
+      const levelsInWorld = levelsConfig.filter(lvl => lvl.worldId === w.worldId);
+      const levelNums = levelsInWorld.map(lvl => lvl.levelNum);
+      const stars = levelProgressList
+        .filter(lp => levelNums.includes(lp.levelNum))
+        .reduce((sum, lp) => sum + (lp.starsEarned || 0), 0);
+
+      return {
+        worldId: w.worldId,
+        worldName: w.worldName,
+        requiredUnlockXP: w.requiredUnlockXP,
+        themeColor: w.themeColor,
+        levelRange: w.levelRange,
+        unlocked: isUnlocked,
+        stars
+      };
+    });
+
+    res.json({
+      xp,
+      worlds,
+      levelProgress: levelProgressList.reduce((acc, lp) => {
+        acc[lp.levelNum] = lp.starsEarned;
+        return acc;
+      }, {})
+    });
+  } catch (err) {
+    console.error('[GuessMind] Error loading worlds:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/mindreader/start', express.json(), async (req, res) => {
+  try {
+    const { levelNum } = req.body;
+    if (!levelNum) {
+      return res.status(400).json({ error: 'Missing levelNum' });
+    }
+
+    const level = levelsConfig.find(l => l.levelNum === parseInt(levelNum, 10));
+    if (!level) {
+      return res.status(400).json({ error: 'Invalid levelNum' });
+    }
+
+    const concept = conceptsConfig[level.conceptId];
+    if (!concept) {
+      return res.status(404).json({ error: 'Concept configuration not found' });
+    }
+
+    // Optional progression verification for authenticated users
+    const user = await getOptionalUser(req);
+    if (user) {
+      const xp = user.xp || 0;
+      const world = worldsConfig.find(w => w.worldId === level.worldId);
+      if (world && xp < world.requiredUnlockXP) {
+        return res.status(403).json({ error: `World locked. Requires ${world.requiredUnlockXP} XP.` });
+      }
+
+      if (level.levelNum > 1) {
+        const prevLevel = levelsConfig.find(l => l.levelNum === level.levelNum - 1);
+        if (prevLevel) {
+          const completedPrev = user.levelProgress.find(lp => lp.levelNum === prevLevel.levelNum && lp.starsEarned > 0);
+          if (!completedPrev) {
+            return res.status(403).json({ error: 'Previous level not completed.' });
+          }
+        }
+      }
+    }
+
+    const gameId = 'sess_gm_' + crypto.randomUUID().replace(/-/g, '');
+    const session = new GuessMindSession(gameId, level.levelNum, concept);
+    guessMindSessions.set(gameId, session);
+
+    console.log(`[GuessMind] Session ${gameId} started for level ${levelNum} with concept "${concept.name}"`);
+
+    res.json({
+      gameId,
+      levelNum: level.levelNum,
+      clue: concept.clues[0],
+      clueIndex: 0,
+      hintsRemaining: session.hintsRemaining
+    });
+  } catch (err) {
+    console.error('[GuessMind] Error in start API:', err);
+    res.status(500).json({ error: 'Internal server error starting level' });
+  }
+});
+
+app.post('/api/mindreader/next-clue', express.json(), (req, res) => {
+  const { gameId } = req.body;
+  if (!gameId) {
+    return res.status(400).json({ error: 'Missing gameId' });
+  }
+
+  const session = guessMindSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+
+  if (session.clueIndex >= 4) {
+    return res.status(400).json({ error: 'All clues already revealed' });
+  }
+
+  session.clueIndex += 1;
+  const clue = session.selectedConcept.clues[session.clueIndex];
+
+  res.json({
+    clue,
+    clueIndex: session.clueIndex,
+    cluesExhausted: session.clueIndex === 4
+  });
+});
+
+app.post('/api/mindreader/use-hint', express.json(), (req, res) => {
+  const { gameId } = req.body;
+  if (!gameId) {
+    return res.status(400).json({ error: 'Missing gameId' });
+  }
+
+  const session = guessMindSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+
+  if (session.hintsRemaining <= 0) {
+    return res.status(400).json({ error: 'No hints remaining' });
+  }
+
+  const hint = session.selectedConcept.hints[3 - session.hintsRemaining];
+  session.hintsRemaining -= 1;
+  session.hintsUsed += 1;
+
+  res.json({
+    hint,
+    hintsRemaining: session.hintsRemaining
+  });
+});
+
+app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
+  const { gameId, guess } = req.body;
+  if (!gameId || !guess) {
+    return res.status(400).json({ error: 'Missing gameId or guess' });
+  }
+
+  const session = guessMindSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+
+  const concept = session.selectedConcept;
+  const normalizedGuess = guess.trim().toLowerCase().replace(/\s+/g, '');
+  const normalizedConceptName = concept.name.trim().toLowerCase().replace(/\s+/g, '');
+
+  const isCorrect = normalizedGuess === normalizedConceptName;
+  
+  let starsEarned = 0;
+  let mrrChange = -5;
+  let xpEarned = 0;
+  let user = null;
+
+  try {
+    user = await getOptionalUser(req);
+  } catch (err) {
+    console.error('[GuessMind] Error loading user profile:', err);
+  }
+
+  if (isCorrect) {
+    // Calculate stars
+    if (session.clueIndex <= 1) {
+      starsEarned = 3;
+    } else if (session.clueIndex <= 3) {
+      starsEarned = 2;
+    } else {
+      starsEarned = 1;
+    }
+
+    // Calculate MRR
+    mrrChange = Math.max(5, 15 + (5 * (4 - session.clueIndex)) - (3 * session.hintsUsed));
+
+    // Calculate XP
+    if (user) {
+      const prevRecord = user.levelProgress.find(lp => lp.levelNum === session.levelNum);
+      if (prevRecord) {
+        xpEarned = 20; // Replaying level
+      } else {
+        xpEarned = 100; // First completion
+        // Perfect run bonus
+        if (starsEarned >= 3 && session.hintsUsed === 0) {
+          xpEarned += 50;
+        }
+      }
+    } else {
+      xpEarned = 100; // Guest first completion
+      if (starsEarned >= 3 && session.hintsUsed === 0) {
+        xpEarned += 50;
+      }
+    }
+  }
+
+  let finalMrr = 1000;
+  let finalXp = 0;
+  let authenticated = false;
+
+  if (user) {
+    authenticated = true;
+    user.mrr = Math.max(1000, (user.mrr || 1000) + mrrChange);
+    user.xp = (user.xp || 0) + xpEarned;
+
+    // Update levelProgress
+    const prevRecord = user.levelProgress.find(lp => lp.levelNum === session.levelNum);
+    if (prevRecord) {
+      if (starsEarned > prevRecord.starsEarned) {
+        prevRecord.starsEarned = starsEarned;
+      }
+      prevRecord.completedAt = new Date();
+    } else {
+      user.levelProgress.push({
+        levelNum: session.levelNum,
+        conceptId: concept.conceptId,
+        starsEarned
+      });
+    }
+
+    // Recalculate and update worldProgress unlocks
+    for (const w of worldsConfig) {
+      if (user.xp >= w.requiredUnlockXP) {
+        const exists = user.worldProgress.find(wp => wp.worldId === w.worldId);
+        if (!exists) {
+          user.worldProgress.push({ worldId: w.worldId, unlocked: true });
+        }
+      }
+    }
+
+    if (!user.isInMemory) {
+      await user.save();
+    } else {
+      inMemoryProfiles[user.username.toLowerCase()] = user;
+    }
+
+    finalMrr = user.mrr;
+    finalXp = user.xp;
+  }
+
+  // Save telemetry event
+  const mongoose = require('mongoose');
+  if (mongoose.connection.readyState === 1) {
+    await auth.MindReaderAnalytic.create({
+      outcome: isCorrect ? 'win' : 'loss',
+      concept: concept.name,
+      questionsCount: session.clueIndex + 1, // Number of clues revealed
+      scope: 'guess_mind',
+      predictionsMade: [guess],
+      questionsAsked: [], // Not applicable here
+      hintsRequested: session.hintsUsed,
+      completionTime: Math.round((new Date() - session.createdAt) / 1000),
+      incorrectGuessesCount: isCorrect ? 0 : 1
+    }).catch(err => console.error('[GuessMind] Failed to save analytic:', err));
+  }
+
+  guessMindSessions.delete(gameId);
+
+  console.log(`[GuessMind] Session ${gameId} guess: "${guess}" | Secret: "${concept.name}" | Correct: ${isCorrect} | Stars: ${starsEarned} | XP: ${xpEarned}`);
+
+  res.json({
+    correct: isCorrect,
+    actualConcept: concept.name,
+    starsEarned,
+    xpEarned,
+    reward: {
+      mrrChange,
+      mrr: finalMrr,
+      xp: finalXp,
+      authenticated
+    },
+    educationalInfo: concept.educationalInfo
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
 // /graph — Prerequisite DAG visualisation
 // ═══════════════════════════════════════════════════════════════════════════
 app.get('/graph', (_req, res) => {
