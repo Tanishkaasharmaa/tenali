@@ -1,8 +1,8 @@
 /**
- * TENALI REVERSE MIND READER — FRONTEND COMPONENT
- * ═════════════════════════════════════════════════
- * Allows the student to guess Tenali's secret mathematical concept
- * by asking questions, requesting hints, and submitting a final guess.
+ * GUESS WHAT'S ON TENALI'S MIND — SEQUENTIAL GAME ENGINE
+ * ══════════════════════════════════════════════════════
+ * Renders kingdoms, sequential Candy Crush paths, focused clue cards,
+ * slide-out notepad scratchpads, autocomplete guesses, and educational cards.
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -20,1078 +20,655 @@ function authGetToken() {
   }
 }
 
-// Predefined 25 math concepts with metadata for interactive topic filtering
-const CONCEPTS_DATA = [
-  { name: 'Prime Number', category: 'Number Theory', difficulty: 'easy' },
-  { name: 'HCF (Highest Common Factor)', category: 'Number Theory', difficulty: 'easy' },
-  { name: 'LCM (Lowest Common Multiple)', category: 'Number Theory', difficulty: 'easy' },
-  { name: 'Square Root', category: 'Arithmetic', difficulty: 'medium' },
-  { name: 'Equivalent Fractions', category: 'Arithmetic', difficulty: 'easy' },
-  { name: 'Percentage', category: 'Arithmetic', difficulty: 'easy' },
-  { name: 'Linear Equation', category: 'Algebra', difficulty: 'medium' },
-  { name: 'Quadratic Equation', category: 'Algebra', difficulty: 'hard' },
-  { name: 'Matrix', category: 'Algebra', difficulty: 'hard' },
-  { name: 'Vector', category: 'Geometry', difficulty: 'hard' },
-  { name: 'Right Triangle', category: 'Geometry', difficulty: 'medium' },
-  { name: "Pythagoras' Theorem", category: 'Geometry', difficulty: 'medium' },
-  { name: 'Venn Diagram', category: 'Logic', difficulty: 'medium' },
-  { name: 'Mean', category: 'Statistics', difficulty: 'easy' },
-  { name: 'Probability', category: 'Statistics', difficulty: 'medium' },
-  { name: 'Ratio', category: 'Arithmetic', difficulty: 'easy' },
-  { name: 'Decimal', category: 'Arithmetic', difficulty: 'easy' },
-  { name: 'Integers', category: 'Arithmetic', difficulty: 'easy' },
-  { name: 'Polygon', category: 'Geometry', difficulty: 'easy' },
-  { name: 'Circle', category: 'Geometry', difficulty: 'medium' },
-  { name: 'Perimeter', category: 'Geometry', difficulty: 'easy' },
-  { name: 'Area', category: 'Geometry', difficulty: 'easy' },
-  { name: 'Exponent', category: 'Arithmetic', difficulty: 'medium' },
-  { name: 'Median', category: 'Statistics', difficulty: 'easy' },
-  { name: 'Mode', category: 'Statistics', difficulty: 'easy' }
-];
-
-const ALL_CATEGORIES = ['Number Theory', 'Arithmetic', 'Algebra', 'Geometry', 'Statistics', 'Logic'];
-
-const CATEGORIES = ["Definition", "Category", "Properties", "Applications"];
-
-const QUESTIONS_LIBRARY = [
-  // --- Definition ---
-  { id: "q_is_number", category: "Definition", text: "Is it a type of number (like prime numbers or integers)?" },
-  { id: "q_is_theorem", category: "Definition", text: "Is it a mathematical theorem (like Pythagoras' Theorem)?" },
-  { id: "q_is_formula", category: "Definition", text: "Is it an equation or formula (like y = mx + c)?" },
-  { id: "q_is_operation", category: "Definition", text: "Is it a calculation process (like finding the HCF or LCM)?" },
-  { id: "q_is_not_operation", category: "Definition", text: "Is it a concept/idea rather than an operation?" },
-  { id: "q_is_not_number", category: "Definition", text: "Is it something other than a type of number?" },
-  // --- Category ---
-  { id: "q_cat_geometry", category: "Category", text: "Does it belong to Geometry (shapes, lines, area)?" },
-  { id: "q_cat_algebra", category: "Category", text: "Does it belong to Algebra (using letters like x and y)?" },
-  { id: "q_cat_number_theory", category: "Category", text: "Does it belong to Arithmetic/Number Theory (integers, factors)?" },
-  { id: "q_cat_not_geometry", category: "Category", text: "Is it outside the scope of Geometry?" },
-  { id: "q_cat_not_algebra", category: "Category", text: "Is it outside the scope of Algebra?" },
-  // --- Properties ---
-  { id: "q_prop_diagrams", category: "Properties", text: "Do we usually draw a diagram or shape to show it?" },
-  { id: "q_prop_variables", category: "Properties", text: "Does it use variables/letters (like x and y)?" },
-  { id: "q_prop_fractions", category: "Properties", text: "Does it use fractions, decimals, or ratios?" },
-  { id: "q_prop_graphs", category: "Properties", text: "Does it involve coordinates, grids, or graphs?" },
-  { id: "q_prop_calculation", category: "Properties", text: "Do we need to do calculations to find it?" },
-  { id: "q_prop_no_calculation", category: "Properties", text: "Is it a qualitative concept (not requiring calculations)?" },
-  { id: "q_prop_no_variables", category: "Properties", text: "Does it avoid algebraic variables?" },
-  { id: "q_grade_elementary", category: "Properties", text: "Is it taught in primary school (Grade 5 or below)?" },
-  { id: "q_grade_middle", category: "Properties", text: "Is it taught in middle school (Grade 6 to 8)?" },
-  { id: "q_grade_high", category: "Properties", text: "Is it taught in high school (Grade 9 or above)?" },
-  // --- Applications ---
-  { id: "q_app_real_world", category: "Applications", text: "Does it have common real-world applications?" },
-  { id: "q_app_no_real_world", category: "Applications", text: "Is it mostly theoretical or abstract math?" }
+// Complete list of all 25 curriculum concepts for guess fuzzy-matching
+const CONCEPTS_LIST = [
+  "Prime Number",
+  "Factors",
+  "Multiples",
+  "LCM",
+  "HCF",
+  "Right Triangle",
+  "Pythagoras' Theorem",
+  "Perimeter",
+  "Area",
+  "Volume",
+  "Linear Equation",
+  "Quadratic Equation",
+  "Variable",
+  "Expression",
+  "Inequality",
+  "Mean",
+  "Median",
+  "Mode",
+  "Probability",
+  "Venn Diagram",
+  "Sine",
+  "Cosine",
+  "Tangent",
+  "Hypotenuse",
+  "Angle of Elevation"
 ];
 
 export default function MindReaderApp2({ onBack }) {
-  const [phase, setPhase] = useState('setup'); // 'setup' | 'preparing' | 'playing' | 'gameover'
-  const [gameId, setGameId] = useState('');
-  const [questionsRemaining, setQuestionsRemaining] = useState(10);
-  const [hintsRemaining, setHintsRemaining] = useState(2);
-  const [askedQuestions, setAskedQuestions] = useState([]);
-  const [history, setHistory] = useState([]); // [{ sender: 'student'|'tenali'|'hint', text: '...' }]
-  const [expression, setExpression] = useState('thinking');
-  const [tenaliSpeech, setTenaliSpeech] = useState('');
-  
-  // Game states & profile
-  const [mrr, setMrr] = useState(1000);
-  const [gamesToday, setGamesToday] = useState(0);
-  const [dailyLimit, setDailyLimit] = useState(99999);
-  const [authenticated, setAuthenticated] = useState(false);
-  const [unlockedSkins, setUnlockedSkins] = useState(['Classic Tenali']);
-  const [equippedSkin, setEquippedSkin] = useState('classic');
-  const [equippedTitle, setEquippedTitle] = useState('Novice Reader');
-  const [showCabinet, setShowCabinet] = useState(false);
-  const [winStreak, setWinStreak] = useState(0);
-  const [gameDifficulty, setGameDifficulty] = useState('easy');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('easy');
-  const [topicFilter, setTopicFilter] = useState('whole');
-  const [selectedCategories, setSelectedCategories] = useState(ALL_CATEGORIES);
-
-  // Gameplay panels
-  const [activeCategory, setActiveCategory] = useState('Definition');
-  const [showGuessDialog, setShowGuessDialog] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedConcept, setSelectedConcept] = useState('');
-  
-  // GameOver variables
-  const [isCorrectGuess, setIsCorrectGuess] = useState(false);
-  const [mrrChange, setMrrChange] = useState(0);
-  const [correctConceptDetails, setCorrectConceptDetails] = useState(null);
-
+  // Game Phase: 'setup' | 'worlds' | 'levels' | 'playing' | 'gameover'
+  const [phase, setPhase] = useState('setup');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const historyEndRef = useRef(null);
 
-  const titlesList = [
-    { name: 'Novice Reader', minMrr: 1000 },
-    { name: 'Royal Trickster', minMrr: 1100 },
-    { name: 'Court Genius', minMrr: 1250 },
-    { name: 'Mind Emperor', minMrr: 1400 },
-  ];
+  // Player Stats
+  const [xp, setXp] = useState(0);
+  const [mrr, setMrr] = useState(1000);
+  const [unlockedWorlds, setUnlockedWorlds] = useState(['arithmetic_kingdom']);
+  const [levelProgress, setLevelProgress] = useState({}); // levelNum -> starsEarned
 
-  const skinsList = [
-    { id: 'classic', name: 'Classic Tenali', minMrr: 1000, description: 'Traditional court orange attire.' },
-    { id: 'royal', name: 'Royal Robes', minMrr: 1150, description: 'Gold and royal blue garments fitted for the palace.' },
-    { id: 'scholar', name: 'Sage Scholar', minMrr: 1300, description: 'White silver robes showing absolute mathematical wisdom.' }
-  ];
+  // Active game navigation states
+  const [worlds, setWorlds] = useState([]);
+  const [activeWorldIndex, setActiveWorldIndex] = useState(0);
+  const [activeWorldId, setActiveWorldId] = useState('arithmetic_kingdom');
+  const [levelNum, setLevelNum] = useState(1);
 
-  // Load profile and configuration
-  useEffect(() => {
-    const loadProfile = async () => {
-      try {
-        const configRes = await fetch(`${API}/api/mindreader/config`);
-        if (configRes.ok) {
-          const configData = await configRes.json();
-          if (configData.dailyLimit) setDailyLimit(configData.dailyLimit);
-        }
+  // Active game session playing states
+  const [gameId, setGameId] = useState('');
+  const [clue, setClue] = useState('');
+  const [clueIndex, setClueIndex] = useState(0);
+  const [hintsRemaining, setHintsRemaining] = useState(3);
+  const [cluesExhausted, setCluesExhausted] = useState(false);
+  const [avatarExpression, setAvatarExpression] = useState('thinking');
+  const [tenaliSpeech, setTenaliSpeech] = useState('');
 
-        const token = authGetToken();
-        const headers = {};
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-        }
+  // Notebook Scratchpad
+  const [showNotebook, setShowNotebook] = useState(false);
+  const [notebookText, setNotebookText] = useState('');
 
-        const profileRes = await fetch(`${API}/api/mindreader/profile`, { headers });
-        if (profileRes.ok) {
-          const profileData = await profileRes.json();
-          if (profileData.authenticated) {
-            setMrr(profileData.mrr);
-            setGamesToday(profileData.mindReaderGamesToday);
-            setUnlockedSkins(profileData.unlockedSkins || ['Classic Tenali']);
-            setEquippedSkin(profileData.equippedSkin || 'classic');
-            setEquippedTitle(profileData.equippedTitle || 'Novice Reader');
-            setWinStreak(profileData.winStreak || 0);
-            setAuthenticated(true);
-          } else {
-            setAuthenticated(false);
-            const localMrr = parseInt(localStorage.getItem('tenali-mindreader-mrr') || '1000', 10);
-            setMrr(localMrr);
-            setEquippedSkin(localStorage.getItem('tenali-mindreader-skin') || 'classic');
-            setEquippedTitle(localStorage.getItem('tenali-mindreader-title') || 'Novice Reader');
-            setGamesToday(parseInt(localStorage.getItem('tenali-mindreader-games-today') || '0', 10));
-            setWinStreak(parseInt(localStorage.getItem('tenali-mindreader-streak') || '0', 10));
-          }
-        }
-      } catch (err) {
-        console.error('Failed to load profile data:', err);
-      }
-    };
+  // Hint Overlay Box
+  const [showHintOverlay, setShowHintOverlay] = useState(false);
+  const [hintText, setHintText] = useState('');
 
-    loadProfile();
-  }, []);
+  // Guess Modal Autocomplete Search
+  const [showGuess, setShowGuess] = useState(false);
+  const [guessQuery, setGuessQuery] = useState('');
+  const [selectedGuessConcept, setSelectedGuessConcept] = useState('');
 
-  // Scroll chat transcript to the bottom on update
-  useEffect(() => {
-    if (historyEndRef.current) {
-      historyEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [history]);
+  // Results & Educational Data
+  const [isCorrectGuess, setIsCorrectGuess] = useState(false);
+  const [starsEarned, setStarsEarned] = useState(0);
+  const [xpEarned, setXpEarned] = useState(0);
+  const [mrrChange, setMrrChange] = useState(0);
+  const [actualConcept, setActualConcept] = useState('');
+  const [educationalInfo, setEducationalInfo] = useState(null);
 
-  // Set Tenali greeting message on lobby setup
-  useEffect(() => {
-    if (phase === 'setup') {
-      setExpression('thinking');
-      setTenaliSpeech("Greetings! I have hidden a mathematical secret in my mind.\n\nCan you discover what it is in 10 questions or less? I shall answer your queries truthfully!");
-    }
-  }, [phase]);
-
-  const handleEquipItem = async (type, val) => {
-    if (type === 'skin') {
-      setEquippedSkin(val);
-      if (authenticated) {
-        try {
-          const token = authGetToken();
-          await fetch(`${API}/api/mindreader/equip`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': token ? `Bearer ${token}` : ''
-            },
-            body: JSON.stringify({ skin: val })
-          });
-        } catch (err) {
-          console.error('Failed to save equipped skin:', err);
-        }
-      } else {
-        localStorage.setItem('tenali-mindreader-skin', val);
-      }
-    } else if (type === 'title') {
-      setEquippedTitle(val);
-      if (authenticated) {
-        try {
-          const token = authGetToken();
-          await fetch(`${API}/api/mindreader/equip`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': token ? `Bearer ${token}` : ''
-            },
-            body: JSON.stringify({ title: val })
-          });
-        } catch (err) {
-          console.error('Failed to save equipped title:', err);
-        }
-      } else {
-        localStorage.setItem('tenali-mindreader-title', val);
-      }
-    }
-  };
-
-  const getCurrentAllowedCategories = () => {
-    if (topicFilter === 'whole') {
-      return ALL_CATEGORIES;
-    }
-    if (topicFilter === 'selected') {
-      return selectedCategories;
-    }
-    if (topicFilter === 'studied') {
-      const studied = [];
-      try {
-        if (localStorage.getItem('tenali-chapter1-progress') && localStorage.getItem('tenali-chapter1-progress') !== '{}') studied.push('Number Theory');
-        if (localStorage.getItem('tenali-chapter2-progress') && localStorage.getItem('tenali-chapter2-progress') !== '{}') studied.push('Arithmetic');
-        if (localStorage.getItem('tenali-chapter3-progress') && localStorage.getItem('tenali-chapter3-progress') !== '{}') studied.push('Algebra');
-        if (localStorage.getItem('tenali-chapter4-progress') && localStorage.getItem('tenali-chapter4-progress') !== '{}') studied.push('Geometry');
-        if (localStorage.getItem('tenali-chapter5-progress') && localStorage.getItem('tenali-chapter5-progress') !== '{}') studied.push('Statistics', 'Logic');
-        if (localStorage.getItem('tenali-chapter6-progress') && localStorage.getItem('tenali-chapter6-progress') !== '{}') studied.push('Algebra', 'Geometry');
-      } catch (e) {
-        console.error(e);
-      }
-      if (studied.length === 0) {
-        studied.push('Number Theory', 'Arithmetic');
-      }
-      return [...new Set(studied)];
-    }
-    if (topicFilter === 'daily') {
-      const day = new Date().getDate();
-      const index = day % ALL_CATEGORIES.length;
-      return [ALL_CATEGORIES[index]];
-    }
-    if (topicFilter === 'weakest') {
-      return ['Geometry', 'Algebra'];
-    }
-    return ALL_CATEGORIES;
-  };
-
-  const getActiveConcepts = (diff) => {
-    const cats = getCurrentAllowedCategories();
-    return CONCEPTS_DATA.filter(c => c.difficulty === diff && cats.includes(c.category)).map(c => c.name);
-  };
-
-  const handleStartGame = (difficulty = 'easy') => {
-    setPhase('preparing');
+  // Load user profile, XP, levels stars on load
+  const loadWorldsAndProgress = async () => {
     setLoading(true);
     setErrorMsg('');
-
-    const token = authGetToken();
-    const headers = { 'Content-Type': 'application/json' };
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    const allowedCategories = getCurrentAllowedCategories();
-
-    setTimeout(async () => {
-      try {
-        const res = await fetch(`${API}/api/game/start`, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({ difficulty, allowedCategories })
-        });
-
-        if (!res.ok) throw new Error("Failed to start session.");
-        const data = await res.json();
-        
-        setGameId(data.gameId);
-        setQuestionsRemaining(data.questionsRemaining);
-        setHintsRemaining(data.hintsRemaining);
-        setGameDifficulty(data.difficulty || difficulty);
-        setAskedQuestions([]);
-        setHistory([]);
-        setExpression('thinking');
-        setTenaliSpeech("I am ready. Ask me any question from the categories below!");
-        setPhase('playing');
-      } catch (err) {
-        setErrorMsg(err.message || "Communication error with Tenali.");
-        setPhase('setup');
-      } finally {
-        setLoading(false);
-      }
-    }, 2000); // 2-second buffer for the nice selecting animation
-  };
-
-  const handleAskQuestion = async (qObj) => {
-    if (loading || askedQuestions.includes(qObj.id) || questionsRemaining <= 0) return;
-    
-    setLoading(true);
-    setErrorMsg('');
-    setExpression('writing');
-
-    // Add student query to history immediately
-    setHistory(prev => [...prev, { sender: 'student', text: qObj.text }]);
-
     try {
-      const res = await fetch(`${API}/api/game/question`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId, questionId: qObj.id })
-      });
+      const token = authGetToken();
+      const headers = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
 
-      if (!res.ok) throw new Error("Failed to get question answer.");
-      const data = await res.json();
-
-      setQuestionsRemaining(data.questionsRemaining);
-      setAskedQuestions(prev => [...prev, qObj.id]);
-      
-      // Map answer to corresponding avatar expression
-      if (data.answer === 'yes') {
-        setExpression('happy');
-      } else if (data.answer === 'no') {
-        setExpression('serious');
+      const res = await fetch(`${API}/api/mindreader/worlds`, { headers });
+      if (res.ok) {
+        const data = await res.json();
+        setXp(data.xp || 0);
+        setWorlds(data.worlds || []);
+        setLevelProgress(data.levelProgress || {});
       } else {
-        setExpression('confused');
+        setErrorMsg('Failed to load levels progress.');
       }
-
-      setTenaliSpeech(data.dialogue);
-      setHistory(prev => [...prev, { sender: 'tenali', text: data.dialogue }]);
     } catch (err) {
-      setErrorMsg(err.message || "Failed to communicate question.");
+      console.error(err);
+      setErrorMsg('Server connection failed.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRequestHint = async () => {
-    if (loading || hintsRemaining <= 0) return;
+  useEffect(() => {
+    loadWorldsAndProgress();
+  }, [phase]);
 
+  // Set Tenali greeting message on lobby setup
+  useEffect(() => {
+    if (phase === 'setup') {
+      setAvatarExpression('thinking');
+      setTenaliSpeech("Greetings! I have hidden a mathematical secret in my mind. Can you discover it before the clues run out?");
+    }
+  }, [phase]);
+
+  // Level selector maps
+  const getLevelsForActiveWorld = () => {
+    if (!worlds || worlds.length === 0) return [];
+    const worldObj = worlds[activeWorldIndex];
+    if (!worldObj) return [];
+    const [start, end] = worldObj.levelRange;
+    const list = [];
+    for (let i = start; i <= end; i++) {
+      // Unlocked criteria:
+      // level 1 is always unlocked.
+      // level N is unlocked if level N-1 has a star rating > 0.
+      let unlocked = false;
+      if (i === 1) {
+        unlocked = true;
+      } else {
+        const prevStars = levelProgress[i - 1];
+        unlocked = prevStars !== undefined && prevStars > 0;
+      }
+      list.push({
+        levelNum: i,
+        stars: levelProgress[i] || 0,
+        unlocked
+      });
+    }
+    return list;
+  };
+
+  // World Carousel Handlers
+  const nextWorld = () => {
+    if (activeWorldIndex < worlds.length - 1) {
+      setActiveWorldIndex(activeWorldIndex + 1);
+    }
+  };
+
+  const prevWorld = () => {
+    if (activeWorldIndex > 0) {
+      setActiveWorldIndex(activeWorldIndex - 1);
+    }
+  };
+
+  // Start Level API
+  const handleStartLevel = async (lvl) => {
     setLoading(true);
     setErrorMsg('');
-    setExpression('hinting');
-
-    setHistory(prev => [...prev, { sender: 'student', text: "Can you give me a hint?" }]);
-
     try {
-      const res = await fetch(`${API}/api/game/hint`, {
+      const token = authGetToken();
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const res = await fetch(`${API}/api/mindreader/start`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ levelNum: lvl })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setGameId(data.gameId);
+        setLevelNum(data.levelNum);
+        setClue(data.clue);
+        setClueIndex(data.clueIndex);
+        setHintsRemaining(data.hintsRemaining);
+        setCluesExhausted(false);
+        setShowNotebook(false);
+        setShowHintOverlay(false);
+        setHintText('');
+        setNotebookText('');
+        setAvatarExpression('thinking');
+        setTenaliSpeech("Here is your first clue. Read it carefully!");
+        setPhase('playing');
+      } else {
+        const errData = await res.json();
+        setErrorMsg(errData.error || 'Failed to start level.');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMsg('Server connection failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Next Clue API
+  const handleNextClue = async () => {
+    if (cluesExhausted) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/api/mindreader/next-clue`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ gameId })
       });
 
-      if (!res.ok) throw new Error("Failed to get hint.");
-      const data = await res.json();
-
-      setHintsRemaining(data.hintsRemaining);
-      setTenaliSpeech(data.dialogue);
-      setHistory(prev => [...prev, { sender: 'hint', text: data.dialogue }]);
+      if (res.ok) {
+        const data = await res.json();
+        setClue(data.clue);
+        setClueIndex(data.clueIndex);
+        setCluesExhausted(data.cluesExhausted);
+        setAvatarExpression('happy');
+        setTenaliSpeech("Aha! The next clue is revealed. Can you guess it now?");
+      }
     } catch (err) {
-      setErrorMsg(err.message || "Failed to communicate hint request.");
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGuessSubmit = async () => {
-    if (!selectedConcept) return;
-    
+  // Request Hint API
+  const handleUseHint = async () => {
+    if (hintsRemaining <= 0) return;
     setLoading(true);
-    setErrorMsg('');
-    setShowGuessDialog(false);
-
-    const token = authGetToken();
-    const headers = { 'Content-Type': 'application/json' };
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
     try {
-      const res = await fetch(`${API}/api/game/guess`, {
+      const res = await fetch(`${API}/api/mindreader/use-hint`, {
         method: 'POST',
-        headers,
-        body: JSON.stringify({ gameId, guess: selectedConcept, winStreak })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameId })
       });
 
-      if (!res.ok) throw new Error("Failed to process guess.");
-      const data = await res.json();
-
-      setIsCorrectGuess(data.correct);
-      setCorrectConceptDetails(data.concept);
-      setMrrChange(data.reward.mrrChange);
-
-      if (data.reward.authenticated) {
-        setMrr(data.reward.mrr);
-        setGamesToday(data.reward.mindReaderGamesToday);
-        setWinStreak(data.reward.winStreak || 0);
-      } else {
-        const localMrr = parseInt(localStorage.getItem('tenali-mindreader-mrr') || '1000', 10);
-        const newMrr = Math.max(1000, localMrr + data.reward.mrrChange);
-        setMrr(newMrr);
-        localStorage.setItem('tenali-mindreader-mrr', String(newMrr));
-
-        const newGames = gamesToday + 1;
-        setGamesToday(newGames);
-        localStorage.setItem('tenali-mindreader-games-today', String(newGames));
-
-        const newStreak = data.correct ? winStreak + 1 : 0;
-        setWinStreak(newStreak);
-        localStorage.setItem('tenali-mindreader-streak', String(newStreak));
+      if (res.ok) {
+        const data = await res.json();
+        setHintText(data.hint);
+        setHintsRemaining(data.hintsRemaining);
+        setShowHintOverlay(true);
+        setAvatarExpression('smirk');
+        setTenaliSpeech(`Lean in... here is your hint!`);
       }
-
-      if (data.correct) {
-        setExpression('impressed');
-        setTenaliSpeech(`Incredible! You correctly guessed "${data.concept.name}"! I bow to your mathematical shield.`);
-      } else {
-        setExpression('proud');
-        setTenaliSpeech(`Aha! My secret remains safe. I was thinking of "${data.concept.name}". Better luck next time!`);
-      }
-
-      setPhase('gameover');
     } catch (err) {
-      setErrorMsg(err.message || "Failed to send guess.");
-      setShowGuessDialog(true);
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredConcepts = CONCEPTS_DATA.map(c => c.name).filter(concept =>
-    concept.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Submit Guess API
+  const handleSubmitGuess = async () => {
+    if (!selectedGuessConcept) return;
+    setLoading(true);
+    try {
+      const token = authGetToken();
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const res = await fetch(`${API}/api/mindreader/submit-guess`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ gameId, guess: selectedGuessConcept })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setIsCorrectGuess(data.correct);
+        setStarsEarned(data.starsEarned);
+        setXpEarned(data.xpEarned);
+        setMrrChange(data.reward.mrrChange);
+        setActualConcept(data.actualConcept);
+        setEducationalInfo(data.educationalInfo);
+        
+        if (data.correct) {
+          setAvatarExpression('victory');
+          setTenaliSpeech(`Outstanding! You correctly guessed "${data.actualConcept}"!`);
+        } else {
+          setAvatarExpression('loss');
+          setTenaliSpeech(`Alas! The correct concept was "${data.actualConcept}". Let's review it together.`);
+        }
+        setShowGuess(false);
+        setPhase('gameover');
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fuzzy autocomplete list filtering
+  const getFilteredConcepts = () => {
+    if (!guessQuery.trim()) return CONCEPTS_LIST;
+    return CONCEPTS_LIST.filter(c => c.toLowerCase().includes(guessQuery.toLowerCase()));
+  };
 
   return (
-    <div className="header-row-wrapper" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-      
-      {/* Header with home navigation */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button className="back-button" onClick={onBack}>← Home</button>
-        <h1>Read Tenali's Mind</h1>
-        <div style={{ width: '80px' }} /> {/* alignment balance */}
+    <div className="mr2-container">
+      {/* 🔮 Sequential Game Header */}
+      <div className="mr2-hud">
+        <div className="mr2-hud-pill">🏆 Total XP: <strong>{xp}</strong></div>
+        <div className="mr2-hud-pill">👑 Level: <strong>{levelNum}</strong></div>
+        <div className="mr2-hud-pill">💡 Hints: <strong>{hintsRemaining}/3</strong></div>
       </div>
 
-      <div className="mr2-container">
-        
-        {/* Top Stats HUD (Only when not in transition screen) */}
-        {phase !== 'preparing' && (
-          <div className="mr2-card mr2-hud">
-            <div className="mr2-hud-pill">🔮 MRR: <strong>{mrr}</strong></div>
-            <div className="mr2-hud-pill">🏷️ Title: <strong>{equippedTitle}</strong></div>
-            {winStreak > 0 && <div className="mr2-hud-pill" style={{ color: '#e67e22', border: '1px solid #e67e22' }}>🔥 Streak: <strong>{winStreak}</strong></div>}
-            {phase === 'playing' ? (
-              <>
-                <div className="mr2-hud-pill" style={{ textTransform: 'capitalize', color: gameDifficulty === 'easy' ? '#2ecc71' : gameDifficulty === 'medium' ? '#f1c40f' : '#e74c3c', borderColor: gameDifficulty === 'easy' ? '#2ecc71' : gameDifficulty === 'medium' ? '#f1c40f' : '#e74c3c' }}>
-                  {gameDifficulty === 'easy' ? '🟢 Easy' : gameDifficulty === 'medium' ? '🟡 Medium' : '🔴 Hard'}
-                </div>
-                <div className="mr2-hud-pill">💬 Questions: <strong>{questionsRemaining} / {gameDifficulty === 'easy' ? 15 : gameDifficulty === 'medium' ? 10 : 6}</strong></div>
-                <div className="mr2-hud-pill">💡 Hints: <strong>{hintsRemaining} / {gameDifficulty === 'easy' ? 3 : gameDifficulty === 'medium' ? 2 : 1}</strong></div>
-              </>
-            ) : (
-              <button 
-                className="cabinet-toggle-btn" 
-                onClick={() => setShowCabinet(true)} 
-                style={{ 
-                  background: 'linear-gradient(135deg, var(--clr-accent) 0%, #8e44ad 100%)', 
-                  color: 'white', border: 'none', padding: '8px 16px', borderRadius: '20px', 
-                  cursor: 'pointer', fontWeight: '600', boxShadow: '0 4px 12px rgba(142, 68, 173, 0.2)' 
-                }}
-              >
-                🎁 Rewards Cabinet
-              </button>
-            )}
-          </div>
-        )}
+      {errorMsg && <div className="feedback wrong" style={{ textAlign: 'center', margin: '15px 0' }}>{errorMsg}</div>}
 
-        {/* LOBBY / SETUP SCREEN */}
-        {phase === 'setup' && (
-          <div className="mr2-lobby-layout">
-            
-            {/* Top row: Avatar & Dialogue */}
-            <div className="mr2-card mr2-lobby-hero">
-              <TenaliAvatar expression={expression} skin={equippedSkin} />
-              
-              <div className="mr2-speech-bubble" style={{ flexGrow: 1 }}>
-                <div className="mr2-speech-header">
-                  <span className="mr2-char-name">Tenali Raman</span>
-                  <span className="mr2-char-title">{equippedTitle}</span>
-                </div>
-                <div className="mr2-dialogue-text">{tenaliSpeech}</div>
+      {/* ─── PHASE 1: SETUP LOBBY SCREEN ──────────────────────────────────────── */}
+      {phase === 'setup' && (
+        <div className="gm-container">
+          <div className="mr2-char-hub-horizontal">
+            <TenaliAvatar expression={avatarExpression} skin="classic" />
+            <div className="mr2-speech-bubble" style={{ maxWidth: '400px' }}>
+              <div className="mr2-speech-header">
+                <span className="mr2-char-name">Tenali Raman</span>
+                <span className="mr2-char-title">Court Genius</span>
               </div>
-            </div>
-
-            <div className="mr2-lobby-columns">
-              
-              {/* Left Column: Settings Panel */}
-              <div className="mr2-lobby-panel-left">
-                
-                {/* Panel Card 1: Difficulty */}
-                <div className="mr2-card mr2-lobby-section-card">
-                  <h3>Difficulty Mode</h3>
-                  <div className="difficulty-grid-selector" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginTop: '5px' }}>
-                    <button 
-                      onClick={() => setSelectedDifficulty('easy')}
-                      disabled={loading}
-                      className="difficulty-btn-card"
-                      style={{
-                        background: selectedDifficulty === 'easy' ? 'rgba(46, 204, 113, 0.15)' : 'rgba(46, 204, 113, 0.04)', 
-                        border: selectedDifficulty === 'easy' ? '2.5px solid #2ecc71' : '1.5px solid rgba(46, 204, 113, 0.25)', 
-                        borderRadius: '12px', padding: '12px 6px',
-                        cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
-                        boxShadow: selectedDifficulty === 'easy' ? '0 0 15px rgba(46, 204, 113, 0.25)' : 'none'
-                      }}
-                    >
-                      <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: '4px' }}>🟢</span>
-                      <strong style={{ display: 'block', color: '#2ecc71', fontSize: '0.92rem' }}>Easy</strong>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '4px', lineHeight: '1.25' }}>
-                        15 Qs | 3 Hints
-                      </span>
-                    </button>
-
-                    <button 
-                      onClick={() => setSelectedDifficulty('medium')}
-                      disabled={loading}
-                      className="difficulty-btn-card"
-                      style={{
-                        background: selectedDifficulty === 'medium' ? 'rgba(241, 196, 15, 0.15)' : 'rgba(241, 196, 15, 0.04)', 
-                        border: selectedDifficulty === 'medium' ? '2.5px solid #f1c40f' : '1.5px solid rgba(241, 196, 15, 0.25)', 
-                        borderRadius: '12px', padding: '12px 6px',
-                        cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
-                        boxShadow: selectedDifficulty === 'medium' ? '0 0 15px rgba(241, 196, 15, 0.25)' : 'none'
-                      }}
-                    >
-                      <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: '4px' }}>🟡</span>
-                      <strong style={{ display: 'block', color: '#f1c40f', fontSize: '0.92rem' }}>Medium</strong>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '4px', lineHeight: '1.25' }}>
-                        10 Qs | 2 Hints (+10)
-                      </span>
-                    </button>
-
-                    <button 
-                      onClick={() => setSelectedDifficulty('hard')}
-                      disabled={loading}
-                      className="difficulty-btn-card"
-                      style={{
-                        background: selectedDifficulty === 'hard' ? 'rgba(231, 76, 60, 0.15)' : 'rgba(231, 76, 60, 0.04)', 
-                        border: selectedDifficulty === 'hard' ? '2.5px solid #e74c3c' : '1.5px solid rgba(231, 76, 60, 0.25)', 
-                        borderRadius: '12px', padding: '12px 6px',
-                        cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center', color: 'var(--clr-text)',
-                        boxShadow: selectedDifficulty === 'hard' ? '0 0 15px rgba(231, 76, 60, 0.25)' : 'none'
-                      }}
-                    >
-                      <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: '4px' }}>🔴</span>
-                      <strong style={{ display: 'block', color: '#e74c3c', fontSize: '0.92rem' }}>Hard</strong>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--clr-text-soft)', display: 'block', marginTop: '4px', lineHeight: '1.25' }}>
-                        6 Qs | 1 Hint (+25)
-                      </span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Panel Card 2: Topic Filter */}
-                <div className="mr2-card mr2-lobby-section-card">
-                  <h3>Topic Filter</h3>
-                  <div className="topic-selector-tabs" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '5px', marginBottom: '12px' }}>
-                    <button 
-                      onClick={() => setTopicFilter('studied')}
-                      style={{
-                        background: topicFilter === 'studied' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '15px', padding: '6px 12px',
-                        cursor: 'pointer', fontSize: '0.78rem', fontWeight: '500', transition: 'all 0.2s'
-                      }}
-                    >
-                      📖 Studied
-                    </button>
-                    <button 
-                      onClick={() => setTopicFilter('whole')}
-                      style={{
-                        background: topicFilter === 'whole' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '15px', padding: '6px 12px',
-                        cursor: 'pointer', fontSize: '0.78rem', fontWeight: '500', transition: 'all 0.2s'
-                      }}
-                    >
-                      🌐 Whole Pool
-                    </button>
-                    <button 
-                      onClick={() => setTopicFilter('selected')}
-                      style={{
-                        background: topicFilter === 'selected' ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '15px', padding: '6px 12px',
-                        cursor: 'pointer', fontSize: '0.78rem', fontWeight: '500', transition: 'all 0.2s'
-                      }}
-                    >
-                      🎯 Select Topics
-                    </button>
-                  </div>
-
-                  {topicFilter === 'selected' && (
-                    <div className="categories-chips-selector" style={{ background: 'rgba(0,0,0,0.15)', borderRadius: '10px', padding: '10px' }}>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                        {ALL_CATEGORIES.map((cat, idx) => {
-                          const isActive = selectedCategories.includes(cat);
-                          return (
-                            <button
-                              key={idx}
-                              onClick={() => {
-                                if (isActive) {
-                                  setSelectedCategories(selectedCategories.filter(c => c !== cat));
-                                } else {
-                                  setSelectedCategories([...selectedCategories, cat]);
-                                }
-                              }}
-                              style={{
-                                background: isActive ? 'var(--clr-accent)' : 'rgba(255,255,255,0.05)',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                color: isActive ? 'white' : 'var(--clr-text-soft)',
-                                borderRadius: '12px', padding: '5px 10px', cursor: 'pointer',
-                                fontSize: '0.75rem', transition: 'all 0.15s'
-                              }}
-                            >
-                              {cat}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Start Button */}
-                <button 
-                  className="mr2-guess-trigger-btn" 
-                  onClick={() => handleStartGame(selectedDifficulty)} 
-                  disabled={loading || getActiveConcepts(selectedDifficulty).length === 0}
-                  style={{ padding: '14px', fontSize: '1.05rem', textTransform: 'uppercase', letterSpacing: '1px', borderRadius: '12px', width: '100%', border: 'none', fontWeight: 'bold' }}
-                >
-                  {loading ? 'Starting...' : 'Start Game Challenge'}
-                </button>
-              </div>
-
-              {/* Right Column: Reference Dictionary Card */}
-              <div className="mr2-lobby-panel-right mr2-card">
-                <h3 style={{ margin: 0, color: 'var(--clr-accent)', fontSize: '1.05rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-                  Concept Dictionary ({getActiveConcepts(selectedDifficulty).length})
-                </h3>
-                <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.85rem', margin: '0 0 5px 0', lineHeight: 1.3 }}>
-                  Tenali will secretly pick a topic from this live list based on your filters:
-                </p>
-                <div className="dictionary-scrollable-pool">
-                  {getActiveConcepts(selectedDifficulty).length > 0 ? (
-                    getActiveConcepts(selectedDifficulty).map((concept, idx) => (
-                      <span key={idx} className="mr2-concept-chip" style={{ fontSize: '0.82rem', padding: '5px 10px' }}>{concept}</span>
-                    ))
-                  ) : (
-                    <div style={{ color: '#e74c3c', fontSize: '0.82rem', padding: '10px 0', fontWeight: '500', width: '100%', textAlign: 'center' }}>
-                      ⚠️ No topics match the current filter set.
-                    </div>
-                  )}
-                </div>
-              </div>
-
+              <p className="mr2-dialogue-text">{tenaliSpeech}</p>
             </div>
           </div>
-        )}
 
-        {/* PREPARING SCREEN */}
-        {phase === 'preparing' && (
-          <div className="mr2-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 2rem', textAlign: 'center' }}>
-            <h2 style={{ fontSize: '1.6rem', color: 'var(--clr-accent)', marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              Selecting today's challenge...
-            </h2>
-            <div className="pregame-music-container" style={{ display: 'flex', gap: '6px', height: '40px', alignItems: 'flex-end', margin: '2rem 0' }}>
-              <div className="mr2-music-bar bar-1"></div>
-              <div className="mr2-music-bar bar-2"></div>
-              <div className="mr2-music-bar bar-3"></div>
-              <div className="mr2-music-bar bar-4"></div>
-              <div className="mr2-music-bar bar-5"></div>
-            </div>
-            <p style={{ fontStyle: 'italic', color: 'var(--clr-text-soft)', fontSize: '1.05rem', animation: 'pulse-opacity 1.5s infinite' }}>
-              🔮 Tenali is closing his eyes... searching the mathematical dictionary...
-            </p>
-          </div>
-        )}
-
-        {/* GAMEPLAY VIEW */}
-        {phase === 'playing' && (
-          <div className="mr2-gameplay-layout">
-            
-            {/* Left Column: questions, possible topics, and action triggers */}
-            <div className="mr2-control-panel">
-              
-              {/* Predefined Categories & Questions Panel */}
-              <div className="mr2-card" style={{ padding: '16px' }}>
-                <div className="mr2-category-tabs">
-                  {CATEGORIES.map((cat, idx) => (
-                    <button 
-                      key={idx} 
-                      className={`mr2-tab-btn ${activeCategory === cat ? 'active' : ''}`}
-                      onClick={() => setActiveCategory(cat)}
-                    >
-                      {cat}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="mr2-question-list">
-                  {QUESTIONS_LIBRARY.filter(q => q.category === activeCategory).map((qObj) => {
-                    const isAsked = askedQuestions.includes(qObj.id);
-                    return (
-                      <div key={qObj.id} className={`mr2-question-row ${isAsked ? 'disabled' : ''}`}>
-                        <span className="mr2-question-text">{qObj.text}</span>
-                        <button 
-                          className="mr2-ask-btn" 
-                          onClick={() => handleAskQuestion(qObj)}
-                          disabled={isAsked || loading || questionsRemaining <= 0}
-                        >
-                          {isAsked ? 'Asked' : 'Ask'}
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Separate Possible Topics Card */}
-              <div className="mr2-card" style={{ padding: '16px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ color: 'var(--clr-accent)', fontWeight: 'bold', fontSize: '0.85rem', letterSpacing: '0.5px' }}>
-                    🎯 POSSIBLE TOPICS ({getActiveConcepts(gameDifficulty).length})
-                  </span>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--clr-text-soft)', fontStyle: 'italic' }}>
-                    💡 Click to Guess
-                  </span>
-                </div>
-                <div style={{
-                  display: 'flex', flexWrap: 'wrap', gap: '5px', maxHeight: '110px', overflowY: 'auto',
-                  background: 'rgba(0, 0, 0, 0.25)', border: '1px solid rgba(255, 255, 255, 0.04)',
-                  padding: '8px', borderRadius: '8px'
-                }}>
-                  {getActiveConcepts(gameDifficulty).map((concept, idx) => (
-                    <span 
-                      key={idx} 
-                      className="mr2-concept-chip" 
-                      onClick={() => {
-                        setSelectedConcept(concept);
-                        setSearchQuery(concept);
-                        setShowGuessDialog(true);
-                      }}
-                      style={{ fontSize: '0.76rem', padding: '4px 8px', cursor: 'pointer', margin: 0 }}
-                    >
-                      {concept}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Action Rows */}
-              {errorMsg && <p className="error-text" style={{ margin: '5px 0 0 0', textAlign: 'center' }}>{errorMsg}</p>}
-              
-              <div className="mr2-action-controls">
-                <button 
-                  className="mr2-hint-btn" 
-                  onClick={handleRequestHint} 
-                  disabled={loading || hintsRemaining <= 0}
-                >
-                  💡 Hint ({hintsRemaining} left)
-                </button>
-                <button 
-                  className="mr2-guess-trigger-btn"
-                  onClick={() => { setShowGuessDialog(true); setSelectedConcept(''); setSearchQuery(''); }}
-                  disabled={loading}
-                >
-                  🎯 Make Final Guess
-                </button>
-              </div>
-
-            </div>
-
-            {/* Right Column: Mind Cloud & Tenali Avatar */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              
-              {/* Mind Cloud History */}
-              <div className="mr2-transcript-panel-cloud" style={{ height: '360px' }}>
-                <div className="mr2-thought-dot-1" />
-                <div className="mr2-thought-dot-2" />
-                
-                <div className="mr2-transcript-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>💭 Tenali's Mind Cloud (History)</span>
-                </div>
-                
-                <div className="mr2-transcript-history" style={{ flex: 1, minHeight: '150px' }}>
-                  {history.length === 0 ? (
-                    <div style={{ color: 'var(--clr-text-soft)', fontStyle: 'italic', fontSize: '0.9rem', textAlign: 'center', marginTop: '40px' }}>
-                      No questions asked yet. Choose a question from the categories block!
-                    </div>
-                  ) : (
-                    history.map((msg, idx) => {
-                      let bubbleClass = 'mr2-chat-tenali';
-                      if (msg.sender === 'student') bubbleClass = 'mr2-chat-student';
-                      if (msg.sender === 'hint') bubbleClass = 'mr2-chat-hint';
-                      return (
-                        <div key={idx} className={`mr2-chat-bubble ${bubbleClass}`}>
-                          {msg.sender === 'student' ? '🙋‍♂️ Student: ' : msg.sender === 'hint' ? '💡 Clue: ' : '😈 Tenali: '}
-                          {msg.text}
-                        </div>
-                      );
-                    })
-                  )}
-                  <div ref={historyEndRef} />
-                </div>
-              </div>
-
-              {/* Tenali Avatar card below Mind Cloud */}
-              <div className="mr2-card" style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px 16px' }}>
-                <div style={{ transform: 'scale(0.65)', transformOrigin: 'center center', width: '80px', height: '94px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <TenaliAvatar expression={expression} skin={equippedSkin} />
-                </div>
-                <div>
-                  <div style={{ fontWeight: 'bold', color: 'var(--clr-text)', fontSize: '0.95rem' }}>Tenali Raman</div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--clr-accent)', fontWeight: '500' }}>{equippedTitle}</div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        )}
-
-        {/* RESULTS SCREEN */}
-        {phase === 'gameover' && (
-          <div className="mr2-card" style={{ textAlign: 'center' }}>
-            {isCorrectGuess ? (
-              <div>
-                <h2 className="mr2-result-win">🏆 VICTORY! 🏆</h2>
-                <div className="mr2-mrr-up">MRR Rating: {mrr - mrrChange} ➔ {mrr} (+{mrrChange} points)</div>
-              </div>
-            ) : (
-              <div>
-                <h2 className="mr2-result-loss">❌ DEFEAT ❌</h2>
-                <div className="mr2-mrr-down">MRR Rating: {mrr - mrrChange} ➔ {mrr} ({mrrChange} points)</div>
-              </div>
-            )}
-
-            <div className="mr2-char-hub-vertical" style={{ margin: '20px 0' }}>
-              <div className="mr2-speech-bubble">
-                <div className="mr2-speech-header">
-                  <span className="mr2-char-name">Tenali Raman</span>
-                  <span className="mr2-char-title">{equippedTitle}</span>
-                </div>
-                <div className="mr2-dialogue-text">"{tenaliSpeech}"</div>
-              </div>
-              <TenaliAvatar expression={expression} skin={equippedSkin} />
-            </div>
-
-            {/* Concept Explanation Card */}
-            {correctConceptDetails && (
-              <div className="mr2-details-container">
-                <h3 style={{ color: 'var(--clr-accent)', margin: '0 0 10px 0', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '6px', fontSize: '1.15rem' }}>
-                  📖 Concept Details: {correctConceptDetails.name}
-                </h3>
-                <div className="mr2-details-item">
-                  <strong>Definition:</strong> {correctConceptDetails.definition}
-                </div>
-                <div className="mr2-details-item">
-                  <strong>Examples:</strong>
-                  <ul className="mr2-details-list">
-                    {correctConceptDetails.examples.map((ex, idx) => (
-                      <li key={idx}>{ex}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="mr2-details-item">
-                  <strong>Fun Fact:</strong> {correctConceptDetails.funFact}
-                </div>
-                <div className="mr2-details-item">
-                  <strong>Related Lesson:</strong> {correctConceptDetails.relatedLesson}
-                </div>
-                <div className="mr2-details-item">
-                  <strong>Common Mistakes:</strong> {correctConceptDetails.commonMistakes}
-                </div>
-              </div>
-            )}
-
-            <button 
-              className="mr2-guess-trigger-btn" 
-              onClick={() => setPhase('setup')}
-              style={{ marginTop: '10px', width: '200px' }}
-            >
-              Play Again
+          <div className="mr2-card" style={{ width: '100%', marginTop: '20px' }}>
+            <h3 style={{ marginTop: 0, color: 'var(--clr-accent)' }}>Gameplay Rules</h3>
+            <ul style={{ paddingLeft: '20px', lineHeight: '1.6', color: 'var(--clr-text-soft)' }}>
+              <li>Tenali thinks of a concept. Try to guess it using up to <strong>5 progressive clues</strong>.</li>
+              <li>Earlier guesses earn more stars:
+                <ul style={{ paddingLeft: '15px' }}>
+                  <li>⭐ ⭐ ⭐ Stars: Guessed at Clue 1 or 2.</li>
+                  <li>⭐ ⭐ Stars: Guessed at Clue 3 or 4.</li>
+                  <li>⭐ Star: Guessed at Clue 5.</li>
+                </ul>
+              </li>
+              <li>You have <strong>3 hints</strong> per level. Hint usage reduces your final MRR reward.</li>
+              <li>You have exactly <strong>1 guess</strong> attempt. An incorrect guess ends the level run.</li>
+            </ul>
+            <button className="btn-primary" style={{ width: '100%', padding: '14px', marginTop: '10px' }} onClick={() => setPhase('worlds')}>
+              Enter the Kingdoms
             </button>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* GUESS SEARCH DIALOG MODAL */}
-        {showGuessDialog && (
-          <div className="mr2-guess-overlay">
-            <div className="mr2-guess-modal">
-              <div className="mr2-guess-header">
-                <h3>Submit Final Guess</h3>
-                <button className="mr2-close-btn" onClick={() => setShowGuessDialog(false)}>&times;</button>
-              </div>
+      {/* ─── PHASE 2: WORLD SELECT CAROUSEL ───────────────────────────────────── */}
+      {phase === 'worlds' && (
+        <div className="gm-container">
+          <h2>Select a Learning World</h2>
+          {worlds.length > 0 ? (
+            <div className="gm-carousel-wrapper">
+              <button 
+                className="btn-secondary" 
+                onClick={prevWorld} 
+                disabled={activeWorldIndex === 0}
+                style={{ borderRadius: '50%', width: '45px', height: '45px', padding: 0 }}
+              >
+                &larr;
+              </button>
 
-              <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.85rem', margin: '0' }}>
-                You have exactly 1 guess. Filter the concepts below and select your answer!
-              </p>
+              <div className={`gm-world-card ${worlds[activeWorldIndex].unlocked ? 'active-world' : 'locked-world'}`}>
+                <div className="gm-world-header" style={{ color: worlds[activeWorldIndex].themeColor }}>
+                  World {activeWorldIndex + 1} of {worlds.length}
+                </div>
+                <h3 className="gm-world-title">{worlds[activeWorldIndex].worldName}</h3>
+                
+                <div className="gm-world-badge">
+                  ⭐ {worlds[activeWorldIndex].stars} Stars Earned
+                </div>
 
-              <input 
-                type="text" 
-                className="mr2-search-input" 
-                placeholder="Type to filter concepts..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-
-              <div className="mr2-concept-select-list">
-                {filteredConcepts.length === 0 ? (
-                  <div style={{ color: 'var(--clr-text-soft)', fontStyle: 'italic', fontSize: '0.9rem', textAlign: 'center', padding: '10px' }}>
-                    No concepts match your filter.
+                {!worlds[activeWorldIndex].unlocked ? (
+                  <div style={{ color: 'var(--clr-wrong)', marginBottom: '15px', fontWeight: 'bold' }}>
+                    🔒 Locked (Requires {worlds[activeWorldIndex].requiredUnlockXP} XP)
                   </div>
                 ) : (
-                  filteredConcepts.map((concept, idx) => (
-                    <div 
-                      key={idx} 
-                      className={`mr2-concept-select-item ${selectedConcept === concept ? 'selected' : ''}`}
-                      onClick={() => setSelectedConcept(concept)}
-                    >
-                      {concept}
-                    </div>
-                  ))
+                  <div style={{ color: 'var(--clr-correct)', marginBottom: '15px', fontWeight: 'bold' }}>
+                    🔓 Unlocked
+                  </div>
                 )}
+
+                <button 
+                  className="gm-world-btn" 
+                  style={{
+                    background: worlds[activeWorldIndex].unlocked ? 'var(--clr-accent)' : 'var(--clr-input)',
+                    color: worlds[activeWorldIndex].unlocked ? '#fff' : 'var(--clr-text-soft)'
+                  }}
+                  disabled={!worlds[activeWorldIndex].unlocked}
+                  onClick={() => {
+                    setActiveWorldId(worlds[activeWorldIndex].worldId);
+                    setPhase('levels');
+                  }}
+                >
+                  {worlds[activeWorldIndex].unlocked ? 'Enter Kingdom' : 'Locked'}
+                </button>
               </div>
 
               <button 
-                className="mr2-submit-guess-btn" 
-                onClick={handleGuessSubmit}
-                disabled={!selectedConcept || loading}
+                className="btn-secondary" 
+                onClick={nextWorld} 
+                disabled={activeWorldIndex === worlds.length - 1}
+                style={{ borderRadius: '50%', width: '45px', height: '45px', padding: 0 }}
               >
-                {loading ? 'Submitting...' : `Submit Guess: "${selectedConcept || 'None'}"`}
+                &rarr;
               </button>
             </div>
+          ) : (
+            <div>Loading worlds...</div>
+          )}
+
+          <button className="btn-outline" style={{ marginTop: '20px' }} onClick={() => setPhase('setup')}>
+            &larr; Back to Lobby
+          </button>
+        </div>
+      )}
+
+      {/* ─── PHASE 3: LEVEL SELECTION TRACK ───────────────────────────────────── */}
+      {phase === 'levels' && (
+        <div className="gm-container">
+          <h2>{worlds[activeWorldIndex]?.worldName || 'Levels Map'}</h2>
+          <p className="subtitle">Complete levels sequentially. Earn stars to unlock the next level.</p>
+
+          <div className="gm-level-track">
+            <div className="gm-level-line"></div>
+            
+            {getLevelsForActiveWorld().reverse().map((node) => (
+              <div key={node.levelNum} className="gm-level-node-wrapper">
+                <button
+                  className={`gm-level-node ${node.unlocked ? 'unlocked' : ''} ${node.levelNum === levelNum ? 'active-node' : ''}`}
+                  disabled={!node.unlocked}
+                  onClick={() => handleStartLevel(node.levelNum)}
+                >
+                  {node.unlocked ? node.levelNum : '🔒'}
+                </button>
+                {node.stars > 0 && (
+                  <div className="gm-level-stars">
+                    {Array.from({ length: node.stars }).map((_, idx) => (
+                      <span key={idx}>★</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-        )}
 
-        {/* REWARDS CABINET sliding drawer */}
-        {showCabinet && (
-          <div 
-            className="cabinet-overlay" 
-            onClick={() => setShowCabinet(false)} 
-            style={{ 
-              position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
-              background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', 
-              justifyContent: 'flex-end', backdropFilter: 'blur(4px)' 
-            }}
-          >
-            <div 
-              className="cabinet-drawer" 
-              onClick={(e) => e.stopPropagation()} 
-              style={{ 
-                width: '450px', maxWidth: '100%', height: '100%', 
-                background: 'var(--clr-surface)', boxShadow: '-10px 0 30px rgba(0,0,0,0.2)', 
-                padding: '30px', display: 'flex', flexDirection: 'column', overflowY: 'auto' 
-              }}
-            >
-              <div 
-                className="cabinet-header" 
-                style={{ 
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
-                  marginBottom: '24px', borderBottom: '1px solid var(--clr-border)', paddingBottom: '12px' 
-                }}
-              >
-                <h2 style={{ margin: 0, fontSize: '1.5rem', color: 'var(--clr-text)' }}>🎁 Rewards Cabinet</h2>
-                <button onClick={() => setShowCabinet(false)} style={{ background: 'none', border: 'none', fontSize: '1.8rem', cursor: 'pointer', color: 'var(--clr-text-soft)' }}>&times;</button>
+          <button className="btn-outline" style={{ marginTop: '20px' }} onClick={() => setPhase('worlds')}>
+            &larr; Back to Kingdoms
+          </button>
+        </div>
+      )}
+
+      {/* ─── PHASE 4: GAMEPLAY BOARD ──────────────────────────────────────────── */}
+      {phase === 'playing' && (
+        <div className="gm-container" style={{ position: 'relative' }}>
+          <div className="mr2-char-hub-vertical">
+            <TenaliAvatar expression={avatarExpression} skin="classic" />
+            <div className="mr2-speech-bubble">
+              <div className="mr2-speech-header">
+                <span className="mr2-char-name">Tenali Raman</span>
               </div>
-
-              <p style={{ fontSize: '0.9rem', color: 'var(--clr-text-soft)', marginBottom: '20px', lineHeight: 1.4 }}>
-                Earn Mind Reader Rating (MRR) by defeating Tenali in games. Higher MRR unlocks special skins and titles!
-              </p>
-              
-              <div 
-                className="cabinet-mrr-display" 
-                style={{ 
-                  background: 'linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(142, 68, 173, 0.1) 100%)', 
-                  border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '16px', 
-                  textAlign: 'center', marginBottom: '24px' 
-                }}
-              >
-                <span style={{ fontSize: '0.85rem', color: 'var(--clr-text-soft)', display: 'block', textTransform: 'uppercase', letterSpacing: '1px' }}>Your Current Rating</span>
-                <span style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--clr-accent)', display: 'block', margin: '4px 0' }}>🔮 {mrr} MRR</span>
-              </div>
-
-              <h3 style={{ borderBottom: '1px solid var(--clr-border)', paddingBottom: '8px', marginBottom: '12px', fontSize: '1.1rem', color: 'var(--clr-text)' }}>Skins</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
-                {skinsList.map((skinItem) => {
-                  const isUnlocked = mrr >= skinItem.minMrr;
-                  const isEquipped = equippedSkin === skinItem.id;
-                  return (
-                    <div 
-                      key={skinItem.id} 
-                      style={{ 
-                        border: isEquipped ? '2px solid var(--clr-accent)' : '1px solid var(--clr-border)', 
-                        borderRadius: '12px', padding: '14px', background: isEquipped ? 'rgba(74, 144, 226, 0.05)' : 'none', 
-                        display: 'flex', justifyContent: 'space-between', alignItems: 'center' 
-                      }}
-                    >
-                      <div style={{ flex: 1, paddingRight: '12px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                          <strong style={{ color: 'var(--clr-text)', fontSize: '0.98rem' }}>{skinItem.name}</strong>
-                          <span style={{ fontSize: '0.75rem', padding: '2px 6px', borderRadius: '4px', background: isUnlocked ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.1)', color: isUnlocked ? '#2ecc71' : 'var(--clr-wrong)', fontWeight: '600' }}>
-                            {isUnlocked ? '✓ Unlocked' : `🔒 ${skinItem.minMrr} MRR`}
-                          </span>
-                        </div>
-                        <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'var(--clr-text-soft)', lineHeight: 1.3 }}>{skinItem.description}</p>
-                      </div>
-                      <div>
-                        {isEquipped ? (
-                          <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--clr-accent)' }}>Equipped</span>
-                        ) : isUnlocked ? (
-                          <button onClick={() => handleEquipItem('skin', skinItem.id)} style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid var(--clr-accent)', background: 'none', color: 'var(--clr-accent)', cursor: 'pointer', fontWeight: '600' }}>Equip</button>
-                        ) : (
-                          <button disabled style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid var(--clr-border)', background: 'none', color: 'var(--clr-text-soft)', opacity: 0.5, cursor: 'not-allowed' }}>Locked</button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <h3 style={{ borderBottom: '1px solid var(--clr-border)', paddingBottom: '8px', marginBottom: '12px', fontSize: '1.1rem', color: 'var(--clr-text)' }}>Titles</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {titlesList.map((titleItem) => {
-                  const isUnlocked = mrr >= titleItem.minMrr;
-                  const isEquipped = equippedTitle === titleItem.name;
-                  return (
-                    <div 
-                      key={titleItem.name} 
-                      style={{ 
-                        border: isEquipped ? '2px solid var(--clr-accent)' : '1px solid var(--clr-border)', 
-                        borderRadius: '12px', padding: '14px', background: isEquipped ? 'rgba(74, 144, 226, 0.05)' : 'none', 
-                        display: 'flex', justifyContent: 'space-between', alignItems: 'center' 
-                      }}
-                    >
-                      <div style={{ flex: 1, paddingRight: '12px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                          <strong style={{ color: 'var(--clr-text)', fontSize: '0.98rem' }}>{titleItem.name}</strong>
-                          <span style={{ fontSize: '0.75rem', padding: '2px 6px', borderRadius: '4px', background: isUnlocked ? 'rgba(46, 204, 113, 0.15)' : 'rgba(231, 76, 60, 0.1)', color: isUnlocked ? '#2ecc71' : 'var(--clr-wrong)', fontWeight: '600' }}>
-                            {isUnlocked ? '✓ Unlocked' : `🔒 ${titleItem.minMrr} MRR`}
-                          </span>
-                        </div>
-                        <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'var(--clr-text-soft)' }}>Required Rating: {titleItem.minMrr} MRR</p>
-                      </div>
-                      <div>
-                        {isEquipped ? (
-                          <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--clr-accent)' }}>Equipped</span>
-                        ) : isUnlocked ? (
-                          <button onClick={() => handleEquipItem('title', titleItem.name)} style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid var(--clr-accent)', background: 'none', color: 'var(--clr-accent)', cursor: 'pointer', fontWeight: '600' }}>Equip</button>
-                        ) : (
-                          <button disabled style={{ padding: '6px 14px', borderRadius: '8px', border: '1px solid var(--clr-border)', background: 'none', color: 'var(--clr-text-soft)', opacity: 0.5, cursor: 'not-allowed' }}>Locked</button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
+              <p className="mr2-dialogue-text">{tenaliSpeech}</p>
             </div>
           </div>
-        )}
 
-      </div>
+          {/* Single Clue Presentation Card */}
+          <div className="gm-clue-card">
+            <p className="gm-clue-text">"{clue}"</p>
+            
+            {/* Dots navigation timeline */}
+            <div className="gm-dot-timeline">
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <div key={idx} className={`gm-dot ${idx <= clueIndex ? 'active' : ''}`}></div>
+              ))}
+            </div>
+          </div>
+
+          {/* Clue Hint details popup if requested */}
+          {showHintOverlay && (
+            <div className="feedback correct" style={{ width: '100%', margin: '10px 0', textAlign: 'center' }}>
+              💡 Hint: <strong>{hintText}</strong>
+            </div>
+          )}
+
+          {/* Action Row */}
+          <div style={{ display: 'flex', gap: '10px', width: '100%', flexWrap: 'wrap', marginTop: '15px' }}>
+            <button className="btn-outline" style={{ flex: 1, minWidth: '120px' }} onClick={() => setShowNotebook(true)}>
+              📝 Notes
+            </button>
+            <button className="btn-outline" style={{ flex: 1, minWidth: '120px' }} onClick={handleUseHint} disabled={hintsRemaining <= 0}>
+              💡 Hint
+            </button>
+            <button className="btn-primary" style={{ flex: 1.5, minWidth: '150px' }} onClick={() => setShowGuess(true)}>
+              🔎 Guess
+            </button>
+            <button 
+              className="btn-secondary" 
+              style={{ flex: 1, minWidth: '120px' }} 
+              onClick={handleNextClue} 
+              disabled={cluesExhausted}
+            >
+              Next Clue &rarr;
+            </button>
+          </div>
+
+          {/* Notebook drawer slide-out */}
+          {showNotebook && (
+            <div className="gm-notebook-overlay">
+              <div className="gm-notebook-header">
+                <h3>Scratch Notepad</h3>
+                <button className="btn-outline" style={{ padding: '4px 10px' }} onClick={() => setShowNotebook(false)}>
+                  Close
+                </button>
+              </div>
+              <textarea
+                className="gm-notebook-textarea"
+                placeholder="Type your notes here. They will not be evaluated..."
+                value={notebookText}
+                onChange={(e) => setNotebookText(e.target.value)}
+              />
+            </div>
+          )}
+
+          {/* Fullscreen Autocomplete Guess Modal */}
+          {showGuess && (
+            <div className="gm-guess-modal">
+              <h2>Select Your Concept Guess</h2>
+              <p className="subtitle">Start typing to filter. Submit carefully — only 1 guess allowed!</p>
+
+              <input
+                className="gm-search-input"
+                type="text"
+                placeholder="Search mathematical concepts..."
+                value={guessQuery}
+                onChange={(e) => {
+                  setGuessQuery(e.target.value);
+                  setSelectedGuessConcept('');
+                }}
+                autoFocus
+              />
+
+              <div className="gm-results-list">
+                {getFilteredConcepts().map((conceptName) => (
+                  <button
+                    key={conceptName}
+                    className={`gm-concept-row ${selectedGuessConcept === conceptName ? 'selected' : ''}`}
+                    onClick={() => setSelectedGuessConcept(conceptName)}
+                  >
+                    {conceptName}
+                  </button>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', gap: '15px', width: '100%', maxWidth: '500px', marginTop: '20px' }}>
+                <button className="btn-outline" style={{ flex: 1 }} onClick={() => {
+                  setShowGuess(false);
+                  setGuessQuery('');
+                  setSelectedGuessConcept('');
+                }}>
+                  &larr; Back
+                </button>
+                <button 
+                  className="btn-primary" 
+                  style={{ flex: 1 }} 
+                  disabled={!selectedGuessConcept}
+                  onClick={handleSubmitGuess}
+                >
+                  Confirm Guess
+                </button>
+              </div>
+            </div>
+          )}
+
+          <button className="btn-outline" style={{ marginTop: '30px', width: '100%' }} onClick={() => setPhase('levels')}>
+            Quit Level
+          </button>
+        </div>
+      )}
+
+      {/* ─── PHASE 5: GAMEOVER RESULT SCREEN ───────────────────────────────────── */}
+      {phase === 'gameover' && (
+        <div className="gm-container">
+          <div className="mr2-char-hub-vertical">
+            <TenaliAvatar expression={avatarExpression} skin="classic" />
+            <div className="mr2-speech-bubble">
+              <p className="mr2-dialogue-text">{tenaliSpeech}</p>
+            </div>
+          </div>
+
+          <div className="mr2-card" style={{ width: '100%', textAlign: 'center', margin: '20px 0' }}>
+            <h2 style={{ margin: '0 0 15px 0', color: isCorrectGuess ? 'var(--clr-correct)' : 'var(--clr-wrong)' }}>
+              {isCorrectGuess ? '🎉 Correct Guess!' : '❌ Incorrect guess'}
+            </h2>
+
+            {isCorrectGuess && (
+              <div style={{ fontSize: '2.5rem', color: '#f1c40f', margin: '15px 0' }}>
+                {Array.from({ length: starsEarned }).map((_, idx) => (
+                  <span key={idx}>★</span>
+                ))}
+                {Array.from({ length: 3 - starsEarned }).map((_, idx) => (
+                  <span key={idx} style={{ opacity: 0.15 }}>★</span>
+                ))}
+              </div>
+            )}
+
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
+              <div className="mr2-hud-pill">XP: <strong>+{xpEarned}</strong></div>
+              <div className="mr2-hud-pill">Rating: <strong>{mrrChange >= 0 ? `+${mrrChange}` : mrrChange} MRR</strong></div>
+            </div>
+          </div>
+
+          {/* Educational review sheet */}
+          {educationalInfo && (
+            <div className="gm-educational-card">
+              <h3 style={{ margin: 0, color: 'var(--clr-accent)', borderBottom: '1px solid var(--clr-border)', paddingBottom: '10px' }}>
+                Revision Card: {actualConcept}
+              </h3>
+
+              <div className="gm-edu-section">
+                <span className="gm-edu-label">Definition</span>
+                <span className="gm-edu-value">{educationalInfo.definition}</span>
+              </div>
+
+              <div className="gm-edu-section">
+                <span className="gm-edu-label">Worked Examples</span>
+                <ul style={{ margin: 0, paddingLeft: '20px', color: 'var(--clr-text)' }}>
+                  {educationalInfo.examples.map((ex, idx) => (
+                    <li key={idx} style={{ marginBottom: '4px' }}>{ex}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="gm-edu-section">
+                <span className="gm-edu-label">Common Mistakes</span>
+                <span className="gm-edu-value" style={{ color: 'var(--clr-wrong)' }}>{educationalInfo.commonMistakes}</span>
+              </div>
+
+              <div className="gm-edu-section">
+                <span className="gm-edu-label">Fun Fact</span>
+                <span className="gm-edu-value" style={{ fontStyle: 'italic' }}>{educationalInfo.funFact}</span>
+              </div>
+
+              <div className="gm-edu-section">
+                <span className="gm-edu-label">Related Lesson</span>
+                <span className="gm-edu-value">{educationalInfo.relatedLesson}</span>
+              </div>
+            </div>
+          )}
+
+          <button className="btn-primary" style={{ width: '100%', padding: '14px', marginTop: '20px' }} onClick={() => setPhase('levels')}>
+            Next Level Map &rarr;
+          </button>
+        </div>
+      )}
     </div>
   );
 }
