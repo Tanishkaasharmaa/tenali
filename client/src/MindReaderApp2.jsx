@@ -1,9 +1,8 @@
 /**
  * GUESS WHAT'S ON TENALI'S MIND — COMPACT SEQUENTIAL GAME ENGINE
  * ══════════════════════════════════════════════════════════════
- * Implements a scroll-free, minimal UI where every phase (Lobby, Worlds,
- * Level select, Playing, GameOver) fits completely within the screen height.
- * Uses a compact 2x2 grid for thought inputs and minimizes text descriptions.
+ * Implements a scroll-free, minimal UI matching the Word Creator aesthetic.
+ * Uses inline styling for absolute specificity and safety against CSS overrides.
  */
 
 import React, { useState, useEffect } from 'react';
@@ -47,8 +46,6 @@ export default function MindReaderApp2({ onBack }) {
   const [cluesExhausted, setCluesExhausted] = useState(false);
   const [avatarExpression, setAvatarExpression] = useState('thinking');
   const [tenaliSpeech, setTenaliSpeech] = useState('');
-  const [revealedClues, setRevealedClues] = useState([]);
-  const [localClueIndex, setLocalClueIndex] = useState(0);
 
   // 4 Blank Thought Boxes (2x2 Grid Layout)
   const [thoughtGuesses, setThoughtGuesses] = useState(['', '', '', '']);
@@ -68,6 +65,10 @@ export default function MindReaderApp2({ onBack }) {
   const [mrrChange, setMrrChange] = useState(0);
   const [actualConcept, setActualConcept] = useState('');
   const [educationalInfo, setEducationalInfo] = useState(null);
+
+  // Clues history navigation
+  const [revealedClues, setRevealedClues] = useState([]);
+  const [localClueIndex, setLocalClueIndex] = useState(0);
 
   // Load user profile, XP, levels stars on load
   const loadWorldsAndProgress = async () => {
@@ -189,7 +190,6 @@ export default function MindReaderApp2({ onBack }) {
 
   // Next Clue API
   const handleNextClue = async () => {
-    // Step forward locally if we navigated back
     if (localClueIndex < revealedClues.length - 1) {
       setLocalClueIndex(localClueIndex + 1);
       setClue(revealedClues[localClueIndex + 1]);
@@ -285,7 +285,12 @@ export default function MindReaderApp2({ onBack }) {
     } finally {
       setLoading(false);
     }
-     updated[index] = val;
+  };
+
+  // Thought Box Change Handler
+  const handleThoughtChange = (index, val) => {
+    const updated = [...thoughtGuesses];
+    updated[index] = val;
     setThoughtGuesses(updated);
   };
 
@@ -296,11 +301,26 @@ export default function MindReaderApp2({ onBack }) {
     }
   };
 
+  // Clean outline button style
+  const outlineBtnStyle = {
+    background: 'rgba(255, 255, 255, 0.04)',
+    border: '1px solid rgba(255, 255, 255, 0.15)',
+    color: '#d1c7bd',
+    borderRadius: '20px',
+    padding: '6px 16px',
+    fontSize: '0.82rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+    outline: 'none',
+    boxShadow: 'none',
+    margin: 0
+  };
+
   return (
-    <div className="mr2-container gm-dark-theme" style={{ padding: '10px 15px' }}>
+    <div className="mr2-container gm-dark-theme" style={{ padding: '10px 15px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* 🔮 Sequential Game Header */}
       {phase !== 'playing' && (
-        <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px' }}>
+        <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px', width: '100%', maxWidth: '500px' }}>
           <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>🏆 XP: <strong>{xp}</strong></div>
           <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>👑 Level: <strong>{levelNum}</strong></div>
           <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>💡 Hints: <strong>{hintsRemaining}/3</strong></div>
@@ -312,7 +332,7 @@ export default function MindReaderApp2({ onBack }) {
       {/* ─── PHASE 1: SETUP LOBBY SCREEN (MINIMAL TEXT) ────────────────────────── */}
       {phase === 'setup' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '15px' }}>
-          <h2 style={{ margin: '10px 0 0 0', fontFamily: 'var(--font-display)', fontSize: '2rem' }}>Read Tenali's Mind</h2>
+          <h2 style={{ margin: '10px 0 0 0', fontFamily: 'Georgia, serif', color: '#fff', fontSize: '2rem' }}>Read Tenali's Mind</h2>
           
           <div className="mr2-char-hub-vertical" style={{ margin: '10px 0', gap: '10px' }}>
             <TenaliAvatar expression={avatarExpression} skin="classic" />
@@ -330,7 +350,7 @@ export default function MindReaderApp2({ onBack }) {
       {/* ─── PHASE 2: WORLD SELECT CAROUSEL ───────────────────────────────────── */}
       {phase === 'worlds' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '10px' }}>
-          <h3 style={{ margin: '10px 0' }}>Select a World</h3>
+          <h3 style={{ margin: '10px 0', color: '#fff' }}>Select a World</h3>
           {worlds.length > 0 ? (
             <div className="gm-carousel-wrapper" style={{ margin: '15px 0', gap: '10px' }}>
               <button 
@@ -346,7 +366,7 @@ export default function MindReaderApp2({ onBack }) {
                 <div className="gm-world-header" style={{ color: worlds[activeWorldIndex].themeColor, fontSize: '0.8rem' }}>
                   World {activeWorldIndex + 1} of {worlds.length}
                 </div>
-                <h4 className="gm-world-title" style={{ fontSize: '1.45rem', margin: '0 0 10px 0' }}>{worlds[activeWorldIndex].worldName}</h4>
+                <h4 className="gm-world-title" style={{ fontSize: '1.45rem', margin: '0 0 10px 0', color: '#fff' }}>{worlds[activeWorldIndex].worldName}</h4>
                 
                 <div className="gm-world-badge" style={{ padding: '2px 8px', fontSize: '0.75rem', marginBottom: '12px' }}>
                   ⭐ {worlds[activeWorldIndex].stars} Stars
@@ -402,7 +422,7 @@ export default function MindReaderApp2({ onBack }) {
       {/* ─── PHASE 3: LEVEL SELECTION MAP (SCROLL-FREE PATH) ──────────────────── */}
       {phase === 'levels' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '5px' }}>
-          <h4 style={{ margin: '5px 0' }}>{worlds[activeWorldIndex]?.worldName}</h4>
+          <h4 style={{ margin: '5px 0', color: '#fff' }}>{worlds[activeWorldIndex]?.worldName}</h4>
 
           <div className="gm-level-track" style={{ padding: '15px 0', maxHeight: '320px', overflowY: 'auto', width: '100%', maxWidth: '280px' }}>
             <div className="gm-level-line" style={{ top: '35px', bottom: '35px' }}></div>
@@ -436,37 +456,42 @@ export default function MindReaderApp2({ onBack }) {
 
       {/* ─── PHASE 4: GAMEPLAY BOARD (WORD CREATOR INSPIRATION) ────────────────── */}
       {phase === 'playing' && (
-        <div className="gm-container" style={{ minHeight: 'auto', gap: '4px' }}>
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '4px', width: '100%', maxWidth: '450px' }}>
           {/* Top Control Header Bar */}
-          <div className="gm-top-bar" style={{ width: '100%', maxWidth: '400px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="gm-top-bar" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', gap: '8px' }}>
-              <button className="gm-pill-btn" onClick={() => setPhase('levels')}>
+              <button 
+                style={outlineBtnStyle}
+                onClick={() => setPhase('levels')}
+              >
                 &larr; Map
               </button>
               <button 
-                className="gm-pill-btn" 
+                style={outlineBtnStyle}
                 onClick={handleUseHint} 
                 disabled={hintsRemaining <= 0}
               >
                 💡 Hint ({hintsRemaining}/3)
               </button>
             </div>
-            <span style={{ fontSize: '0.88rem', fontWeight: '700', color: '#fff' }}>
-              XP: <span className="gm-orange-text">{xp} XP</span>
+            <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#fff' }}>
+              XP: <span style={{ color: '#d9783e' }}>{xp} XP</span>
             </span>
           </div>
 
           {/* Serif Level Display Header */}
-          <h2 className="gm-serif-display" style={{ fontSize: '1.75rem', margin: '10px 0 2px 0', textAlign: 'center' }}>
+          <h2 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '2.1rem', margin: '15px 0 2px 0', textAlign: 'center', fontWeight: 'bold' }}>
             Tenali's Mind • Level {levelNum}
           </h2>
           <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-            <span className="gm-pill-badge">Clue {localClueIndex + 1} of 5</span>
+            <span className="gm-pill-badge" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '4px 12px', fontSize: '0.78rem', color: '#a89f95' }}>
+              Clue {localClueIndex + 1} of 5
+            </span>
           </div>
 
           {/* Focused Italic Clue Box */}
           <div style={{ margin: '12px auto', maxWidth: '420px', textAlign: 'center' }}>
-            <p className="gm-serif-display" style={{ fontStyle: 'italic', fontSize: '1.35rem', lineHeight: '1.45', color: '#fff', margin: 0 }}>
+            <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '1.48rem', lineHeight: '1.45', color: '#ffffff', margin: 0 }}>
               "{clue}"
             </p>
             <p style={{ fontSize: '0.78rem', color: '#a89f95', margin: '8px 0 0 0', fontStyle: 'italic' }}>
@@ -477,7 +502,6 @@ export default function MindReaderApp2({ onBack }) {
           {/* 4 Thought Input Fields in a Compact 2x2 Grid Layout */}
           <div style={{
             width: '100%',
-            maxWidth: '400px',
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: '8px',
@@ -487,7 +511,17 @@ export default function MindReaderApp2({ onBack }) {
               <input
                 key={idx}
                 type="text"
-                className="gm-charcoal-input"
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  padding: '10px 14px',
+                  background: '#2b2624',
+                  border: '1.5px solid #443c39',
+                  borderRadius: '10px',
+                  color: '#ffffff',
+                  fontSize: '0.88rem',
+                  outline: 'none'
+                }}
                 placeholder={`Topic ${idx + 1}...`}
                 value={val}
                 onChange={(e) => handleThoughtChange(idx, e.target.value)}
@@ -497,29 +531,55 @@ export default function MindReaderApp2({ onBack }) {
 
           {/* Clue Hint details popup if requested */}
           {showHintOverlay && (
-            <div className="feedback correct" style={{ width: '100%', maxWidth: '400px', padding: '6px', margin: '4px 0', textAlign: 'center', fontSize: '0.85rem' }}>
+            <div className="feedback correct" style={{ width: '100%', padding: '6px', margin: '4px 0', textAlign: 'center', fontSize: '0.85rem' }}>
               💡 Hint: <strong>{hintText}</strong>
             </div>
           )}
 
           {/* Primary Action Button (Centered) */}
           <div style={{ textAlign: 'center', margin: '14px 0 8px 0' }}>
-            <button className="gm-primary-action-btn" onClick={() => setShowGuess(true)}>
+            <button 
+              className="gm-primary-action-btn" 
+              style={{
+                background: 'rgba(217, 120, 62, 0.25)',
+                border: '1.5px solid #d9783e',
+                color: '#ffd8c2',
+                borderRadius: '12px',
+                padding: '12px 28px',
+                fontSize: '0.95rem',
+                fontWeight: '700',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                boxShadow: '0 4px 12px rgba(217, 120, 62, 0.1)'
+              }}
+              onClick={() => setShowGuess(true)}
+            >
               Verify Guess
             </button>
           </div>
 
           {/* Footer Navigation Row */}
-          <div className="gm-footer-nav" style={{ width: '100%', maxWidth: '400px', display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+          <div className="gm-footer-nav" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
             <button 
-              className="gm-pill-btn" 
+              style={{
+                ...outlineBtnStyle,
+                opacity: localClueIndex === 0 ? 0.35 : 1,
+                cursor: localClueIndex === 0 ? 'not-allowed' : 'pointer'
+              }}
               disabled={localClueIndex === 0} 
               onClick={handlePrevLocalClue}
             >
               &larr; Prev Clue
             </button>
             <button 
-              className="gm-pill-btn" 
+              style={{
+                ...outlineBtnStyle,
+                background: 'rgba(217, 120, 62, 0.25)',
+                border: '1.5px solid #d9783e',
+                color: '#ffd8c2',
+                opacity: cluesExhausted && localClueIndex === revealedClues.length - 1 ? 0.35 : 1,
+                cursor: cluesExhausted && localClueIndex === revealedClues.length - 1 ? 'not-allowed' : 'pointer'
+              }}
               disabled={cluesExhausted && localClueIndex === revealedClues.length - 1} 
               onClick={handleNextClue}
             >
@@ -530,7 +590,7 @@ export default function MindReaderApp2({ onBack }) {
           {/* Fullscreen Free-text Guess Modal (Compact) */}
           {showGuess && (
             <div className="gm-guess-modal" style={{ padding: '20px' }}>
-              <h3 style={{ margin: '20px 0 10px 0' }}>Type Your Guess</h3>
+              <h3 style={{ margin: '20px 0 10px 0', color: '#fff' }}>Type Your Guess</h3>
               <p className="subtitle" style={{ fontSize: '0.88rem', margin: 0 }}>Warning: Only 1 final attempt allowed!</p>
 
               <input
