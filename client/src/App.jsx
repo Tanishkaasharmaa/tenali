@@ -75,6 +75,7 @@ import VisualMathLabRedux, {
 import CoordinateGrid from './components/CoordinateGrid';
 import LanguageDashboard from './language/LanguageDashboard'
 import { VOCAB_CORPUS } from './vocabCorpus'
+import CuriosityApp from './Curiosity.jsx'
 import PercentExplanationApp from './PercentExplanationApp'
 import { playSound } from './audioContext'
 import GeometryApp from './GeometryApp'
@@ -44021,6 +44022,7 @@ function App() {
     randommix: RandomMixApp,       // Random Mix (adaptive)
     custom: CustomApp,             // Custom lesson builder
     gym: GymApp,                   // Unified adaptive Gym — bundles all 7 below
+    curiosity: CuriosityApp,       // Curiosity Mode — experiment with "what if" variations
     guess: GuessNumberApp,         // Binary magic — guess a number 0–31
     detective: EnhancedMathDetectiveApp, // Math Detective Agency — story-based mystery cases
     gymdecimals: GymDecimalsApp,   // Gym Decimals — signed decimal multiplication (MCQ)
@@ -44205,6 +44207,11 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
   const mathLabEntry = { key: 'math-lab', name: '🔬 Visual Learning Universe', subtitle: 'Visual, Mensuration & Addition labs', color: 'orange' }
   const geocraftEntry = { key: 'geocraft', name: '📐 GeoCraft', subtitle: 'Interactive Geometry Lab', color: 'featured', isRedirect: true, path: '/geocraft' }
 
+  const hamburgerApps = [
+    ...featuredApps,
+    { key: 'curiosity', name: 'Curiosity Mode', subtitle: 'Explore "What if" variations', color: 'pink' },
+  ]
+
   // All regular quiz apps sorted alphabetically by name
   const regularApps = [
     { key: 'detective', name: '🔍 Detective Agency', subtitle: 'Solve math mysteries and crack cases!', color: 'indigo' },
@@ -44296,7 +44303,7 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
   ]
 
   // Combined list for search filtering
-  const allApps = [...featuredApps, ...regularApps]
+  const allApps = [...hamburgerApps, ...regularApps]
 
   // Hamburger menu open state
   const menuRef = useRef(null)
@@ -44327,6 +44334,7 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
   
   // Decide which items to show on the main grid list
   const displayGridApps = isGoalSelection ? filteredRegular : [...filteredRegular]
+  const filteredHamburgerApps = isSearching ? hamburgerApps.filter(matchFilter) : hamburgerApps
 
   // Grid layout tracking (for responsive display)
   const gridRef = useRef(null)
@@ -44428,7 +44436,7 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
               <span style={{ display: 'block', fontSize: '0.78rem', color: 'var(--clr-text-soft)', marginTop: '2px' }}>Practice with targets & limits</span>
             </button>
 
-            {featuredApps.map(app => (
+            {filteredHamburgerApps.map(app => (
               <button key={app.key} onClick={() => { setMenuOpen(false); onSelect(app.key) }} style={{
                 display: 'block', width: '100%', textAlign: 'left', padding: '10px 16px',
                 background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text)',
