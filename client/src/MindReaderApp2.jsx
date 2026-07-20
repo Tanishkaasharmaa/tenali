@@ -419,33 +419,37 @@ export default function MindReaderApp2({ onBack }) {
         </div>
       )}
 
-      {/* ─── PHASE 3: LEVEL SELECTION MAP (SCROLL-FREE PATH) ──────────────────── */}
+      {/* ─── PHASE 3: LEVEL SELECTION MAP (SCROLL-FREE SNAKE PATH) ─────────────── */}
       {phase === 'levels' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '5px' }}>
-          <h4 style={{ margin: '5px 0', color: '#fff' }}>{worlds[activeWorldIndex]?.worldName}</h4>
+          <h4 style={{ margin: '5px 0', color: '#fff', fontFamily: 'Georgia, serif', fontSize: '1.4rem' }}>
+            {worlds[activeWorldIndex]?.worldName}
+          </h4>
 
-          <div className="gm-level-track" style={{ padding: '15px 0', maxHeight: '320px', overflowY: 'auto', width: '100%', maxWidth: '280px' }}>
-            <div className="gm-level-line" style={{ top: '35px', bottom: '35px' }}></div>
-            
-            {getLevelsForActiveWorld().reverse().map((node) => (
-              <div key={node.levelNum} className="gm-level-node-wrapper" style={{ margin: '12px 0' }}>
-                <button
-                  className={`gm-level-node ${node.unlocked ? 'unlocked' : ''} ${node.levelNum === levelNum ? 'active-node' : ''}`}
-                  disabled={!node.unlocked}
-                  style={{ width: '46px', height: '46px', fontSize: '1.05rem' }}
-                  onClick={() => handleStartLevel(node.levelNum)}
-                >
-                  {node.unlocked ? node.levelNum : '🔒'}
-                </button>
-                {node.stars > 0 && (
-                  <div className="gm-level-stars" style={{ marginTop: '3px', fontSize: '0.7rem' }}>
-                    {Array.from({ length: node.stars }).map((_, idx) => (
-                      <span key={idx}>★</span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+          <div style={{ padding: '15px 0', width: '100%', maxWidth: '280px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {getLevelsForActiveWorld().map((node, idx) => {
+              // Alternate horizontal offsets to create a snake path
+              const offsetX = idx % 2 === 0 ? '-35px' : '35px';
+              return (
+                <div key={node.levelNum} className="gm-level-node-wrapper" style={{ margin: '8px 0', transform: `translateX(${offsetX})` }}>
+                  <button
+                    className={`gm-level-node ${node.unlocked ? 'unlocked' : ''} ${node.levelNum === levelNum ? 'active-node' : ''}`}
+                    disabled={!node.unlocked}
+                    style={{ width: '46px', height: '46px', fontSize: '1.05rem', border: node.unlocked ? '1.5px solid #d9783e' : '1.5px solid rgba(255,255,255,0.1)' }}
+                    onClick={() => handleStartLevel(node.levelNum)}
+                  >
+                    {node.unlocked ? node.levelNum : '🔒'}
+                  </button>
+                  {node.stars > 0 && (
+                    <div className="gm-level-stars" style={{ marginTop: '3px', fontSize: '0.7rem', justifyContent: 'center' }}>
+                      {Array.from({ length: node.stars }).map((_, idx) => (
+                        <span key={idx}>★</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           <button className="btn-outline" style={{ marginTop: '10px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('worlds')}>
