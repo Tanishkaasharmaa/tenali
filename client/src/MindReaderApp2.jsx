@@ -284,11 +284,13 @@ export default function MindReaderApp2({ onBack }) {
   return (
     <div className="mr2-container" style={{ padding: '10px 15px' }}>
       {/* 🔮 Sequential Game Header */}
-      <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px' }}>
-        <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>🏆 XP: <strong>{xp}</strong></div>
-        <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>👑 Level: <strong>{levelNum}</strong></div>
-        <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>💡 Hints: <strong>{hintsRemaining}/3</strong></div>
-      </div>
+      {phase !== 'playing' && (
+        <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px' }}>
+          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>🏆 XP: <strong>{xp}</strong></div>
+          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>👑 Level: <strong>{levelNum}</strong></div>
+          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>💡 Hints: <strong>{hintsRemaining}/3</strong></div>
+        </div>
+      )}
 
       {errorMsg && <div className="feedback wrong" style={{ textAlign: 'center', padding: '6px', margin: '4px 0', fontSize: '0.9rem' }}>{errorMsg}</div>}
 
@@ -420,6 +422,25 @@ export default function MindReaderApp2({ onBack }) {
       {/* ─── PHASE 4: GAMEPLAY BOARD (SCROLL-FREE VIEWPORT FIT) ───────────────── */}
       {phase === 'playing' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '5px' }}>
+          {/* Top Control Header Box */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '400px', marginBottom: '6px' }}>
+            <button 
+              className="btn-outline" 
+              style={{ padding: '6px 12px', fontSize: '0.85rem' }} 
+              onClick={handleUseHint} 
+              disabled={hintsRemaining <= 0}
+            >
+              💡 Hint ({hintsRemaining}/3)
+            </button>
+            <button 
+              className="btn-outline" 
+              style={{ padding: '6px 12px', fontSize: '0.85rem' }} 
+              onClick={() => setPhase('levels')}
+            >
+              🚪 Quit
+            </button>
+          </div>
+
           <div className="mr2-char-hub-vertical" style={{ margin: '5px 0', gap: '6px' }}>
             <div className="mr2-speech-bubble" style={{ minWidth: '260px', maxWidth: '400px', padding: '10px 16px' }}>
               <p className="mr2-dialogue-text" style={{ fontStyle: 'italic', fontSize: '1.25rem', fontWeight: '500', margin: 0, textAlign: 'center' }}>
@@ -474,9 +495,6 @@ export default function MindReaderApp2({ onBack }) {
 
           {/* Action Row */}
           <div style={{ display: 'flex', gap: '8px', width: '100%', maxWidth: '400px', flexWrap: 'nowrap', marginTop: '5px' }}>
-            <button className="btn-outline" style={{ flex: 1, padding: '10px', fontSize: '0.88rem' }} onClick={handleUseHint} disabled={hintsRemaining <= 0}>
-              💡 Get Hint
-            </button>
             <button className="btn-primary" style={{ flex: 1.5, padding: '10px', fontSize: '0.88rem' }} onClick={() => setShowGuess(true)}>
               🔎 Make Guess
             </button>
@@ -524,10 +542,6 @@ export default function MindReaderApp2({ onBack }) {
               </div>
             </div>
           )}
-
-          <button className="btn-outline" style={{ marginTop: '15px', width: '100%', maxWidth: '400px', padding: '8px', fontSize: '0.85rem' }} onClick={() => setPhase('levels')}>
-            Quit Level
-          </button>
         </div>
       )}
 
