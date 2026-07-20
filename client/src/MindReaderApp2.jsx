@@ -419,40 +419,94 @@ export default function MindReaderApp2({ onBack }) {
         </div>
       )}
 
-      {/* ─── PHASE 3: LEVEL SELECTION MAP (SCROLL-FREE SNAKE PATH) ─────────────── */}
+      {/* ─── PHASE 3: LEVEL SELECTION MAP (SCROLL-FREE SNAKE PATH WITH DOTTED CONNECTOR) ─── */}
       {phase === 'levels' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '5px' }}>
-          <h4 style={{ margin: '5px 0', color: '#fff', fontFamily: 'Georgia, serif', fontSize: '1.4rem' }}>
+          <h4 style={{ margin: '5px 0 15px 0', color: '#fff', fontFamily: 'Georgia, serif', fontSize: '1.4rem' }}>
             {worlds[activeWorldIndex]?.worldName}
           </h4>
 
-          <div style={{ padding: '15px 0', width: '100%', maxWidth: '280px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            {getLevelsForActiveWorld().map((node, idx) => {
-              // Alternate horizontal offsets to create a snake path
-              const offsetX = idx % 2 === 0 ? '-35px' : '35px';
-              return (
-                <div key={node.levelNum} className="gm-level-node-wrapper" style={{ margin: '8px 0', transform: `translateX(${offsetX})` }}>
-                  <button
-                    className={`gm-level-node ${node.unlocked ? 'unlocked' : ''} ${node.levelNum === levelNum ? 'active-node' : ''}`}
-                    disabled={!node.unlocked}
-                    style={{ width: '46px', height: '46px', fontSize: '1.05rem', border: node.unlocked ? '1.5px solid #d9783e' : '1.5px solid rgba(255,255,255,0.1)' }}
-                    onClick={() => handleStartLevel(node.levelNum)}
+          {/* Coordinate-Mapped Snake Track */}
+          <div style={{ position: 'relative', width: '360px', height: '280px', margin: '10px 0' }}>
+            {/* SVG Winding Dotted Connector Line */}
+            <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
+              <path 
+                d="M 60 30 L 300 90 L 60 150 L 300 210 L 180 260" 
+                stroke="rgba(217, 120, 62, 0.45)" 
+                strokeWidth="2.5" 
+                strokeDasharray="6,6" 
+                fill="none" 
+              />
+            </svg>
+
+            {/* Absolutely Positioned Level Nodes */}
+            {(() => {
+              const coords = [
+                { x: 60,  y: 30 },
+                { x: 300, y: 90 },
+                { x: 60,  y: 150 },
+                { x: 300, y: 210 },
+                { x: 180, y: 260 }
+              ];
+              return getLevelsForActiveWorld().map((node, idx) => {
+                const pt = coords[idx] || { x: 180, y: 140 };
+                const leftPos = pt.x - 23; // Center a 46px bubble
+                const topPos = pt.y - 23;
+                return (
+                  <div 
+                    key={node.levelNum} 
+                    style={{ 
+                      position: 'absolute', 
+                      left: `${leftPos}px`, 
+                      top: `${topPos}px`, 
+                      zIndex: 2, 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      alignItems: 'center' 
+                    }}
                   >
-                    {node.unlocked ? node.levelNum : '🔒'}
-                  </button>
-                  {node.stars > 0 && (
-                    <div className="gm-level-stars" style={{ marginTop: '3px', fontSize: '0.7rem', justifyContent: 'center' }}>
-                      {Array.from({ length: node.stars }).map((_, idx) => (
-                        <span key={idx}>★</span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                    <button
+                      className={`gm-level-node ${node.unlocked ? 'unlocked' : ''} ${node.levelNum === levelNum ? 'active-node' : ''}`}
+                      disabled={!node.unlocked}
+                      style={{ 
+                        width: '46px', 
+                        height: '46px', 
+                        fontSize: '1.05rem', 
+                        borderRadius: '50%',
+                        border: node.unlocked ? '1.5px solid #d9783e' : '1.5px solid rgba(255,255,255,0.1)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: node.unlocked ? 'pointer' : 'not-allowed'
+                      }}
+                      onClick={() => handleStartLevel(node.levelNum)}
+                    >
+                      {node.unlocked ? node.levelNum : '🔒'}
+                    </button>
+                    {node.stars > 0 && (
+                      <div 
+                        style={{ 
+                          position: 'absolute', 
+                          top: '48px', 
+                          color: '#f1c40f', 
+                          fontSize: '0.7rem', 
+                          display: 'flex', 
+                          gap: '1.5px', 
+                          whiteSpace: 'nowrap' 
+                        }}
+                      >
+                        {Array.from({ length: node.stars }).map((_, i) => (
+                          <span key={i}>★</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              });
+            })()}
           </div>
 
-          <button className="btn-outline" style={{ marginTop: '10px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('worlds')}>
+          <button className="btn-outline" style={{ marginTop: '15px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('worlds')}>
             &larr; Worlds
           </button>
         </div>
