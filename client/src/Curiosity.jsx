@@ -657,7 +657,6 @@ export default function CuriosityApp({ onBack }) {
                       }}
                     >
                       <strong>{item.symbol}</strong>
-                      <span>{`Drag ${item.label.toLowerCase()} onto a number`}</span>
                     </button>
                   ))}
                 </div>
@@ -683,9 +682,6 @@ export default function CuriosityApp({ onBack }) {
                   </button>
                 </div>
 
-                <div className="curiosity-play-choice" aria-live="polite">
-                  <span>{activeVariation}</span>
-                </div>
               </div>
             )}
 
