@@ -679,65 +679,94 @@ export default function MindReaderApp2({ onBack }) {
         </div>
       )}
 
-      {/* ─── PHASE 5: GAMEOVER RESULT SCREEN (SCROLL-FREE OVERVIEW + REVIEW) ──── */}
+      {/* ─── PHASE 5: GAMEOVER RESULT SCREEN (SCROLL-FREE REFRACTORED RESULTS) ─── */}
       {phase === 'gameover' && (
-        <div className="gm-container" style={{ minHeight: 'auto', gap: '5px', maxHeight: '80vh', overflowY: 'auto', paddingRight: '5px' }}>
-          <div className="mr2-char-hub-vertical" style={{ margin: '5px 0', gap: '6px' }}>
-            <TenaliAvatar expression={avatarExpression} skin="classic" />
-            <div className="mr2-speech-bubble" style={{ padding: '8px 16px' }}>
-              <p className="mr2-dialogue-text" style={{ margin: 0, fontSize: '0.95rem' }}>{tenaliSpeech}</p>
-            </div>
-          </div>
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '5px', width: '100%', maxWidth: '420px', padding: '10px 15px' }}>
+          {/* Centered Serif Heading */}
+          <h2 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '2.2rem', margin: '20px 0 4px 0', textAlign: 'center', fontWeight: 'bold' }}>
+            {isCorrectGuess ? '🎉 Correct!' : '❌ Game Over'}
+          </h2>
+          <p style={{ fontSize: '0.95rem', color: '#a89f95', margin: '0 0 10px 0', textAlign: 'center' }}>
+            The concept was <strong style={{ color: '#fff' }}>"{actualConcept}"</strong>
+          </p>
 
-          <div className="mr2-card" style={{ width: '100%', textAlign: 'center', padding: '12px', margin: '10px 0' }}>
-            <h3 style={{ margin: '0 0 8px 0', color: isCorrectGuess ? 'var(--clr-correct)' : 'var(--clr-wrong)', fontSize: '1.25rem' }}>
-              {isCorrectGuess ? '🎉 Correct!' : '❌ Game Over'}
-            </h3>
-
-            {isCorrectGuess && (
-              <div style={{ fontSize: '1.85rem', color: '#f1c40f', margin: '8px 0' }}>
-                {Array.from({ length: starsEarned }).map((_, idx) => (
-                  <span key={idx}>★</span>
-                ))}
-                {Array.from({ length: 3 - starsEarned }).map((_, idx) => (
-                  <span key={idx} style={{ opacity: 0.15 }}>★</span>
-                ))}
-              </div>
-            )}
-
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
-              <div className="mr2-hud-pill" style={{ padding: '4px 10px', fontSize: '0.8rem' }}>XP: <strong>+{xpEarned}</strong></div>
-              <div className="mr2-hud-pill" style={{ padding: '4px 10px', fontSize: '0.8rem' }}>Rating: <strong>{mrrChange >= 0 ? `+${mrrChange}` : mrrChange}</strong></div>
-            </div>
-          </div>
-
-          {/* Compact Educational Revision Card */}
-          {educationalInfo && (
-            <div className="gm-educational-card" style={{ padding: '16px', margin: 0, gap: '10px', fontSize: '0.88rem' }}>
-              <h4 style={{ margin: 0, color: 'var(--clr-accent)', borderBottom: '1px solid var(--clr-border)', paddingBottom: '6px' }}>
-                Revision Card: {actualConcept}
-              </h4>
-
-              <div className="gm-edu-section" style={{ gap: '2px' }}>
-                <span className="gm-edu-label" style={{ fontSize: '0.72rem' }}>Definition</span>
-                <span className="gm-edu-value">{educationalInfo.definition}</span>
-              </div>
-
-              <div className="gm-edu-section" style={{ gap: '2px' }}>
-                <span className="gm-edu-label" style={{ fontSize: '0.72rem' }}>Examples</span>
-                <span className="gm-edu-value">{educationalInfo.examples.join(', ')}</span>
-              </div>
-
-              <div className="gm-edu-section" style={{ gap: '2px' }}>
-                <span className="gm-edu-label" style={{ fontSize: '0.72rem' }}>Common Mistakes</span>
-                <span className="gm-edu-value" style={{ color: 'var(--clr-wrong)' }}>{educationalInfo.commonMistakes}</span>
-              </div>
+          {/* Stars Display */}
+          {isCorrectGuess && (
+            <div style={{ fontSize: '2rem', color: '#f1c40f', margin: '5px 0', textAlign: 'center', letterSpacing: '4px' }}>
+              {Array.from({ length: starsEarned }).map((_, idx) => (
+                <span key={idx}>★</span>
+              ))}
+              {Array.from({ length: 3 - starsEarned }).map((_, idx) => (
+                <span key={idx} style={{ opacity: 0.15 }}>★</span>
+              ))}
             </div>
           )}
 
-          <button className="btn-primary" style={{ width: '100%', padding: '12px', marginTop: '10px' }} onClick={() => setPhase('levels')}>
-            Next Level Map &rarr;
-          </button>
+          {/* Reward Badges */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', margin: '15px 0' }}>
+            <span className="gm-pill-badge" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: '#a89f95' }}>
+              XP: <strong style={{ color: '#d9783e' }}>+{xpEarned}</strong>
+            </span>
+            <span className="gm-pill-badge" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: '#a89f95' }}>
+              Rating: <strong style={{ color: '#d9783e' }}>{mrrChange >= 0 ? `+${mrrChange}` : mrrChange}</strong>
+            </span>
+          </div>
+
+          {/* Premium Charcoal Revision Card */}
+          {educationalInfo && (
+            <div style={{
+              background: '#2b2624',
+              border: '1.5px solid #383230',
+              borderRadius: '12px',
+              padding: '16px',
+              width: '100%',
+              margin: '10px 0',
+              textAlign: 'left'
+            }}>
+              <h4 style={{ margin: '0 0 12px 0', fontFamily: 'Georgia, serif', color: '#d9783e', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '6px', fontSize: '1.05rem', fontWeight: 'bold' }}>
+                Revision Card
+              </h4>
+
+              <div style={{ marginBottom: '10px' }}>
+                <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: '#a89f95', letterSpacing: '0.05em', fontWeight: 'bold' }}>Definition</div>
+                <div style={{ color: '#f7f5f4', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.definition}</div>
+              </div>
+
+              <div style={{ marginBottom: '10px' }}>
+                <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: '#a89f95', letterSpacing: '0.05em', fontWeight: 'bold' }}>Examples</div>
+                <div style={{ color: '#f7f5f4', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.examples.join(', ')}</div>
+              </div>
+
+              {educationalInfo.commonMistakes && (
+                <div>
+                  <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: '#a89f95', letterSpacing: '0.05em', fontWeight: 'bold' }}>Common Mistakes</div>
+                  <div style={{ color: '#f56c6c', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.commonMistakes}</div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Centered Proceed Button */}
+          <div style={{ textAlign: 'center', marginTop: '15px', width: '100%' }}>
+            <button 
+              style={{
+                background: 'rgba(217, 120, 62, 0.25)',
+                border: '1.5px solid #d9783e',
+                color: '#ffd8c2',
+                borderRadius: '12px',
+                padding: '12px 32px',
+                fontSize: '0.95rem',
+                fontWeight: '700',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                width: '100%',
+                boxSizing: 'border-box'
+              }}
+              onClick={() => setPhase('levels')}
+            >
+              Next Level Map &rarr;
+            </button>
+          </div>
         </div>
       )}
     </div>
