@@ -9172,6 +9172,49 @@ app.get('/mindreader', (_req, res) => {
 const { REVERSE_CONCEPTS, REVERSE_QUESTIONS, PERSONALITY_RESPONSES } = require('./mindReaderKB2');
 const crypto = require('crypto');
 
+// ─── GUESS WHAT'S ON TENALI'S MIND (CONFIGS) ──────────────────────────────────
+let worldsConfig = [];
+let levelsConfig = [];
+let conceptsConfig = {};
+
+try {
+  const dataDir = path.join(__dirname, 'data');
+  worldsConfig = JSON.parse(fs.readFileSync(path.join(dataDir, 'worlds.json'), 'utf8'));
+  levelsConfig = JSON.parse(fs.readFileSync(path.join(dataDir, 'levels.json'), 'utf8'));
+  conceptsConfig = JSON.parse(fs.readFileSync(path.join(dataDir, 'concepts.json'), 'utf8'));
+  console.log(`[GuessMind] Loaded ${worldsConfig.length} worlds, ${levelsConfig.length} levels, and ${Object.keys(conceptsConfig).length} concepts successfully.`);
+} catch (err) {
+  console.error('[GuessMind] Error loading configuration files:', err);
+}
+
+// In-memory guess mind sessions
+const guessMindSessions = new Map();
+
+class GuessMindSession {
+  constructor(gameId, levelNum, selectedConcept) {
+    this.gameId = gameId;
+    this.levelNum = levelNum;
+    this.selectedConcept = selectedConcept; // full concept object
+    this.clueIndex = 0; // starts at Clue 1 (index 0)
+    this.hintsRemaining = 3;
+    this.hintsUsed = 0;
+    this.guessed = false;
+    this.createdAt = new Date();
+  }
+}
+
+// Session pruning interval for Guess Mind sessions (runs every 10 mins, cleans sessions older than 30 mins)
+setInterval(() => {
+  const now = Date.now();
+  for (const [gameId, session] of guessMindSessions.entries()) {
+    if (now - session.createdAt.getTime() > 30 * 60 * 1000) {
+      guessMindSessions.delete(gameId);
+      console.log(`[GuessMind] Evicted expired session: ${gameId}`);
+    }
+  }
+}, 10 * 60 * 1000);
+
+
 // In-memory reverse mind reader sessions
 const reverseSessions = new Map();
 

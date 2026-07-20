@@ -35,6 +35,17 @@ const UserSchema = new mongoose.Schema({
   equippedSkin: { type: String, default: 'classic' },
   equippedTitle: { type: String, default: 'Novice Reader' },
   reverseMindReaderWinStreak: { type: Number, default: 0 },
+  xp: { type: Number, default: 0 },
+  worldProgress: [{
+    worldId: { type: String, required: true },
+    unlocked: { type: Boolean, default: false }
+  }],
+  levelProgress: [{
+    levelNum: { type: Number, required: true },
+    conceptId: { type: String, required: true },
+    starsEarned: { type: Number, default: 0 }, // 0 to 3 stars
+    completedAt: { type: Date, default: Date.now }
+  }],
   createdAt: { type: Date, default: Date.now },
 });
 

@@ -40580,7 +40580,7 @@ function TenthApp({ onBack }) {
 function MindReaderWrapper({ onBack }) {
   const urlParams = new URLSearchParams(window.location.search);
   const initialMode = urlParams.get('mode'); // 'tenali' | 'you' | null
-  
+
   const [gameMode, setGameMode] = useState(initialMode);
 
   useEffect(() => {
@@ -40619,19 +40619,19 @@ function MindReaderWrapper({ onBack }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px', maxWidth: '800px', margin: '40px auto', padding: '20px', textAlign: 'center' }}>
       <button className="back-button" onClick={onBack} style={{ alignSelf: 'flex-start' }}>← Home</button>
-      
+
       <h2 style={{ fontSize: '1.8rem', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>Choose Your Mind Reader Mode</h2>
       <p style={{ color: 'var(--clr-text-soft)', fontSize: '1.05rem', maxWidth: '550px', margin: '0 auto 10px', lineHeight: 1.5 }}>
         Play the mathematical mind reading challenges. Do you want Tenali to read your mind, or do you want to guess Tenali's secret?
       </p>
-      
+
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', width: '100%', maxWidth: '640px', marginTop: '10px' }}>
-        
+
         {/* Mode 1: Tenali guesses */}
-        <div 
+        <div
           onClick={() => handleSelectMode('tenali')}
-          style={{ 
-            background: 'rgba(30, 39, 46, 0.4)', border: '2px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '30px 20px', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' 
+          style={{
+            background: 'rgba(30, 39, 46, 0.4)', border: '2px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '30px 20px', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 8px 32px rgba(0,0,0,0.2)'
           }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--clr-accent)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.transform = 'none' }}
@@ -40644,10 +40644,10 @@ function MindReaderWrapper({ onBack }) {
         </div>
 
         {/* Mode 2: You guess */}
-        <div 
+        <div
           onClick={() => handleSelectMode('you')}
-          style={{ 
-            background: 'rgba(30, 39, 46, 0.4)', border: '2px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '30px 20px', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' 
+          style={{
+            background: 'rgba(30, 39, 46, 0.4)', border: '2px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '30px 20px', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 8px 32px rgba(0,0,0,0.2)'
           }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--clr-accent)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.transform = 'none' }}
@@ -41462,54 +41462,15 @@ function Home({ onSelect }) {
             borderRadius: 'var(--radius-sm)', boxShadow: 'var(--shadow-card)',
             padding: '6px 0', minWidth: '200px', overflow: 'hidden'
           }}>
-            {featuredApps.map(app => {
-              if (app.key === 'mindreader') {
-                return (
-                  <div key={app.key}>
-                    <button onClick={() => setMrMenuOpen(o => !o)} style={{
-                      display: 'block', width: '100%', textAlign: 'left', padding: '10px 16px',
-                      background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text)',
-                      fontFamily: 'var(--font-body)', fontSize: '0.95rem', transition: 'background var(--transition)'
-                    }} onMouseEnter={e => e.target.style.background = 'var(--clr-hover-strong)'}
-                      onMouseLeave={e => e.target.style.background = 'none'}>
-                      <strong style={{ color: 'var(--clr-accent)' }}>{app.name}</strong>
-                      <span style={{ display: 'block', fontSize: '0.78rem', color: 'var(--clr-text-soft)', marginTop: '2px' }}>{app.subtitle}</span>
-                    </button>
-                    {mrMenuOpen && (
-                      <div style={{ paddingLeft: '16px', borderLeft: '2.5px solid var(--clr-accent)', margin: '4px 0 4px 16px' }}>
-                        <button onClick={() => { setMenuOpen(false); setMrMenuOpen(false); onSelect('mindreader_tenali') }} style={{
-                          display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px',
-                          background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text-soft)',
-                          fontFamily: 'var(--font-body)', fontSize: '0.88rem', transition: 'color 0.15s'
-                        }} onMouseEnter={e => e.target.style.color = 'var(--clr-accent)'}
-                          onMouseLeave={e => e.target.style.color = 'var(--clr-text-soft)'}>
-                          🔮 Tenali will guess
-                        </button>
-                        <button onClick={() => { setMenuOpen(false); setMrMenuOpen(false); onSelect('mindreader_you') }} style={{
-                          display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px',
-                          background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text-soft)',
-                          fontFamily: 'var(--font-body)', fontSize: '0.88rem', transition: 'color 0.15s'
-                        }} onMouseEnter={e => e.target.style.color = 'var(--clr-accent)'}
-                          onMouseLeave={e => e.target.style.color = 'var(--clr-text-soft)'}>
-                          🙋‍♂️ Read Tenali's Mind
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )
-              }
-              return (
-                <button key={app.key} onClick={() => { setMenuOpen(false); onSelect(app.key) }} style={{
-                  display: 'block', width: '100%', textAlign: 'left', padding: '10px 16px',
-                  background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text)',
-                  fontFamily: 'var(--font-body)', fontSize: '0.95rem', transition: 'background var(--transition)'
-                }} onMouseEnter={e => e.target.style.background = 'var(--clr-hover-strong)'}
-                  onMouseLeave={e => e.target.style.background = 'none'}>
-                  <strong style={{ color: 'var(--clr-accent)' }}>{app.name}</strong>
-                  <span style={{ display: 'block', fontSize: '0.78rem', color: 'var(--clr-text-soft)', marginTop: '2px' }}>{app.subtitle}</span>
-                </button>
-              )
-            })}
+            <button onClick={() => { setMenuOpen(false); onSelect('mindreader_you') }} style={{
+              display: 'block', width: '100%', textAlign: 'left', padding: '10px 16px',
+              background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text)',
+              fontFamily: 'var(--font-body)', fontSize: '0.95rem', transition: 'background var(--transition)'
+            }} onMouseEnter={e => e.target.style.background = 'var(--clr-hover-strong)'}
+              onMouseLeave={e => e.target.style.background = 'none'}>
+              <strong style={{ color: 'var(--clr-accent)' }}>Read Tenali's Mind</strong>
+              <span style={{ display: 'block', fontSize: '0.78rem', color: 'var(--clr-text-soft)', marginTop: '2px' }}>Guess what's on Tenali's mind</span>
+            </button>
           </div>}
         </div>
       </div>
@@ -56420,7 +56381,7 @@ export function MindReaderApp({ onBack }) {
         {/* Phase 4 - Royal Gamble Cinematic Overlay */}
         {prediction && cinematicStep !== 'idle' && (
           <div className="mr-cinematic-overlay">
-            
+
             {/* Glowing Royal Gamble meter */}
             <div className="mr-risk-meter royal-gamble-meter" style={{ width: '90%', maxWidth: '400px', margin: '20px auto' }}>
               <div className="risk-indicator-labels" style={{ display: 'flex', justifyContent: 'center', marginBottom: '8px' }}>
@@ -56500,18 +56461,18 @@ export function MindReaderApp({ onBack }) {
             return (
               <div className="character-hub-horizontal">
                 <TenaliAvatar expression={stateObj.expression} skin={equippedSkin} />
-                
+
                 <div className="thought-cloud-bubble-side">
                   <div className="thought-dot-side-1" />
                   <div className="thought-dot-side-2" />
-                  
+
                   <div className="thought-header" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                     <span className="avatar-name" style={{ fontWeight: '700', color: 'var(--clr-accent)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Tenali Raman</span>
                     <span className="avatar-title-tag" style={{ background: 'rgba(74, 144, 226, 0.15)', color: 'var(--clr-accent)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: '600', border: '1px solid rgba(74, 144, 226, 0.3)' }}>
                       {equippedTitle}
                     </span>
                   </div>
-                  
+
                   <div className="dialogue-speech" style={{ whiteSpace: 'pre-line', fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic' }}>
                     "{stateObj.text}"
                   </div>
@@ -56526,14 +56487,14 @@ export function MindReaderApp({ onBack }) {
               <div className="thought-cloud-bubble mr-card" style={{ position: 'relative', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '24px', padding: '16px 24px', width: '100%', maxWidth: '480px', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', textAlign: 'center' }}>
                 <div className="thought-dot thought-dot-1" style={{ position: 'absolute', bottom: '-14px', left: 'calc(50% - 6px)', width: '12px', height: '12px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
                 <div className="thought-dot thought-dot-2" style={{ position: 'absolute', bottom: '-24px', left: 'calc(50% - 4px)', width: '8px', height: '8px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
-                
+
                 <div className="thought-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
                   <span className="avatar-name" style={{ fontWeight: '700', color: 'var(--clr-accent)', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Tenali Raman</span>
                   <span className="avatar-title-tag" style={{ background: 'rgba(74, 144, 226, 0.15)', color: 'var(--clr-accent)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: '600', border: '1px solid rgba(74, 144, 226, 0.3)' }}>
                     {equippedTitle}
                   </span>
                 </div>
-                
+
                 <div className="dialogue-speech" style={{ whiteSpace: 'pre-line', fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic' }}>
                   "{stateObj.text}"
                 </div>
@@ -56628,7 +56589,7 @@ export function MindReaderApp({ onBack }) {
               </div>
 
               <div className="playing-character-row" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', position: 'relative', marginTop: '10px' }}>
-                
+
                 {/* Phase 3 - Glowing Risk/Confidence Meter (○────────────●) */}
                 <div className="mr-risk-meter" style={{ width: '100%', maxWidth: '480px', marginBottom: '8px', marginTop: '5px' }}>
                   <div className="risk-indicator-labels" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
@@ -56641,21 +56602,20 @@ export function MindReaderApp({ onBack }) {
                   <div className="risk-slider-track" style={{ display: 'flex', alignItems: 'center', width: '100%', position: 'relative', height: '20px', padding: '0 4px' }}>
                     <span className="risk-slider-start-dot" style={{ fontSize: '1.3rem', color: meterProgress <= 0.15 ? '#3498db' : 'var(--clr-text-soft)', fontWeight: 'bold' }}>○</span>
                     <div className="risk-slider-bar-wrapper" style={{ flexGrow: 1, position: 'relative', height: '3px', background: 'var(--clr-border)', margin: '0 10px', borderRadius: '2px' }}>
-                      <div 
-                        className={`risk-slider-glow-dot ${
-                          meterProgress <= 0.15 ? 'calm' :
-                          meterProgress <= 0.35 ? 'curious' :
-                          meterProgress <= 0.55 ? 'thinking' :
-                          meterProgress <= 0.75 ? 'confident' : 'royal'
-                        }`}
-                        style={{ 
-                          position: 'absolute', 
-                          top: '50%', 
-                          transform: 'translate(-50%, -50%)', 
-                          left: `${Math.min(100, Math.max(0, meterProgress * 100))}%`, 
-                          width: '14px', 
-                          height: '14px', 
-                          borderRadius: '50%', 
+                      <div
+                        className={`risk-slider-glow-dot ${meterProgress <= 0.15 ? 'calm' :
+                            meterProgress <= 0.35 ? 'curious' :
+                              meterProgress <= 0.55 ? 'thinking' :
+                                meterProgress <= 0.75 ? 'confident' : 'royal'
+                          }`}
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          left: `${Math.min(100, Math.max(0, meterProgress * 100))}%`,
+                          width: '14px',
+                          height: '14px',
+                          borderRadius: '50%',
                           transition: 'left 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s'
                         }}
                       />
@@ -56667,11 +56627,11 @@ export function MindReaderApp({ onBack }) {
                 <div className="thought-cloud-bubble mr-card" style={{ position: 'relative', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '24px', padding: '16px 24px', width: '100%', maxWidth: '480px', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', textAlign: 'center' }}>
                   <div className="thought-dot thought-dot-1" style={{ position: 'absolute', bottom: '-14px', left: 'calc(50% - 6px)', width: '12px', height: '12px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
                   <div className="thought-dot thought-dot-2" style={{ position: 'absolute', bottom: '-24px', left: 'calc(50% - 4px)', width: '8px', height: '8px', background: 'var(--clr-surface)', border: '2px solid var(--clr-accent)', borderRadius: '50%' }}></div>
-                  
+
                   <div className="thought-header" style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--clr-accent)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     Tenali's Mind Cloud
                   </div>
-                  
+
                   <div className="dialogue-speech" style={{ whiteSpace: 'pre-line', fontSize: '1.02rem', lineHeight: '1.5', color: 'var(--clr-text)', fontStyle: 'italic' }}>
                     "{stateObj.text}"
                   </div>
@@ -56733,7 +56693,7 @@ export function MindReaderApp({ onBack }) {
                 <p className="outcome-subdesc" style={{ fontSize: '0.98rem', color: 'var(--clr-text-soft)', marginBottom: '15px' }}>
                   Outstanding! You successfully shielded your thoughts from Tenali's gaze. He ran out of options!
                 </p>
-                
+
                 {mrrChange > 0 && !cheated && <div className="mrr-up-anim">MRR Rating: {mrr - mrrChange} ➔ {mrr} (+{mrrChange})!</div>}
 
                 {cheated && (
@@ -56765,11 +56725,11 @@ export function MindReaderApp({ onBack }) {
                 {actualConcept && (
                   <div className="confused-candidates-explainability" style={{ marginTop: '20px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px', textAlign: 'left' }}>
                     <h4 style={{ color: 'var(--clr-accent)', margin: '0 0 12px 0', fontSize: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '6px' }}>🧐 Mind-Reading Post-Mortem:</h4>
-                    
+
                     <p style={{ margin: '6px 0', fontSize: '0.92rem' }}>
                       🔑 **Your Secret Concept**: <strong style={{ color: '#2ecc71' }}>{actualConcept.name}</strong>
                     </p>
-                    
+
                     {incorrectPredictions.length > 0 && (
                       <p style={{ margin: '6px 0', fontSize: '0.92rem' }}>
                         ❌ **Tenali's Rejected Guesses**: <span style={{ color: 'var(--clr-wrong)', textDecoration: 'line-through' }}>{incorrectPredictions.join(', ')}</span>
@@ -56794,7 +56754,7 @@ export function MindReaderApp({ onBack }) {
               <div className="loss-display">
                 <h2>🔮 TENALI TRIUMPHED! 🔮</h2>
                 <p className="outcome-desc" style={{ fontSize: '1.1rem', margin: '10px 0' }}>Tenali Raman successfully peeked into your thoughts and decoded your secret math pattern!</p>
-                
+
                 {actualConcept && actualConcept.definingCharacteristics && (
                   <div className="concept-characteristics-box" style={{ marginTop: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px', textAlign: 'left' }}>
                     <p style={{ fontWeight: '700', color: 'var(--clr-accent)', marginBottom: '8px', fontSize: '0.95rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🧩 Key Characteristics Identified:</p>

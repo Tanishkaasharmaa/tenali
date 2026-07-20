@@ -1,0 +1,31 @@
+[
+  { "levelNum": 1, "worldId": "arithmetic_kingdom", "conceptId": "prime_number" },
+  { "levelNum": 2, "worldId": "arithmetic_kingdom", "conceptId": "factors" },
+  { "levelNum": 3, "worldId": "arithmetic_kingdom", "conceptId": "multiples" },
+  { "levelNum": 4, "worldId": "arithmetic_kingdom", "conceptId": "lcm" },
+  { "levelNum": 5, "worldId": "arithmetic_kingdom", "conceptId": "hcf" },
+  
+  { "levelNum": 6, "worldId": "geometry_kingdom", "conceptId": "right_triangle" },
+  { "levelNum": 7, "worldId": "geometry_kingdom", "conceptId": "pythagoras_theorem" },
+  { "levelNum": 8, "worldId": "geometry_kingdom", "conceptId": "perimeter" },
+  { "levelNum": 9, "worldId": "geometry_kingdom", "conceptId": "area" },
+  { "levelNum": 10, "worldId": "geometry_kingdom", "conceptId": "volume" },
+  
+  { "levelNum": 11, "worldId": "algebra_kingdom", "conceptId": "linear_equation" },
+  { "levelNum": 12, "worldId": "algebra_kingdom", "conceptId": "quadratic_equation" },
+  { "levelNum": 13, "worldId": "algebra_kingdom", "conceptId": "variable" },
+  { "levelNum": 14, "worldId": "algebra_kingdom", "conceptId": "expression" },
+  { "levelNum": 15, "worldId": "algebra_kingdom", "conceptId": "inequality" },
+  
+  { "levelNum": 16, "worldId": "statistics_kingdom", "conceptId": "mean" },
+  { "levelNum": 17, "worldId": "statistics_kingdom", "conceptId": "median" },
+  { "levelNum": 18, "worldId": "statistics_kingdom", "conceptId": "mode" },
+  { "levelNum": 19, "worldId": "statistics_kingdom", "conceptId": "probability" },
+  { "levelNum": 20, "worldId": "statistics_kingdom", "conceptId": "venn_diagram" },
+  
+  { "levelNum": 21, "worldId": "trigonometry_kingdom", "conceptId": "sine" },
+  { "levelNum": 22, "worldId": "trigonometry_kingdom", "conceptId": "cosine" },
+  { "levelNum": 23, "worldId": "trigonometry_kingdom", "conceptId": "tangent" },
+  { "levelNum": 24, "worldId": "trigonometry_kingdom", "conceptId": "hypotenuse" },
+  { "levelNum": 25, "worldId": "trigonometry_kingdom", "conceptId": "angle_of_elevation" }
+]
