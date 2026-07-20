@@ -2,7 +2,7 @@
  * GUESS WHAT'S ON TENALI'S MIND — COMPACT SEQUENTIAL GAME ENGINE
  * ══════════════════════════════════════════════════════════════
  * Implements a scroll-free, minimal UI matching the Word Creator aesthetic.
- * Uses inline styling for absolute specificity and safety against CSS overrides.
+ * Uses exact Tenali project CSS variables for themes and colors.
  */
 
 import React, { useState, useEffect } from 'react';
@@ -304,8 +304,8 @@ export default function MindReaderApp2({ onBack }) {
   // Clean outline button style
   const outlineBtnStyle = {
     background: 'rgba(255, 255, 255, 0.04)',
-    border: '1px solid rgba(255, 255, 255, 0.15)',
-    color: '#d1c7bd',
+    border: '1px solid var(--clr-border)',
+    color: 'var(--clr-text-soft)',
     borderRadius: '20px',
     padding: '6px 16px',
     fontSize: '0.82rem',
@@ -317,13 +317,13 @@ export default function MindReaderApp2({ onBack }) {
   };
 
   return (
-    <div className="mr2-container gm-dark-theme" style={{ padding: '10px 15px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className="mr2-container gm-dark-theme" style={{ background: 'var(--clr-bg)', padding: '10px 15px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* 🔮 Sequential Game Header */}
       {phase !== 'playing' && (
         <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px', width: '100%', maxWidth: '500px' }}>
-          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>🏆 XP: <strong>{xp}</strong></div>
-          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>👑 Level: <strong>{levelNum}</strong></div>
-          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem' }}>💡 Hints: <strong>{hintsRemaining}/3</strong></div>
+          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem', color: 'var(--clr-text)' }}>🏆 XP: <strong>{xp}</strong></div>
+          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem', color: 'var(--clr-text)' }}>👑 Level: <strong>{levelNum}</strong></div>
+          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem', color: 'var(--clr-text)' }}>💡 Hints: <strong>{hintsRemaining}/3</strong></div>
         </div>
       )}
 
@@ -332,16 +332,16 @@ export default function MindReaderApp2({ onBack }) {
       {/* ─── PHASE 1: SETUP LOBBY SCREEN (MINIMAL TEXT) ────────────────────────── */}
       {phase === 'setup' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '15px' }}>
-          <h2 style={{ margin: '10px 0 0 0', fontFamily: 'Georgia, serif', color: '#fff', fontSize: '2rem' }}>Read Tenali's Mind</h2>
+          <h2 style={{ margin: '10px 0 0 0', fontFamily: 'var(--font-display)', color: 'var(--clr-text)', fontSize: '2rem' }}>Read Tenali's Mind</h2>
           
           <div className="mr2-char-hub-vertical" style={{ margin: '10px 0', gap: '10px' }}>
             <TenaliAvatar expression={avatarExpression} skin="classic" />
             <div className="mr2-speech-bubble" style={{ maxWidth: '320px', padding: '12px 18px' }}>
-              <p className="mr2-dialogue-text" style={{ fontSize: '1rem', margin: 0 }}>{tenaliSpeech}</p>
+              <p className="mr2-dialogue-text" style={{ fontSize: '1rem', margin: 0, color: 'var(--clr-text)' }}>{tenaliSpeech}</p>
             </div>
           </div>
 
-          <button className="btn-primary" style={{ width: '100%', maxWidth: '320px', padding: '12px', marginTop: '10px' }} onClick={() => setPhase('worlds')}>
+          <button className="btn-primary" style={{ width: '100%', maxWidth: '320px', padding: '12px', marginTop: '10px', background: 'var(--clr-accent)', color: 'var(--clr-text)' }} onClick={() => setPhase('worlds')}>
             Enter the Kingdoms
           </button>
         </div>
@@ -350,7 +350,7 @@ export default function MindReaderApp2({ onBack }) {
       {/* ─── PHASE 2: WORLD SELECT CAROUSEL ───────────────────────────────────── */}
       {phase === 'worlds' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '10px' }}>
-          <h3 style={{ margin: '10px 0', color: '#fff' }}>Select a World</h3>
+          <h3 style={{ margin: '10px 0', color: 'var(--clr-text)' }}>Select a World</h3>
           {worlds.length > 0 ? (
             <div className="gm-carousel-wrapper" style={{ margin: '15px 0', gap: '10px' }}>
               <button 
@@ -362,13 +362,13 @@ export default function MindReaderApp2({ onBack }) {
                 &larr;
               </button>
 
-              <div className={`gm-world-card ${worlds[activeWorldIndex].unlocked ? 'active-world' : 'locked-world'}`} style={{ padding: '20px 16px', maxWidth: '300px' }}>
-                <div className="gm-world-header" style={{ color: worlds[activeWorldIndex].themeColor, fontSize: '0.8rem' }}>
+              <div className={`gm-world-card ${worlds[activeWorldIndex].unlocked ? 'active-world' : 'locked-world'}`} style={{ padding: '20px 16px', maxWidth: '300px', background: 'var(--clr-card)', border: '1px solid var(--clr-border)' }}>
+                <div className="gm-world-header" style={{ color: worlds[activeWorldIndex].themeColor || 'var(--clr-accent)', fontSize: '0.8rem' }}>
                   World {activeWorldIndex + 1} of {worlds.length}
                 </div>
-                <h4 className="gm-world-title" style={{ fontSize: '1.45rem', margin: '0 0 10px 0', color: '#fff' }}>{worlds[activeWorldIndex].worldName}</h4>
+                <h4 className="gm-world-title" style={{ fontSize: '1.45rem', margin: '0 0 10px 0', color: 'var(--clr-text)' }}>{worlds[activeWorldIndex].worldName}</h4>
                 
-                <div className="gm-world-badge" style={{ padding: '2px 8px', fontSize: '0.75rem', marginBottom: '12px' }}>
+                <div className="gm-world-badge" style={{ padding: '2px 8px', fontSize: '0.75rem', marginBottom: '12px', background: 'var(--clr-badge)', color: 'var(--clr-text)' }}>
                   ⭐ {worlds[activeWorldIndex].stars} Stars
                 </div>
 
@@ -388,7 +388,7 @@ export default function MindReaderApp2({ onBack }) {
                     padding: '10px',
                     fontSize: '0.9rem',
                     background: worlds[activeWorldIndex].unlocked ? 'var(--clr-accent)' : 'var(--clr-input)',
-                    color: worlds[activeWorldIndex].unlocked ? '#fff' : 'var(--clr-text-soft)'
+                    color: worlds[activeWorldIndex].unlocked ? 'var(--clr-text)' : 'var(--clr-text-soft)'
                   }}
                   disabled={!worlds[activeWorldIndex].unlocked}
                   onClick={() => {
@@ -419,10 +419,10 @@ export default function MindReaderApp2({ onBack }) {
         </div>
       )}
 
-      {/* ─── PHASE 3: LEVEL SELECTION MAP (SCROLL-FREE SNAKE PATH WITH DOTTED CONNECTOR) ─── */}
+      {/* ─── PHASE 3: LEVEL SELECTION MAP (SCROLL-FREE PATH) ──────────────────── */}
       {phase === 'levels' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '5px' }}>
-          <h4 style={{ margin: '5px 0 15px 0', color: '#fff', fontFamily: 'Georgia, serif', fontSize: '1.4rem' }}>
+          <h4 style={{ margin: '5px 0 15px 0', color: 'var(--clr-text)', fontFamily: 'var(--font-display)', fontSize: '1.4rem' }}>
             {worlds[activeWorldIndex]?.worldName}
           </h4>
 
@@ -432,7 +432,7 @@ export default function MindReaderApp2({ onBack }) {
             <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
               <path 
                 d="M 80 30 L 260 90 L 80 150 L 260 210 L 170 260" 
-                stroke="rgba(217, 120, 62, 0.4)" 
+                stroke="var(--clr-accent-soft)" 
                 strokeWidth="2" 
                 strokeDasharray="5,5" 
                 fill="none" 
@@ -473,7 +473,7 @@ export default function MindReaderApp2({ onBack }) {
                         height: '46px', 
                         fontSize: '1.05rem', 
                         borderRadius: '50%',
-                        border: node.unlocked ? '1.5px solid #d9783e' : '1.5px solid rgba(255,255,255,0.08)',
+                        border: node.unlocked ? '1.5px solid var(--clr-accent)' : '1.5px solid var(--clr-border)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -532,24 +532,24 @@ export default function MindReaderApp2({ onBack }) {
                 💡 Hint ({hintsRemaining}/3)
               </button>
             </div>
-            <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#ffd8c2', display: 'flex', alignItems: 'center' }}>
-              XP: <span style={{ color: '#d9783e', marginLeft: '4px' }}>{xp} XP</span>
+            <span style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--clr-text)', display: 'flex', alignItems: 'center' }}>
+              XP: <span style={{ color: 'var(--clr-accent)', marginLeft: '4px' }}>{xp} XP</span>
             </span>
           </div>
 
           {/* Serif Level Display Header */}
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '2.1rem', margin: '5px 0 2px 0', textAlign: 'center', fontWeight: 'bold' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--clr-text)', fontSize: '2.1rem', margin: '5px 0 2px 0', textAlign: 'center', fontWeight: 'bold' }}>
             Tenali's Mind • Level {levelNum}
           </h2>
           <div style={{ textAlign: 'center', marginBottom: '15px' }}>
-            <span className="gm-pill-badge" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '4px 12px', fontSize: '0.78rem', color: '#a89f95' }}>
+            <span className="gm-pill-badge" style={{ background: 'var(--clr-accent-soft)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '4px 12px', fontSize: '0.78rem', color: 'var(--clr-text-soft)' }}>
               Clue {localClueIndex + 1} of 5
             </span>
           </div>
 
           {/* Focused Italic Clue Box (No Tip Text) */}
           <div style={{ margin: '15px auto 25px auto', maxWidth: '400px', textAlign: 'center' }}>
-            <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '1.48rem', lineHeight: '1.45', color: '#ffffff', margin: 0 }}>
+            <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '1.48rem', lineHeight: '1.45', color: 'var(--clr-text)', margin: 0 }}>
               "{clue}"
             </p>
           </div>
@@ -570,10 +570,10 @@ export default function MindReaderApp2({ onBack }) {
                   width: '100%',
                   boxSizing: 'border-box',
                   padding: '10px 14px',
-                  background: '#2b2624',
-                  border: '1.5px solid #443c39',
+                  background: 'var(--clr-input)',
+                  border: '1.5px solid var(--clr-border)',
                   borderRadius: '10px',
-                  color: '#ffffff',
+                  color: 'var(--clr-text)',
                   fontSize: '0.88rem',
                   outline: 'none'
                 }}
@@ -596,16 +596,16 @@ export default function MindReaderApp2({ onBack }) {
             <button 
               className="gm-primary-action-btn" 
               style={{
-                background: 'rgba(217, 120, 62, 0.25)',
-                border: '1.5px solid #d9783e',
-                color: '#ffd8c2',
+                background: 'var(--clr-accent-soft)',
+                border: '1.5px solid var(--clr-accent)',
+                color: 'var(--clr-text)',
                 borderRadius: '12px',
                 padding: '12px 28px',
                 fontSize: '0.95rem',
                 fontWeight: '700',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
-                boxShadow: '0 4px 12px rgba(217, 120, 62, 0.1)'
+                boxShadow: 'none'
               }}
               onClick={() => setShowGuess(true)}
             >
@@ -614,7 +614,7 @@ export default function MindReaderApp2({ onBack }) {
           </div>
 
           {/* Footer Navigation Row */}
-          <div className="gm-footer-nav" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+          <div className="gm-footer-nav" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '10px', borderTop: '1px solid var(--clr-border)' }}>
             <button 
               style={{
                 ...outlineBtnStyle,
@@ -629,9 +629,9 @@ export default function MindReaderApp2({ onBack }) {
             <button 
               style={{
                 ...outlineBtnStyle,
-                background: 'rgba(217, 120, 62, 0.25)',
-                border: '1.5px solid #d9783e',
-                color: '#ffd8c2',
+                background: 'var(--clr-accent-soft)',
+                border: '1.5px solid var(--clr-accent)',
+                color: 'var(--clr-text)',
                 opacity: cluesExhausted && localClueIndex === revealedClues.length - 1 ? 0.35 : 1,
                 cursor: cluesExhausted && localClueIndex === revealedClues.length - 1 ? 'not-allowed' : 'pointer'
               }}
@@ -644,14 +644,14 @@ export default function MindReaderApp2({ onBack }) {
 
           {/* Fullscreen Free-text Guess Modal (Compact) */}
           {showGuess && (
-            <div className="gm-guess-modal" style={{ padding: '20px' }}>
-              <h3 style={{ margin: '20px 0 10px 0', color: '#fff' }}>Type Your Guess</h3>
-              <p className="subtitle" style={{ fontSize: '0.88rem', margin: 0 }}>Warning: Only 1 final attempt allowed!</p>
+            <div className="gm-guess-modal" style={{ padding: '20px', background: 'var(--clr-card)', border: '1px solid var(--clr-border)' }}>
+              <h3 style={{ margin: '20px 0 10px 0', color: 'var(--clr-text)' }}>Type Your Guess</h3>
+              <p className="subtitle" style={{ fontSize: '0.88rem', margin: 0, color: 'var(--clr-text-soft)' }}>Warning: Only 1 final attempt allowed!</p>
 
               <input
                 className="gm-search-input"
                 type="text"
-                style={{ margin: '20px 0 15px 0', padding: '12px 16px', fontSize: '1rem', width: '100%', maxWidth: '400px' }}
+                style={{ margin: '20px 0 15px 0', padding: '12px 16px', fontSize: '1rem', width: '100%', maxWidth: '400px', background: 'var(--clr-input)', border: '1.5px solid var(--clr-border)', color: 'var(--clr-text)' }}
                 placeholder="Type your guess here..."
                 value={guessQuery}
                 onChange={(e) => setGuessQuery(e.target.value)}
@@ -667,7 +667,7 @@ export default function MindReaderApp2({ onBack }) {
                 </button>
                 <button 
                   className="btn-primary" 
-                  style={{ flex: 1, padding: '10px', fontSize: '0.9rem' }} 
+                  style={{ flex: 1, padding: '10px', fontSize: '0.9rem', background: 'var(--clr-accent)', color: 'var(--clr-text)' }} 
                   disabled={!guessQuery.trim()}
                   onClick={handleSubmitGuess}
                 >
@@ -683,11 +683,11 @@ export default function MindReaderApp2({ onBack }) {
       {phase === 'gameover' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '5px', width: '100%', maxWidth: '420px', padding: '10px 15px' }}>
           {/* Centered Serif Heading */}
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#fff', fontSize: '2.2rem', margin: '20px 0 4px 0', textAlign: 'center', fontWeight: 'bold' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--clr-text)', fontSize: '2.2rem', margin: '20px 0 4px 0', textAlign: 'center', fontWeight: 'bold' }}>
             {isCorrectGuess ? '🎉 Correct!' : '❌ Game Over'}
           </h2>
-          <p style={{ fontSize: '0.95rem', color: '#a89f95', margin: '0 0 10px 0', textAlign: 'center' }}>
-            The concept was <strong style={{ color: '#fff' }}>"{actualConcept}"</strong>
+          <p style={{ fontSize: '0.95rem', color: 'var(--clr-text-soft)', margin: '0 0 10px 0', textAlign: 'center' }}>
+            The concept was <strong style={{ color: 'var(--clr-text)' }}>"{actualConcept}"</strong>
           </p>
 
           {/* Stars Display */}
@@ -704,43 +704,43 @@ export default function MindReaderApp2({ onBack }) {
 
           {/* Reward Badges */}
           <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', margin: '15px 0' }}>
-            <span className="gm-pill-badge" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: '#a89f95' }}>
-              XP: <strong style={{ color: '#d9783e' }}>+{xpEarned}</strong>
+            <span className="gm-pill-badge" style={{ background: 'var(--clr-accent-soft)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: 'var(--clr-text-soft)' }}>
+              XP: <strong style={{ color: 'var(--clr-accent)' }}>+{xpEarned}</strong>
             </span>
-            <span className="gm-pill-badge" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: '#a89f95' }}>
-              Rating: <strong style={{ color: '#d9783e' }}>{mrrChange >= 0 ? `+${mrrChange}` : mrrChange}</strong>
+            <span className="gm-pill-badge" style={{ background: 'var(--clr-accent-soft)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: 'var(--clr-text-soft)' }}>
+              Rating: <strong style={{ color: 'var(--clr-accent)' }}>{mrrChange >= 0 ? `+${mrrChange}` : mrrChange}</strong>
             </span>
           </div>
 
           {/* Premium Charcoal Revision Card */}
           {educationalInfo && (
             <div style={{
-              background: '#2b2624',
-              border: '1.5px solid #383230',
+              background: 'var(--clr-card)',
+              border: '1.5px solid var(--clr-border)',
               borderRadius: '12px',
               padding: '16px',
               width: '100%',
               margin: '10px 0',
               textAlign: 'left'
             }}>
-              <h4 style={{ margin: '0 0 12px 0', fontFamily: 'Georgia, serif', color: '#d9783e', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '6px', fontSize: '1.05rem', fontWeight: 'bold' }}>
+              <h4 style={{ margin: '0 0 12px 0', fontFamily: 'var(--font-display)', color: 'var(--clr-accent)', borderBottom: '1px solid var(--clr-border)', paddingBottom: '6px', fontSize: '1.05rem', fontWeight: 'bold' }}>
                 Revision Card
               </h4>
 
               <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: '#a89f95', letterSpacing: '0.05em', fontWeight: 'bold' }}>Definition</div>
-                <div style={{ color: '#f7f5f4', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.definition}</div>
+                <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--clr-text-soft)', letterSpacing: '0.05em', fontWeight: 'bold' }}>Definition</div>
+                <div style={{ color: 'var(--clr-text)', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.definition}</div>
               </div>
 
               <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: '#a89f95', letterSpacing: '0.05em', fontWeight: 'bold' }}>Examples</div>
-                <div style={{ color: '#f7f5f4', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.examples.join(', ')}</div>
+                <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--clr-text-soft)', letterSpacing: '0.05em', fontWeight: 'bold' }}>Examples</div>
+                <div style={{ color: 'var(--clr-text)', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.examples.join(', ')}</div>
               </div>
 
               {educationalInfo.commonMistakes && (
                 <div>
-                  <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: '#a89f95', letterSpacing: '0.05em', fontWeight: 'bold' }}>Common Mistakes</div>
-                  <div style={{ color: '#f56c6c', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.commonMistakes}</div>
+                  <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--clr-text-soft)', letterSpacing: '0.05em', fontWeight: 'bold' }}>Common Mistakes</div>
+                  <div style={{ color: 'var(--clr-wrong)', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.commonMistakes}</div>
                 </div>
               )}
             </div>
@@ -750,10 +750,10 @@ export default function MindReaderApp2({ onBack }) {
           <div style={{ textAlign: 'center', marginTop: '15px', width: '100%' }}>
             <button 
               style={{
-                background: 'rgba(217, 120, 62, 0.25)',
-                border: '1.5px solid #d9783e',
-                color: '#ffd8c2',
+                background: 'var(--clr-accent)',
+                color: 'var(--clr-text)',
                 borderRadius: '12px',
+                border: 'none',
                 padding: '12px 32px',
                 fontSize: '0.95rem',
                 fontWeight: '700',
