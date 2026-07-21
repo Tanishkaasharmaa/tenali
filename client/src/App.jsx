@@ -44496,6 +44496,22 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
           </div>
         </>
       )}
+      {!search && !isGoalSelection && (
+        <div className="journey-banner-row">
+          <button className="journey-banner-btn" onClick={() => onSelect('learning_journey')}>
+            <div className="journey-banner-content">
+              <div className="journey-banner-header">
+                <span>⭐</span>
+                <h3 className="journey-banner-title">Guided Learning Journey</h3>
+              </div>
+              <p className="journey-banner-subtitle">
+                Embark on a structured, sequential math learning path with checkpoints.
+              </p>
+            </div>
+            <div className="journey-banner-arrow">➔</div>
+          </button>
+        </div>
+      )}
       <div className="search-bar-row">
         <input
           id="tour-search-bar"
