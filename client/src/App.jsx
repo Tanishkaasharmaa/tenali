@@ -44431,7 +44431,6 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
     ...featuredApps,
     { key: 'curiosity', name: 'Curiosity Mode', subtitle: 'Explore "What if" variations', color: 'pink' },
   ]
-  ]
 
   // All regular quiz apps sorted alphabetically by name
   const regularApps = [

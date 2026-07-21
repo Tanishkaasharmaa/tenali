@@ -9199,7 +9199,6 @@ app.post('/api/mindreader/next', express.json(), (req, res) => {
   return res.json(result);
 });
 
-const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'tenali-dev-secret-change-me';
 
 // Helper to automatically unlock skins based on MRR threshold
