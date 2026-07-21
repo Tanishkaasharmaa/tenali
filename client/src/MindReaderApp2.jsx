@@ -29,13 +29,13 @@ export default function MindReaderApp2({ onBack }) {
   // Player Stats
   const [xp, setXp] = useState(0);
   const [mrr, setMrr] = useState(1000);
-  const [unlockedWorlds, setUnlockedWorlds] = useState(['arithmetic_kingdom']);
+  const [unlockedWorlds, setUnlockedWorlds] = useState(['number_kingdom']);
   const [levelProgress, setLevelProgress] = useState({}); // levelNum -> starsEarned
 
   // Active game navigation states
   const [worlds, setWorlds] = useState([]);
   const [activeWorldIndex, setActiveWorldIndex] = useState(0);
-  const [activeWorldId, setActiveWorldId] = useState('arithmetic_kingdom');
+  const [activeWorldId, setActiveWorldId] = useState('number_kingdom');
   const [levelNum, setLevelNum] = useState(1);
 
   // Active game session playing states

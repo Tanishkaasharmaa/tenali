@@ -31,18 +31,53 @@ Defines kingdoms, required completion criteria, and metadata.
 ```json
 [
   {
+    "worldId": "number_kingdom",
+    "worldName": "Number Kingdom (Beginner)",
+    "requiredUnlockXP": 0,
+    "themeColor": "#3b82f6",
+    "levelRange": [1, 10]
+  },
+  {
     "worldId": "arithmetic_kingdom",
     "worldName": "Arithmetic Kingdom",
-    "requiredUnlockXP": 0,
+    "requiredUnlockXP": 500,
     "themeColor": "#e8864a",
-    "levelRange": [1, 5]
+    "levelRange": [11, 20]
   },
   {
     "worldId": "geometry_kingdom",
     "worldName": "Geometry Kingdom",
-    "requiredUnlockXP": 200,
-    "themeColor": "#5cb87a",
-    "levelRange": [6, 10]
+    "requiredUnlockXP": 1000,
+    "themeColor": "#10b981",
+    "levelRange": [21, 30]
+  },
+  {
+    "worldId": "algebra_kingdom",
+    "worldName": "Algebra Kingdom",
+    "requiredUnlockXP": 1500,
+    "themeColor": "#f59e0b",
+    "levelRange": [31, 40]
+  },
+  {
+    "worldId": "advanced_math",
+    "worldName": "Advanced Mathematics",
+    "requiredUnlockXP": 2000,
+    "themeColor": "#8b5cf6",
+    "levelRange": [41, 50]
+  },
+  {
+    "worldId": "coordinate_calculus",
+    "worldName": "Coordinate & Calculus",
+    "requiredUnlockXP": 2500,
+    "themeColor": "#ec4899",
+    "levelRange": [51, 60]
+  },
+  {
+    "worldId": "data_logic",
+    "worldName": "Data & Logic",
+    "requiredUnlockXP": 3000,
+    "themeColor": "#6b7280",
+    "levelRange": [61, 66]
   }
 ]
 ```
@@ -51,11 +86,78 @@ Defines kingdoms, required completion criteria, and metadata.
 Maps individual levels to their respective mathematical concepts.
 ```json
 [
-  { "levelNum": 1, "worldId": "arithmetic_kingdom", "conceptId": "prime_number" },
-  { "levelNum": 2, "worldId": "arithmetic_kingdom", "conceptId": "factors" },
-  { "levelNum": 3, "worldId": "arithmetic_kingdom", "conceptId": "multiples" },
-  { "levelNum": 4, "worldId": "arithmetic_kingdom", "conceptId": "lcm" },
-  { "levelNum": 5, "worldId": "arithmetic_kingdom", "conceptId": "hcf" }
+  { "levelNum": 1, "worldId": "number_kingdom", "conceptId": "addition" },
+  { "levelNum": 2, "worldId": "number_kingdom", "conceptId": "column_addition" },
+  { "levelNum": 3, "worldId": "number_kingdom", "conceptId": "subtraction" },
+  { "levelNum": 4, "worldId": "number_kingdom", "conceptId": "multiplication" },
+  { "levelNum": 5, "number_kingdom", "conceptId": "column_multiplication" },
+  { "levelNum": 6, "worldId": "number_kingdom", "conceptId": "decimals" },
+  { "levelNum": 7, "worldId": "number_kingdom", "conceptId": "fractions" },
+  { "levelNum": 8, "worldId": "number_kingdom", "conceptId": "hcf_lcm" },
+  { "levelNum": 9, "worldId": "number_kingdom", "conceptId": "prime_factors" },
+  { "levelNum": 10, "worldId": "number_kingdom", "conceptId": "rounding" },
+
+  { "levelNum": 11, "worldId": "arithmetic_kingdom", "conceptId": "arithmetic" },
+  { "levelNum": 12, "worldId": "arithmetic_kingdom", "conceptId": "percentages" },
+  { "levelNum": 13, "worldId": "arithmetic_kingdom", "conceptId": "ratio" },
+  { "levelNum": 14, "worldId": "arithmetic_kingdom", "conceptId": "profit_loss" },
+  { "levelNum": 15, "worldId": "arithmetic_kingdom", "conceptId": "gst" },
+  { "levelNum": 16, "worldId": "arithmetic_kingdom", "conceptId": "banking_rd" },
+  { "levelNum": 17, "worldId": "arithmetic_kingdom", "conceptId": "shares_dividends" },
+  { "levelNum": 18, "worldId": "arithmetic_kingdom", "conceptId": "speed_distance_time" },
+  { "levelNum": 19, "worldId": "arithmetic_kingdom", "conceptId": "standard_form" },
+  { "levelNum": 20, "worldId": "arithmetic_kingdom", "conceptId": "number_bases" },
+
+  { "levelNum": 21, "worldId": "geometry_kingdom", "conceptId": "angles" },
+  { "levelNum": 22, "worldId": "geometry_kingdom", "conceptId": "triangles" },
+  { "levelNum": 23, "worldId": "geometry_kingdom", "conceptId": "congruence" },
+  { "levelNum": 24, "worldId": "geometry_kingdom", "conceptId": "similarity" },
+  { "levelNum": 25, "worldId": "geometry_kingdom", "conceptId": "polygons" },
+  { "levelNum": 26, "worldId": "geometry_kingdom", "conceptId": "circle_theorems" },
+  { "levelNum": 27, "worldId": "geometry_kingdom", "conceptId": "herons_formula" },
+  { "levelNum": 28, "worldId": "geometry_kingdom", "conceptId": "pythagoras_theorem" },
+  { "levelNum": 29, "worldId": "geometry_kingdom", "conceptId": "circular_measure" },
+  { "levelNum": 30, "worldId": "geometry_kingdom", "conceptId": "transformations" },
+
+  { "levelNum": 31, "worldId": "algebra_kingdom", "conceptId": "linear_equations" },
+  { "levelNum": 32, "worldId": "algebra_kingdom", "conceptId": "simultaneous_equations" },
+  { "levelNum": 33, "worldId": "algebra_kingdom", "conceptId": "inequalities" },
+  { "levelNum": 34, "worldId": "algebra_kingdom", "conceptId": "functions" },
+  { "levelNum": 35, "worldId": "algebra_kingdom", "conceptId": "indices" },
+  { "levelNum": 36, "worldId": "algebra_kingdom", "conceptId": "surds" },
+  { "levelNum": 37, "worldId": "algebra_kingdom", "conceptId": "quadratics_formula" },
+  { "levelNum": 38, "worldId": "algebra_kingdom", "conceptId": "polynomial_factorization" },
+  { "levelNum": 39, "worldId": "algebra_kingdom", "conceptId": "polynomial_multiplication" },
+  { "levelNum": 40, "worldId": "algebra_kingdom", "conceptId": "algebraic_fractions" },
+
+  { "levelNum": 41, "worldId": "advanced_math", "conceptId": "matrices" },
+  { "levelNum": 42, "worldId": "advanced_math", "conceptId": "vectors" },
+  { "levelNum": 43, "worldId": "advanced_math", "conceptId": "dot_products" },
+  { "levelNum": 44, "worldId": "advanced_math", "conceptId": "linear_algebra" },
+  { "levelNum": 45, "worldId": "advanced_math", "conceptId": "logarithms" },
+  { "levelNum": 46, "worldId": "advanced_math", "conceptId": "sequences" },
+  { "levelNum": 47, "worldId": "advanced_math", "conceptId": "binomial_theorem" },
+  { "levelNum": 48, "worldId": "advanced_math", "conceptId": "complex_numbers" },
+  { "levelNum": 49, "worldId": "advanced_math", "conceptId": "permutations_combinations" },
+  { "levelNum": 50, "worldId": "advanced_math", "conceptId": "probability" },
+
+  { "levelNum": 51, "worldId": "coordinate_calculus", "conceptId": "coordinate_geometry" },
+  { "levelNum": 52, "worldId": "coordinate_calculus", "conceptId": "line_equation" },
+  { "levelNum": 53, "worldId": "coordinate_calculus", "conceptId": "section_formula" },
+  { "levelNum": 54, "worldId": "coordinate_calculus", "conceptId": "conic_sections" },
+  { "levelNum": 55, "worldId": "coordinate_calculus", "conceptId": "limits" },
+  { "levelNum": 56, "worldId": "coordinate_calculus", "conceptId": "differentiation" },
+  { "levelNum": 57, "worldId": "coordinate_calculus", "conceptId": "integration" },
+  { "levelNum": 58, "worldId": "coordinate_calculus", "conceptId": "differential_equations" },
+  { "levelNum": 59, "worldId": "coordinate_calculus", "conceptId": "inverse_trigonometry" },
+  { "levelNum": 60, "worldId": "coordinate_calculus", "conceptId": "trigonometry" },
+
+  { "levelNum": 61, "worldId": "data_logic", "conceptId": "statistics" },
+  { "levelNum": 62, "worldId": "data_logic", "conceptId": "mean" },
+  { "levelNum": 63, "worldId": "data_logic", "conceptId": "sets" },
+  { "levelNum": 64, "worldId": "data_logic", "conceptId": "venn_diagram" },
+  { "levelNum": 65, "worldId": "data_logic", "conceptId": "variation" },
+  { "levelNum": 66, "worldId": "data_logic", "conceptId": "vocabulary" }
 ]
 ```
 

@@ -33,9 +33,9 @@ async function runTests() {
     assert(worldsRes.status === 200, 'Worlds endpoint returned status 200');
     const worldsData = await worldsRes.json();
     assert(worldsData.worlds && Array.isArray(worldsData.worlds), 'Worlds response contains worlds array');
-    assert(worldsData.worlds.length === 5, 'Should have exactly 5 worlds configured');
-    assert(worldsData.worlds[0].unlocked === true, 'Arithmetic Kingdom should be unlocked by default');
-    assert(worldsData.worlds[1].unlocked === false, 'Geometry Kingdom should be locked by default (requires 200 XP)');
+    assert(worldsData.worlds.length === 7, 'Should have exactly 7 worlds configured');
+    assert(worldsData.worlds[0].unlocked === true, 'Number Kingdom (Beginner) should be unlocked by default');
+    assert(worldsData.worlds[1].unlocked === false, 'Arithmetic Kingdom should be locked by default (requires 500 XP)');
 
     // Test 2: POST /api/mindreader/start
     console.log('\n--- Test 2: POST /api/mindreader/start ---');
@@ -48,7 +48,7 @@ async function runTests() {
     const startData = await startRes.json();
     assert(startData.gameId, 'Response contains gameId');
     assert(startData.levelNum === 1, 'levelNum matches requested level');
-    assert(startData.clue === 'I belong to the world of numbers.', 'First clue matches configuration');
+    assert(startData.clue === 'I am the most fundamental arithmetic operation.', 'First clue matches configuration');
     assert(startData.clueIndex === 0, 'clueIndex is 0');
     assert(startData.hintsRemaining === 3, 'hintsRemaining is 3');
 
@@ -63,7 +63,7 @@ async function runTests() {
     });
     assert(clueRes.status === 200, 'Next clue endpoint returned status 200');
     const clueData = await clueRes.json();
-    assert(clueData.clue === 'I always have exactly two positive divisors.', 'Second clue matches configuration');
+    assert(clueData.clue === 'I combine two or more groups to find a total sum.', 'Second clue matches configuration');
     assert(clueData.clueIndex === 1, 'clueIndex incremented to 1');
     assert(clueData.cluesExhausted === false, 'cluesExhausted is false');
 
@@ -76,7 +76,7 @@ async function runTests() {
     });
     assert(hintRes.status === 200, 'Use hint endpoint returned status 200');
     const hintData = await hintRes.json();
-    assert(hintData.hint === 'Arithmetic category topic.', 'First hint text matches');
+    assert(hintData.hint === 'Number Kingdom topic.', 'First hint text matches');
     assert(hintData.hintsRemaining === 2, 'hintsRemaining decremented to 2');
 
     // Test 5: POST /api/mindreader/submit-guess (Correct Guess)
@@ -84,16 +84,16 @@ async function runTests() {
     const guessRes = await fetch(`${BASE_URL}/api/mindreader/submit-guess`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gameId, guess: 'prime number' })
+      body: JSON.stringify({ gameId, guess: 'addition' })
     });
     assert(guessRes.status === 200, 'Submit guess endpoint returned status 200');
     const guessData = await guessRes.json();
     assert(guessData.correct === true, 'guess is correct');
-    assert(guessData.actualConcept === 'Prime Number', 'actualConcept matches');
+    assert(guessData.actualConcept === 'Addition', 'actualConcept matches');
     assert(guessData.starsEarned === 3, 'Stars earned is 3 (guessed at Clue 2)');
     assert(guessData.xpEarned === 100, 'xpEarned is 100 (Guest first completion, perfect run bonus not given due to hint use)');
     assert(guessData.educationalInfo, 'Response contains educationalInfo');
-    assert(guessData.educationalInfo.funFact === 'The number 2 is the only even prime number. All other prime numbers are odd!', 'Educational fun fact matches');
+    assert(guessData.educationalInfo.funFact === 'The plus sign (+) is believed to have originated as an abbreviation for the Latin word \'et\', which means \'and\'.', 'Educational fun fact matches');
 
     // Test 6: Verify Session Eviction
     console.log('\n--- Test 6: Verify Session Eviction ---');

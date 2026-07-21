@@ -9792,14 +9792,14 @@ app.get('/api/mindreader/worlds', async (req, res) => {
   try {
     const user = await getOptionalUser(req);
     let xp = 0;
-    let unlockedWorlds = ['arithmetic_kingdom'];
+    let unlockedWorlds = ['number_kingdom'];
     let levelProgressList = [];
 
     if (user) {
       xp = user.xp || 0;
       // Ensure world progress exists
       if (!user.worldProgress || user.worldProgress.length === 0) {
-        user.worldProgress = [{ worldId: 'arithmetic_kingdom', unlocked: true }];
+        user.worldProgress = [{ worldId: 'number_kingdom', unlocked: true }];
       }
       // Re-calculate unlocks based on current XP
       for (const w of worldsConfig) {

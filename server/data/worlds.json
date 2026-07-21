@@ -1,37 +1,51 @@
 [
   {
+    "worldId": "number_kingdom",
+    "worldName": "Number Kingdom (Beginner)",
+    "requiredUnlockXP": 0,
+    "themeColor": "#3b82f6",
+    "levelRange": [1, 10]
+  },
+  {
     "worldId": "arithmetic_kingdom",
     "worldName": "Arithmetic Kingdom",
-    "requiredUnlockXP": 0,
+    "requiredUnlockXP": 500,
     "themeColor": "#e8864a",
-    "levelRange": [1, 5]
+    "levelRange": [11, 20]
   },
   {
     "worldId": "geometry_kingdom",
     "worldName": "Geometry Kingdom",
-    "requiredUnlockXP": 200,
-    "themeColor": "#5cb87a",
-    "levelRange": [6, 10]
+    "requiredUnlockXP": 1000,
+    "themeColor": "#10b981",
+    "levelRange": [21, 30]
   },
   {
     "worldId": "algebra_kingdom",
     "worldName": "Algebra Kingdom",
-    "requiredUnlockXP": 500,
-    "themeColor": "#3b82f6",
-    "levelRange": [11, 15]
+    "requiredUnlockXP": 1500,
+    "themeColor": "#f59e0b",
+    "levelRange": [31, 40]
   },
   {
-    "worldId": "statistics_kingdom",
-    "worldName": "Statistics Kingdom",
-    "requiredUnlockXP": 800,
-    "themeColor": "#a855f7",
-    "levelRange": [16, 20]
+    "worldId": "advanced_math",
+    "worldName": "Advanced Mathematics",
+    "requiredUnlockXP": 2000,
+    "themeColor": "#8b5cf6",
+    "levelRange": [41, 50]
   },
   {
-    "worldId": "trigonometry_kingdom",
-    "worldName": "Trigonometry Kingdom",
-    "requiredUnlockXP": 1200,
+    "worldId": "coordinate_calculus",
+    "worldName": "Coordinate & Calculus",
+    "requiredUnlockXP": 2500,
     "themeColor": "#ec4899",
-    "levelRange": [21, 25]
+    "levelRange": [51, 60]
+  },
+  {
+    "worldId": "data_logic",
+    "worldName": "Data & Logic",
+    "requiredUnlockXP": 3000,
+    "themeColor": "#6b7280",
+    "levelRange": [61, 66]
   }
 ]

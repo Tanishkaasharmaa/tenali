@@ -16,7 +16,14 @@
     ],
     "educationalInfo": {
       "definition": "A whole number greater than 1 with exactly two positive divisors: 1 and itself.",
-      "examples": ["2", "3", "5", "7", "11", "13"],
+      "examples": [
+        "2",
+        "3",
+        "5",
+        "7",
+        "11",
+        "13"
+      ],
       "commonMistakes": "Confusing prime numbers with odd numbers (e.g. 9 or 15 are odd but not prime). Believing 1 is a prime number.",
       "funFact": "The number 2 is the only even prime number. All other prime numbers are odd!",
       "relatedLesson": "Factors and Multiples",
@@ -43,7 +50,10 @@
     ],
     "educationalInfo": {
       "definition": "Numbers you multiply together to get another number, or numbers that divide a target number exactly.",
-      "examples": ["Factors of 6: 1, 2, 3, 6.", "Factors of 10: 1, 2, 5, 10."],
+      "examples": [
+        "Factors of 6: 1, 2, 3, 6.",
+        "Factors of 10: 1, 2, 5, 10."
+      ],
       "commonMistakes": "Confusing factors with multiples (factors are always less than or equal to the target number).",
       "funFact": "Perfect numbers are numbers equal to the sum of their proper factors (e.g., 6 = 1 + 2 + 3).",
       "relatedLesson": "Factors and Multiples",
@@ -70,7 +80,10 @@
     ],
     "educationalInfo": {
       "definition": "The product of a given number and any integer.",
-      "examples": ["Multiples of 3: 3, 6, 9, 12...", "Multiples of 7: 7, 14, 21, 28..."],
+      "examples": [
+        "Multiples of 3: 3, 6, 9, 12...",
+        "Multiples of 7: 7, 14, 21, 28..."
+      ],
       "commonMistakes": "Confusing factors with multiples (multiples are infinite and grow larger).",
       "funFact": "Zero is technically a multiple of every number, but we usually ignore it in math practice games.",
       "relatedLesson": "Factors and Multiples",
@@ -97,7 +110,10 @@
     ],
     "educationalInfo": {
       "definition": "Lowest Common Multiple: the smallest positive integer that is divisible by all numbers in a given set.",
-      "examples": ["LCM(3, 5) = 15", "LCM(8, 12) = 24"],
+      "examples": [
+        "LCM(3, 5) = 15",
+        "LCM(8, 12) = 24"
+      ],
       "commonMistakes": "Listing factors instead of multiples when looking for the LCM, resulting in a number that is too small.",
       "funFact": "The LCM of any two consecutive numbers is always their product!",
       "relatedLesson": "HCF and LCM",
@@ -124,7 +140,10 @@
     ],
     "educationalInfo": {
       "definition": "Highest Common Factor: the greatest common divisor that divides two or more numbers without remainder.",
-      "examples": ["HCF(8, 12) = 4", "HCF(15, 20) = 5"],
+      "examples": [
+        "HCF(8, 12) = 4",
+        "HCF(15, 20) = 5"
+      ],
       "commonMistakes": "Finding the lowest common divisor (which is usually 1) instead of the highest.",
       "funFact": "The product of HCF(a,b) and LCM(a,b) is always equal to a * b!",
       "relatedLesson": "HCF and LCM",
@@ -151,7 +170,10 @@
     ],
     "educationalInfo": {
       "definition": "A triangle in which one angle is a right angle (90 degrees).",
-      "examples": ["A triangle with angles 30, 60, and 90 degrees.", "A triangle with side ratios 3:4:5."],
+      "examples": [
+        "A triangle with angles 30, 60, and 90 degrees.",
+        "A triangle with side ratios 3:4:5."
+      ],
       "commonMistakes": "Assuming the right angle is always at the bottom-left corner.",
       "funFact": "A right triangle can also be isosceles, with angles 45, 45, and 90 degrees.",
       "relatedLesson": "Triangles and Angles",
@@ -178,7 +200,10 @@
     ],
     "educationalInfo": {
       "definition": "A fundamental relation in Euclidean geometry among the three sides of a right triangle.",
-      "examples": ["3^2 + 4^2 = 5^2 (9 + 16 = 25).", "5^2 + 12^2 = 13^2 (25 + 144 = 169)."],
+      "examples": [
+        "3^2 + 4^2 = 5^2 (9 + 16 = 25).",
+        "5^2 + 12^2 = 13^2 (25 + 144 = 169)."
+      ],
       "commonMistakes": "Applying the formula to non-right triangles. Incorrectly squaring sides (e.g. thinking a + b = c).",
       "funFact": "Pythagoras may not have been the first to discover this; ancient Babylonian, Indian, and Chinese mathematicians knew it centuries earlier.",
       "relatedLesson": "Pythagoras' Theorem",
@@ -205,7 +230,10 @@
     ],
     "educationalInfo": {
       "definition": "The continuous line forming the boundary of a closed two-dimensional shape.",
-      "examples": ["Perimeter of rectangle with dimensions 5cm and 3cm is 2 * (5 + 3) = 16cm.", "Perimeter of square with side 4cm is 16cm."],
+      "examples": [
+        "Perimeter of rectangle with dimensions 5cm and 3cm is 2 * (5 + 3) = 16cm.",
+        "Perimeter of square with side 4cm is 16cm."
+      ],
       "commonMistakes": "Confusing perimeter with area (perimeter is linear length, measured in units like cm, not cm^2).",
       "funFact": "The word perimeter comes from the Greek 'peri' (around) and 'metron' (measure).",
       "relatedLesson": "Perimeter, Area, and Volume",
@@ -232,7 +260,10 @@
     ],
     "educationalInfo": {
       "definition": "The quantity that expresses the extent of a two-dimensional figure or shape in the plane.",
-      "examples": ["Area of a square with side 5cm is 25 cm^2.", "Area of triangle is 0.5 * base * height."],
+      "examples": [
+        "Area of a square with side 5cm is 25 cm^2.",
+        "Area of triangle is 0.5 * base * height."
+      ],
       "commonMistakes": "Measuring area in linear units instead of square units. Confusing formulas of perimeter and area.",
       "funFact": "A standard A4 sheet of paper has an area of exactly 1/16th of a square meter.",
       "relatedLesson": "Perimeter, Area, and Volume",
@@ -259,67 +290,16 @@
     ],
     "educationalInfo": {
       "definition": "The amount of three-dimensional space enclosed by a closed surface.",
-      "examples": ["Volume of a cube with side 3cm is 27 cm^3.", "A cylinder with radius 2cm and height 5cm has volume 20*pi cm^3."],
+      "examples": [
+        "Volume of a cube with side 3cm is 27 cm^3.",
+        "A cylinder with radius 2cm and height 5cm has volume 20*pi cm^3."
+      ],
       "commonMistakes": "Using area formulas instead of multiplying by the third dimension (height/depth). Measuring in square units.",
       "funFact": "One liter is defined as the volume of a cube that measures 10cm on each side (1000 cm^3).",
       "relatedLesson": "Perimeter, Area, and Volume",
       "practiceQuestions": [
         "Calculate the volume of a box measuring 5cm by 4cm by 3cm.",
         "What is the volume of a sphere of radius 3 units (in terms of pi)?"
-      ]
-    }
-  },
-  "linear_equation": {
-    "conceptId": "linear_equation",
-    "name": "Linear Equation",
-    "clues": [
-      "I am an algebraic statement of equality.",
-      "My graph forms a straight line.",
-      "The highest exponent of my variables is exactly 1.",
-      "My standard form is written as y = mx + c.",
-      "An example of my form is 2x + 5 = 11."
-    ],
-    "hints": [
-      "Algebra category topic.",
-      "Grade 7 level topic.",
-      "Starts with 'L'."
-    ],
-    "educationalInfo": {
-      "definition": "An equation between two variables that gives a straight line when plotted on a graph.",
-      "examples": ["y = 3x - 2", "4x + 7 = 19"],
-      "commonMistakes": "Thinking equations with variables squared are linear. Making errors in balance rules (e.g. forgetting to do the same operation to both sides).",
-      "funFact": "Linear equations are the foundation of linear programming, which logistics companies use to optimize shipping routes.",
-      "relatedLesson": "Equations and Formulae",
-      "practiceQuestions": [
-        "Solve for x: 3x - 4 = 11.",
-        "Does the point (2, 5) lie on the line y = 2x + 1?"
-      ]
-    }
-  },
-  "quadratic_equation": {
-    "conceptId": "quadratic_equation",
-    "name": "Quadratic Equation",
-    "clues": [
-      "I am an algebraic relation.",
-      "My graph forms a U-shaped curve called a parabola.",
-      "The highest exponent of my variable is exactly 2.",
-      "My standard form is ax^2 + bx + c = 0.",
-      "My solutions can be found using factorisation, completing the square, or a square-root formula."
-    ],
-    "hints": [
-      "Algebra category topic.",
-      "Grade 9 level topic.",
-      "Starts with 'Q'."
-    ],
-    "educationalInfo": {
-      "definition": "Any equation that can be rearranged in standard form as ax^2 + bx + c = 0 where a is not equal to zero.",
-      "examples": ["x^2 - 5x + 6 = 0", "y = 2x^2 + 3"],
-      "commonMistakes": "Forgetting the plus-minus sign when taking square roots. Missing the quadratic term when rearranging equations.",
-      "funFact": "The path of any thrown object, like a basketball or a stone, is a parabola described by a quadratic equation.",
-      "relatedLesson": "Quadratic Equations",
-      "practiceQuestions": [
-        "Find the roots of x^2 - 9 = 0.",
-        "How many solutions does x^2 - 4x + 4 = 0 have?"
       ]
     }
   },
@@ -340,7 +320,10 @@
     ],
     "educationalInfo": {
       "definition": "A symbol (usually a letter) standing for an unknown numerical value in an equation or algebraic expression.",
-      "examples": ["In y = mx + c, x and y are variables.", "In x + 2 = 5, x is the variable."],
+      "examples": [
+        "In y = mx + c, x and y are variables.",
+        "In x + 2 = 5, x is the variable."
+      ],
       "commonMistakes": "Treating variables as constants. Forgetting that different variables can represent different numbers in the same equation.",
       "funFact": "French philosopher René Descartes introduced the convention of using x, y, z for variables and a, b, c for constants.",
       "relatedLesson": "Equations and Formulae",
@@ -367,40 +350,16 @@
     ],
     "educationalInfo": {
       "definition": "A mathematical phrase that can contain numbers, variables, and operators, but does not contain an equality sign.",
-      "examples": ["2x + 5", "x^2 - y"],
+      "examples": [
+        "2x + 5",
+        "x^2 - y"
+      ],
       "commonMistakes": "Confusing an expression with an equation (equations have '=', expressions do not).",
       "funFact": "Expressions are the algebraic equivalent of a sentence fragment, while equations are complete sentences.",
       "relatedLesson": "Equations and Formulae",
       "practiceQuestions": [
         "Simplify the expression: 2x + 3x - 4.",
         "Is '5x + 3 = 13' an expression or an equation?"
-      ]
-    }
-  },
-  "inequality": {
-    "conceptId": "inequality",
-    "name": "Inequality",
-    "clues": [
-      "I describe a comparison between two mathematical quantities.",
-      "I show that one value is larger or smaller than another.",
-      "I use symbols that resemble arrowheads or wedges.",
-      "When you multiply both sides by a negative number, you must flip my symbol.",
-      "Examples of my symbols are <, >, <=, and >=."
-    ],
-    "hints": [
-      "Algebra category topic.",
-      "Grade 8 level topic.",
-      "Starts with 'I'."
-    ],
-    "educationalInfo": {
-      "definition": "A mathematical statement indicating that one expression is greater than, less than, or not equal to another.",
-      "examples": ["2x + 1 > 5", "y <= 3"],
-      "commonMistakes": "Forgetting to flip the inequality sign when dividing or multiplying by a negative number.",
-      "funFact": "The 'less than' (<) and 'greater than' (>) symbols were introduced by mathematician Thomas Harriot in 1631.",
-      "relatedLesson": "Inequalities",
-      "practiceQuestions": [
-        "Solve for x: -2x > 8.",
-        "Represent x >= 3 on a number line."
       ]
     }
   },
@@ -421,7 +380,10 @@
     ],
     "educationalInfo": {
       "definition": "The average value of a set of numbers, calculated by dividing the sum of the values by their count.",
-      "examples": ["Mean of {1, 3, 8} is (1+3+8)/3 = 4.", "Mean of {10, 20} is 15."],
+      "examples": [
+        "Mean of {1, 3, 8} is (1+3+8)/3 = 4.",
+        "Mean of {10, 20} is 15."
+      ],
       "commonMistakes": "Forgetting to divide by the count of items. Getting skewed results when a dataset has extreme outliers.",
       "funFact": "The arithmetic mean is just one type of mean; others include the geometric mean and harmonic mean.",
       "relatedLesson": "Statistics",
@@ -448,7 +410,10 @@
     ],
     "educationalInfo": {
       "definition": "The middle number in a sorted, ascending or descending list of numbers.",
-      "examples": ["Median of {3, 5, 9} is 5.", "Median of {2, 4, 6, 8} is (4+6)/2 = 5."],
+      "examples": [
+        "Median of {3, 5, 9} is 5.",
+        "Median of {2, 4, 6, 8} is (4+6)/2 = 5."
+      ],
       "commonMistakes": "Forgetting to sort the numbers before picking the middle value.",
       "funFact": "Unlike the mean, the median is robust to outliers, which is why median house prices are reported instead of average prices.",
       "relatedLesson": "Statistics",
@@ -475,7 +440,10 @@
     ],
     "educationalInfo": {
       "definition": "The value that appears most frequently in a data set.",
-      "examples": ["Mode of {1, 2, 2, 3} is 2.", "Mode of {blue, red, blue, green} is blue."],
+      "examples": [
+        "Mode of {1, 2, 2, 3} is 2.",
+        "Mode of {blue, red, blue, green} is blue."
+      ],
       "commonMistakes": "Thinking a dataset must always have exactly one mode. Confusing frequency with the value itself.",
       "funFact": "The word mode comes from the French 'la mode', meaning fashion, i.e., what is most popular.",
       "relatedLesson": "Statistics",
@@ -502,7 +470,10 @@
     ],
     "educationalInfo": {
       "definition": "The branch of mathematics concerning numerical descriptions of how likely an event is to occur.",
-      "examples": ["The probability of getting heads on a coin flip is 0.5.", "Drawing an ace from a deck of cards is 4/52 = 1/13."],
+      "examples": [
+        "The probability of getting heads on a coin flip is 0.5.",
+        "Drawing an ace from a deck of cards is 4/52 = 1/13."
+      ],
       "commonMistakes": "Expressing probability as a number greater than 1. Confusing odds (e.g. 1 to 3) with probabilities (1/4).",
       "funFact": "Modern probability theory was developed in the 17th century by Blaise Pascal and Pierre de Fermat to solve gambling problems.",
       "relatedLesson": "Probability",
@@ -529,7 +500,10 @@
     ],
     "educationalInfo": {
       "definition": "An illustration that uses circles to show the relationships among things or finite groups of things.",
-      "examples": ["A diagram showing common multiples of 2 and 3 in the overlap.", "Comparing categories of shapes."],
+      "examples": [
+        "A diagram showing common multiples of 2 and 3 in the overlap.",
+        "Comparing categories of shapes."
+      ],
       "commonMistakes": "Forgetting to write the elements that belong outside both circles inside the bounding rectangle (universal set).",
       "funFact": "The rectangular bounding box representing the universal set is often omitted in popular memes, but is mathematically required.",
       "relatedLesson": "Sets and Venn Diagrams",
@@ -556,7 +530,10 @@
     ],
     "educationalInfo": {
       "definition": "The trigonometric function that for an acute angle is the ratio between the leg opposite the angle and the hypotenuse.",
-      "examples": ["sin(30) = 0.5", "sin(90) = 1"],
+      "examples": [
+        "sin(30) = 0.5",
+        "sin(90) = 1"
+      ],
       "commonMistakes": "Dividing adjacent by hypotenuse instead of opposite by hypotenuse. Forgetting to set the calculator to Degree mode.",
       "funFact": "The word sine originates from a Latin mistranslation of the Arabic word 'jaib', which means pocket or fold.",
       "relatedLesson": "Trigonometry Basics",
@@ -583,7 +560,10 @@
     ],
     "educationalInfo": {
       "definition": "The trigonometric function that for an acute angle is the ratio between the leg adjacent to the angle and the hypotenuse.",
-      "examples": ["cos(60) = 0.5", "cos(0) = 1"],
+      "examples": [
+        "cos(60) = 0.5",
+        "cos(0) = 1"
+      ],
       "commonMistakes": "Using the opposite side instead of the adjacent side in calculations.",
       "funFact": "The cosine of an angle is identical to the sine of its complementary angle (hence the 'co-' prefix).",
       "relatedLesson": "Trigonometry Basics",
@@ -610,7 +590,10 @@
     ],
     "educationalInfo": {
       "definition": "A trigonometric function representing the ratio of the opposite side to the adjacent side of a right triangle.",
-      "examples": ["tan(45) = 1", "tan(30) = 1/sqrt(3)"],
+      "examples": [
+        "tan(45) = 1",
+        "tan(30) = 1/sqrt(3)"
+      ],
       "commonMistakes": "Inverting the ratio (dividing adjacent by opposite, which is cotangent).",
       "funFact": "At 90 degrees, tangent is undefined because you cannot divide by zero (cosine is 0). Its graph shoots off to infinity.",
       "relatedLesson": "Trigonometry Basics",
@@ -637,7 +620,10 @@
     ],
     "educationalInfo": {
       "definition": "The longest side of a right-angled triangle, opposite the right angle.",
-      "examples": ["In a 3-4-5 right triangle, the side of length 5 is the hypotenuse.", "The diagonal of a rectangle acts as the hypotenuse for the two triangles formed."],
+      "examples": [
+        "In a 3-4-5 right triangle, the side of length 5 is the hypotenuse.",
+        "The diagonal of a rectangle acts as the hypotenuse for the two triangles formed."
+      ],
       "commonMistakes": "Assuming the hypotenuse is the base or height. Applying the term to triangles that don't have a right angle.",
       "funFact": "The word hypotenuse comes from the Greek 'hypoteinousa', meaning 'stretching under'.",
       "relatedLesson": "Pythagoras' Theorem",
@@ -664,13 +650,1897 @@
     ],
     "educationalInfo": {
       "definition": "The angle formed by the line of sight and the horizontal plane for an object above the horizontal.",
-      "examples": ["Looking up at a bird in a tree.", "Measuring the angle from the ground to the top of a flag pole."],
+      "examples": [
+        "Looking up at a bird in a tree.",
+        "Measuring the angle from the ground to the top of a flag pole."
+      ],
       "commonMistakes": "Measuring the angle from the vertical instead of the horizontal ground.",
       "funFact": "Surveyors use an instrument called a clinometer or theodolite to measure angles of elevation in the field.",
       "relatedLesson": "Applications of Trigonometry",
       "practiceQuestions": [
         "If you stand 10m away from a tree and look up at the top at 45 degrees, how tall is the tree (ignoring eye height)?",
         "Explain the difference between the angle of elevation and the angle of depression."
+      ]
+    }
+  },
+  "linear_equations": {
+    "conceptId": "linear_equations",
+    "name": "Linear Equations",
+    "clues": [
+      "I am an algebraic statement of equality.",
+      "My graph forms a straight line.",
+      "The highest exponent of my variables is exactly 1.",
+      "My standard form is written as y = mx + c.",
+      "An example of my form is 2x + 5 = 11."
+    ],
+    "hints": [
+      "Algebra category topic.",
+      "Grade 7 level topic.",
+      "Starts with 'L'."
+    ],
+    "educationalInfo": {
+      "definition": "An equation between two variables that gives a straight line when plotted on a graph.",
+      "examples": [
+        "y = 3x - 2",
+        "4x + 7 = 19"
+      ],
+      "commonMistakes": "Thinking equations with variables squared are linear. Making errors in balance rules (e.g. forgetting to do the same operation to both sides).",
+      "funFact": "Linear equations are the foundation of linear programming, which logistics companies use to optimize shipping routes.",
+      "relatedLesson": "Equations and Formulae",
+      "practiceQuestions": [
+        "Solve for x: 3x - 4 = 11.",
+        "Does the point (2, 5) lie on the line y = 2x + 1?"
+      ]
+    }
+  },
+  "inequalities": {
+    "conceptId": "inequalities",
+    "name": "Inequalities",
+    "clues": [
+      "I describe a comparison between two mathematical quantities.",
+      "I show that one value is larger or smaller than another.",
+      "I use symbols that resemble arrowheads or wedges.",
+      "When you multiply both sides by a negative number, you must flip my symbol.",
+      "Examples of my symbols are <, >, <=, and >=."
+    ],
+    "hints": [
+      "Algebra category topic.",
+      "Grade 8 level topic.",
+      "Starts with 'I'."
+    ],
+    "educationalInfo": {
+      "definition": "A mathematical statement indicating that one expression is greater than, less than, or not equal to another.",
+      "examples": [
+        "2x + 1 > 5",
+        "y <= 3"
+      ],
+      "commonMistakes": "Forgetting to flip the inequality sign when dividing or multiplying by a negative number.",
+      "funFact": "The 'less than' (<) and 'greater than' (>) symbols were introduced by mathematician Thomas Harriot in 1631.",
+      "relatedLesson": "Inequalities",
+      "practiceQuestions": [
+        "Solve for x: -2x > 8.",
+        "Represent x >= 3 on a number line."
+      ]
+    }
+  },
+  "quadratics_formula": {
+    "conceptId": "quadratics_formula",
+    "name": "Quadratics (Formula)",
+    "clues": [
+      "I am an algebraic relation.",
+      "My graph forms a U-shaped curve called a parabola.",
+      "The highest exponent of my variable is exactly 2.",
+      "My standard form is ax^2 + bx + c = 0.",
+      "My solutions can be found using factorisation, completing the square, or a square-root formula."
+    ],
+    "hints": [
+      "Algebra category topic.",
+      "Grade 9 level topic.",
+      "Starts with 'Q'."
+    ],
+    "educationalInfo": {
+      "definition": "Any equation that can be rearranged in standard form as ax^2 + bx + c = 0 where a is not equal to zero.",
+      "examples": [
+        "x^2 - 5x + 6 = 0",
+        "y = 2x^2 + 3"
+      ],
+      "commonMistakes": "Forgetting the plus-minus sign when taking square roots. Missing the quadratic term when rearranging equations.",
+      "funFact": "The path of any thrown object, like a basketball or a stone, is a parabola described by a quadratic equation.",
+      "relatedLesson": "Quadratic Equations",
+      "practiceQuestions": [
+        "Find the roots of x^2 - 9 = 0.",
+        "How many solutions does x^2 - 4x + 4 = 0 have?"
+      ]
+    }
+  },
+  "addition": {
+    "conceptId": "addition",
+    "name": "Addition",
+    "clues": [
+      "I am the most fundamental arithmetic operation.",
+      "I combine two or more groups to find a total sum.",
+      "My mathematical symbol is a plus sign (+).",
+      "I am commutative, meaning the order of numbers doesn't change my result.",
+      "If you combine 3 and 5, you get 8 through me."
+    ],
+    "hints": [
+      "Number Kingdom topic.",
+      "Learned in early primary school.",
+      "Starts with 'A'."
+    ],
+    "educationalInfo": {
+      "definition": "The mathematical process of putting two or more numbers together to find their total sum.",
+      "examples": [
+        "5 + 3 = 8",
+        "10 + 20 = 30"
+      ],
+      "commonMistakes": "Confusing addends, making simple calculation errors, or confusing addition with multiplication.",
+      "funFact": "The plus sign (+) is believed to have originated as an abbreviation for the Latin word 'et', which means 'and'.",
+      "relatedLesson": "Basic Operations",
+      "practiceQuestions": [
+        "What is the sum of 14 and 25?",
+        "If you have 5 apples and buy 7 more, how many do you have?"
+      ]
+    }
+  },
+  "column_addition": {
+    "conceptId": "column_addition",
+    "name": "Column Addition",
+    "clues": [
+      "I am a vertical method of adding numbers.",
+      "I align digits by their place value (units under units, tens under tens).",
+      "I require carrying over values to the next column when a sum exceeds 9.",
+      "I allow you to easily add very large numbers by hand.",
+      "You work from right to left when using me."
+    ],
+    "hints": [
+      "Number Kingdom topic.",
+      "Vertical addition method.",
+      "Starts with 'C'."
+    ],
+    "educationalInfo": {
+      "definition": "A method of adding numbers by writing them vertically one under another and adding each column starting from the right.",
+      "examples": [
+        "Adding 127 and 84 by lining up units, tens, and hundreds.",
+        "45 + 56 = 101 with carry over of 1."
+      ],
+      "commonMistakes": "Misaligning place values, forgetting to add the carried-over digit, or starting from the left column instead of the right.",
+      "funFact": "Column addition has been taught for centuries and is the basis of how mechanical adding machines work.",
+      "relatedLesson": "Addition and Subtraction",
+      "practiceQuestions": [
+        "Add 348 and 275 vertically.",
+        "Solve: 1294 + 857."
+      ]
+    }
+  },
+  "subtraction": {
+    "conceptId": "subtraction",
+    "name": "Subtraction",
+    "clues": [
+      "I am the inverse operation of addition.",
+      "I find the difference between two numbers.",
+      "My mathematical symbol is a minus sign (-).",
+      "I am not commutative; changing the order of my numbers changes the result.",
+      "If you take 3 away from 8, you get 5 through me."
+    ],
+    "hints": [
+      "Number Kingdom topic.",
+      "Basic operation for finding differences.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "The mathematical operation that represents the operation of removing objects from a collection.",
+      "examples": [
+        "10 - 4 = 6",
+        "100 - 45 = 55"
+      ],
+      "commonMistakes": "Subtracting the larger digit from the smaller digit instead of borrowing, or getting the order of the terms mixed up.",
+      "funFact": "The word subtraction comes from the Latin roots 'sub' (under/away) and 'trahere' (to draw).",
+      "relatedLesson": "Basic Operations",
+      "practiceQuestions": [
+        "What is the difference between 92 and 47?",
+        "If you have 15 coins and spend 8, how many are left?"
+      ]
+    }
+  },
+  "multiplication": {
+    "conceptId": "multiplication",
+    "name": "Multiplication",
+    "clues": [
+      "I am often described as repeated addition.",
+      "I scale a quantity by a certain factor.",
+      "My mathematical symbols include a cross (x) or an asterisk (*).",
+      "My result is called the product.",
+      "If you multiply 4 by 3, you get 12."
+    ],
+    "hints": [
+      "Number Kingdom topic.",
+      "Used to scale numbers.",
+      "Starts with 'M'."
+    ],
+    "educationalInfo": {
+      "definition": "The mathematical operation of scaling one number by another.",
+      "examples": [
+        "3 * 4 = 12",
+        "6 * 7 = 42"
+      ],
+      "commonMistakes": "Confusing multiplication with addition, or getting confused by factors containing zero (any number multiplied by zero is zero).",
+      "funFact": "In algebra, multiplication is often implied by writing variables side-by-side, e.g., 'ab' means 'a multiplied by b'.",
+      "relatedLesson": "Basic Operations",
+      "practiceQuestions": [
+        "What is the product of 12 and 8?",
+        "Solve: 9 * 11."
+      ]
+    }
+  },
+  "column_multiplication": {
+    "conceptId": "column_multiplication",
+    "name": "Column Multiplication",
+    "clues": [
+      "I am a vertical method of multiplying numbers.",
+      "I calculate partial products for each digit of the multiplier.",
+      "I require placing placeholder zeros as you shift to higher place values.",
+      "I combine vertical multiplication with column addition for the final step.",
+      "I am also known as long multiplication."
+    ],
+    "hints": [
+      "Number Kingdom topic.",
+      "Long multiplication method.",
+      "Starts with 'C'."
+    ],
+    "educationalInfo": {
+      "definition": "A systematic algorithm for multiplying multi-digit numbers by writing them vertically and finding partial products.",
+      "examples": [
+        "Multiplying 45 by 23 by setting up two lines of partial products.",
+        "12 * 15 = 180."
+      ],
+      "commonMistakes": "Forgetting the placeholder zero when multiplying by the tens digit, addition errors in the final sum, or misaligning columns.",
+      "funFact": "The grid method is often used to teach this concept before transitioning to the compact column method.",
+      "relatedLesson": "Multiplication",
+      "practiceQuestions": [
+        "Multiply 135 by 24 vertically.",
+        "Solve: 76 * 48."
+      ]
+    }
+  },
+  "decimals": {
+    "conceptId": "decimals",
+    "name": "Decimals",
+    "clues": [
+      "I represent parts of a whole using a base-10 system.",
+      "I use a dot or point to separate whole numbers from fractional parts.",
+      "Each place value to the right of my point is a power of 1/10 (tenths, hundredths).",
+      "I can be converted to fractions, and vice-versa.",
+      "The value of Pi is usually approximated as 3.14 through me."
+    ],
+    "hints": [
+      "Number Kingdom topic.",
+      "Uses a point separators.",
+      "Starts with 'D'."
+    ],
+    "educationalInfo": {
+      "definition": "A fraction whose denominator is a power of ten, expressed using a decimal point.",
+      "examples": [
+        "0.5 = 1/2",
+        "0.75 = 3/4",
+        "3.14"
+      ],
+      "commonMistakes": "Confusing the values of 0.05 and 0.5, misaligning decimal points during addition, or incorrect rounding.",
+      "funFact": "The word decimal comes from the Latin word 'decimus', which means tenth.",
+      "relatedLesson": "Decimals",
+      "practiceQuestions": [
+        "Convert 3/5 into a decimal.",
+        "Add 2.34 and 5.8."
+      ]
+    }
+  },
+  "fractions": {
+    "conceptId": "fractions",
+    "name": "Fractions",
+    "clues": [
+      "I represent a part of a whole or a ratio of two integers.",
+      "I consist of a top number (numerator) and a bottom number (denominator).",
+      "My two numbers are separated by a horizontal slash or bar.",
+      "I can be proper, improper, or written as a mixed number.",
+      "A half is written as 1/2 through me."
+    ],
+    "hints": [
+      "Number Kingdom topic.",
+      "Numerator and denominator.",
+      "Starts with 'F'."
+    ],
+    "educationalInfo": {
+      "definition": "A numerical quantity that is not a whole number, representing one or more equal parts of a whole.",
+      "examples": [
+        "3/4",
+        "5/2",
+        "1 1/3"
+      ],
+      "commonMistakes": "Adding denominators when adding fractions (e.g. thinking 1/2 + 1/2 = 2/4), or confusing numerator and denominator roles.",
+      "funFact": "The division sign (÷) is actually a representation of a fraction, with the dots representing the numerator and denominator.",
+      "relatedLesson": "Fractions",
+      "practiceQuestions": [
+        "Simplify the fraction 12/16.",
+        "Add 1/3 and 2/5."
+      ]
+    }
+  },
+  "hcf_lcm": {
+    "conceptId": "hcf_lcm",
+    "name": "HCF & LCM",
+    "clues": [
+      "I combine two major concepts of divisors and multiples.",
+      "I find the highest common factor and the lowest common multiple.",
+      "I am essential for simplifying fractions and solving periodic scheduling questions.",
+      "For any two numbers, their product equals the product of my two values.",
+      "For 4 and 6, my values are 2 (HCF) and 12 (LCM)."
+    ],
+    "hints": [
+      "Number Kingdom topic.",
+      "Highest Factor and Lowest Multiple.",
+      "Starts with 'H'."
+    ],
+    "educationalInfo": {
+      "definition": "The dual concepts of the greatest shared factor (HCF) and the smallest shared multiple (LCM) of a set of numbers.",
+      "examples": [
+        "For 12 and 18, HCF = 6, LCM = 36.",
+        "For 5 and 7, HCF = 1, LCM = 35."
+      ],
+      "commonMistakes": "Confusing HCF and LCM calculations, or listing factors when looking for multiples.",
+      "funFact": "If the HCF of two numbers is 1, they are called coprime or relatively prime.",
+      "relatedLesson": "HCF and LCM",
+      "practiceQuestions": [
+        "Find the HCF and LCM of 8 and 12.",
+        "Verify if HCF(10, 15) * LCM(10, 15) = 10 * 15."
+      ]
+    }
+  },
+  "prime_factors": {
+    "conceptId": "prime_factors",
+    "name": "Prime Factors",
+    "clues": [
+      "I am a special subset of a number's divisors.",
+      "I consist only of prime numbers that multiply to give the original number.",
+      "The Fundamental Theorem of Arithmetic states that my decomposition is unique.",
+      "I am often found using a factor tree.",
+      "For 12, my members are 2, 2, and 3."
+    ],
+    "hints": [
+      "Number Kingdom topic.",
+      "Prime factorization components.",
+      "Starts with 'P'."
+    ],
+    "educationalInfo": {
+      "definition": "The prime numbers that divide an integer exactly, without leaving a remainder.",
+      "examples": [
+        "Prime factors of 12: 2, 2, 3.",
+        "Prime factors of 30: 2, 3, 5."
+      ],
+      "commonMistakes": "Including composite numbers in the factorization (e.g. listing 4 in the prime factorization of 20).",
+      "funFact": "Prime factorization is the basis of RSA encryption, which secures internet traffic. Factoring giant numbers is extremely hard for computers.",
+      "relatedLesson": "Prime Factorization",
+      "practiceQuestions": [
+        "Write the prime factorization of 60.",
+        "What are the prime factors of 49?"
+      ]
+    }
+  },
+  "rounding": {
+    "conceptId": "rounding",
+    "name": "Rounding",
+    "clues": [
+      "I make a number simpler while keeping its value close to the original.",
+      "I approximate values to a specific place value (nearest ten, hundred, etc.).",
+      "The rule is: if the next digit is 5 or more, you round up.",
+      "I am used to make estimates or clean up long decimal values.",
+      "The number 6.8 rounds to 7 when rounding to the nearest integer."
+    ],
+    "hints": [
+      "Number Kingdom topic.",
+      "Approximating numbers.",
+      "Starts with 'R'."
+    ],
+    "educationalInfo": {
+      "definition": "Replacing a number with an approximate value that is shorter, simpler, or more explicit.",
+      "examples": [
+        "Rounding 73 to the nearest ten gives 70.",
+        "Rounding 1.56 to one decimal place gives 1.6."
+      ],
+      "commonMistakes": "Rounding down when the digit is 5, or rounding multiple times consecutively (e.g. 4.48 -> 4.5 -> 5).",
+      "funFact": "In financial calculations, bankers sometimes use 'half-to-even' rounding to reduce statistical bias.",
+      "relatedLesson": "Rounding and Estimation",
+      "practiceQuestions": [
+        "Round 345 to the nearest hundred.",
+        "Round 9.876 to two decimal places."
+      ]
+    }
+  },
+  "arithmetic": {
+    "conceptId": "arithmetic",
+    "name": "Arithmetic",
+    "clues": [
+      "I am the oldest and most elementary branch of mathematics.",
+      "I focus on the properties and manipulation of numbers.",
+      "My core operations are addition, subtraction, multiplication, and division.",
+      "My name comes from the Greek word 'arithmos', which means number.",
+      "Every calculation begins with my rules."
+    ],
+    "hints": [
+      "Arithmetic Kingdom topic.",
+      "Basic study of numbers.",
+      "Starts with 'A'."
+    ],
+    "educationalInfo": {
+      "definition": "The branch of mathematics dealing with the properties and manipulation of numbers.",
+      "examples": [
+        "Simple arithmetic equations like 5 + 3 = 8.",
+        "Order of operations (BODMAS/PEMDAS)."
+      ],
+      "commonMistakes": "Violating the order of operations, or basic arithmetic mistakes like carry over errors.",
+      "funFact": "Arithmetic is one of the pillars of the classical Liberal Arts, known as the Quadrivium.",
+      "relatedLesson": "Number Systems",
+      "practiceQuestions": [
+        "Solve: 5 + 3 * 2.",
+        "What does the term 'arithmetic progression' mean?"
+      ]
+    }
+  },
+  "percentages": {
+    "conceptId": "percentages",
+    "name": "Percentages",
+    "clues": [
+      "I represent a rate or fraction out of 100.",
+      "My mathematical symbol is %.",
+      "I can be written as a decimal by dividing by 100.",
+      "I am used to calculate discounts, interest rates, and school grades.",
+      "Half of a quantity is represented as 50% through me."
+    ],
+    "hints": [
+      "Arithmetic Kingdom topic.",
+      "Per hundred.",
+      "Starts with 'P'."
+    ],
+    "educationalInfo": {
+      "definition": "A relative value indicating the hundredth part of any quantity.",
+      "examples": [
+        "25% = 25/100 = 0.25",
+        "75% of 80 is 60."
+      ],
+      "commonMistakes": "Forgetting to divide by 100 when performing arithmetic, or incorrectly adding percentages directly (like successively applying two 10% discounts).",
+      "funFact": "The word percent comes from the Latin 'per centum', which translates directly to 'by the hundred'.",
+      "relatedLesson": "Percentages",
+      "practiceQuestions": [
+        "What is 15% of 200?",
+        "Convert 0.85 into a percentage."
+      ]
+    }
+  },
+  "ratio": {
+    "conceptId": "ratio",
+    "name": "Ratio",
+    "clues": [
+      "I compare two or more quantities to show their relative sizes.",
+      "I am usually written as numbers separated by a colon (:).",
+      "I do not have units, as I am a comparison of similar quantities.",
+      "I can be simplified like a fraction by dividing by a common factor.",
+      "If there are 2 apples and 3 oranges, their comparison is written as 2:3."
+    ],
+    "hints": [
+      "Arithmetic Kingdom topic.",
+      "Proportional comparison.",
+      "Starts with 'R'."
+    ],
+    "educationalInfo": {
+      "definition": "The quantitative relation between two amounts showing the number of times one value contains or is contained within the other.",
+      "examples": [
+        "A ratio of 4:6 simplifies to 2:3.",
+        "Sharing $100 in the ratio 2:3 yields $40 and $60."
+      ],
+      "commonMistakes": "Writing the terms in the wrong order, or failing to simplify the ratio completely.",
+      "funFact": "The Golden Ratio (~1.618) is a famous mathematical ratio found in nature, art, and architecture.",
+      "relatedLesson": "Ratios and Proportions",
+      "practiceQuestions": [
+        "Simplify the ratio 15:25.",
+        "If a map scale is 1:10000, what does 5cm on the map represent in real life?"
+      ]
+    }
+  },
+  "profit_loss": {
+    "conceptId": "profit_loss",
+    "name": "Profit & Loss",
+    "clues": [
+      "I measure the financial outcome of buying and selling items.",
+      "I determine if you made a gain or suffered a deficit.",
+      "I depend on Cost Price (CP) and Selling Price (SP).",
+      "If SP is greater than CP, you get a positive return (gain).",
+      "I am usually expressed as a percentage of the Cost Price."
+    ],
+    "hints": [
+      "Arithmetic Kingdom topic.",
+      "Business transactions calculations.",
+      "Starts with 'P'."
+    ],
+    "educationalInfo": {
+      "definition": "The calculation of financial gain (profit) or financial deficit (loss) resulting from business transactions.",
+      "examples": [
+        "Buying for $10 and selling for $12 yields a profit of $2 (20%).",
+        "Buying for $50 and selling for $40 yields a loss of $10 (20%)."
+      ],
+      "commonMistakes": "Calculating profit/loss percentage based on the Selling Price instead of the Cost Price.",
+      "funFact": "In business accounting, profits are often marked in black ink, while losses are marked in red ink (hence the phrase 'in the red').",
+      "relatedLesson": "Commercial Mathematics",
+      "practiceQuestions": [
+        "An item bought for $80 is sold for $100. Find the profit percentage.",
+        "Calculate the loss if a machine costing $1200 is sold at a 15% loss."
+      ]
+    }
+  },
+  "gst": {
+    "conceptId": "gst",
+    "name": "GST",
+    "clues": [
+      "I am a modern indirect tax levied on consumer purchases.",
+      "My name stands for Goods and Services Tax.",
+      "I am calculated as a percentage of the sale price and added to the total bill.",
+      "I replaced many cascading taxes in countries like India, Canada, and Australia.",
+      "If an item costs $100 and tax is 18%, the final price is $118."
+    ],
+    "hints": [
+      "Arithmetic Kingdom topic.",
+      "Taxation system.",
+      "Starts with 'G'."
+    ],
+    "educationalInfo": {
+      "definition": "Goods and Services Tax: a value-added tax levied on most goods and services sold for domestic consumption.",
+      "examples": [
+        "18% GST on a $500 laptop adds $90 to the bill.",
+        "Calculations involving inclusive vs. exclusive GST."
+      ],
+      "commonMistakes": "Adding GST directly when the price is already 'inclusive of tax', or applying the wrong tax rate slab.",
+      "funFact": "France was the first country to implement a GST/VAT system in 1954 to eliminate tax cascading.",
+      "relatedLesson": "Commercial Mathematics",
+      "practiceQuestions": [
+        "If a restaurant bill is $80 before a 5% GST, what is the final amount?",
+        "An item is sold for $112 inclusive of 12% GST. Find its original cost."
+      ]
+    }
+  },
+  "banking_rd": {
+    "conceptId": "banking_rd",
+    "name": "Banking (RD)",
+    "clues": [
+      "I am a type of saving deposit offered by banks.",
+      "My name stands for Recurring Deposit.",
+      "I require a customer to deposit a fixed sum of money every month.",
+      "I earn interest over a fixed tenure, and pay out a maturity value at the end.",
+      "I am highly popular for systematic savings plans."
+    ],
+    "hints": [
+      "Arithmetic Kingdom topic.",
+      "Systematic monthly savings.",
+      "Starts with 'B'."
+    ],
+    "educationalInfo": {
+      "definition": "A recurring deposit is a special term deposit that allows people to make regular deposits and earn decent returns on their savings.",
+      "examples": [
+        "Depositing $100 every month for 2 years at 6% interest.",
+        "Calculating interest using the formula: I = P * [n(n+1)/(2*12)] * (r/100)."
+      ],
+      "commonMistakes": "Confusing the monthly deposit with the principal sum, or failing to adjust the time factor to years correctly in interest formulas.",
+      "funFact": "RDs help teach financial discipline by encouraging consistent savings habits.",
+      "relatedLesson": "Banking",
+      "practiceQuestions": [
+        "A person deposits $500 per month in an RD for 12 months. Calculate the total principal deposited.",
+        "Explain how a Recurring Deposit differs from a Fixed Deposit."
+      ]
+    }
+  },
+  "shares_dividends": {
+    "conceptId": "shares_dividends",
+    "name": "Shares & Dividends",
+    "clues": [
+      "I deal with corporate ownership and stock market investments.",
+      "I represent units of ownership in a business entity.",
+      "I distribute a portion of company earnings back to the investors.",
+      "I involve terms like Face Value, Market Value, and Dividend Rate.",
+      "Dividends are always calculated as a percentage of the Face Value."
+    ],
+    "hints": [
+      "Arithmetic Kingdom topic.",
+      "Stock market vocabulary.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "Calculations involving investments in company stocks (shares) and the distribution of corporate profits (dividends) to shareholders.",
+      "examples": [
+        "Buying shares at a market premium.",
+        "Receiving a 10% dividend on shares of face value $100."
+      ],
+      "commonMistakes": "Calculating dividends using the Market Value instead of the nominal/Face Value of the shares.",
+      "funFact": "The Dutch East India Company was the first company to issue public shares and pay dividends in the 17th century.",
+      "relatedLesson": "Commercial Mathematics",
+      "practiceQuestions": [
+        "A man buys 50 shares of face value $10 at $12 market price. Find his investment.",
+        "Calculate the annual dividend received from 100 shares of face value $50 yielding 8% dividend."
+      ]
+    }
+  },
+  "speed_distance_time": {
+    "conceptId": "speed_distance_time",
+    "name": "Speed, Distance & Time",
+    "clues": [
+      "I am a fundamental relationship in physics and motion.",
+      "My core equation states that rate equals space divided by duration.",
+      "I use units like meters per second, or miles per hour.",
+      "I require unit conversions, such as converting km/h to m/s.",
+      "If you travel 120 km in 2 hours, your rate is 60 km/h."
+    ],
+    "hints": [
+      "Arithmetic Kingdom topic.",
+      "Motion calculations.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "The mathematical relationship linking speed, distance traveled, and the time taken to travel that distance.",
+      "examples": [
+        "Speed = Distance / Time",
+        "Distance = Speed * Time",
+        "Time = Distance / Speed"
+      ],
+      "commonMistakes": "Mixing up units (e.g., dividing kilometers by minutes without converting to hours), or forgetting that average speed is total distance divided by total time.",
+      "funFact": "Speed limits were first introduced in the UK in 1861, restricting steam locomotives to 10 mph.",
+      "relatedLesson": "Speed and Motion",
+      "practiceQuestions": [
+        "How far does a car travel in 3.5 hours at a speed of 80 km/h?",
+        "Convert a speed of 90 km/h into meters per second."
+      ]
+    }
+  },
+  "standard_form": {
+    "conceptId": "standard_form",
+    "name": "Standard Form",
+    "clues": [
+      "I am also known as scientific notation.",
+      "I write numbers as a product of a decimal and a power of ten.",
+      "My format is written as a * 10^n.",
+      "My lead coefficient (a) must be greater than or equal to 1, and strictly less than 10.",
+      "The speed of light (300,000,000 m/s) is written as 3 * 10^8 in my form."
+    ],
+    "hints": [
+      "Arithmetic Kingdom topic.",
+      "Scientific notation system.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "A way of writing very large or very small numbers in the format a * 10^n where 1 <= a < 10 and n is an integer.",
+      "examples": [
+        "45,000 = 4.5 * 10^4",
+        "0.0034 = 3.4 * 10^-3"
+      ],
+      "commonMistakes": "Writing the coefficient as a number greater than 10 (e.g. 45 * 10^3), or counting the number of zeros instead of decimal places.",
+      "funFact": "Standard form makes it easy to compare sizes, such as comparing the mass of the Earth (5.97 * 10^24 kg) to the Moon (7.34 * 10^22 kg).",
+      "relatedLesson": "Powers and Standard Form",
+      "practiceQuestions": [
+        "Express 0.000057 in standard form.",
+        "Convert 8.2 * 10^5 into an ordinary number."
+      ]
+    }
+  },
+  "number_bases": {
+    "conceptId": "number_bases",
+    "name": "Number Bases",
+    "clues": [
+      "I describe systems of counting and representing numbers.",
+      "I define the number of unique digits available in the system.",
+      "Computers use my base-2 system (binary) to represent all code.",
+      "Our everyday counting uses my base-10 system (decimal).",
+      "Base-16 (hexadecimal) uses letters A-F to represent values 10-15."
+    ],
+    "hints": [
+      "Arithmetic Kingdom topic.",
+      "Counting systems.",
+      "Starts with 'N'."
+    ],
+    "educationalInfo": {
+      "definition": "The number of unique digits, including zero, used to represent numbers in a positional numeral system.",
+      "examples": [
+        "Binary (Base 2): 1010 = 10",
+        "Octal (Base 8)",
+        "Hexadecimal (Base 16)"
+      ],
+      "commonMistakes": "Using digits that are not allowed in the base (e.g., writing the digit '2' in a binary number).",
+      "funFact": "The ancient Babylonians used a base-60 (sexagesimal) system, which is why we have 60 seconds in a minute and 360 degrees in a circle.",
+      "relatedLesson": "Number Systems",
+      "practiceQuestions": [
+        "Convert the binary number 1101 into base 10.",
+        "What is the hexadecimal representation of the decimal number 15?"
+      ]
+    }
+  },
+  "angles": {
+    "conceptId": "angles",
+    "name": "Angles",
+    "clues": [
+      "I measure the amount of turn or rotation between two intersecting lines.",
+      "I am measured in degrees using a protractor.",
+      "I can also be measured in radians in higher mathematics.",
+      "My types include acute, obtuse, right, reflex, and straight.",
+      "A right angle measures exactly 90 degrees."
+    ],
+    "hints": [
+      "Geometry Kingdom topic.",
+      "Rotational gap measurement.",
+      "Starts with 'A'."
+    ],
+    "educationalInfo": {
+      "definition": "The space (usually measured in degrees) between two intersecting lines or surfaces at or close to the point where they meet.",
+      "examples": [
+        "Acute angle: less than 90 degrees.",
+        "Obtuse angle: between 90 and 180 degrees.",
+        "Right angle: exactly 90 degrees."
+      ],
+      "commonMistakes": "Confusing obtuse and acute angles, or reading the wrong scale (inner vs. outer) on a protractor.",
+      "funFact": "The symbol for degrees (°) is a small circle, which reflects the historical subdivision of a full circle into 360 parts.",
+      "relatedLesson": "Angles and Lines",
+      "practiceQuestions": [
+        "If two angles lie on a straight line and one is 65 degrees, what is the other?",
+        "Find the reflex angle corresponding to an interior angle of 110 degrees."
+      ]
+    }
+  },
+  "triangles": {
+    "conceptId": "triangles",
+    "name": "Triangles",
+    "clues": [
+      "I am the simplest polygon.",
+      "I have exactly three sides and three vertices.",
+      "The sum of my interior angles is always 180 degrees.",
+      "I can be classified by my sides (equilateral, isosceles, scalene) or my angles (acute, right, obtuse).",
+      "My area is calculated as 0.5 * base * height."
+    ],
+    "hints": [
+      "Geometry Kingdom topic.",
+      "Three-sided shape.",
+      "Starts with 'T'."
+    ],
+    "educationalInfo": {
+      "definition": "A plane figure with three straight sides and three angles.",
+      "examples": [
+        "Equilateral triangle: 3 equal sides and angles (60 degrees).",
+        "Isosceles triangle: 2 equal sides and angles."
+      ],
+      "commonMistakes": "Believing a triangle can have more than one right angle, or assuming the angle sum changes depending on size.",
+      "funFact": "Triangles are the only rigid polygon. This makes them crucial for building bridges, roofs, and crane trusses.",
+      "relatedLesson": "Triangles",
+      "practiceQuestions": [
+        "If a triangle has angles of 50 and 70 degrees, what is the third angle?",
+        "Can a triangle have side lengths of 2cm, 3cm, and 6cm? Why or why not?"
+      ]
+    }
+  },
+  "congruence": {
+    "conceptId": "congruence",
+    "name": "Congruence",
+    "clues": [
+      "I describe objects that are identical in every way.",
+      "I state that two shapes are exactly the same size and shape.",
+      "My test criteria for triangles include SSS, SAS, ASA, and RHS.",
+      "My mathematical symbol is an equals sign with a wavy line on top (~ over =).",
+      "If you slide, rotate, or reflect a shape, the new shape retains this relationship with the original."
+    ],
+    "hints": [
+      "Geometry Kingdom topic.",
+      "Identical geometric equality.",
+      "Starts with 'C'."
+    ],
+    "educationalInfo": {
+      "definition": "The state of being identical in form, shape, and size; matching exactly when superimposed.",
+      "examples": [
+        "Two triangles with side lengths 3cm, 4cm, and 5cm are congruent.",
+        "The two halves of a symmetric shape."
+      ],
+      "commonMistakes": "Confusing congruence with similarity (similar shapes have the same shape but different sizes).",
+      "funFact": "Congruence is a fundamental concept in manufacturing, ensuring spare parts fit machinery perfectly.",
+      "relatedLesson": "Congruence and Similarity",
+      "practiceQuestions": [
+        "State the SSS congruence criterion.",
+        "If Triangle ABC is congruent to Triangle PQR, and angle B is 45 degrees, find angle Q."
+      ]
+    }
+  },
+  "similarity": {
+    "conceptId": "similarity",
+    "name": "Similarity",
+    "clues": [
+      "I describe shapes that are scaled versions of one another.",
+      "I mean that two shapes have the same shape, but different sizes.",
+      "My corresponding angles are equal, and my corresponding sides are in proportion.",
+      "I am the basis of map scales, models, and zooming in on images.",
+      "All circles and all squares share this property with others of their kind."
+    ],
+    "hints": [
+      "Geometry Kingdom topic.",
+      "Same shape, different size.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "The property of two geometric figures having the same shape, corresponding angles equal, and corresponding sides proportional.",
+      "examples": [
+        "A photo and its enlargement.",
+        "Triangles with angles 30, 60, 90 of different sizes."
+      ],
+      "commonMistakes": "Assuming similar figures have the same perimeter or area (areas scale by the square of the scale factor).",
+      "funFact": "Thales of Miletus used similarity to calculate the height of the Egyptian pyramids by comparing their shadows to the shadow of his staff.",
+      "relatedLesson": "Congruence and Similarity",
+      "practiceQuestions": [
+        "If a triangle has sides 3, 4, 5 and a similar triangle has a scale factor of 3, find the sides of the larger triangle.",
+        "What is the relation between the areas of two similar figures with scale factor k?"
+      ]
+    }
+  },
+  "polygons": {
+    "conceptId": "polygons",
+    "name": "Polygons",
+    "clues": [
+      "I am a general term for a closed 2D shape with straight sides.",
+      "My sides must not cross over one another.",
+      "My name comes from the Greek words for 'many angles'.",
+      "My interior angle sum is calculated as (n - 2) * 180, where n is the number of sides.",
+      "My regular members have all sides and angles equal."
+    ],
+    "hints": [
+      "Geometry Kingdom topic.",
+      "General multi-sided straight shapes.",
+      "Starts with 'P'."
+    ],
+    "educationalInfo": {
+      "definition": "A plane figure with at least three straight sides and angles, typically five or more.",
+      "examples": [
+        "Pentagon (5 sides)",
+        "Hexagon (6 sides)",
+        "Octagon (8 sides)"
+      ],
+      "commonMistakes": "Including shapes with curved sides (like circles) in the polygon family, or misapplying the angle sum formula.",
+      "funFact": "A polygon with 100 sides is called a hectogon, and one with an infinite number of sides approaches a circle.",
+      "relatedLesson": "Polygons",
+      "practiceQuestions": [
+        "Find the sum of the interior angles of a regular hexagon.",
+        "What is the measure of each interior angle of a regular octagon?"
+      ]
+    }
+  },
+  "circle_theorems": {
+    "conceptId": "circle_theorems",
+    "name": "Circle Theorems",
+    "clues": [
+      "I am a set of geometric rules regarding angles inside circles.",
+      "One of my rules states that an angle in a semicircle is a right angle.",
+      "Another rule states that angles subtended by the same arc are equal.",
+      "I also deal with cyclic quadrilaterals, whose opposite angles sum to 180 degrees.",
+      "I include theorems about tangents, chords, and radii."
+    ],
+    "hints": [
+      "Geometry Kingdom topic.",
+      "Circle angle laws.",
+      "Starts with 'C'."
+    ],
+    "educationalInfo": {
+      "definition": "A collection of theorems stating relationships between angles, chords, tangents, and secants in a circle.",
+      "examples": [
+        "Angle at center is twice the angle at the circumference.",
+        "Angles in same segment are equal.",
+        "Tangent is perpendicular to radius."
+      ],
+      "commonMistakes": "Confusing cyclic quadrilaterals with standard quadrilaterals drawn inside a circle (vertices must lie exactly on the circle).",
+      "funFact": "Thales' Theorem (angle in a semicircle) is one of the oldest recorded mathematical theorems.",
+      "relatedLesson": "Circle Geometry",
+      "practiceQuestions": [
+        "If a cyclic quadrilateral has an angle of 85 degrees, find the opposite angle.",
+        "State the relationship between a tangent to a circle and the radius at the point of contact."
+      ]
+    }
+  },
+  "herons_formula": {
+    "conceptId": "herons_formula",
+    "name": "Heron's Formula",
+    "clues": [
+      "I calculate the area of a triangle.",
+      "I do not require knowing the height of the triangle.",
+      "I only require the lengths of all three sides.",
+      "I use a term called the semi-perimeter (s), which is half the perimeter.",
+      "My mathematical formula is: Area = sqrt(s * (s - a) * (s - b) * (s - c))."
+    ],
+    "hints": [
+      "Geometry Kingdom topic.",
+      "Area using three side lengths.",
+      "Starts with 'H'."
+    ],
+    "educationalInfo": {
+      "definition": "A formula for finding the area of a triangle given the lengths of its three sides.",
+      "examples": [
+        "Finding area of triangle with sides 5, 12, 13 using s = 15.",
+        "Formula: A = sqrt(s(s-a)(s-b)(s-c))."
+      ],
+      "commonMistakes": "Adding side lengths incorrectly when calculating semi-perimeter, or arithmetic errors inside the square root.",
+      "funFact": "The formula is credited to Hero of Alexandria, a Greek mathematician and engineer who lived in 60 AD.",
+      "relatedLesson": "Area of Triangles",
+      "practiceQuestions": [
+        "Find the area of a triangle with sides 6cm, 8cm, and 10cm using Heron's Formula.",
+        "Calculate the semi-perimeter for a triangle with sides 7, 24, and 25."
+      ]
+    }
+  },
+  "circular_measure": {
+    "conceptId": "circular_measure",
+    "name": "Circular Measure",
+    "clues": [
+      "I deal with calculations of arcs, sectors, and segments.",
+      "I express angles in radians, where 180 degrees equals Pi radians.",
+      "My arc length formula is simple: s = r * theta (in radians).",
+      "My sector area formula is: Area = 0.5 * r^2 * theta.",
+      "I bridge geometry and trigonometry for curved pathways."
+    ],
+    "hints": [
+      "Geometry Kingdom topic.",
+      "Radian-based circle math.",
+      "Starts with 'C'."
+    ],
+    "educationalInfo": {
+      "definition": "The branch of circle geometry dealing with angles measured in radians, arc lengths, and area of sectors.",
+      "examples": [
+        "Arc length s = r * theta.",
+        "Sector area A = 0.5 * r^2 * theta.",
+        "Converting degrees to radians."
+      ],
+      "commonMistakes": "Using angles in degrees inside the arc length or sector area formulas (must convert to radians first).",
+      "funFact": "A radian is the angle subtended at the center of a circle by an arc equal in length to the radius of the circle.",
+      "relatedLesson": "Circles and Radians",
+      "practiceQuestions": [
+        "Convert 60 degrees into radians (in terms of pi).",
+        "Find the arc length of a circle of radius 6cm with a central angle of 2 radians."
+      ]
+    }
+  },
+  "transformations": {
+    "conceptId": "transformations",
+    "name": "Transformations",
+    "clues": [
+      "I move or change a geometric figure on a plane.",
+      "My core operations include translation, rotation, reflection, and enlargement.",
+      "Translations shift a shape without turning or resizing it.",
+      "Reflections flip a shape across a mirror line.",
+      "Enlargements resize a shape by a scale factor from a center point."
+    ],
+    "hints": [
+      "Geometry Kingdom topic.",
+      "Moving and resizing shapes.",
+      "Starts with 'T'."
+    ],
+    "educationalInfo": {
+      "definition": "A general term for four specific ways to manipulate the shape and/or position of a point, a line, or a geometric figure.",
+      "examples": [
+        "Translation by vector [2, -3].",
+        "Reflection in the line y = x.",
+        "Rotation of 90 degrees clockwise."
+      ],
+      "commonMistakes": "Confusing clockwise and counter-clockwise rotation, or applying translations in the wrong direction.",
+      "funFact": "Computer graphics and video games use transformation matrices to render 3D coordinates onto flat screens in real time.",
+      "relatedLesson": "Coordinate Geometry",
+      "practiceQuestions": [
+        "Translate the point (3, 4) by the vector [2, -1].",
+        "What is the coordinate of (2, 5) after reflection in the y-axis?"
+      ]
+    }
+  },
+  "simultaneous_equations": {
+    "conceptId": "simultaneous_equations",
+    "name": "Simultaneous Equations",
+    "clues": [
+      "I am a system containing multiple equations.",
+      "I contain multiple unknown variables that must satisfy all equations at once.",
+      "I can be solved using elimination, substitution, or graphical methods.",
+      "Graphically, my solution is the point where the lines intersect.",
+      "An example of my form is: x + y = 5 and 2x - y = 1."
+    ],
+    "hints": [
+      "Algebra Kingdom topic.",
+      "Systems of linear equations.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "A set of equations containing multiple variables that are solved together to find a common set of values.",
+      "examples": [
+        "Solving x + y = 10 and x - y = 4 yields x = 7, y = 3.",
+        "Graphical intersection of two lines."
+      ],
+      "commonMistakes": "Making sign errors when subtracting equations, or forgetting to solve for both variables.",
+      "funFact": "GPS receivers solve simultaneous equations involving distances to multiple satellites to locate your position.",
+      "relatedLesson": "Simultaneous Equations",
+      "practiceQuestions": [
+        "Solve: x + y = 6 and 2x + y = 8.",
+        "What does it mean if a system of simultaneous equations has parallel lines?"
+      ]
+    }
+  },
+  "functions": {
+    "conceptId": "functions",
+    "name": "Functions",
+    "clues": [
+      "I associate every input value with exactly one output value.",
+      "I pass the vertical line test on a graph.",
+      "My inputs are called the domain, and my outputs are called the range.",
+      "I am commonly represented in notation as f(x) or g(x).",
+      "If f(x) = 2x, then my output for input 5 is 10."
+    ],
+    "hints": [
+      "Algebra Kingdom topic.",
+      "Input-output relations.",
+      "Starts with 'F'."
+    ],
+    "educationalInfo": {
+      "definition": "A relation from a set of inputs to a set of possible outputs where each input is related to exactly one output.",
+      "examples": [
+        "f(x) = x^2",
+        "f(x) = 2x + 1",
+        "Inverse functions f^-1(x)"
+      ],
+      "commonMistakes": "Thinking a relation where one input has two outputs (like a vertical line or side parabola) is a function.",
+      "funFact": "The word function was first introduced by Gottfried Leibniz in 1673 to describe quantities associated with a curve.",
+      "relatedLesson": "Functions and Graphs",
+      "practiceQuestions": [
+        "If f(x) = 3x - 5, find f(4).",
+        "Explain what the domain of a function represents."
+      ]
+    }
+  },
+  "indices": {
+    "conceptId": "indices",
+    "name": "Indices",
+    "clues": [
+      "I represent powers, exponents, or logarithms.",
+      "I show the number of times a base is multiplied by itself.",
+      "My laws include: x^a * x^b = x^(a+b), and (x^a)^b = x^(ab).",
+      "Any non-zero base raised to the power of 0 equals 1.",
+      "Negative values of me represent reciprocals, e.g. x^-1 = 1/x."
+    ],
+    "hints": [
+      "Algebra Kingdom topic.",
+      "Exponents and powers.",
+      "Starts with 'I'."
+    ],
+    "educationalInfo": {
+      "definition": "The index (plural indices) of a number shows how many times to use the number in a multiplication.",
+      "examples": [
+        "2^3 = 8",
+        "5^0 = 1",
+        "x^-2 = 1/x^2"
+      ],
+      "commonMistakes": "Multiplying base and power directly (e.g. thinking 2^3 = 6), or adding bases instead of powers when multiplying.",
+      "funFact": "Exponential growth (governed by indices) starts slowly but accelerates rapidly, describing population growth and compound interest.",
+      "relatedLesson": "Powers and Roots",
+      "practiceQuestions": [
+        "Simplify: (a^3 * a^4) / a^2.",
+        "What is the value of 8^(2/3)?"
+      ]
+    }
+  },
+  "surds": {
+    "conceptId": "surds",
+    "name": "Surds",
+    "clues": [
+      "I am an irrational number left in its root form.",
+      "I preserve absolute numerical accuracy because my decimal form goes on forever.",
+      "Examples of me include sqrt(2), sqrt(3), and sqrt(5).",
+      "You can simplify me by finding square factors, like sqrt(12) = 2*sqrt(3).",
+      "My denominators are often simplified using a process called rationalizing."
+    ],
+    "hints": [
+      "Algebra Kingdom topic.",
+      "Irrational root numbers.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "Irrational numbers containing root symbols that cannot be simplified to rational numbers or integers.",
+      "examples": [
+        "sqrt(2)",
+        "sqrt(8) = 2*sqrt(2)",
+        "Rationalizing 1/sqrt(2) to sqrt(2)/2"
+      ],
+      "commonMistakes": "Thinking that all root symbols are surds (e.g. sqrt(4) is NOT a surd since it simplifies to 2).",
+      "funFact": "The Greeks discovered surds when they realized the hypotenuse of a right triangle with legs of length 1 could not be written as a fraction.",
+      "relatedLesson": "Surds and Radicals",
+      "practiceQuestions": [
+        "Simplify the surd: sqrt(50).",
+        "Rationalize the denominator of: 3 / sqrt(5)."
+      ]
+    }
+  },
+  "polynomial_factorization": {
+    "conceptId": "polynomial_factorization",
+    "name": "Polynomial Factorization",
+    "clues": [
+      "I write a complex algebraic expression as a product of simpler ones.",
+      "I am the inverse process of algebraic expansion.",
+      "I use methods like grouping, taking out common terms, and splitting the middle term.",
+      "For a quadratic, I resolve ax^2 + bx + c into (x - p)(x - q).",
+      "For x^2 - 9, my factorized form is (x - 3)(x + 3)."
+    ],
+    "hints": [
+      "Algebra Kingdom topic.",
+      "Factoring algebraic expressions.",
+      "Starts with 'P'."
+    ],
+    "educationalInfo": {
+      "definition": "The process of factoring a polynomial into a product of simpler polynomials that cannot be factored further.",
+      "examples": [
+        "x^2 - 5x + 6 = (x - 2)(x - 3)",
+        "Difference of squares: a^2 - b^2 = (a-b)(a+b)"
+      ],
+      "commonMistakes": "Incorrect signs in the factored brackets, or failing to check if a common numerical factor can be extracted first.",
+      "funFact": "Polynomial factorization is used to solve high-degree equations and simplify complex algebraic fractions.",
+      "relatedLesson": "Factorization",
+      "practiceQuestions": [
+        "Factorize: x^2 + 7x + 12.",
+        "Factorize completely: 3x^2 - 12."
+      ]
+    }
+  },
+  "polynomial_multiplication": {
+    "conceptId": "polynomial_multiplication",
+    "name": "Polynomial Multiplication",
+    "clues": [
+      "I expand products of algebraic terms.",
+      "I require multiplying every term of one expression by every term of another.",
+      "The FOIL method (First, Outer, Inner, Last) is a common rule used for binomials.",
+      "I combine exponents of variables when multiplying terms.",
+      "If you multiply (x+1) and (x+2), you get x^2 + 3x + 2 through me."
+    ],
+    "hints": [
+      "Algebra Kingdom topic.",
+      "Expanding algebraic terms.",
+      "Starts with 'P'."
+    ],
+    "educationalInfo": {
+      "definition": "The algebraic process of multiplying polynomials to form a single expanded polynomial.",
+      "examples": [
+        "(x + 2)(x + 3) = x^2 + 5x + 6",
+        "Distributing a(b + c) = ab + ac"
+      ],
+      "commonMistakes": "Forgetting to distribute to all terms in the brackets, or incorrect addition of powers of variables (e.g. thinking x * x = 2x instead of x^2).",
+      "funFact": "Polynomial multiplication is isomorphic to the convolution operation used in signal processing and deep learning networks.",
+      "relatedLesson": "Algebraic Expansion",
+      "practiceQuestions": [
+        "Expand: (2x - 3)(x + 5).",
+        "Multiply: x * (x^2 - 3x + 2)."
+      ]
+    }
+  },
+  "algebraic_fractions": {
+    "conceptId": "algebraic_fractions",
+    "name": "Algebraic Fractions",
+    "clues": [
+      "I am a fraction containing variables in the numerator or denominator.",
+      "I can be simplified by factorizing and canceling common expressions.",
+      "I require a common denominator when adding or subtracting my terms.",
+      "To divide me, you multiply by the reciprocal of the divisor.",
+      "An example of me is: (x^2 - 4) / (x - 2), which simplifies to (x + 2)."
+    ],
+    "hints": [
+      "Algebra Kingdom topic.",
+      "Fractions containing algebra.",
+      "Starts with 'A'."
+    ],
+    "educationalInfo": {
+      "definition": "A fraction whose numerator and/or denominator are algebraic expressions.",
+      "examples": [
+        "(2x) / 3",
+        "(x + 1) / (x^2 - 1) = 1 / (x - 1)"
+      ],
+      "commonMistakes": "Canceling terms that are added rather than multiplied (e.g. trying to cancel 'x' in (x+2)/x to get 2).",
+      "funFact": "Simplifying algebraic fractions is key to solving rational equations and performing integral calculus.",
+      "relatedLesson": "Algebraic Fractions",
+      "practiceQuestions": [
+        "Simplify: (x^2 - 9) / (2x + 6).",
+        "Add: 1/x + 2/y."
+      ]
+    }
+  },
+  "matrices": {
+    "conceptId": "matrices",
+    "name": "Matrices",
+    "clues": [
+      "I am a rectangular grid of numbers arranged in rows and columns.",
+      "My size is described by dimensions like 2x2 or 3x2.",
+      "I can be added and subtracted if my dimensions match.",
+      "My multiplication is row-by-column, and is not commutative (AB != BA).",
+      "My identity member has 1s on the diagonal and 0s elsewhere."
+    ],
+    "hints": [
+      "Advanced Mathematics topic.",
+      "Grids of numbers.",
+      "Starts with 'M'."
+    ],
+    "educationalInfo": {
+      "definition": "A rectangular array of quantities or expressions in rows and columns that is treated as a single entity.",
+      "examples": [
+        "A 2x2 matrix representing transformations.",
+        "Matrix multiplication.",
+        "Determinants and Inverses."
+      ],
+      "commonMistakes": "Multiplying element-wise instead of row-by-column, or assuming matrix multiplication is commutative.",
+      "funFact": "Computer graphics render 3D coordinate transformations using 4x4 matrices. Shaders perform billions of matrix operations per second.",
+      "relatedLesson": "Matrices",
+      "practiceQuestions": [
+        "Find the determinant of the matrix [[2, 3], [1, 4]].",
+        "Multiply [[1, 2], [3, 4]] by [[2], [1]]."
+      ]
+    }
+  },
+  "vectors": {
+    "conceptId": "vectors",
+    "name": "Vectors",
+    "clues": [
+      "I represent a quantity that has both magnitude and direction.",
+      "I am represented graphically by an arrow.",
+      "My coordinates can be written in column format, like [x, y].",
+      "I can be added tip-to-tail to find a resultant path.",
+      "Forces and velocities are real-world examples of me."
+    ],
+    "hints": [
+      "Advanced Mathematics topic.",
+      "Magnitude and direction.",
+      "Starts with 'V'."
+    ],
+    "educationalInfo": {
+      "definition": "A quantity having direction as well as magnitude, especially as determining the position of one point in space relative to another.",
+      "examples": [
+        "Vector addition: u + v.",
+        "Velocity vector: 5 m/s North-East."
+      ],
+      "commonMistakes": "Confusing vectors with scalars (scalars only have magnitude, like speed or temperature).",
+      "funFact": "The word vector comes from the Latin word meaning 'carrier' or 'one who carries'.",
+      "relatedLesson": "Vectors",
+      "practiceQuestions": [
+        "Find the magnitude of the vector [3, 4].",
+        "Add the vectors [2, -1] and [5, 4]."
+      ]
+    }
+  },
+  "dot_products": {
+    "conceptId": "dot_products",
+    "name": "Dot Products",
+    "clues": [
+      "I am an operation performed on two vectors.",
+      "I multiply corresponding components and sum the results.",
+      "My final output is a single scalar number, not a vector.",
+      "If the dot product of two vectors is zero, they are perpendicular.",
+      "My formula is u * v = |u| * |v| * cos(theta)."
+    ],
+    "hints": [
+      "Advanced Mathematics topic.",
+      "Scalar vector product.",
+      "Starts with 'D'."
+    ],
+    "educationalInfo": {
+      "definition": "An algebraic operation that takes two equal-length sequences of numbers and returns a single number.",
+      "examples": [
+        "Dot product of [1, 3] and [4, -1] is (1*4) + (3*-1) = 1.",
+        "Checking for orthogonality."
+      ],
+      "commonMistakes": "Thinking the output is a vector, or adding components incorrectly.",
+      "funFact": "Dot products are used extensively in physics to calculate work done by a force vector along a displacement vector.",
+      "relatedLesson": "Vectors",
+      "practiceQuestions": [
+        "Find the dot product of [2, 5] and [3, -1].",
+        "What is the angle between two vectors if their dot product is equal to the product of their magnitudes?"
+      ]
+    }
+  },
+  "linear_algebra": {
+    "conceptId": "linear_algebra",
+    "name": "Linear Algebra",
+    "clues": [
+      "I study vectors, vector spaces, and linear maps.",
+      "I use matrices to represent systems of linear equations.",
+      "I deal with eigenvalues, eigenvectors, and determinants.",
+      "I am key to machine learning, physics, and computer science.",
+      "I expand the study of lines and planes into many dimensions."
+    ],
+    "hints": [
+      "Advanced Mathematics topic.",
+      "Study of matrices and vectors.",
+      "Starts with 'L'."
+    ],
+    "educationalInfo": {
+      "definition": "The branch of mathematics concerning vector spaces and linear mappings between these spaces.",
+      "examples": [
+        "Solving systems of equations using Gaussian elimination.",
+        "Calculating matrix eigenvalues."
+      ],
+      "commonMistakes": "Thinking that all algebraic rules apply directly (e.g. matrix division is not defined; instead, you multiply by the inverse).",
+      "funFact": "Google's original search ranking algorithm, PageRank, is built entirely on linear algebra, specifically calculating the dominant eigenvector of a huge link matrix.",
+      "relatedLesson": "Linear Algebra",
+      "practiceQuestions": [
+        "What is the identity matrix?",
+        "Explain what an eigenvector represents."
+      ]
+    }
+  },
+  "logarithms": {
+    "conceptId": "logarithms",
+    "name": "Logarithms",
+    "clues": [
+      "I am the inverse operation of exponentiation.",
+      "I answer: 'to what power must we raise a base to get this number?'.",
+      "My natural version uses base e and is abbreviated as ln.",
+      "My laws convert multiplication to addition: log(ab) = log(a) + log(b).",
+      "The value log10(100) is exactly equal to 2."
+    ],
+    "hints": [
+      "Advanced Mathematics topic.",
+      "Exponent inverse.",
+      "Starts with 'L'."
+    ],
+    "educationalInfo": {
+      "definition": "A quantity representing the power to which a fixed number (the base) must be raised to produce a given number.",
+      "examples": [
+        "log2(8) = 3 since 2^3 = 8.",
+        "log(10) = 1."
+      ],
+      "commonMistakes": "Thinking log(a + b) equals log(a) * log(b), or confusing base e with base 10.",
+      "funFact": "Logarithms were invented by John Napier in 1614 to simplify astronomical calculations. Slide rules use logarithmic scales to multiply numbers by adding their lengths.",
+      "relatedLesson": "Logarithms",
+      "practiceQuestions": [
+        "Solve: log3(81).",
+        "Simplify the expression: log(x^3) - log(x)."
+      ]
+    }
+  },
+  "sequences": {
+    "conceptId": "sequences",
+    "name": "Sequences",
+    "clues": [
+      "I am an ordered list of numbers following a clear mathematical rule.",
+      "Each number in my list is called a term.",
+      "My common types include Arithmetic and Geometric.",
+      "My terms are written as a_1, a_2, a_3...",
+      "The Fibonacci series (1, 1, 2, 3, 5, 8...) is a famous member of my family."
+    ],
+    "hints": [
+      "Advanced Mathematics topic.",
+      "Ordered progressions.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "An enumerated collection of objects in which repetitions are allowed and order matters.",
+      "examples": [
+        "Arithmetic sequence: 2, 5, 8, 11... (difference of 3).",
+        "Geometric sequence: 2, 4, 8, 16... (ratio of 2)."
+      ],
+      "commonMistakes": "Confusing the term number (n) with the value of the term (a_n), or mixing up arithmetic and geometric rules.",
+      "funFact": "The Fibonacci sequence appears in the spiral patterns of pinecones, sunflowers, and shells.",
+      "relatedLesson": "Sequences and Series",
+      "practiceQuestions": [
+        "Find the 10th term of the arithmetic sequence: 3, 7, 11...",
+        "What is the common ratio of the geometric sequence: 81, 27, 9, 3...?"
+      ]
+    }
+  },
+  "binomial_theorem": {
+    "conceptId": "binomial_theorem",
+    "name": "Binomial Theorem",
+    "clues": [
+      "I expand positive integer powers of a binomial expression.",
+      "My expansion is written for terms like (x + y)^n.",
+      "My coefficients correspond to rows of Pascal's Triangle.",
+      "I use combinatorics symbols like 'n choose k' (combinations).",
+      "For (x+y)^2, my expansion is x^2 + 2xy + y^2."
+    ],
+    "hints": [
+      "Advanced Mathematics topic.",
+      "Binomial expansion law.",
+      "Starts with 'B'."
+    ],
+    "educationalInfo": {
+      "definition": "A formula that provides the algebraic expansion of powers of a binomial.",
+      "examples": [
+        "(a + b)^3 = a^3 + 3a^2b + 3ab^2 + b^3",
+        "Using combinations nCr to find coefficients."
+      ],
+      "commonMistakes": "Forgetting binomial coefficients, or failing to raise the second term (b) to the correct power.",
+      "funFact": "Isaac Newton generalized the theorem to include fractional and negative exponents, leading to infinite series.",
+      "relatedLesson": "Algebra",
+      "practiceQuestions": [
+        "Find the coefficient of the x^2 term in the expansion of (x + 3)^4.",
+        "Expand completely: (x - y)^3."
+      ]
+    }
+  },
+  "complex_numbers": {
+    "conceptId": "complex_numbers",
+    "name": "Complex Numbers",
+    "clues": [
+      "I extend the real number system to solve equations with negative roots.",
+      "I consist of a real part and an imaginary part.",
+      "I use the symbol i (or j in engineering), where i^2 = -1.",
+      "I am represented geometrically on the Argand plane.",
+      "I am written in standard form as a + bi."
+    ],
+    "hints": [
+      "Advanced Mathematics topic.",
+      "Real + imaginary numbers.",
+      "Starts with 'C'."
+    ],
+    "educationalInfo": {
+      "definition": "A number that can be expressed in the form a + bi, where a and b are real numbers, and i is the imaginary unit.",
+      "examples": [
+        "3 + 4i",
+        "Solving x^2 + 1 = 0 yields x = ±i."
+      ],
+      "commonMistakes": "Thinking i is a variable that can be evaluated as a real number, or calculating powers of i incorrectly (i^3 = -i, i^4 = 1).",
+      "funFact": "Complex numbers are crucial for describing electromagnetic waves, electrical circuits, and quantum mechanics.",
+      "relatedLesson": "Complex Numbers",
+      "practiceQuestions": [
+        "Multiply: (2 + 3i)(1 - i).",
+        "What is the modulus of the complex number 3 + 4i?"
+      ]
+    }
+  },
+  "permutations_combinations": {
+    "conceptId": "permutations_combinations",
+    "name": "Permutations & Combinations",
+    "clues": [
+      "I am the study of counting arrangements and selections.",
+      "I ask: 'how many ways can we choose elements from a set?'.",
+      "One of my branches states that order matters (arranging).",
+      "My other branch states that order does NOT matter (selecting).",
+      "For a set of 3 items, you can arrange them in 6 ways (3!) or choose 2 of them in 3 ways."
+    ],
+    "hints": [
+      "Advanced Mathematics topic.",
+      "Arrangements and selections.",
+      "Starts with 'P'."
+    ],
+    "educationalInfo": {
+      "definition": "Permutations (nPr): the number of ways to arrange items where order matters. Combinations (nCr): the number of ways to select items where order does not matter.",
+      "examples": [
+        "Permutations of ABC: ABC, ACB, BAC, BCA, CAB, CBA.",
+        "Combinations of choosing 2 from ABC: AB, BC, AC."
+      ],
+      "commonMistakes": "Using permutation formulas when order doesn't matter (e.g. choosing a committee), or vice versa.",
+      "funFact": "The number of possible permutations of a standard 52-card deck is 52! (about 8 * 10^67). Every time you shuffle a deck thoroughly, that exact order has likely never existed in the universe before.",
+      "relatedLesson": "Combinatorics",
+      "practiceQuestions": [
+        "Calculate the number of ways to choose 3 books out of 7 (7C3).",
+        "Find the number of arrangements of the letters in the word MATH."
+      ]
+    }
+  },
+  "coordinate_geometry": {
+    "conceptId": "coordinate_geometry",
+    "name": "Coordinate Geometry",
+    "clues": [
+      "I study geometry using coordinates on a plane.",
+      "I combine algebra and geometry by plotting points on Cartesian grids.",
+      "I use coordinates written as pairs of numbers (x, y).",
+      "I use formulas to calculate distance between points, midpoints, and slopes.",
+      "René Descartes is credited with inventing my grid system."
+    ],
+    "hints": [
+      "Coordinate & Calculus topic.",
+      "Cartesian plane geometry.",
+      "Starts with 'C'."
+    ],
+    "educationalInfo": {
+      "definition": "The study of geometry using a coordinate system and the principles of algebra.",
+      "examples": [
+        "Finding distance using d = sqrt((x2-x1)^2 + (y2-y1)^2).",
+        "Midpoint coordinates."
+      ],
+      "commonMistakes": "Mixing up x and y coordinate orders (remember: x comes first, horizontal then vertical).",
+      "funFact": "Descartes reportedly invented coordinate geometry while lying in bed watching a fly on the ceiling, realizing he could describe its position using coordinates.",
+      "relatedLesson": "Coordinate Geometry",
+      "practiceQuestions": [
+        "Find the midpoint of the segment joining (2, 4) and (8, 10).",
+        "Calculate the distance between (1, 2) and (4, 6)."
+      ]
+    }
+  },
+  "line_equation": {
+    "conceptId": "line_equation",
+    "name": "Line Equation",
+    "clues": [
+      "I am the algebraic representation of a straight line.",
+      "My slope-intercept format is y = mx + c.",
+      "My variable 'm' represents the gradient or slope, and 'c' represents the y-intercept.",
+      "My general format is written as Ax + By + C = 0.",
+      "If a line passes through the origin with a slope of 1, my equation is y = x."
+    ],
+    "hints": [
+      "Coordinate & Calculus topic.",
+      "Straight line equations.",
+      "Starts with 'L'."
+    ],
+    "educationalInfo": {
+      "definition": "An equation that describes the points belonging to a straight line on a coordinate plane.",
+      "examples": [
+        "y = 2x - 3",
+        "2x + 3y = 6"
+      ],
+      "commonMistakes": "Confusing the slope (m) with the y-intercept (c), or getting the sign of the slope wrong.",
+      "funFact": "Two lines are perpendicular if the product of their slopes is exactly -1 (negative reciprocals).",
+      "relatedLesson": "Coordinate Geometry",
+      "practiceQuestions": [
+        "Find the equation of a line with slope 3 passing through (0, 4).",
+        "What is the slope of the line described by 2x - y = 5?"
+      ]
+    }
+  },
+  "section_formula": {
+    "conceptId": "section_formula",
+    "name": "Section Formula",
+    "clues": [
+      "I find coordinates of points on a line segment.",
+      "I calculate coordinates of a point that divides a segment in a given ratio.",
+      "I can calculate divisions both internally and externally.",
+      "My formulas use coordinates (x1, y1) and (x2, y2) and ratio m:n.",
+      "For internal division, my x-coordinate is (m*x2 + n*x1) / (m + n)."
+    ],
+    "hints": [
+      "Coordinate & Calculus topic.",
+      "Line segment ratio division.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "A coordinate geometry formula that determines the coordinates of a point dividing a line segment in a specified ratio.",
+      "examples": [
+        "Finding point dividing segment internally in ratio 2:1.",
+        "Formula: x = (mx2 + nx1)/(m+n)."
+      ],
+      "commonMistakes": "Mixing up the order of the coordinates and ratios in the numerator (m multiplies x2, not x1).",
+      "funFact": "When the ratio is 1:1, the section formula simplifies exactly to the midpoint formula.",
+      "relatedLesson": "Coordinate Geometry",
+      "practiceQuestions": [
+        "Find coordinates of point dividing segment (1, 2) to (4, 8) in ratio 2:1 internally.",
+        "State the difference in signs between the internal and external section formulas."
+      ]
+    }
+  },
+  "conic_sections": {
+    "conceptId": "conic_sections",
+    "name": "Conic Sections",
+    "clues": [
+      "I am a family of curves generated by intersecting a plane and a cone.",
+      "My members depend on the angle of the slicing plane.",
+      "My family consists of the circle, ellipse, parabola, and hyperbola.",
+      "My general quadratic equation is Ax^2 + Bxy + Cy^2 + Dx + Ey + F = 0.",
+      "Planetary orbits trace out my elliptical members."
+    ],
+    "hints": [
+      "Coordinate & Calculus topic.",
+      "Conic curves geometry.",
+      "Starts with 'C'."
+    ],
+    "educationalInfo": {
+      "definition": "Curves obtained as the intersection of the surface of a cone with a flat plane.",
+      "examples": [
+        "Circles",
+        "Ellipses",
+        "Parabolas",
+        "Hyperbolas"
+      ],
+      "commonMistakes": "Thinking that all curved shapes are conics, or confusing the formulas for ellipses and hyperbolas (ellipses have a '+' sign, hyperbolas have a '-' sign between terms).",
+      "funFact": "Reflective telescopes use parabolic mirrors to focus light, while whispering galleries use elliptical vaults to bounce sound between focal points.",
+      "relatedLesson": "Conic Sections",
+      "practiceQuestions": [
+        "Which conic section is represented by x^2 / 9 + y^2 / 4 = 1?",
+        "What is the eccentricity of a circle?"
+      ]
+    }
+  },
+  "limits": {
+    "conceptId": "limits",
+    "name": "Limits",
+    "clues": [
+      "I describe the behavior of a function as its input approaches a value.",
+      "I am the fundamental foundation upon which all calculus is built.",
+      "I am written using the notation 'lim' as x approaches c.",
+      "I help define derivatives and integrals by checking values infinitely close.",
+      "The value of (x^2 - 1)/(x - 1) as x approaches 1 is 2 through me."
+    ],
+    "hints": [
+      "Coordinate & Calculus topic.",
+      "Foundation of calculus.",
+      "Starts with 'L'."
+    ],
+    "educationalInfo": {
+      "definition": "A value that a function approaches as the input approaches some value.",
+      "examples": [
+        "lim (x->2) of 3x + 1 = 7.",
+        "Evaluating indeterminate forms like 0/0 using factoring or L'Hopital's rule."
+      ],
+      "commonMistakes": "Thinking the limit of a function at a point must equal the function's value at that point, or ignoring left-hand and right-hand limits.",
+      "funFact": "Limits allow us to divide by 'almost zero' to calculate speed at an exact instant, resolving ancient paradoxes like Zeno's Arrow.",
+      "relatedLesson": "Introduction to Calculus",
+      "practiceQuestions": [
+        "Evaluate the limit as x approaches 3 of (x^2 - 9)/(x - 3).",
+        "What does it mean for a limit to be undefined?"
+      ]
+    }
+  },
+  "differentiation": {
+    "conceptId": "differentiation",
+    "name": "Differentiation",
+    "clues": [
+      "I calculate rates of change.",
+      "I find the slope of a tangent line to a curve at any point.",
+      "My result is called the derivative, written as dy/dx or f'(x).",
+      "My basic power rule states that the derivative of x^n is n * x^(n-1).",
+      "If a function represents position over time, I calculate the velocity."
+    ],
+    "hints": [
+      "Coordinate & Calculus topic.",
+      "Rate of change derivative.",
+      "Starts with 'D'."
+    ],
+    "educationalInfo": {
+      "definition": "The mathematical process of finding the derivative of a function, representing its rate of change.",
+      "examples": [
+        "d/dx of x^2 is 2x.",
+        "d/dx of sin(x) is cos(x).",
+        "Chain rule, product rule, quotient rule."
+      ],
+      "commonMistakes": "Forgetting the chain rule when differentiating composite functions, or confusing differentiation rules with integration.",
+      "funFact": "Sir Isaac Newton and Gottfried Wilhelm Leibniz independently developed differentiation in the late 17th century, leading to a bitter feud.",
+      "relatedLesson": "Calculus",
+      "practiceQuestions": [
+        "Find the derivative of f(x) = 3x^2 + 5x - 2.",
+        "What is the slope of the curve y = x^3 at x = 2?"
+      ]
+    }
+  },
+  "integration": {
+    "conceptId": "integration",
+    "name": "Integration",
+    "clues": [
+      "I calculate the area under a curve.",
+      "I am the inverse operation of differentiation (antiderivative).",
+      "My mathematical symbol is an elongated S (∫).",
+      "I require adding a constant of integration (+ C) for indefinite forms.",
+      "My definite form has upper and lower bounds to evaluate exact area."
+    ],
+    "hints": [
+      "Coordinate & Calculus topic.",
+      "Area under curve accumulation.",
+      "Starts with 'I'."
+    ],
+    "educationalInfo": {
+      "definition": "The mathematical process of finding the integral of a function, which calculates areas, volumes, and accumulations.",
+      "examples": [
+        "∫ x dx = 0.5 * x^2 + C.",
+        "∫ sin(x) dx = -cos(x) + C.",
+        "Fundamental Theorem of Calculus."
+      ],
+      "commonMistakes": "Forgetting the constant of integration (+ C) for indefinite integrals, or incorrect sign changes.",
+      "funFact": "The integral symbol ∫ stands for 'summa' (Latin for sum), representing the infinite sum of infinitesimally narrow rectangles under a curve.",
+      "relatedLesson": "Calculus",
+      "practiceQuestions": [
+        "Evaluate the indefinite integral: ∫ (2x + 3) dx.",
+        "Find the area under the curve y = x from x = 0 to x = 4."
+      ]
+    }
+  },
+  "differential_equations": {
+    "conceptId": "differential_equations",
+    "name": "Differential Equations",
+    "clues": [
+      "I relate an unknown function to its derivatives.",
+      "I model change and growth in physical processes.",
+      "My equations involve terms like dy/dx, y, and x.",
+      "I can be solved using separation of variables for simple cases.",
+      "I describe radioactive decay, heat transfer, and population growth."
+    ],
+    "hints": [
+      "Coordinate & Calculus topic.",
+      "Equations with derivatives.",
+      "Starts with 'D'."
+    ],
+    "educationalInfo": {
+      "definition": "An equation that relates one or more functions and their derivatives.",
+      "examples": [
+        "dy/dx = ky (exponential growth).",
+        "d^2y/dx^2 + y = 0 (harmonic oscillator)."
+      ],
+      "commonMistakes": "Confusing independent and dependent variables, or applying algebra rules incorrectly when separating variables.",
+      "funFact": "The famous Schrödinger equation in quantum mechanics is a partial differential equation that describes the wave function of a particle.",
+      "relatedLesson": "Calculus",
+      "practiceQuestions": [
+        "Solve the differential equation: dy/dx = 2x.",
+        "What is the order of the differential equation: (dy/dx)^2 + d^2y/dx^2 = 5?"
+      ]
+    }
+  },
+  "inverse_trigonometry": {
+    "conceptId": "inverse_trigonometry",
+    "name": "Inverse Trigonometry",
+    "clues": [
+      "I am the inverse of trigonometric functions.",
+      "I answer: 'what angle has this trigonometric ratio value?'.",
+      "My functions are written as arcsin, arccos, and arctan (or sin^-1, cos^-1, tan^-1).",
+      "My outputs are angles, restricted to principal value branches to remain functions.",
+      "The value of arcsin(0.5) is 30 degrees (or Pi/6 radians)."
+    ],
+    "hints": [
+      "Coordinate & Calculus topic.",
+      "Angles from trig ratios.",
+      "Starts with 'I'."
+    ],
+    "educationalInfo": {
+      "definition": "The inverse functions of the basic trigonometric functions, used to find angles from ratios.",
+      "examples": [
+        "arcsin(1) = 90 degrees.",
+        "arctan(1) = 45 degrees.",
+        "Principal value ranges."
+      ],
+      "commonMistakes": "Confusing sin^-1(x) with 1/sin(x) (which is cosecant), or using angle values outside the principal range.",
+      "funFact": "Inverse trig functions are used in computer graphics to determine the angle of lighting vectors relative to surface normals.",
+      "relatedLesson": "Trigonometry",
+      "practiceQuestions": [
+        "Find the principal value of arccos(0.5) in degrees.",
+        "Evaluate: tan(arctan(5))."
+      ]
+    }
+  },
+  "trigonometry": {
+    "conceptId": "trigonometry",
+    "name": "Trigonometry",
+    "clues": [
+      "I study the relationships between side lengths and angles of triangles.",
+      "My name comes from Greek words meaning 'triangle measurement'.",
+      "My primary ratios are sine, cosine, and tangent.",
+      "I extend triangles to circles using the unit circle definition.",
+      "My famous identity states that sin^2(x) + cos^2(x) = 1."
+    ],
+    "hints": [
+      "Coordinate & Calculus topic.",
+      "Triangle and angle ratios.",
+      "Starts with 'T'."
+    ],
+    "educationalInfo": {
+      "definition": "The branch of mathematics dealing with the relations of the sides and angles of triangles and with the relevant functions of any angles.",
+      "examples": [
+        "SOH CAH TOA rules.",
+        "Trigonometric identities.",
+        "Graphing sine waves."
+      ],
+      "commonMistakes": "Confusing opposite and adjacent sides, or forgetting to verify calculator mode (degree vs. radian).",
+      "funFact": "Trigonometry was originally developed by astronomers to calculate the positions of stars and planets using spherical geometry.",
+      "relatedLesson": "Trigonometry",
+      "practiceQuestions": [
+        "In a right triangle, if the opposite side is 3 and adjacent is 4, find tangent of the angle.",
+        "Simplify the expression: sin(x) * cot(x)."
+      ]
+    }
+  },
+  "statistics": {
+    "conceptId": "statistics",
+    "name": "Statistics",
+    "clues": [
+      "I am the science of learning from data.",
+      "I collect, organize, analyze, interpret, and present data.",
+      "I divide into descriptive (summarizing) and inferential (predicting) methods.",
+      "I use charts, graphs, and summary values to communicate patterns.",
+      "I deal with surveys, experiments, and probability distributions."
+    ],
+    "hints": [
+      "Data & Logic topic.",
+      "Science of data collection.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "The practice or science of collecting and analyzing numerical data in large quantities.",
+      "examples": [
+        "Calculating mean, median, mode.",
+        "Creating histograms, scatter plots, and box plots."
+      ],
+      "commonMistakes": "Drawing conclusions from biased samples, or confusing correlation with causation.",
+      "funFact": "The word statistics originates from the Latin word 'status', meaning state, because it was originally used to collect data about states and populations for taxation.",
+      "relatedLesson": "Data Handling",
+      "practiceQuestions": [
+        "State the difference between population and sample.",
+        "What does a high standard deviation represent?"
+      ]
+    }
+  },
+  "sets": {
+    "conceptId": "sets",
+    "name": "Sets",
+    "clues": [
+      "I am a collection of distinct objects, called elements.",
+      "I am usually written inside curly brackets {}, like {1, 2, 3}.",
+      "My operations include union (combining) and intersection (shared items).",
+      "The empty set has zero elements and is written as ∅.",
+      "I can be finite or infinite, like the set of all real numbers."
+    ],
+    "hints": [
+      "Data & Logic topic.",
+      "Collections of elements.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "A collection of distinct objects, considered as an object in its own right.",
+      "examples": [
+        "A = {2, 4, 6}",
+        "Union A U B",
+        "Intersection A ∩ B"
+      ],
+      "commonMistakes": "Including duplicate elements in a set (sets only contain unique elements), or confusing union and intersection symbols.",
+      "funFact": "Set theory is the foundational language of modern mathematics, introduced by Georg Cantor in the late 19th century.",
+      "relatedLesson": "Sets and Venn Diagrams",
+      "practiceQuestions": [
+        "If A = {1, 2} and B = {2, 3}, find A ∩ B.",
+        "What is the power set of a set with 2 elements?"
+      ]
+    }
+  },
+  "variation": {
+    "conceptId": "variation",
+    "name": "Variation",
+    "clues": [
+      "I describe how one variable changes in relation to another.",
+      "My main types are Direct (both grow together) and Inverse (one grows, other shrinks).",
+      "I use a constant of proportionality, usually denoted by k.",
+      "My equations are written as y = kx or y = k/x.",
+      "Gravity varies inversely with the square of the distance."
+    ],
+    "hints": [
+      "Data & Logic topic.",
+      "Proportional changes.",
+      "Starts with 'V'."
+    ],
+    "educationalInfo": {
+      "definition": "The relationship between two or more variables that change in a predictable proportion to each other.",
+      "examples": [
+        "Direct: y = kx (more study hours -> higher test scores).",
+        "Inverse: y = k/x (higher speed -> less travel time)."
+      ],
+      "commonMistakes": "Confusing direct and inverse setups, or forgetting to solve for the constant k first.",
+      "funFact": "Hooke's Law (spring stretch is directly proportional to force applied) is a classic example of direct variation.",
+      "relatedLesson": "Ratios and Proportions",
+      "practiceQuestions": [
+        "If y varies directly as x, and y = 10 when x = 2, find y when x = 5.",
+        "Write the equation for y varying inversely as the square of x."
+      ]
+    }
+  },
+  "vocabulary": {
+    "conceptId": "vocabulary",
+    "name": "Vocabulary",
+    "clues": [
+      "I focus on the spelling, names, and definitions of math terms.",
+      "I connect language skills to mathematical symbols.",
+      "I explain terms like numerator, hypotenuse, quotient, and vertex.",
+      "I ensure students understand the precise terminology used in questions.",
+      "Mathematics is a language, and I am its dictionary."
+    ],
+    "hints": [
+      "Data & Logic topic.",
+      "Terminology and definitions.",
+      "Starts with 'V'."
+    ],
+    "educationalInfo": {
+      "definition": "The body of mathematical words and terminology used to describe concepts, structures, and operations.",
+      "examples": [
+        "Quotient: result of division.",
+        "Sum: result of addition.",
+        "Isosceles: triangle with two equal sides."
+      ],
+      "commonMistakes": "Misspelling mathematical terms (like 'hypotnuse'), or confusing terms like numerator and denominator.",
+      "funFact": "Many math words have Greek or Latin origins. For example, 'geometry' comes from 'geo' (Earth) and 'metron' (measure).",
+      "relatedLesson": "Mathematical Language",
+      "practiceQuestions": [
+        "What is the mathematical term for the result of a multiplication?",
+        "Define the word 'coprime'."
       ]
     }
   }
