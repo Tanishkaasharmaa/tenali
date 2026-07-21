@@ -428,30 +428,43 @@ export default function MindReaderApp2({ onBack }) {
 
           {/* Coordinate-Mapped Snake Track */}
           <div style={{ position: 'relative', width: '340px', height: '280px', margin: '10px 0' }}>
-            {/* SVG Winding Dotted Connector Line */}
-            <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
-              <path 
-                d="M 80 30 L 260 90 L 80 150 L 260 210 L 170 260" 
-                stroke="var(--clr-accent-soft)" 
-                strokeWidth="2" 
-                strokeDasharray="5,5" 
-                fill="none" 
-              />
-            </svg>
-
-            {/* Absolutely Positioned Level Nodes */}
             {(() => {
               const coords = [
-                { x: 80,  y: 30 },
-                { x: 260, y: 90 },
-                { x: 80,  y: 150 },
-                { x: 260, y: 210 },
-                { x: 170, y: 260 }
+                { x: 60,  y: 30 },
+                { x: 170, y: 30 },
+                { x: 280, y: 30 },
+                { x: 280, y: 95 },
+                { x: 170, y: 95 },
+                { x: 60,  y: 95 },
+                { x: 60,  y: 160 },
+                { x: 170, y: 160 },
+                { x: 280, y: 160 },
+                { x: 170, y: 230 }
               ];
-              return getLevelsForActiveWorld().map((node, idx) => {
+              const activeLevels = getLevelsForActiveWorld();
+              const pathD = activeLevels.map((node, idx) => {
                 const pt = coords[idx] || { x: 170, y: 140 };
-                const leftPos = pt.x - 23; // Center a 46px bubble
-                const topPos = pt.y - 23;
+                return `${idx === 0 ? 'M' : 'L'} ${pt.x} ${pt.y}`;
+              }).join(' ');
+
+              return (
+                <>
+                  {/* SVG Winding Dotted Connector Line */}
+                  <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
+                    <path 
+                      d={pathD} 
+                      stroke="var(--clr-accent-soft)" 
+                      strokeWidth="2" 
+                      strokeDasharray="5,5" 
+                      fill="none" 
+                    />
+                  </svg>
+
+                  {/* Absolutely Positioned Level Nodes */}
+                  {activeLevels.map((node, idx) => {
+                    const pt = coords[idx] || { x: 170, y: 140 };
+                    const leftPos = pt.x - 23; // Center a 46px bubble
+                    const topPos = pt.y - 23;
                 return (
                   <div 
                     key={node.levelNum} 
@@ -502,9 +515,11 @@ export default function MindReaderApp2({ onBack }) {
                     )}
                   </div>
                 );
-              });
-            })()}
-          </div>
+              })}
+            </>
+          );
+        })()}
+      </div>
 
           <button className="btn-outline" style={{ marginTop: '15px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('worlds')}>
             &larr; Worlds

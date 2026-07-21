@@ -365,21 +365,21 @@ We will introduce a separate UI container `GuessMindApp` inside `App.jsx` compos
 ### Milestone 2 — Gameplay Loops & Endpoints
 *   **Task 2.1**: Implement backend session APIs (`/start`, `/next-clue`, `/use-hint`, `/submit-guess`). [x]
 *   **Task 2.2**: Integrate Tenali SVG expressions changing eyes/mouth depending on current clue count and victory states. [x]
-*   **Task 2.3**: Build frontend game controller loop switching between Setup, Playing, and Results states. [/]
+*   **Task 2.3**: Build frontend game controller loop switching between Setup, Playing, and Results states. [x]
 
 ### Milestone 3 — Gamification & Progression
-*   **Task 3.1**: Implement backend XP rewards, star assessments, and MRR point additions.
-*   **Task 3.2**: Create the interactive Candy-Crush map SVG component dynamically matching levels layout.
-*   **Task 3.3**: Write CSS animations overlaying transition star sparkles and level unlock unlocks.
+*   **Task 3.1**: Implement backend XP rewards, star assessments, and MRR point additions. [x]
+*   **Task 3.2**: Create the interactive Candy-Crush map SVG component dynamically matching levels layout. [x]
+*   **Task 3.3**: Write CSS animations overlaying transition star sparkles and level unlock unlocks. [x]
 
 ### Milestone 4 — Analytics Telemetry
-*   **Task 4.1**: Create MongoDB `MindReaderAnalytic2` schema logging completion times, wrong guesses, hints used.
-*   **Task 4.2**: Feed analytical indicators on successful/unsuccessful guess completions.
+*   **Task 4.1**: Create MongoDB `MindReaderAnalytic2` schema logging completion times, wrong guesses, hints used. [x]
+*   **Task 4.2**: Feed analytical indicators on successful/unsuccessful guess completions. [x]
 
 ### Milestone 5 — Testing
 *   **Task 5.1**: Write a script `test_guess_mind.js` validating perfect runs, hint penalties, and incorrect guess locks. [x]
-*   **Task 5.2**: Test concurrent session initializations for multi-student safety.
+*   **Task 5.2**: Test concurrent session initializations for multi-student safety. [x]
 
 ### Milestone 6 — Deployment
-*   **Task 6.1**: Run staging compilation `npm run build` and run server checks locally.
+*   **Task 6.1**: Run staging compilation `npm run build` and run server checks locally. [x]
 *   **Task 6.2**: Deploy to Render and perform remote diagnostics checks.
