@@ -1,416 +1,677 @@
-[
-  {
-    "id": "prime_number",
+{
+  "prime_number": {
+    "conceptId": "prime_number",
     "name": "Prime Number",
-    "subject": "Number",
     "clues": [
-      "I am a positive integer strictly greater than 1.",
-      "I cannot be divided evenly by 2 (unless I am the number 2 itself).",
-      "I have exactly two distinct positive divisors.",
-      "My only factors are 1 and myself.",
-      "Numbers like 2, 3, 5, 7, and 11 belong to my family."
+      "I belong to the world of numbers.",
+      "I always have exactly two positive divisors.",
+      "Cryptography depends heavily on me.",
+      "The smallest member of my family is 2.",
+      "My opposite is Composite Number."
     ],
-    "hint": "Think of numbers that cannot be split into smaller equal integer groups.",
-    "educationalReview": {
-      "definition": "A prime number is a whole number greater than 1 whose only divisors are 1 and itself.",
-      "whyCluesPointedHere": "The clues highlighted having exactly two factors (1 and itself), excluding numbers with multiple divisor pairs.",
-      "workedExample": "Is 7 prime? Divisors of 7 are 1 and 7. Since there are exactly two factors, 7 is a prime number. Is 9 prime? Divisors of 9 are 1, 3, 9. Since it has 3 factors, 9 is not prime.",
-      "commonMistakes": "1 is often mistaken for a prime number, but it is NOT prime because it only has 1 positive factor (itself). 2 IS a prime number and is the only even prime.",
-      "funFact": "Prime numbers act as the building blocks of mathematics because every integer can be uniquely factored into primes (Fundamental Theorem of Arithmetic)!",
-      "practiceQuestion": "Which of the following numbers is a prime number: 15, 21, 29, or 35?",
-      "practiceAnswer": "29 (15 = 3×5, 21 = 3×7, 35 = 5×7, whereas 29 has no other divisors besides 1 and 29).",
-      "relatedConcepts": ["Composite Number", "Prime Factorization", "HCF"]
+    "hints": [
+      "Arithmetic category topic.",
+      "Grade 6 level topic.",
+      "Starts with 'P'."
+    ],
+    "educationalInfo": {
+      "definition": "A whole number greater than 1 with exactly two positive divisors: 1 and itself.",
+      "examples": ["2", "3", "5", "7", "11", "13"],
+      "commonMistakes": "Confusing prime numbers with odd numbers (e.g. 9 or 15 are odd but not prime). Believing 1 is a prime number.",
+      "funFact": "The number 2 is the only even prime number. All other prime numbers are odd!",
+      "relatedLesson": "Factors and Multiples",
+      "practiceQuestions": [
+        "Is 29 a prime number?",
+        "What is the next prime number after 19?"
+      ]
     }
   },
-  {
-    "id": "rounding",
-    "name": "Rounding",
-    "subject": "Number",
+  "factors": {
+    "conceptId": "factors",
+    "name": "Factors",
     "clues": [
-      "I am a numerical process used to simplify numbers.",
-      "I change a number to a shorter, nearby value that is easier to use.",
-      "My most famous rule is: '5 or more, round up; 4 or less, round down'.",
-      "I am often used when estimating totals or money.",
-      "For example, 47 becomes 50 when applying me to the nearest ten."
+      "I am a relationship between two numbers.",
+      "I divide a given number exactly without leaving any remainder.",
+      "The number 1 is a universal member of my group.",
+      "My count for any number is always finite.",
+      "For 12, my members are 1, 2, 3, 4, 6, and 12."
     ],
-    "hint": "Focus on the rule of looking at the digit to the right and adjusting up or down.",
-    "educationalReview": {
-      "definition": "Rounding is replacing a number with a simpler value that is close to the original number.",
-      "whyCluesPointedHere": "The clues described simplifying numbers for estimation using place value rules.",
-      "workedExample": "Round 3.84 to 1 decimal place: Look at the second decimal place (4). Since 4 < 5, we keep the first decimal place as 8. Answer = 3.8.",
-      "commonMistakes": "Rounding too early during multi-step calculations can cause inaccuracy in the final answer. Always round at the very last step!",
-      "funFact": "Financial software uses round-half-to-even (Banker's Rounding) to prevent cumulative statistical bias over millions of transactions!",
-      "practiceQuestion": "What is 8,649 rounded to the nearest hundred?",
-      "practiceAnswer": "8,600 (Look at the tens digit, which is 4. Since 4 < 5, round down).",
-      "relatedConcepts": ["Significant Figures", "Estimation", "Decimal Places"]
+    "hints": [
+      "Arithmetic category topic.",
+      "Grade 5 level topic.",
+      "Starts with 'F'."
+    ],
+    "educationalInfo": {
+      "definition": "Numbers you multiply together to get another number, or numbers that divide a target number exactly.",
+      "examples": ["Factors of 6: 1, 2, 3, 6.", "Factors of 10: 1, 2, 5, 10."],
+      "commonMistakes": "Confusing factors with multiples (factors are always less than or equal to the target number).",
+      "funFact": "Perfect numbers are numbers equal to the sum of their proper factors (e.g., 6 = 1 + 2 + 3).",
+      "relatedLesson": "Factors and Multiples",
+      "practiceQuestions": [
+        "Find all the factors of 18.",
+        "What is the greatest factor of 48?"
+      ]
     }
   },
-  {
-    "id": "hcf",
-    "name": "Highest Common Factor (HCF)",
-    "subject": "Number",
+  "multiples": {
+    "conceptId": "multiples",
+    "name": "Multiples",
     "clues": [
-      "I am a number concept involving divisors of two or more integers.",
-      "I find the LARGEST integer that can divide numbers without a remainder.",
-      "I am also known as the Greatest Common Divisor (GCD).",
-      "I am used to simplify fractions to their simplest form.",
-      "For 12 and 18, my value is 6."
+      "I represent numbers that grow outward.",
+      "I am generated by multiplying a number by integers.",
+      "Unlike factors, my count for any number is infinite.",
+      "I am always greater than or equal to the original number.",
+      "For 5, my sequence starts with 5, 10, 15, 20..."
     ],
-    "hint": "Think of the biggest shared number that divides both values completely.",
-    "educationalReview": {
-      "definition": "The Highest Common Factor (HCF) of two or more numbers is the largest positive integer that divides each of the numbers without leaving a remainder.",
-      "whyCluesPointedHere": "The clues emphasized finding the largest shared factor for simplifying fractions.",
-      "workedExample": "Find HCF of 24 and 36: Factors of 24 = {1,2,3,4,6,8,12,24}. Factors of 36 = {1,2,3,4,6,9,12,18,36}. Shared factors = {1,2,3,4,6,12}. The largest is 12.",
-      "commonMistakes": "Confusing HCF with LCM! Remember: Factors divide INTO the number (so HCF ≤ smallest number), while Multiples are MULTIPLIED by the number.",
-      "funFact": "The Euclidean Algorithm, invented around 300 BC to compute HCFs, is one of the oldest algorithms still in active use on computers today!",
-      "practiceQuestion": "What is the HCF of 16 and 24?",
-      "practiceAnswer": "8 (Factors of 16 are 1,2,4,8,16; Factors of 24 are 1,2,3,4,6,8,12,24. Largest common factor is 8).",
-      "relatedConcepts": ["LCM", "Prime Factorization", "Simplifying Fractions"]
+    "hints": [
+      "Arithmetic category topic.",
+      "Grade 5 level topic.",
+      "Starts with 'M'."
+    ],
+    "educationalInfo": {
+      "definition": "The product of a given number and any integer.",
+      "examples": ["Multiples of 3: 3, 6, 9, 12...", "Multiples of 7: 7, 14, 21, 28..."],
+      "commonMistakes": "Confusing factors with multiples (multiples are infinite and grow larger).",
+      "funFact": "Zero is technically a multiple of every number, but we usually ignore it in math practice games.",
+      "relatedLesson": "Factors and Multiples",
+      "practiceQuestions": [
+        "What is the 5th multiple of 9?",
+        "Is 45 a multiple of 6?"
+      ]
     }
   },
-  {
-    "id": "lcm",
-    "name": "Lowest Common Multiple (LCM)",
-    "subject": "Number",
+  "lcm": {
+    "conceptId": "lcm",
+    "name": "LCM",
     "clues": [
-      "I am a concept that focuses on products rather than factors.",
-      "I find the SMALLEST positive integer that is a multiple of two or more numbers.",
-      "I am necessary when finding a common denominator to add fractions.",
-      "I am used in scheduling problems when two events repeat at different intervals.",
-      "For 4 and 6, my value is 12."
+      "I help add fractions with different denominators.",
+      "I am the smallest positive multiple shared by two or more numbers.",
+      "For prime numbers a and b, I am simply equal to their product: a * b.",
+      "You can find me by listing multiples or using prime factorization.",
+      "For 4 and 6, I am 12."
     ],
-    "hint": "Think of skip-counting by both numbers until they first land on the exact same number.",
-    "educationalReview": {
-      "definition": "The Lowest Common Multiple (LCM) is the smallest positive number that is a multiple of two or more numbers.",
-      "whyCluesPointedHere": "The clues focused on products, skip counting, and common denominators.",
-      "workedExample": "Find LCM of 4 and 6: Multiples of 4 = 4, 8, 12, 16, 20... Multiples of 6 = 6, 12, 18, 24... The smallest shared number is 12.",
-      "commonMistakes": "Simply multiplying the two numbers together does not always give the LOWEST common multiple (e.g. 4 × 6 = 24, but 12 is smaller).",
-      "funFact": "If traffic lights turn green every 15 seconds and 20 seconds respectively, LCM tells you exactly when both will turn green together (after 60 seconds)!",
-      "practiceQuestion": "What is the LCM of 5 and 7?",
-      "practiceAnswer": "35 (Since 5 and 7 are prime to each other, their LCM is 5 × 7 = 35).",
-      "relatedConcepts": ["HCF", "Fraction Addition", "Multiples"]
+    "hints": [
+      "Arithmetic category topic.",
+      "Grade 6 level topic.",
+      "Starts with 'L'."
+    ],
+    "educationalInfo": {
+      "definition": "Lowest Common Multiple: the smallest positive integer that is divisible by all numbers in a given set.",
+      "examples": ["LCM(3, 5) = 15", "LCM(8, 12) = 24"],
+      "commonMistakes": "Listing factors instead of multiples when looking for the LCM, resulting in a number that is too small.",
+      "funFact": "The LCM of any two consecutive numbers is always their product!",
+      "relatedLesson": "HCF and LCM",
+      "practiceQuestions": [
+        "Find the LCM of 6 and 8.",
+        "What is the LCM of 5 and 7?"
+      ]
     }
   },
-  {
-    "id": "square_root",
-    "name": "Square Root",
-    "subject": "Number",
+  "hcf": {
+    "conceptId": "hcf",
+    "name": "HCF",
     "clues": [
-      "I am an operation that reverses exponentiation of degree 2.",
-      "I ask: 'What number, when multiplied by itself, gives this value?'",
-      "My symbol looks like a tick mark with a flat roof (√).",
-      "For 25, my principal value is 5.",
-      "I appear in the Pythagorean Theorem formula."
+      "I am also known as the Greatest Common Divisor.",
+      "I am the largest positive integer that divides two or more numbers without a remainder.",
+      "For coprime numbers, I am always equal to 1.",
+      "Euclid created a famous recursive algorithm to compute me.",
+      "For 12 and 18, I am 6."
     ],
-    "hint": "Think of finding the side length of a square given its total area.",
-    "educationalReview": {
-      "definition": "A square root of a number is a value that, when multiplied by itself, yields the original number.",
-      "whyCluesPointedHere": "The clues referenced inverse squaring, the radical symbol (√), and area to side length relationships.",
-      "workedExample": "Find √81: Ask what positive number times itself equals 81. 9 × 9 = 81, so √81 = 9.",
-      "commonMistakes": "Forgetting that positive numbers have both a positive and negative square root (e.g., (-5) × (-5) = 25 as well), though √ denotes the principal positive root.",
-      "funFact": "Square roots of non-perfect squares (like √2 or √3) are irrational numbers—their decimal expansions go on forever without repeating!",
-      "practiceQuestion": "What is √144?",
-      "practiceAnswer": "12 (because 12 × 12 = 144).",
-      "relatedConcepts": ["Exponents", "Pythagoras' Theorem", "Surds"]
+    "hints": [
+      "Arithmetic category topic.",
+      "Grade 6 level topic.",
+      "Starts with 'H'."
+    ],
+    "educationalInfo": {
+      "definition": "Highest Common Factor: the greatest common divisor that divides two or more numbers without remainder.",
+      "examples": ["HCF(8, 12) = 4", "HCF(15, 20) = 5"],
+      "commonMistakes": "Finding the lowest common divisor (which is usually 1) instead of the highest.",
+      "funFact": "The product of HCF(a,b) and LCM(a,b) is always equal to a * b!",
+      "relatedLesson": "HCF and LCM",
+      "practiceQuestions": [
+        "What is the HCF of 24 and 36?",
+        "Find the HCF of 17 and 23."
+      ]
     }
   },
-  {
-    "id": "equivalent_fractions",
-    "name": "Equivalent Fractions",
-    "subject": "Number",
-    "clues": [
-      "I am a fraction concept where different representations share equal value.",
-      "I am created by multiplying or dividing the top and bottom by the exact same non-zero number.",
-      "1/2, 2/4, 4/8, and 50/100 are all examples of me.",
-      "I represent the exact same slice of a pizza pie regardless of how many cuts are made.",
-      "I help in comparing fractions with different denominators."
-    ],
-    "hint": "Different numbers on top and bottom, but the overall value or proportion remains identical.",
-    "educationalReview": {
-      "definition": "Equivalent fractions are fractions that represent the same value or amount, even though they have different numerators and denominators.",
-      "whyCluesPointedHere": "The clues highlighted multiplying numerator and denominator by the same number to maintain equal proportion.",
-      "workedExample": "Are 3/4 and 9/12 equivalent? Multiply 3/4 top and bottom by 3: (3×3)/(4×3) = 9/12. Yes, they are equivalent!",
-      "commonMistakes": "Adding the same number to the top and bottom (e.g. 1/2 + 1/1 = 2/3) does NOT create an equivalent fraction. You must MULTIPLY or DIVIDE!",
-      "funFact": "Ancient Egyptians only used unit fractions (fractions with 1 on top, like 1/3 or 1/5) and wrote all other fractions as sums of different unit fractions!",
-      "practiceQuestion": "Find the missing numerator: 2/5 = ?/20.",
-      "practiceAnswer": "8 (Since 5 × 4 = 20, multiply 2 × 4 = 8).",
-      "relatedConcepts": ["Fractions", "Simplest Form", "Percentages"]
-    }
-  },
-  {
-    "id": "ratio",
-    "name": "Ratio",
-    "subject": "Number",
-    "clues": [
-      "I am a mathematical comparison between two or more quantities.",
-      "I am commonly written using a colon symbol (:).",
-      "I tell you how much of one thing there is compared to another thing.",
-      "If a recipe uses 2 cups of flour for every 1 cup of sugar, that is me.",
-      "I can be simplified just like fractions."
-    ],
-    "hint": "Look for the colon symbol (:) and terms like 'for every X there are Y'.",
-    "educationalReview": {
-      "definition": "A ratio compares values or quantities to show how much of one item exists relative to another.",
-      "whyCluesPointedHere": "The clues highlighted comparisons, colon notation (a:b), and proportional recipes.",
-      "workedExample": "In a class of 30 students, 12 are boys and 18 are girls. Ratio of boys to girls = 12:18. Divide both by 6 to simplify = 2:3.",
-      "commonMistakes": "Mixing up the order! A ratio of boys to girls (2:3) is not the same as girls to boys (3:2). Order matters!",
-      "funFact": "The Golden Ratio (approximately 1.618:1) appears throughout nature, architecture, art, and spiral seashells!",
-      "practiceQuestion": "Simplify the ratio 15:25.",
-      "practiceAnswer": "3:5 (Divide both sides by the common factor 5).",
-      "relatedConcepts": ["Fractions", "Proportions", "Percentage"]
-    }
-  },
-  {
-    "id": "percentage",
-    "name": "Percentage",
-    "subject": "Number",
-    "clues": [
-      "I am a fraction concept where the denominator is ALWAYS 100.",
-      "My name literally comes from Latin meaning 'per hundred'.",
-      "I use a unique symbol with two circles separated by a slash (%).",
-      "I am widely used in store sales, test scores, interest rates, and battery life.",
-      "50% means half, and 100% means the whole thing."
-    ],
-    "hint": "Think of parts out of one hundred and the % sign.",
-    "educationalReview": {
-      "definition": "A percentage is a fraction expressed as a number out of 100.",
-      "whyCluesPointedHere": "The clues pointed to 'per hundred', the % symbol, and everyday score/discount metrics.",
-      "workedExample": "Convert 3/5 to a percentage: 3 ÷ 5 = 0.60. Multiply by 100 = 60%.",
-      "commonMistakes": "Forgetting that percentages can be greater than 100% (e.g. 200% means double the original amount).",
-      "funFact": "The word 'percent' comes from the Latin 'per centum', which was used in ancient Rome for tax calculations per 100 coins!",
-      "practiceQuestion": "What is 20% of 80?",
-      "practiceAnswer": "16 (20% = 0.20; 0.20 × 80 = 16).",
-      "relatedConcepts": ["Fractions", "Decimals", "Ratio"]
-    }
-  },
-  {
-    "id": "composite_number",
-    "name": "Composite Number",
-    "subject": "Number",
-    "clues": [
-      "I am a positive integer greater than 1 that is NOT prime.",
-      "I can be formed by multiplying two smaller positive integers.",
-      "I have strictly MORE than two distinct positive factors.",
-      "4 is the smallest example of me.",
-      "Numbers like 6, 8, 9, 10, and 12 are members of my family."
-    ],
-    "hint": "Think of numbers that CAN be divided evenly by numbers other than 1 and themselves.",
-    "educationalReview": {
-      "definition": "A composite number is a positive integer greater than 1 that has more than two factors.",
-      "whyCluesPointedHere": "The clues contrasted this with prime numbers and noted having more than two factors.",
-      "workedExample": "Is 12 composite? Factors of 12 = 1, 2, 3, 4, 6, 12. Since it has 6 factors (more than 2), 12 is composite.",
-      "commonMistakes": "Thinking all even numbers are composite (2 is prime!) or that all odd numbers are prime (9, 15, 21 are composite!). 1 is neither prime nor composite.",
-      "funFact": "Highly Composite Numbers are numbers that have more factors than any smaller number. 12 and 60 are famous examples, which is why we have 12 hours on clocks and 60 minutes in an hour!",
-      "practiceQuestion": "Which of the following is a composite number: 13, 17, 19, or 21?",
-      "practiceAnswer": "21 (21 has factors 1, 3, 7, 21).",
-      "relatedConcepts": ["Prime Number", "Factors", "Prime Factorization"]
-    }
-  },
-  {
-    "id": "linear_equation",
-    "name": "Linear Equation",
-    "subject": "Algebra",
-    "clues": [
-      "I am an algebraic statement balancing two expressions with an equal sign.",
-      "All variables in my equation are raised to the power of 1.",
-      "When plotted on a Cartesian coordinate plane, I form a perfectly STRAIGHT line.",
-      "My standard slope-intercept form is y = mx + c.",
-      "In 2x + 3 = 7, my unknown x equals 2."
-    ],
-    "hint": "Think of equations where variables have no exponents or powers, and graph as straight lines.",
-    "educationalReview": {
-      "definition": "A linear equation is an algebraic equation in which each term has an exponent of 1, creating a straight line when graphed.",
-      "whyCluesPointedHere": "The clues highlighted degree 1, straight line graphs, and y = mx + c form.",
-      "workedExample": "Solve 3x - 5 = 10: Add 5 to both sides → 3x = 15. Divide by 3 → x = 5.",
-      "commonMistakes": "Forgetting to perform inverse operations on BOTH sides of the equals sign to keep the equation balanced.",
-      "funFact": "Linear equations are used by computer graphics engines to calculate lighting, shadows, and 3D camera projections in video games!",
-      "practiceQuestion": "Solve for x: 4x + 2 = 14.",
-      "practiceAnswer": "x = 3 (Subtract 2 → 4x = 12; divide by 4 → x = 3).",
-      "relatedConcepts": ["Quadratic Equation", "Slope", "Simultaneous Equations"]
-    }
-  },
-  {
-    "id": "quadratic_equation",
-    "name": "Quadratic Equation",
-    "subject": "Algebra",
-    "clues": [
-      "I am an algebraic equation of degree 2.",
-      "My highest variable exponent is 2 (x²).",
-      "When graphed, I form a U-shaped curve called a parabola.",
-      "My general form is ax² + bx + c = 0.",
-      "I can be solved using factoring, completing the square, or a famous formula."
-    ],
-    "hint": "Look for x² terms and parabola U-shaped graph paths.",
-    "educationalReview": {
-      "definition": "A quadratic equation is a second-order polynomial equation involving a variable raised to the power of 2.",
-      "whyCluesPointedHere": "The clues pointed to exponent 2 (x²), parabola curves, and ax² + bx + c = 0.",
-      "workedExample": "Solve x² - 9 = 0: Add 9 → x² = 9. Take square root → x = 3 or x = -3.",
-      "commonMistakes": "Forgetting the negative root when taking square roots (e.g. x² = 16 has solutions x = 4 AND x = -4).",
-      "funFact": "The path of a thrown basketball, water fountain spray, or jumping dolphin follows an exact quadratic parabola trajectory!",
-      "practiceQuestion": "What are the roots of (x - 2)(x + 5) = 0?",
-      "practiceAnswer": "x = 2 and x = -5 (Set each linear factor equal to 0).",
-      "relatedConcepts": ["Linear Equation", "Quadratic Formula", "Parabola"]
-    }
-  },
-  {
-    "id": "matrix",
-    "name": "Matrix",
-    "subject": "Algebra",
-    "clues": [
-      "I am a rectangular grid or array of numbers arranged in rows and columns.",
-      "I am enclosed in large square brackets [ ].",
-      "My size is described by dimensions like 2×2 or 3×3.",
-      "I am used to solve complex systems of simultaneous linear equations.",
-      "Computer graphics use me to rotate, scale, and translate 3D objects."
-    ],
-    "hint": "Think of a grid of numbers in rows and columns used in linear algebra.",
-    "educationalReview": {
-      "definition": "A matrix is a rectangular array of numbers, symbols, or expressions arranged in rows and columns.",
-      "whyCluesPointedHere": "The clues described rectangular rows × columns arrays in square brackets.",
-      "workedExample": "Add two 2×2 matrices: [1 2; 3 4] + [5 6; 7 8] = [1+5 2+6; 3+7 4+8] = [6 8; 10 12].",
-      "commonMistakes": "Matrix multiplication is NOT commutative! In general, A × B ≠ B × A.",
-      "funFact": "The movie 'The Matrix' gets its name from this math concept, and PageRank (Google's original search algorithm) relies on massive eigenvector matrix calculations!",
-      "practiceQuestion": "How many elements are in a 3×4 matrix?",
-      "practiceAnswer": "12 elements (3 rows × 4 columns).",
-      "relatedConcepts": ["Vector", "Determinant", "Linear Transformations"]
-    }
-  },
-  {
-    "id": "vector",
-    "name": "Vector",
-    "subject": "Geometry",
-    "clues": [
-      "I am a mathematical object possessing BOTH magnitude (length) and direction.",
-      "I am often represented visually as an arrow pointing from one point to another.",
-      "Unlike a scalar (which only has size), I tell you where or which way.",
-      "In physics, velocity and force are examples of me.",
-      "I can be written in column form as [x; y]."
-    ],
-    "hint": "Think of a quantity with both size AND direction (represented by an arrow).",
-    "educationalReview": {
-      "definition": "A vector is a mathematical quantity that has both magnitude (size) and direction.",
-      "whyCluesPointedHere": "The clues contrasted magnitude + direction with scalars and referenced arrow drawings.",
-      "workedExample": "If vector A = [3, 4], its magnitude is √(3² + 4²) = √(9 + 16) = √25 = 5 units.",
-      "commonMistakes": "Confusing speed (scalar) with velocity (vector). Speed is 60 mph; velocity is 60 mph North.",
-      "funFact": "Game engines use vector math every millisecond to move characters, compute wind velocity, and bounce light rays!",
-      "practiceQuestion": "Does temperature (e.g. 25°C) represent a scalar or a vector?",
-      "practiceAnswer": "Scalar (it has magnitude/value, but no direction).",
-      "relatedConcepts": ["Matrix", "Dot Product", "Coordinate Geometry"]
-    }
-  },
-  {
-    "id": "right_triangle",
+  "right_triangle": {
+    "conceptId": "right_triangle",
     "name": "Right Triangle",
-    "subject": "Geometry",
     "clues": [
-      "I am a three-sided polygon with one very specific angle.",
+      "I am a three-sided flat shape.",
       "One of my interior angles measures exactly 90 degrees.",
-      "My longest side opposite the 90° angle is called the hypotenuse.",
-      "The square box symbol in a corner marks my special angle.",
-      "I am the foundation for trigonometry (Sine, Cosine, Tangent)."
+      "My longest side has a special name: the hypotenuse.",
+      "My area can be computed simply as half times base times height.",
+      "Trigonometry is built on my ratios."
     ],
-    "hint": "Think of a triangle with an 'L-shaped' 90-degree corner.",
-    "educationalReview": {
-      "definition": "A right triangle (or right-angled triangle) is a triangle in which one angle is a right angle (90 degrees).",
-      "whyCluesPointedHere": "The clues noted the 90° right angle, hypotenuse, and square corner symbol.",
-      "workedExample": "In a right triangle with legs 3 cm and 4 cm, the hypotenuse length c is √(3² + 4²) = √25 = 5 cm.",
-      "commonMistakes": "Assuming the hypotenuse can be any side. The hypotenuse MUST always be the longest side opposite the 90° angle.",
-      "funFact": "Carpenters use the 3-4-5 right triangle rule to ensure building corners are perfectly square (90 degrees)!",
-      "practiceQuestion": "What is the sum of the remaining two acute angles in a right triangle?",
-      "practiceAnswer": "90 degrees (Since total triangle angles = 180° and one angle is 90°).",
-      "relatedConcepts": ["Pythagoras' Theorem", "Trigonometry", "Hypotenuse"]
+    "hints": [
+      "Geometry category topic.",
+      "Grade 7 level topic.",
+      "Starts with 'R'."
+    ],
+    "educationalInfo": {
+      "definition": "A triangle in which one angle is a right angle (90 degrees).",
+      "examples": ["A triangle with angles 30, 60, and 90 degrees.", "A triangle with side ratios 3:4:5."],
+      "commonMistakes": "Assuming the right angle is always at the bottom-left corner.",
+      "funFact": "A right triangle can also be isosceles, with angles 45, 45, and 90 degrees.",
+      "relatedLesson": "Triangles and Angles",
+      "practiceQuestions": [
+        "Can a triangle have two right angles?",
+        "If a right triangle has an angle of 40 degrees, what is the third angle?"
+      ]
     }
   },
-  {
-    "id": "venn_diagram",
-    "name": "Venn Diagram",
-    "subject": "Algebra",
-    "clues": [
-      "I am a visual diagram used in set theory and logic.",
-      "I use overlapping circles to show relationships between different sets.",
-      "The overlapping region in the center represents the intersection (AND).",
-      "The entire combined area of the circles represents the union (OR).",
-      "Invented by John Venn in 1880."
-    ],
-    "hint": "Think of overlapping circles showing shared and unique traits.",
-    "educationalReview": {
-      "definition": "A Venn Diagram is an illustration that uses overlapping circles to show logical relationships between sets of items.",
-      "whyCluesPointedHere": "The clues described overlapping circles, intersections (AND), and set theory.",
-      "workedExample": "Set A = {2, 4, 6}, Set B = {4, 6, 8}. The overlapping region (A ∩ B) contains {4, 6}.",
-      "commonMistakes": "Confusing Union (∪ = all items in A OR B) with Intersection (∩ = only items in BOTH A AND B).",
-      "funFact": "Venn diagrams are used in database search engines (Boolean logic AND / OR / NOT) to retrieve relevant search results!",
-      "practiceQuestion": "If 10 students play Soccer, 12 play Basketball, and 4 play BOTH, how many play Soccer ONLY?",
-      "practiceAnswer": "6 students (10 total soccer - 4 playing both = 6 soccer only).",
-      "relatedConcepts": ["Sets", "Probability", "Logic"]
-    }
-  },
-  {
-    "id": "mean",
-    "name": "Mean (Average)",
-    "subject": "Statistics",
-    "clues": [
-      "I am a measure of central tendency in statistics.",
-      "I am calculated by adding up all numbers and dividing by the total count.",
-      "I am commonly called the arithmetic average.",
-      "For numbers 2, 4, and 9, my value is 5 (15 ÷ 3).",
-      "Unlike median or mode, extreme outlier numbers can pull my value up or down."
-    ],
-    "hint": "Sum all numbers and divide by how many numbers there are.",
-    "educationalReview": {
-      "definition": "The mean is the numerical average of a set of numbers, calculated by summing all items and dividing by the count of items.",
-      "whyCluesPointedHere": "The clues specified summing values and dividing by total count.",
-      "workedExample": "Find mean of 4, 8, 12, 16: Sum = 4 + 8 + 12 + 16 = 40. Count = 4. Mean = 40 ÷ 4 = 10.",
-      "commonMistakes": "Confusing Mean with Median (the middle number) or Mode (the most frequent number).",
-      "funFact": "Weather forecasters compute 30-year climate means to determine whether today's temperature is 'above' or 'below' average!",
-      "practiceQuestion": "What is the mean of 10, 20, 30?",
-      "practiceAnswer": "20 (Sum = 60; 60 ÷ 3 = 20).",
-      "relatedConcepts": ["Median", "Mode", "Statistics"]
-    }
-  },
-  {
-    "id": "probability",
-    "name": "Probability",
-    "subject": "Statistics",
-    "clues": [
-      "I am the branch of mathematics dealing with chance and likelihood.",
-      "My values are ALWAYS between 0 (impossible) and 1 (certain).",
-      "I can be expressed as a fraction, decimal, or percentage.",
-      "Flipping a fair coin has a 0.5 (or 50%) chance of heads.",
-      "Rolling a 6-sided die gives a 1/6 chance for any specific number."
-    ],
-    "hint": "Think of calculating chances, flipping coins, rolling dice, or values between 0 and 1.",
-    "educationalReview": {
-      "definition": "Probability measures the likelihood of an event occurring, calculated as (Favorable Outcomes) ÷ (Total Possible Outcomes).",
-      "whyCluesPointedHere": "The clues focused on chance, coin flips, dice rolls, and values between 0 and 1.",
-      "workedExample": "What is the probability of rolling an even number on a 6-sided die? Favorable = {2, 4, 6} (3 outcomes). Total = 6. P = 3/6 = 1/2 or 50%.",
-      "commonMistakes": "Believing in the 'Gambler's Fallacy'—thinking that after 5 heads in a row, tails is 'due'. Each fair coin flip is completely independent!",
-      "funFact": "Probability theory was originally created in the 1600s by mathematicians Blaise Pascal and Pierre de Fermat to solve a gambling game puzzle!",
-      "practiceQuestion": "A bag has 3 red marbles and 7 blue marbles. What is the probability of drawing a red marble?",
-      "practiceAnswer": "3/10 or 30% (3 red out of 10 total marbles).",
-      "relatedConcepts": ["Statistics", "Sample Space", "Venn Diagram"]
-    }
-  },
-  {
-    "id": "pythagoras_theorem",
+  "pythagoras_theorem": {
+    "conceptId": "pythagoras_theorem",
     "name": "Pythagoras' Theorem",
-    "subject": "Geometry",
     "clues": [
-      "I am a famous geometric theorem for right-angled triangles.",
-      "I state that the area of the square on the hypotenuse equals the sum of areas of squares on the other two sides.",
-      "My famous algebraic formula is a² + b² = c².",
-      "I allow you to calculate an unknown side length if two sides are known.",
-      "Named after an ancient Greek mathematician."
+      "I am a famous geometric principle.",
+      "I apply strictly to right-angled triangles.",
+      "I state that the square of the hypotenuse equals the sum of squares of the other two sides.",
+      "My algebraic formula is written as a^2 + b^2 = c^2.",
+      "Numbers like (3, 4, 5) and (5, 12, 13) are my triples."
     ],
-    "hint": "Look for the iconic formula a² + b² = c².",
-    "educationalReview": {
-      "definition": "Pythagoras' Theorem states that in any right-angled triangle, the square of the length of the hypotenuse (c) is equal to the sum of the squares of the lengths of the other two sides (a and b): a² + b² = c².",
-      "whyCluesPointedHere": "The clues explicitly stated a² + b² = c² and hypotenuse side length calculation.",
-      "workedExample": "In a right triangle with sides a = 6 and b = 8: c² = 6² + 8² = 36 + 64 = 100 → c = √100 = 10.",
-      "commonMistakes": "Applying this theorem to non-right triangles! It ONLY works when one angle is exactly 90 degrees.",
-      "funFact": "Babylonians knew about Pythagorean triples (like 3,4,5 and 5,12,13) over 1,000 years before Pythagoras was born!",
-      "practiceQuestion": "In a right triangle, if legs are a = 5 and b = 12, what is hypotenuse c?",
-      "practiceAnswer": "13 (5² + 12² = 25 + 144 = 169 → c = √169 = 13).",
-      "relatedConcepts": ["Right Triangle", "Square Root", "Trigonometry"]
+    "hints": [
+      "Geometry category topic.",
+      "Grade 8 level topic.",
+      "Starts with 'P'."
+    ],
+    "educationalInfo": {
+      "definition": "A fundamental relation in Euclidean geometry among the three sides of a right triangle.",
+      "examples": ["3^2 + 4^2 = 5^2 (9 + 16 = 25).", "5^2 + 12^2 = 13^2 (25 + 144 = 169)."],
+      "commonMistakes": "Applying the formula to non-right triangles. Incorrectly squaring sides (e.g. thinking a + b = c).",
+      "funFact": "Pythagoras may not have been the first to discover this; ancient Babylonian, Indian, and Chinese mathematicians knew it centuries earlier.",
+      "relatedLesson": "Pythagoras' Theorem",
+      "practiceQuestions": [
+        "If the legs of a right triangle are 6 and 8, find the hypotenuse.",
+        "Is a triangle with side lengths 7, 24, and 25 a right triangle?"
+      ]
+    }
+  },
+  "perimeter": {
+    "conceptId": "perimeter",
+    "name": "Perimeter",
+    "clues": [
+      "I represent a boundary measurement.",
+      "I measure the total continuous distance around the outside of a 2D shape.",
+      "For a circle, my value is called the circumference.",
+      "For a polygon, you calculate me by adding all side lengths together.",
+      "For a square of side s, my formula is 4s."
+    ],
+    "hints": [
+      "Geometry category topic.",
+      "Grade 5 level topic.",
+      "Starts with 'P'."
+    ],
+    "educationalInfo": {
+      "definition": "The continuous line forming the boundary of a closed two-dimensional shape.",
+      "examples": ["Perimeter of rectangle with dimensions 5cm and 3cm is 2 * (5 + 3) = 16cm.", "Perimeter of square with side 4cm is 16cm."],
+      "commonMistakes": "Confusing perimeter with area (perimeter is linear length, measured in units like cm, not cm^2).",
+      "funFact": "The word perimeter comes from the Greek 'peri' (around) and 'metron' (measure).",
+      "relatedLesson": "Perimeter, Area, and Volume",
+      "practiceQuestions": [
+        "Calculate the perimeter of a regular hexagon with side length 5cm.",
+        "What is the perimeter of a rectangle with length 10m and width 4m?"
+      ]
+    }
+  },
+  "area": {
+    "conceptId": "area",
+    "name": "Area",
+    "clues": [
+      "I measure two-dimensional space.",
+      "I count the amount of square units needed to cover a flat surface.",
+      "For a rectangle, my value is length multiplied by width.",
+      "For a circle, my formula is pi times radius squared.",
+      "My units are written with a superscript 2, such as square meters."
+    ],
+    "hints": [
+      "Geometry category topic.",
+      "Grade 5 level topic.",
+      "Starts with 'A'."
+    ],
+    "educationalInfo": {
+      "definition": "The quantity that expresses the extent of a two-dimensional figure or shape in the plane.",
+      "examples": ["Area of a square with side 5cm is 25 cm^2.", "Area of triangle is 0.5 * base * height."],
+      "commonMistakes": "Measuring area in linear units instead of square units. Confusing formulas of perimeter and area.",
+      "funFact": "A standard A4 sheet of paper has an area of exactly 1/16th of a square meter.",
+      "relatedLesson": "Perimeter, Area, and Volume",
+      "practiceQuestions": [
+        "Find the area of a triangle with base 8cm and height 5cm.",
+        "If a square has a perimeter of 24cm, what is its area?"
+      ]
+    }
+  },
+  "volume": {
+    "conceptId": "volume",
+    "name": "Volume",
+    "clues": [
+      "I measure three-dimensional capacity.",
+      "I count the amount of cubic space occupied by a solid object.",
+      "For a cuboid, my calculation is length * width * height.",
+      "For a cylinder, my formula is pi * r^2 * h.",
+      "My units are written with a superscript 3, such as cm^3 or cubic meters."
+    ],
+    "hints": [
+      "Geometry category topic.",
+      "Grade 6 level topic.",
+      "Starts with 'V'."
+    ],
+    "educationalInfo": {
+      "definition": "The amount of three-dimensional space enclosed by a closed surface.",
+      "examples": ["Volume of a cube with side 3cm is 27 cm^3.", "A cylinder with radius 2cm and height 5cm has volume 20*pi cm^3."],
+      "commonMistakes": "Using area formulas instead of multiplying by the third dimension (height/depth). Measuring in square units.",
+      "funFact": "One liter is defined as the volume of a cube that measures 10cm on each side (1000 cm^3).",
+      "relatedLesson": "Perimeter, Area, and Volume",
+      "practiceQuestions": [
+        "Calculate the volume of a box measuring 5cm by 4cm by 3cm.",
+        "What is the volume of a sphere of radius 3 units (in terms of pi)?"
+      ]
+    }
+  },
+  "linear_equation": {
+    "conceptId": "linear_equation",
+    "name": "Linear Equation",
+    "clues": [
+      "I am an algebraic statement of equality.",
+      "My graph forms a straight line.",
+      "The highest exponent of my variables is exactly 1.",
+      "My standard form is written as y = mx + c.",
+      "An example of my form is 2x + 5 = 11."
+    ],
+    "hints": [
+      "Algebra category topic.",
+      "Grade 7 level topic.",
+      "Starts with 'L'."
+    ],
+    "educationalInfo": {
+      "definition": "An equation between two variables that gives a straight line when plotted on a graph.",
+      "examples": ["y = 3x - 2", "4x + 7 = 19"],
+      "commonMistakes": "Thinking equations with variables squared are linear. Making errors in balance rules (e.g. forgetting to do the same operation to both sides).",
+      "funFact": "Linear equations are the foundation of linear programming, which logistics companies use to optimize shipping routes.",
+      "relatedLesson": "Equations and Formulae",
+      "practiceQuestions": [
+        "Solve for x: 3x - 4 = 11.",
+        "Does the point (2, 5) lie on the line y = 2x + 1?"
+      ]
+    }
+  },
+  "quadratic_equation": {
+    "conceptId": "quadratic_equation",
+    "name": "Quadratic Equation",
+    "clues": [
+      "I am an algebraic relation.",
+      "My graph forms a U-shaped curve called a parabola.",
+      "The highest exponent of my variable is exactly 2.",
+      "My standard form is ax^2 + bx + c = 0.",
+      "My solutions can be found using factorisation, completing the square, or a square-root formula."
+    ],
+    "hints": [
+      "Algebra category topic.",
+      "Grade 9 level topic.",
+      "Starts with 'Q'."
+    ],
+    "educationalInfo": {
+      "definition": "Any equation that can be rearranged in standard form as ax^2 + bx + c = 0 where a is not equal to zero.",
+      "examples": ["x^2 - 5x + 6 = 0", "y = 2x^2 + 3"],
+      "commonMistakes": "Forgetting the plus-minus sign when taking square roots. Missing the quadratic term when rearranging equations.",
+      "funFact": "The path of any thrown object, like a basketball or a stone, is a parabola described by a quadratic equation.",
+      "relatedLesson": "Quadratic Equations",
+      "practiceQuestions": [
+        "Find the roots of x^2 - 9 = 0.",
+        "How many solutions does x^2 - 4x + 4 = 0 have?"
+      ]
+    }
+  },
+  "variable": {
+    "conceptId": "variable",
+    "name": "Variable",
+    "clues": [
+      "I am a basic building block of algebra.",
+      "I represent a quantity whose value is unknown or can change.",
+      "I am usually written as a letter from the alphabet.",
+      "The letters x, y, and z are my most common representatives.",
+      "In the term 5x, I am represented by the x."
+    ],
+    "hints": [
+      "Algebra category topic.",
+      "Grade 6 level topic.",
+      "Starts with 'V'."
+    ],
+    "educationalInfo": {
+      "definition": "A symbol (usually a letter) standing for an unknown numerical value in an equation or algebraic expression.",
+      "examples": ["In y = mx + c, x and y are variables.", "In x + 2 = 5, x is the variable."],
+      "commonMistakes": "Treating variables as constants. Forgetting that different variables can represent different numbers in the same equation.",
+      "funFact": "French philosopher René Descartes introduced the convention of using x, y, z for variables and a, b, c for constants.",
+      "relatedLesson": "Equations and Formulae",
+      "practiceQuestions": [
+        "Identify the variable in the expression 3a - 7.",
+        "Can a variable take multiple values in a function?"
+      ]
+    }
+  },
+  "expression": {
+    "conceptId": "expression",
+    "name": "Expression",
+    "clues": [
+      "I combine terms using math operations.",
+      "I contain numbers, variables, and operation symbols.",
+      "Unlike an equation, I do NOT contain an equals sign.",
+      "I can be simplified, but I cannot be solved on my own.",
+      "An example of my form is 3x + 2y - 7."
+    ],
+    "hints": [
+      "Algebra category topic.",
+      "Grade 6 level topic.",
+      "Starts with 'E'."
+    ],
+    "educationalInfo": {
+      "definition": "A mathematical phrase that can contain numbers, variables, and operators, but does not contain an equality sign.",
+      "examples": ["2x + 5", "x^2 - y"],
+      "commonMistakes": "Confusing an expression with an equation (equations have '=', expressions do not).",
+      "funFact": "Expressions are the algebraic equivalent of a sentence fragment, while equations are complete sentences.",
+      "relatedLesson": "Equations and Formulae",
+      "practiceQuestions": [
+        "Simplify the expression: 2x + 3x - 4.",
+        "Is '5x + 3 = 13' an expression or an equation?"
+      ]
+    }
+  },
+  "inequality": {
+    "conceptId": "inequality",
+    "name": "Inequality",
+    "clues": [
+      "I describe a comparison between two mathematical quantities.",
+      "I show that one value is larger or smaller than another.",
+      "I use symbols that resemble arrowheads or wedges.",
+      "When you multiply both sides by a negative number, you must flip my symbol.",
+      "Examples of my symbols are <, >, <=, and >=."
+    ],
+    "hints": [
+      "Algebra category topic.",
+      "Grade 8 level topic.",
+      "Starts with 'I'."
+    ],
+    "educationalInfo": {
+      "definition": "A mathematical statement indicating that one expression is greater than, less than, or not equal to another.",
+      "examples": ["2x + 1 > 5", "y <= 3"],
+      "commonMistakes": "Forgetting to flip the inequality sign when dividing or multiplying by a negative number.",
+      "funFact": "The 'less than' (<) and 'greater than' (>) symbols were introduced by mathematician Thomas Harriot in 1631.",
+      "relatedLesson": "Inequalities",
+      "practiceQuestions": [
+        "Solve for x: -2x > 8.",
+        "Represent x >= 3 on a number line."
+      ]
+    }
+  },
+  "mean": {
+    "conceptId": "mean",
+    "name": "Mean",
+    "clues": [
+      "I am a measure of central tendency.",
+      "People often call me the average.",
+      "To find me, you must sum all values in a dataset.",
+      "After summing, you divide by the total count of numbers.",
+      "For the dataset {2, 4, 9}, my value is 5."
+    ],
+    "hints": [
+      "Statistics category topic.",
+      "Grade 6 level topic.",
+      "Starts with 'M'."
+    ],
+    "educationalInfo": {
+      "definition": "The average value of a set of numbers, calculated by dividing the sum of the values by their count.",
+      "examples": ["Mean of {1, 3, 8} is (1+3+8)/3 = 4.", "Mean of {10, 20} is 15."],
+      "commonMistakes": "Forgetting to divide by the count of items. Getting skewed results when a dataset has extreme outliers.",
+      "funFact": "The arithmetic mean is just one type of mean; others include the geometric mean and harmonic mean.",
+      "relatedLesson": "Statistics",
+      "practiceQuestions": [
+        "Find the mean of {5, 8, 11, 16}.",
+        "If the sum of 5 numbers is 100, what is their mean?"
+      ]
+    }
+  },
+  "median": {
+    "conceptId": "median",
+    "name": "Median",
+    "clues": [
+      "I represent the middle point of a dataset.",
+      "Before finding me, you must sort the numbers in ascending order.",
+      "If the count is odd, I am exactly the middle number.",
+      "If the count is even, I am the mean of the two middle numbers.",
+      "For the sorted dataset {1, 3, 7, 10}, my value is 5."
+    ],
+    "hints": [
+      "Statistics category topic.",
+      "Grade 6 level topic.",
+      "Starts with 'M'."
+    ],
+    "educationalInfo": {
+      "definition": "The middle number in a sorted, ascending or descending list of numbers.",
+      "examples": ["Median of {3, 5, 9} is 5.", "Median of {2, 4, 6, 8} is (4+6)/2 = 5."],
+      "commonMistakes": "Forgetting to sort the numbers before picking the middle value.",
+      "funFact": "Unlike the mean, the median is robust to outliers, which is why median house prices are reported instead of average prices.",
+      "relatedLesson": "Statistics",
+      "practiceQuestions": [
+        "Find the median of {12, 3, 8, 15, 6}.",
+        "What is the median of {1, 2, 9, 10}?"
+      ]
+    }
+  },
+  "mode": {
+    "conceptId": "mode",
+    "name": "Mode",
+    "clues": [
+      "I am the most popular member of a dataset.",
+      "I measure the value that appears with the highest frequency.",
+      "A dataset can have one of me, multiple of me, or none at all.",
+      "I am the only average that can be used for descriptive words (categorical data).",
+      "For the dataset {2, 3, 3, 4, 5}, my value is 3."
+    ],
+    "hints": [
+      "Statistics category topic.",
+      "Grade 6 level topic.",
+      "Starts with 'M'."
+    ],
+    "educationalInfo": {
+      "definition": "The value that appears most frequently in a data set.",
+      "examples": ["Mode of {1, 2, 2, 3} is 2.", "Mode of {blue, red, blue, green} is blue."],
+      "commonMistakes": "Thinking a dataset must always have exactly one mode. Confusing frequency with the value itself.",
+      "funFact": "The word mode comes from the French 'la mode', meaning fashion, i.e., what is most popular.",
+      "relatedLesson": "Statistics",
+      "practiceQuestions": [
+        "What is the mode of {5, 7, 5, 8, 7, 5}?",
+        "Can a set of numbers have no mode?"
+      ]
+    }
+  },
+  "probability": {
+    "conceptId": "probability",
+    "name": "Probability",
+    "clues": [
+      "I measure likelihood and chance.",
+      "My value always lies strictly between 0 and 1 (inclusive).",
+      "A value of 0 means impossible, while 1 means absolute certainty.",
+      "I am computed as successful outcomes divided by total outcomes.",
+      "The chance of rolling a 4 on a standard six-sided die is 1/6."
+    ],
+    "hints": [
+      "Statistics category topic.",
+      "Grade 7 level topic.",
+      "Starts with 'P'."
+    ],
+    "educationalInfo": {
+      "definition": "The branch of mathematics concerning numerical descriptions of how likely an event is to occur.",
+      "examples": ["The probability of getting heads on a coin flip is 0.5.", "Drawing an ace from a deck of cards is 4/52 = 1/13."],
+      "commonMistakes": "Expressing probability as a number greater than 1. Confusing odds (e.g. 1 to 3) with probabilities (1/4).",
+      "funFact": "Modern probability theory was developed in the 17th century by Blaise Pascal and Pierre de Fermat to solve gambling problems.",
+      "relatedLesson": "Probability",
+      "practiceQuestions": [
+        "What is the probability of rolling an even number on a die?",
+        "If a bag has 3 red and 7 blue marbles, what is the probability of picking a red one?"
+      ]
+    }
+  },
+  "venn_diagram": {
+    "conceptId": "venn_diagram",
+    "name": "Venn Diagram",
+    "clues": [
+      "I am a visual way to show collections.",
+      "I represent mathematical sets and their relationships.",
+      "I consist of overlapping circles drawn inside a rectangular box.",
+      "The overlapping section represents the intersection of sets.",
+      "John Venn created me in 1880."
+    ],
+    "hints": [
+      "Statistics category topic.",
+      "Grade 7 level topic.",
+      "Starts with 'V'."
+    ],
+    "educationalInfo": {
+      "definition": "An illustration that uses circles to show the relationships among things or finite groups of things.",
+      "examples": ["A diagram showing common multiples of 2 and 3 in the overlap.", "Comparing categories of shapes."],
+      "commonMistakes": "Forgetting to write the elements that belong outside both circles inside the bounding rectangle (universal set).",
+      "funFact": "The rectangular bounding box representing the universal set is often omitted in popular memes, but is mathematically required.",
+      "relatedLesson": "Sets and Venn Diagrams",
+      "practiceQuestions": [
+        "If set A has 5 items, B has 4, and they overlap by 2, what is the total items inside A union B?",
+        "What does the overlapping area in a Venn diagram represent?"
+      ]
+    }
+  },
+  "sine": {
+    "conceptId": "sine",
+    "name": "Sine",
+    "clues": [
+      "I am a basic trigonometric function.",
+      "In a right triangle, I equal the length of the opposite side divided by the hypotenuse.",
+      "My value for a 30-degree angle is exactly 0.5.",
+      "My graph oscillates continuously between -1 and +1.",
+      "My mathematical abbreviation is sin."
+    ],
+    "hints": [
+      "Trigonometry category topic.",
+      "Grade 9 level topic.",
+      "Starts with 'S'."
+    ],
+    "educationalInfo": {
+      "definition": "The trigonometric function that for an acute angle is the ratio between the leg opposite the angle and the hypotenuse.",
+      "examples": ["sin(30) = 0.5", "sin(90) = 1"],
+      "commonMistakes": "Dividing adjacent by hypotenuse instead of opposite by hypotenuse. Forgetting to set the calculator to Degree mode.",
+      "funFact": "The word sine originates from a Latin mistranslation of the Arabic word 'jaib', which means pocket or fold.",
+      "relatedLesson": "Trigonometry Basics",
+      "practiceQuestions": [
+        "What is the value of sin(0)?",
+        "If opposite side is 5 and hypotenuse is 10, find the sine of the angle."
+      ]
+    }
+  },
+  "cosine": {
+    "conceptId": "cosine",
+    "name": "Cosine",
+    "clues": [
+      "I am a key trigonometric ratio.",
+      "In a right triangle, I equal the length of the adjacent side divided by the hypotenuse.",
+      "My value for a 60-degree angle is exactly 0.5.",
+      "At 0 degrees, my value is at its maximum of 1.",
+      "My mathematical abbreviation is cos."
+    ],
+    "hints": [
+      "Trigonometry category topic.",
+      "Grade 9 level topic.",
+      "Starts with 'C'."
+    ],
+    "educationalInfo": {
+      "definition": "The trigonometric function that for an acute angle is the ratio between the leg adjacent to the angle and the hypotenuse.",
+      "examples": ["cos(60) = 0.5", "cos(0) = 1"],
+      "commonMistakes": "Using the opposite side instead of the adjacent side in calculations.",
+      "funFact": "The cosine of an angle is identical to the sine of its complementary angle (hence the 'co-' prefix).",
+      "relatedLesson": "Trigonometry Basics",
+      "practiceQuestions": [
+        "What is the value of cos(90)?",
+        "If adjacent side is 4 and hypotenuse is 5, find the cosine."
+      ]
+    }
+  },
+  "tangent": {
+    "conceptId": "tangent",
+    "name": "Tangent",
+    "clues": [
+      "I represent a ratio of triangle legs.",
+      "In a right triangle, I equal the opposite side divided by the adjacent side.",
+      "I can also be calculated as the sine of an angle divided by its cosine.",
+      "My value for a 45-degree angle is exactly 1.",
+      "My mathematical abbreviation is tan."
+    ],
+    "hints": [
+      "Trigonometry category topic.",
+      "Grade 9 level topic.",
+      "Starts with 'T'."
+    ],
+    "educationalInfo": {
+      "definition": "A trigonometric function representing the ratio of the opposite side to the adjacent side of a right triangle.",
+      "examples": ["tan(45) = 1", "tan(30) = 1/sqrt(3)"],
+      "commonMistakes": "Inverting the ratio (dividing adjacent by opposite, which is cotangent).",
+      "funFact": "At 90 degrees, tangent is undefined because you cannot divide by zero (cosine is 0). Its graph shoots off to infinity.",
+      "relatedLesson": "Trigonometry Basics",
+      "practiceQuestions": [
+        "What is tan(0)?",
+        "Find the tangent of an angle if the opposite side is 8 and the adjacent side is 8."
+      ]
+    }
+  },
+  "hypotenuse": {
+    "conceptId": "hypotenuse",
+    "name": "Hypotenuse",
+    "clues": [
+      "I am a physical component of a right triangle.",
+      "I am always the longest side of the triangle.",
+      "I am always positioned directly opposite the 90-degree right angle.",
+      "In Pythagoras' formula a^2 + b^2 = c^2, I am represented by the letter c.",
+      "I serve as the denominator in both sine and cosine calculations."
+    ],
+    "hints": [
+      "Trigonometry category topic.",
+      "Grade 8 level topic.",
+      "Starts with 'H'."
+    ],
+    "educationalInfo": {
+      "definition": "The longest side of a right-angled triangle, opposite the right angle.",
+      "examples": ["In a 3-4-5 right triangle, the side of length 5 is the hypotenuse.", "The diagonal of a rectangle acts as the hypotenuse for the two triangles formed."],
+      "commonMistakes": "Assuming the hypotenuse is the base or height. Applying the term to triangles that don't have a right angle.",
+      "funFact": "The word hypotenuse comes from the Greek 'hypoteinousa', meaning 'stretching under'.",
+      "relatedLesson": "Pythagoras' Theorem",
+      "practiceQuestions": [
+        "In a right triangle with legs 5 and 12, what is the length of the hypotenuse?",
+        "Which side is the hypotenuse in a triangle with angles 40, 50, and 90 degrees?"
+      ]
+    }
+  },
+  "angle_of_elevation": {
+    "conceptId": "angle_of_elevation",
+    "name": "Angle of Elevation",
+    "clues": [
+      "I measure an upwards line of sight.",
+      "I am formed between the horizontal ground and a target point above.",
+      "I look upwards, whereas my partner looks down (depression).",
+      "I am equal to the angle of depression due to alternate interior angles.",
+      "You measure me when looking up at the top of a tree or building."
+    ],
+    "hints": [
+      "Trigonometry category topic.",
+      "Grade 10 level topic.",
+      "Starts with 'A'."
+    ],
+    "educationalInfo": {
+      "definition": "The angle formed by the line of sight and the horizontal plane for an object above the horizontal.",
+      "examples": ["Looking up at a bird in a tree.", "Measuring the angle from the ground to the top of a flag pole."],
+      "commonMistakes": "Measuring the angle from the vertical instead of the horizontal ground.",
+      "funFact": "Surveyors use an instrument called a clinometer or theodolite to measure angles of elevation in the field.",
+      "relatedLesson": "Applications of Trigonometry",
+      "practiceQuestions": [
+        "If you stand 10m away from a tree and look up at the top at 45 degrees, how tall is the tree (ignoring eye height)?",
+        "Explain the difference between the angle of elevation and the angle of depression."
+      ]
     }
   }
-]
+}

@@ -34,6 +34,18 @@ const UserSchema = new mongoose.Schema({
   unlockedSkins: [{ type: String, default: ["Classic Tenali"] }],
   equippedSkin: { type: String, default: 'classic' },
   equippedTitle: { type: String, default: 'Novice Reader' },
+  reverseMindReaderWinStreak: { type: Number, default: 0 },
+  xp: { type: Number, default: 0 },
+  worldProgress: [{
+    worldId: { type: String, required: true },
+    unlocked: { type: Boolean, default: false }
+  }],
+  levelProgress: [{
+    levelNum: { type: Number, required: true },
+    conceptId: { type: String, required: true },
+    starsEarned: { type: Number, default: 0 }, // 0 to 3 stars
+    completedAt: { type: Date, default: Date.now }
+  }],
   createdAt: { type: Date, default: Date.now },
   completedTopics: { type: [String], default: [] },
   goldMastery: { type: [String], default: [] },
@@ -153,6 +165,10 @@ const MindReaderAnalyticSchema = new mongoose.Schema({
   questionsCount: { type: Number, required: true },
   scope: { type: String, required: true },
   predictionsMade: [{ type: String }],
+  questionsAsked: [{ type: String }],
+  hintsRequested: { type: Number, default: 0 },
+  completionTime: { type: Number }, // in seconds
+  incorrectGuessesCount: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -245,4 +261,4 @@ router.get('/me', requireAuth, (req, res) => {
   res.json({ user: req.user });
 });
 
-module.exports = { connectMongo, seedUsers, router, requireAuth, User, MindReaderAnalytic, Progress, StudentAttemptLog, UserStats, UserMilestone, UserTopicProgress, UserCollectionProgress };
+module.exports = { connectMongo, seedUsers, router, requireAuth, User, Progress, StudentAttemptLog, UserStats, UserMilestone, UserTopicProgress, UserCollectionProgress, MindReaderAnalytic };

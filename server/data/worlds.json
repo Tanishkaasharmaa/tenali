@@ -1,20 +1,37 @@
 [
   {
-    "id": "world_1",
-    "name": "Kingdom of Numbers",
-    "icon": "🔢",
-    "description": "Recover the fundamental Knowledge Crystals of arithmetic, primes, factors, and fractions.",
-    "themeColor": "#4A90E2",
-    "order": 1,
-    "unlockRequirements": "Unlocked by default"
+    "worldId": "arithmetic_kingdom",
+    "worldName": "Arithmetic Kingdom",
+    "requiredUnlockXP": 0,
+    "themeColor": "#e8864a",
+    "levelRange": [1, 5]
   },
   {
-    "id": "world_2",
-    "name": "Algebraic Realm",
-    "icon": "📐",
-    "description": "Unlock equations, geometric paths, matrices, vectors, and unknown variables.",
-    "themeColor": "#50E3C2",
-    "order": 2,
-    "unlockRequirements": "Complete Kingdom of Numbers Boss Level"
+    "worldId": "geometry_kingdom",
+    "worldName": "Geometry Kingdom",
+    "requiredUnlockXP": 200,
+    "themeColor": "#5cb87a",
+    "levelRange": [6, 10]
+  },
+  {
+    "worldId": "algebra_kingdom",
+    "worldName": "Algebra Kingdom",
+    "requiredUnlockXP": 500,
+    "themeColor": "#3b82f6",
+    "levelRange": [11, 15]
+  },
+  {
+    "worldId": "statistics_kingdom",
+    "worldName": "Statistics Kingdom",
+    "requiredUnlockXP": 800,
+    "themeColor": "#a855f7",
+    "levelRange": [16, 20]
+  },
+  {
+    "worldId": "trigonometry_kingdom",
+    "worldName": "Trigonometry Kingdom",
+    "requiredUnlockXP": 1200,
+    "themeColor": "#ec4899",
+    "levelRange": [21, 25]
   }
 ]

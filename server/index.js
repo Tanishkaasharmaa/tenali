@@ -79,13 +79,31 @@ try {
   console.error('[collections] failed to load collections.json:', e.message);
 }
 app.use('/api/auth', auth.router);
-
 app.use('/api/progress', progress.router);
 auth.seedUsers().catch(() => {});  // always populate in-memory fallback
 
-auth.connectMongo()
-  .then(() => auth.seedUsers())
-  .catch(err => console.error('[auth] Mongo connect failed — using in-memory auth:', err));
+async function connectAuthMongoWithRetry(attempt = 1) {
+  const maxAttempts = Number(process.env.MONGO_CONNECT_ATTEMPTS || 10);
+  const retryDelayMs = Number(process.env.MONGO_CONNECT_RETRY_MS || 2000);
+
+  try {
+    await auth.connectMongo();
+    await auth.seedUsers();
+  } catch (err) {
+    if (attempt >= maxAttempts) {
+      console.error('[auth] Mongo connect failed - using in-memory auth:', err.message);
+      return;
+    }
+
+    console.warn(
+      `[auth] Mongo unavailable (${err.message}); retrying in ${Math.round(retryDelayMs / 1000)}s ` +
+      `(${attempt}/${maxAttempts})`
+    );
+    setTimeout(() => connectAuthMongoWithRetry(attempt + 1), retryDelayMs);
+  }
+}
+
+connectAuthMongoWithRetry();
 
 /**
  * EXPLANATION SUPPORT MIDDLEWARE
@@ -288,7 +306,6 @@ setTimeout(async () => {
   } catch {}
 }, 3000);
 
-
 app.use(async (req, res, next) => {
   // Only intercept POST requests to check endpoints
   if (req.method !== 'POST' || !req.path.includes('-api/check')) {
@@ -448,7 +465,6 @@ app.use(async (req, res, next) => {
 
 
 const { generateExplanation } = require('./explanations');
-
 
 /**
  * Generate a random integer between min and max (inclusive)
@@ -1098,9 +1114,16 @@ function formatSignedTerm(value, variablePart, isFirst = false) {
  * @param {number} x - The x value to evaluate at
  * @returns {string} Prompt text (e.g., "If x = 2, find y for y = 2x² - 3x + 5")
  */
-function buildQuadraticPrompt(a, b, c, x) {
-  const expression = `${formatSignedTerm(a, 'x²', true)} ${formatSignedTerm(b, 'x')} ${formatSignedTerm(c, '')}`;
-  return WordProblemGenerator.quadratic(expression, x);
+function buildQuadraticPrompt(a, b, c, x, opAB = '+', opBC = '+') {
+  // Build each term without leading sign (we control signs via opAB/opBC)
+  const first = `${a}${'x²'}`;
+  const second = `${Math.abs(b)}${'x'}`;
+  const third = `${Math.abs(c)}`;
+
+  const opStr = (op) => (op === '-' ? '-' : '+');
+
+  const expression = `${first} ${opStr(opAB)} ${second} ${opStr(opBC)} ${third}`;
+  return `If x = ${x}, find y for y = ${expression}`;
 }
 
 /**
@@ -1166,8 +1189,18 @@ app.get('/quadratic-api/question', (req, res) => {
  * }
  */
 app.post('/quadratic-api/check', (req, res) => {
-  const { a, b, c, x, answer } = req.body || {};
-  const correctAnswer = Number(a) * Number(x) * Number(x) + Number(b) * Number(x) + Number(c);
+  const { a, b, c, x, answer, opAB, opBC } = req.body || {};
+  // Compute in sequence applying provided operators (default to +)
+  const A = Number(a);
+  const B = Number(b);
+  const C = Number(c);
+  const X = Number(x);
+  const left = A * X * X;
+  const mid = B * X;
+  const third = C;
+  const applyOp = (lhs, op, rhs) => op === '-' ? lhs - rhs : lhs + rhs;
+  const afterMid = applyOp(left, (opAB || '+').toString(), mid);
+  const correctAnswer = applyOp(afterMid, (opBC || '+').toString(), third);
   const correct = Number(answer) === correctAnswer;
   res.json({ correct, correctAnswer, message: correct ? 'Correct' : 'Incorrect' });
 });
@@ -4524,7 +4557,6 @@ app.get('/coordgeom-api/question', (req, res) => {
     }
   }
   else if (difficulty === 'medium') {
-
     // Lengths: distance, distance to origin
     const subType = triPick(['distance', 'distance_origin']);
     const triples = [[3,4,5],[5,12,13],[8,15,17],[6,8,10],[9,12,15]];
@@ -4544,7 +4576,6 @@ app.get('/coordgeom-api/question', (req, res) => {
       const prompt = `Find the distance between (${x1}, ${y1}) and (${x2}, ${y2})`;
       res.json({ id, difficulty, type: 'scalar', prompt, answer: dist, display: String(dist), points: [{x:x1, y:y1}, {x:x2, y:y2}] });
     }
-
   }
   else if (difficulty === 'hard') {
     // Slopes & Eqs: gradient, equation_line
@@ -5091,11 +5122,9 @@ app.get('/matrix-api/question', (req, res) => {
   }
   else if (difficulty === 'medium') {
     // Scalar multiplication
-
     let k = triRand(-3, 5); if (k === 0) k = 2;
     const A = [[triRand(-5,9), triRand(-5,9)], [triRand(-5,9), triRand(-5,9)]];
     const R = [[k*A[0][0], k*A[0][1]], [k*A[1][0], k*A[1][1]]];
-
     const fmtM = (m) => `[${m[0][0]},${m[0][1]};${m[1][0]},${m[1][1]}]`;
     const prompt = `A = ${fmtM(A)}. Find ${k}A.`;
     res.json({ id, difficulty, type: 'scalar', prompt, answer: R, display: fmtM(R) });
@@ -5164,11 +5193,9 @@ app.get('/vectors-api/question', (req, res) => {
   }
   else if (difficulty === 'medium') {
     // Scalar multiplication
-
     let k = triRand(-3, 5); if (k === 0) k = 2;
     const a = [triRand(-6,6), triRand(-6,6)];
     const ans = [k*a[0], k*a[1]];
-
     const prompt = `a = (${a[0]}, ${a[1]}). Find ${k}a.`;
     res.json({ id, difficulty, type: 'scalar', prompt, ansX: ans[0], ansY: ans[1], display: `(${ans[0]}, ${ans[1]})` });
   }
@@ -9148,107 +9175,10 @@ app.post('/diffeq-api/check', express.json(), (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
-
 // TENALI MIND READER (MVP API)
 // ═══════════════════════════════════════════════════════════════════════════
 const { QUESTIONS, CONCEPTS } = require('./mindReaderKB');
 const { runInference }        = require('./mindReaderEngine');
-const challengeService       = require('./challengeService');
-const mindReaderEvents       = require('./mindReaderEvents');
-
-// Decoupled listener to handle ratings (MRR) and database analytics logging
-mindReaderEvents.on('challengeCompleted', async (data) => {
-  const { userContext: user, outcome, concept, questionsCount, scopeType, scopeValue, resultCollector } = data;
-  const todayStr = new Date().toDateString();
-  const diff = outcome === 'win' ? 20 : -5;
-
-  if (user) {
-    resultCollector.authenticated = true;
-    if (user.lastMindReaderGameDate !== todayStr) {
-      user.mindReaderGamesToday = 0;
-      user.lastMindReaderGameDate = todayStr;
-    }
-
-    user.mrr = Math.max(1000, (user.mrr || 1000) + diff);
-    user.mindReaderGamesToday += 1;
-
-    if (!user.isInMemory) {
-      await user.save().catch(err => console.error('[challenge] user save error:', err));
-    } else {
-      inMemoryProfiles[user.username.toLowerCase()] = user;
-    }
-
-    resultCollector.mrr = user.mrr;
-    resultCollector.mindReaderGamesToday = user.mindReaderGamesToday;
-    resultCollector.unlockedSkins = user.unlockedSkins || ["Classic Tenali"];
-    resultCollector.equippedSkin = user.equippedSkin || 'classic';
-    resultCollector.equippedTitle = user.equippedTitle || 'Novice Reader';
-  } else {
-    // Guest fallback
-    resultCollector.authenticated = false;
-    resultCollector.mrr = diff; // client will add this to its local MRR state
-  }
-
-  // Log analytics to database if connected
-  const mongoose = require('mongoose');
-  if (mongoose.connection.readyState === 1) {
-    auth.MindReaderAnalytic.create({
-      outcome,
-      concept: concept.name,
-      questionsCount: questionsCount || 0,
-      scope: `challenge:${scopeType}:${scopeValue || 'all'}`,
-      predictionsMade: []
-    }).catch(err => console.error('[challenge] analytic save error:', err));
-  }
-});
-
-// Adventure Game REST API Router
-app.use('/api/adventure', require('./adventure/adventureRoutes'));
-
-// Challenge Mode HTTP API Route definitions
-app.get('/api/mindreader/challenge/metadata', (req, res) => {
-  try {
-    const meta = challengeService.getMetadata();
-    res.json(meta);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.post('/api/mindreader/challenge/start', express.json(), (req, res) => {
-  const { scopeType, scopeValue, maxQuestions } = req.body;
-  try {
-    const result = challengeService.startChallenge(scopeType, scopeValue, maxQuestions);
-    res.json(result);
-  } catch (err) {
-    const status = err.statusCode || 500;
-    res.status(status).json({ error: err.message });
-  }
-});
-
-app.post('/api/mindreader/challenge/ask', express.json(), (req, res) => {
-  const { token, questionId } = req.body;
-  try {
-    const result = challengeService.askQuestion(token, questionId);
-    res.json(result);
-  } catch (err) {
-    const status = err.statusCode || 500;
-    res.status(status).json({ error: err.message });
-  }
-});
-
-app.post('/api/mindreader/challenge/guess', express.json(), async (req, res) => {
-  const { token, guessConceptId, questionsCount, forceEnd } = req.body;
-  try {
-    // Fetch optional authenticated user context
-    const user = await getOptionalUser(req);
-    const result = challengeService.guessConcept(token, guessConceptId, questionsCount, forceEnd, user);
-    res.json(result);
-  } catch (err) {
-    const status = err.statusCode || 500;
-    res.status(status).json({ error: err.message });
-  }
-});
 
 app.post('/api/mindreader/next', express.json(), (req, res) => {
   const history              = req.body.history              || [];
@@ -9270,6 +9200,23 @@ app.post('/api/mindreader/next', express.json(), (req, res) => {
 });
 
 const JWT_SECRET = process.env.JWT_SECRET || 'tenali-dev-secret-change-me';
+
+// Helper to automatically unlock skins based on MRR threshold
+function updateUnlockedSkins(user) {
+  if (!user.unlockedSkins) {
+    user.unlockedSkins = ["Classic Tenali"];
+  }
+  let updated = false;
+  if (user.mrr >= 1150 && !user.unlockedSkins.includes("Royal Robes")) {
+    user.unlockedSkins.push("Royal Robes");
+    updated = true;
+  }
+  if (user.mrr >= 1300 && !user.unlockedSkins.includes("Sage Scholar")) {
+    user.unlockedSkins.push("Sage Scholar");
+    updated = true;
+  }
+  return updated;
+}
 
 // In-memory profiles fallback when MongoDB is down
 const inMemoryProfiles = {}; // Keyed by username -> { username, mrr, mindReaderGamesToday, lastMindReaderGameDate, unlockedSkins }
@@ -9331,6 +9278,9 @@ app.get('/api/mindreader/profile', async (req, res) => {
         user.lastMindReaderGameDate = todayStr;
         needsSave = true;
       }
+      if (updateUnlockedSkins(user)) {
+        needsSave = true;
+      }
       if (needsSave && !user.isInMemory) {
         await user.save();
       }
@@ -9341,6 +9291,7 @@ app.get('/api/mindreader/profile', async (req, res) => {
         unlockedSkins: user.unlockedSkins || ["Classic Tenali"],
         equippedSkin: user.equippedSkin || 'classic',
         equippedTitle: user.equippedTitle || 'Novice Reader',
+        winStreak: user.reverseMindReaderWinStreak || 0,
         authenticated: true,
         username: user.username
       });
@@ -9415,6 +9366,8 @@ app.post('/api/mindreader/end', express.json(), async (req, res) => {
         user.mrr = Math.max(1000, (user.mrr || 1000) - 5);
       }
 
+      updateUnlockedSkins(user);
+
       user.mindReaderGamesToday += 1;
 
       if (!user.isInMemory) {
@@ -9471,6 +9424,675 @@ app.post('/api/mindreader/end', express.json(), async (req, res) => {
 
 app.get('/mindreader', (_req, res) => {
   res.sendFile(path.join(clientDistPath, 'index.html'));
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TENALI REVERSE MIND READER (API)
+// ═══════════════════════════════════════════════════════════════════════════
+const { REVERSE_CONCEPTS, REVERSE_QUESTIONS, PERSONALITY_RESPONSES } = require('./mindReaderKB2');
+const crypto = require('crypto');
+
+// ─── GUESS WHAT'S ON TENALI'S MIND (CONFIGS) ──────────────────────────────────
+let worldsConfig = [];
+let levelsConfig = [];
+let conceptsConfig = {};
+
+try {
+  const dataDir = path.join(__dirname, 'data');
+  worldsConfig = JSON.parse(fs.readFileSync(path.join(dataDir, 'worlds.json'), 'utf8'));
+  levelsConfig = JSON.parse(fs.readFileSync(path.join(dataDir, 'levels.json'), 'utf8'));
+  conceptsConfig = JSON.parse(fs.readFileSync(path.join(dataDir, 'concepts.json'), 'utf8'));
+  console.log(`[GuessMind] Loaded ${worldsConfig.length} worlds, ${levelsConfig.length} levels, and ${Object.keys(conceptsConfig).length} concepts successfully.`);
+} catch (err) {
+  console.error('[GuessMind] Error loading configuration files:', err);
+}
+
+// In-memory guess mind sessions
+const guessMindSessions = new Map();
+
+class GuessMindSession {
+  constructor(gameId, levelNum, selectedConcept) {
+    this.gameId = gameId;
+    this.levelNum = levelNum;
+    this.selectedConcept = selectedConcept; // full concept object
+    this.clueIndex = 0; // starts at Clue 1 (index 0)
+    this.hintsRemaining = 3;
+    this.hintsUsed = 0;
+    this.guessed = false;
+    this.createdAt = new Date();
+  }
+}
+
+// Session pruning interval for Guess Mind sessions (runs every 10 mins, cleans sessions older than 30 mins)
+setInterval(() => {
+  const now = Date.now();
+  for (const [gameId, session] of guessMindSessions.entries()) {
+    if (now - session.createdAt.getTime() > 30 * 60 * 1000) {
+      guessMindSessions.delete(gameId);
+      console.log(`[GuessMind] Evicted expired session: ${gameId}`);
+    }
+  }
+}, 10 * 60 * 1000);
+
+
+// In-memory reverse mind reader sessions
+const reverseSessions = new Map();
+
+// Game session helper class
+class GameSession {
+  constructor(gameId, selectedConcept, difficulty = 'easy') {
+    this.gameId = gameId;
+    this.selectedConcept = selectedConcept;
+    this.difficulty = difficulty;
+    this.questionsRemaining = 10;
+    this.hintsRemaining = 2;
+    this.maxQuestions = 10;
+    this.maxHints = 2;
+    this.askedQuestions = [];
+    this.guessed = false;
+    this.createdAt = new Date();
+  }
+}
+
+// Session pruning interval (runs every 10 mins, cleans sessions older than 30 mins)
+setInterval(() => {
+  const now = Date.now();
+  for (const [gameId, session] of reverseSessions.entries()) {
+    if (now - session.createdAt.getTime() > 30 * 60 * 1000) {
+      reverseSessions.delete(gameId);
+      console.log(`[ReverseMindReader] Evicted expired session: ${gameId}`);
+    }
+  }
+}, 10 * 60 * 1000);
+
+app.post('/api/game/start', express.json(), async (req, res) => {
+  try {
+    const { difficulty, allowedCategories } = req.body;
+    const diff = (difficulty || 'easy').toLowerCase();
+    
+    // Filter concepts by chosen difficulty level
+    let pool = REVERSE_CONCEPTS.filter(c => c.difficulty === diff);
+    
+    // Additionally filter by allowed categories if provided
+    if (allowedCategories && Array.isArray(allowedCategories) && allowedCategories.length > 0) {
+      const filtered = pool.filter(c => allowedCategories.includes(c.category));
+      if (filtered.length > 0) {
+        pool = filtered;
+      }
+    }
+    
+    const selectedPool = pool.length > 0 ? pool : REVERSE_CONCEPTS;
+    
+    const randomIndex = Math.floor(Math.random() * selectedPool.length);
+    const concept = selectedPool[randomIndex];
+    const gameId = 'sess_' + crypto.randomUUID().replace(/-/g, '');
+    
+    // Configure question and hint resource limits by difficulty
+    let questionsAllowed = 10;
+    let hintsAllowed = 2;
+    if (diff === 'easy') {
+      questionsAllowed = 15;
+      hintsAllowed = 3;
+    } else if (diff === 'medium') {
+      questionsAllowed = 10;
+      hintsAllowed = 2;
+    } else if (diff === 'hard') {
+      questionsAllowed = 6;
+      hintsAllowed = 1;
+    }
+    
+    const session = new GameSession(gameId, concept, diff);
+    session.questionsRemaining = questionsAllowed;
+    session.hintsRemaining = hintsAllowed;
+    session.maxQuestions = questionsAllowed;
+    session.maxHints = hintsAllowed;
+    
+    reverseSessions.set(gameId, session);
+    
+    console.log(`[ReverseMindReader] Started session ${gameId} with concept "${concept.name}" [Level: ${diff}] [Allowed Cats: ${allowedCategories ? allowedCategories.join(',') : 'all'}]`);
+    res.json({
+      gameId,
+      questionsRemaining: session.questionsRemaining,
+      hintsRemaining: session.hintsRemaining,
+      state: 'PLAYING',
+      difficulty: diff
+    });
+  } catch (err) {
+    console.error('[ReverseMindReader] Start game error:', err);
+    res.status(500).json({ error: 'Internal server error starting game' });
+  }
+});
+
+app.post('/api/game/question', express.json(), (req, res) => {
+  const { gameId, questionId } = req.body;
+  if (!gameId || !questionId) {
+    return res.status(400).json({ error: 'Missing gameId or questionId' });
+  }
+  
+  const session = reverseSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+  
+  if (session.questionsRemaining <= 0) {
+    return res.status(400).json({ error: 'No questions remaining' });
+  }
+  
+  const question = REVERSE_QUESTIONS.find(q => q.id === questionId);
+  if (!question) {
+    return res.status(400).json({ error: 'Invalid questionId' });
+  }
+  
+  if (session.askedQuestions.includes(questionId)) {
+    return res.status(400).json({ error: 'Question already asked' });
+  }
+  
+  const concept = session.selectedConcept;
+  const attributeVal = concept.attributes[question.attribute];
+  
+  let answer = 'dontknow';
+  if (attributeVal !== null && attributeVal !== undefined) {
+    if (question.operator === 'gte') {
+      answer = attributeVal >= question.expectedValue ? 'yes' : 'no';
+    } else if (question.operator === 'lte') {
+      answer = attributeVal <= question.expectedValue ? 'yes' : 'no';
+    } else {
+      answer = attributeVal === question.expectedValue ? 'yes' : 'no';
+    }
+  }
+  
+  session.questionsRemaining -= 1;
+  session.askedQuestions.push(questionId);
+  
+  const dialoguePool = PERSONALITY_RESPONSES[answer.toUpperCase()];
+  const dialogue = dialoguePool[Math.floor(Math.random() * dialoguePool.length)];
+  
+  console.log(`[ReverseMindReader] Session ${gameId} asked: "${question.text}" -> Answer: ${answer}`);
+  res.json({
+    dialogue,
+    answer,
+    questionsRemaining: session.questionsRemaining
+  });
+});
+
+app.post('/api/game/hint', express.json(), (req, res) => {
+  const { gameId } = req.body;
+  if (!gameId) {
+    return res.status(400).json({ error: 'Missing gameId' });
+  }
+  
+  const session = reverseSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+  
+  if (session.hintsRemaining <= 0) {
+    return res.status(400).json({ error: 'No hints remaining' });
+  }
+  
+  let hintText = '';
+  if (session.hintsRemaining === 2) {
+    hintText = session.selectedConcept.hints.hint1;
+  } else {
+    hintText = session.selectedConcept.hints.hint2;
+  }
+  
+  session.hintsRemaining -= 1;
+  
+  const hintDialoguePool = PERSONALITY_RESPONSES.HINT;
+  const randomPrefix = hintDialoguePool[Math.floor(Math.random() * hintDialoguePool.length)];
+  const dialogue = `${randomPrefix}"${hintText}"`;
+  
+  console.log(`[ReverseMindReader] Session ${gameId} requested hint. Remaining: ${session.hintsRemaining}`);
+  res.json({
+    dialogue,
+    hint: hintText,
+    hintsRemaining: session.hintsRemaining
+  });
+});
+
+app.post('/api/game/guess', express.json(), async (req, res) => {
+  const { gameId, guess, winStreak } = req.body;
+  if (!gameId || !guess) {
+    return res.status(400).json({ error: 'Missing gameId or guess' });
+  }
+  
+  const session = reverseSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+  
+  const concept = session.selectedConcept;
+  const normalizedGuess = guess.trim().toLowerCase().replace(/\s+/g, '');
+  const normalizedConceptName = concept.name.trim().toLowerCase().replace(/\s+/g, '');
+  
+  const isCorrect = normalizedGuess === normalizedConceptName;
+  let rewardPoints = 0;
+  let user = null;
+  
+  try {
+    user = await getOptionalUser(req);
+  } catch (err) {
+    console.error('[ReverseMindReader] Error fetching optional user for guess:', err);
+  }
+  
+  let currentStreak = 0;
+  if (isCorrect) {
+    if (user) {
+      user.reverseMindReaderWinStreak = (user.reverseMindReaderWinStreak || 0) + 1;
+      currentStreak = user.reverseMindReaderWinStreak;
+    } else {
+      currentStreak = parseInt(winStreak || 0, 10) + 1;
+    }
+    const multiplier = Math.min(1.5, 1.0 + Math.max(0, currentStreak - 1) * 0.1);
+    
+    let difficultyBonus = 0;
+    if (session.difficulty === 'medium') {
+      difficultyBonus = 10;
+    } else if (session.difficulty === 'hard') {
+      difficultyBonus = 25;
+    }
+    
+    rewardPoints = Math.round((20 + (session.questionsRemaining * 2) + (session.hintsRemaining * 5) + difficultyBonus) * multiplier);
+  } else {
+    if (user) {
+      user.reverseMindReaderWinStreak = 0;
+    }
+    currentStreak = 0;
+    rewardPoints = -5;
+  }
+  
+  let finalMrr = 1000;
+  let finalGamesToday = 0;
+  let finalSkins = ["Classic Tenali"];
+  let authenticated = false;
+  
+  if (user) {
+    authenticated = true;
+    const todayStr = new Date().toDateString();
+    
+    if (user.lastMindReaderGameDate !== todayStr) {
+      user.mindReaderGamesToday = 0;
+      user.lastMindReaderGameDate = todayStr;
+    }
+    
+    user.mrr = Math.max(1000, (user.mrr || 1000) + rewardPoints);
+    updateUnlockedSkins(user);
+    user.mindReaderGamesToday += 1;
+    
+    if (!user.isInMemory) {
+      await user.save();
+    } else {
+      inMemoryProfiles[user.username.toLowerCase()] = user;
+    }
+    
+    finalMrr = user.mrr;
+    finalGamesToday = user.mindReaderGamesToday;
+    finalSkins = user.unlockedSkins || ["Classic Tenali"];
+  } else {
+    finalMrr = 1000;
+  }
+  
+  const mongoose = require('mongoose');
+  if (mongoose.connection.readyState === 1) {
+    await auth.MindReaderAnalytic.create({
+      outcome: isCorrect ? 'win' : 'loss',
+      concept: concept.name,
+      questionsCount: 10 - session.questionsRemaining,
+      scope: 'reverse_mindreader',
+      predictionsMade: [guess],
+      questionsAsked: session.askedQuestions,
+      hintsRequested: 2 - session.hintsRemaining,
+      completionTime: Math.round((new Date() - session.createdAt) / 1000),
+      incorrectGuessesCount: isCorrect ? 0 : 1
+    }).catch(err => console.error('[ReverseMindReader] Failed to save analytic:', err));
+  }
+  
+  reverseSessions.delete(gameId);
+  
+  console.log(`[ReverseMindReader] Session ${gameId} guess: "${guess}" | Secret: "${concept.name}" | Correct: ${isCorrect} | Reward: ${rewardPoints} MRR`);
+  console.log('[ReverseMindReader] Telemetry prepared:', {
+    outcome: isCorrect ? 'win' : 'loss',
+    concept: concept.name,
+    questionsCount: 10 - session.questionsRemaining,
+    questionsAsked: session.askedQuestions,
+    hintsRequested: 2 - session.hintsRemaining,
+    completionTime: Math.round((new Date() - session.createdAt) / 1000),
+    incorrectGuessesCount: isCorrect ? 0 : 1
+  });
+  
+  res.json({
+    correct: isCorrect,
+    reward: {
+      mrrChange: rewardPoints,
+      mrr: finalMrr,
+      mindReaderGamesToday: finalGamesToday,
+      unlockedSkins: finalSkins,
+      equippedSkin: user ? user.equippedSkin : 'classic',
+      equippedTitle: user ? user.equippedTitle : 'Novice Reader',
+      winStreak: currentStreak,
+      authenticated
+    },
+    concept: {
+      name: concept.name,
+      definition: concept.definition,
+      examples: concept.examples,
+      funFact: concept.funFact,
+      relatedLesson: concept.relatedLesson,
+      commonMistakes: concept.commonMistakes
+    }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GUESS WHAT'S ON TENALI'S MIND (MVP API)
+// ═══════════════════════════════════════════════════════════════════════════
+
+app.get('/api/mindreader/worlds', async (req, res) => {
+  try {
+    const user = await getOptionalUser(req);
+    let xp = 0;
+    let unlockedWorlds = ['arithmetic_kingdom'];
+    let levelProgressList = [];
+
+    if (user) {
+      xp = user.xp || 0;
+      // Ensure world progress exists
+      if (!user.worldProgress || user.worldProgress.length === 0) {
+        user.worldProgress = [{ worldId: 'arithmetic_kingdom', unlocked: true }];
+      }
+      // Re-calculate unlocks based on current XP
+      for (const w of worldsConfig) {
+        if (xp >= w.requiredUnlockXP) {
+          const exists = user.worldProgress.find(wp => wp.worldId === w.worldId);
+          if (!exists) {
+            user.worldProgress.push({ worldId: w.worldId, unlocked: true });
+          }
+        }
+      }
+      unlockedWorlds = user.worldProgress.filter(wp => wp.unlocked).map(wp => wp.worldId);
+      levelProgressList = user.levelProgress || [];
+    }
+
+    // Map worlds and add aggregate star counts
+    const worlds = worldsConfig.map(w => {
+      const isUnlocked = unlockedWorlds.includes(w.worldId);
+      // levels in this world
+      const levelsInWorld = levelsConfig.filter(lvl => lvl.worldId === w.worldId);
+      const levelNums = levelsInWorld.map(lvl => lvl.levelNum);
+      const stars = levelProgressList
+        .filter(lp => levelNums.includes(lp.levelNum))
+        .reduce((sum, lp) => sum + (lp.starsEarned || 0), 0);
+
+      return {
+        worldId: w.worldId,
+        worldName: w.worldName,
+        requiredUnlockXP: w.requiredUnlockXP,
+        themeColor: w.themeColor,
+        levelRange: w.levelRange,
+        unlocked: isUnlocked,
+        stars
+      };
+    });
+
+    res.json({
+      xp,
+      worlds,
+      levelProgress: levelProgressList.reduce((acc, lp) => {
+        acc[lp.levelNum] = lp.starsEarned;
+        return acc;
+      }, {})
+    });
+  } catch (err) {
+    console.error('[GuessMind] Error loading worlds:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/mindreader/start', express.json(), async (req, res) => {
+  try {
+    const { levelNum } = req.body;
+    if (!levelNum) {
+      return res.status(400).json({ error: 'Missing levelNum' });
+    }
+
+    const level = levelsConfig.find(l => l.levelNum === parseInt(levelNum, 10));
+    if (!level) {
+      return res.status(400).json({ error: 'Invalid levelNum' });
+    }
+
+    const concept = conceptsConfig[level.conceptId];
+    if (!concept) {
+      return res.status(404).json({ error: 'Concept configuration not found' });
+    }
+
+    // Optional progression verification for authenticated users
+    const user = await getOptionalUser(req);
+    if (user) {
+      const xp = user.xp || 0;
+      const world = worldsConfig.find(w => w.worldId === level.worldId);
+      if (world && xp < world.requiredUnlockXP) {
+        return res.status(403).json({ error: `World locked. Requires ${world.requiredUnlockXP} XP.` });
+      }
+
+      if (level.levelNum > 1) {
+        const prevLevel = levelsConfig.find(l => l.levelNum === level.levelNum - 1);
+        if (prevLevel) {
+          const completedPrev = user.levelProgress.find(lp => lp.levelNum === prevLevel.levelNum && lp.starsEarned > 0);
+          if (!completedPrev) {
+            return res.status(403).json({ error: 'Previous level not completed.' });
+          }
+        }
+      }
+    }
+
+    const gameId = 'sess_gm_' + crypto.randomUUID().replace(/-/g, '');
+    const session = new GuessMindSession(gameId, level.levelNum, concept);
+    guessMindSessions.set(gameId, session);
+
+    console.log(`[GuessMind] Session ${gameId} started for level ${levelNum} with concept "${concept.name}"`);
+
+    res.json({
+      gameId,
+      levelNum: level.levelNum,
+      clue: concept.clues[0],
+      clueIndex: 0,
+      hintsRemaining: session.hintsRemaining
+    });
+  } catch (err) {
+    console.error('[GuessMind] Error in start API:', err);
+    res.status(500).json({ error: 'Internal server error starting level' });
+  }
+});
+
+app.post('/api/mindreader/next-clue', express.json(), (req, res) => {
+  const { gameId } = req.body;
+  if (!gameId) {
+    return res.status(400).json({ error: 'Missing gameId' });
+  }
+
+  const session = guessMindSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+
+  if (session.clueIndex >= 4) {
+    return res.status(400).json({ error: 'All clues already revealed' });
+  }
+
+  session.clueIndex += 1;
+  const clue = session.selectedConcept.clues[session.clueIndex];
+
+  res.json({
+    clue,
+    clueIndex: session.clueIndex,
+    cluesExhausted: session.clueIndex === 4
+  });
+});
+
+app.post('/api/mindreader/use-hint', express.json(), (req, res) => {
+  const { gameId } = req.body;
+  if (!gameId) {
+    return res.status(400).json({ error: 'Missing gameId' });
+  }
+
+  const session = guessMindSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+
+  if (session.hintsRemaining <= 0) {
+    return res.status(400).json({ error: 'No hints remaining' });
+  }
+
+  const hint = session.selectedConcept.hints[3 - session.hintsRemaining];
+  session.hintsRemaining -= 1;
+  session.hintsUsed += 1;
+
+  res.json({
+    hint,
+    hintsRemaining: session.hintsRemaining
+  });
+});
+
+app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
+  const { gameId, guess } = req.body;
+  if (!gameId || !guess) {
+    return res.status(400).json({ error: 'Missing gameId or guess' });
+  }
+
+  const session = guessMindSessions.get(gameId);
+  if (!session) {
+    return res.status(404).json({ error: 'Game session not found or expired' });
+  }
+
+  const concept = session.selectedConcept;
+  const normalizedGuess = guess.trim().toLowerCase().replace(/\s+/g, '');
+  const normalizedConceptName = concept.name.trim().toLowerCase().replace(/\s+/g, '');
+
+  const isCorrect = normalizedGuess === normalizedConceptName;
+  
+  let starsEarned = 0;
+  let mrrChange = -5;
+  let xpEarned = 0;
+  let user = null;
+
+  try {
+    user = await getOptionalUser(req);
+  } catch (err) {
+    console.error('[GuessMind] Error loading user profile:', err);
+  }
+
+  if (isCorrect) {
+    // Calculate stars
+    if (session.clueIndex <= 1) {
+      starsEarned = 3;
+    } else if (session.clueIndex <= 3) {
+      starsEarned = 2;
+    } else {
+      starsEarned = 1;
+    }
+
+    // Calculate MRR
+    mrrChange = Math.max(5, 15 + (5 * (4 - session.clueIndex)) - (3 * session.hintsUsed));
+
+    // Calculate XP
+    if (user) {
+      const prevRecord = user.levelProgress.find(lp => lp.levelNum === session.levelNum);
+      if (prevRecord) {
+        xpEarned = 20; // Replaying level
+      } else {
+        xpEarned = 100; // First completion
+        // Perfect run bonus
+        if (starsEarned >= 3 && session.hintsUsed === 0) {
+          xpEarned += 50;
+        }
+      }
+    } else {
+      xpEarned = 100; // Guest first completion
+      if (starsEarned >= 3 && session.hintsUsed === 0) {
+        xpEarned += 50;
+      }
+    }
+  }
+
+  let finalMrr = 1000;
+  let finalXp = 0;
+  let authenticated = false;
+
+  if (user) {
+    authenticated = true;
+    user.mrr = Math.max(1000, (user.mrr || 1000) + mrrChange);
+    user.xp = (user.xp || 0) + xpEarned;
+
+    // Update levelProgress
+    const prevRecord = user.levelProgress.find(lp => lp.levelNum === session.levelNum);
+    if (prevRecord) {
+      if (starsEarned > prevRecord.starsEarned) {
+        prevRecord.starsEarned = starsEarned;
+      }
+      prevRecord.completedAt = new Date();
+    } else {
+      user.levelProgress.push({
+        levelNum: session.levelNum,
+        conceptId: concept.conceptId,
+        starsEarned
+      });
+    }
+
+    // Recalculate and update worldProgress unlocks
+    for (const w of worldsConfig) {
+      if (user.xp >= w.requiredUnlockXP) {
+        const exists = user.worldProgress.find(wp => wp.worldId === w.worldId);
+        if (!exists) {
+          user.worldProgress.push({ worldId: w.worldId, unlocked: true });
+        }
+      }
+    }
+
+    if (!user.isInMemory) {
+      await user.save();
+    } else {
+      inMemoryProfiles[user.username.toLowerCase()] = user;
+    }
+
+    finalMrr = user.mrr;
+    finalXp = user.xp;
+  }
+
+  // Save telemetry event
+  const mongoose = require('mongoose');
+  if (mongoose.connection.readyState === 1) {
+    await auth.MindReaderAnalytic.create({
+      outcome: isCorrect ? 'win' : 'loss',
+      concept: concept.name,
+      questionsCount: session.clueIndex + 1, // Number of clues revealed
+      scope: 'guess_mind',
+      predictionsMade: [guess],
+      questionsAsked: [], // Not applicable here
+      hintsRequested: session.hintsUsed,
+      completionTime: Math.round((new Date() - session.createdAt) / 1000),
+      incorrectGuessesCount: isCorrect ? 0 : 1
+    }).catch(err => console.error('[GuessMind] Failed to save analytic:', err));
+  }
+
+  guessMindSessions.delete(gameId);
+
+  console.log(`[GuessMind] Session ${gameId} guess: "${guess}" | Secret: "${concept.name}" | Correct: ${isCorrect} | Stars: ${starsEarned} | XP: ${xpEarned}`);
+
+  res.json({
+    correct: isCorrect,
+    actualConcept: concept.name,
+    starsEarned,
+    xpEarned,
+    reward: {
+      mrrChange,
+      mrr: finalMrr,
+      xp: finalXp,
+      authenticated
+    },
+    educationalInfo: concept.educationalInfo
+  });
 });
 
 // LEARNING JOURNEY ENDPOINTS
@@ -11908,6 +12530,654 @@ app.use('/api', labRoutes);
  */
 app.get(/.*/, (_req, res) => {
   res.sendFile(path.join(clientDistPath, 'index.html'));
+});
+
+/**
+ * POST /curiosity-api/variation
+ * Accepts an original problem description and a "what if" variation phrase
+ * and returns a generated new problem, the new answer, and an explanation.
+ *
+ * Request Body:
+ * {
+ *   originalType: string,   // e.g. 'addition', 'basicarith', 'quadratic', 'multiply'
+ *   originalData: object,    // problem-specific data (e.g. {a:5,b:3,op:'+'})
+ *   variation: string        // free-text e.g. 'double the first number', 'swap numbers', 'add 10'
+ * }
+ */
+app.post('/curiosity-api/variation', (req, res) => {
+  try {
+    // (no-op) request received - structured ops and variation handling follow
+    const { originalType, originalData, variation } = req.body || {};
+    if (!originalType || !originalData || (!variation && !Array.isArray(req.body.ops))) return res.status(400).json({ error: 'originalType, originalData and variation (or ops) required' });
+
+    let v = String(variation || '').toLowerCase().trim();
+
+    // Helper to parse simple number from variation like 'add 10' or 'plus 7'
+    const extractNumber = (str) => {
+      const m = str.match(/([-+]?[0-9]+(?:\.[0-9]+)?)/);
+      return m ? Number(m[1]) : null;
+    };
+
+    // Produce mutated copy of originalData depending on variation
+    const mutated = JSON.parse(JSON.stringify(originalData));
+
+    // Accept op overrides from top-level request to be robust
+    if (req.body && typeof req.body.opAB === 'string') mutated.opAB = req.body.opAB;
+    if (req.body && typeof req.body.opBC === 'string') mutated.opBC = req.body.opBC;
+
+    // Normalize common unicode minus/dash characters to ASCII '-' for consistency
+    const normalizeOp = (v) => {
+      if (v == null) return v;
+      const s = String(v).trim();
+      if (s === '−' || s === '–' || s === '\u2212') return '-';
+      return s;
+    };
+    if (mutated.opAB != null) mutated.opAB = normalizeOp(mutated.opAB);
+    if (mutated.opBC != null) mutated.opBC = normalizeOp(mutated.opBC);
+
+    // If client sent structured ops array, capture them for possible application
+    const opsFromClient = Array.isArray(req.body.ops) ? req.body.ops : null;
+    let appliedStructuredOps = false;
+    // When structured ops are present, skip legacy free-text parsing
+    const skipLegacy = opsFromClient && Array.isArray(opsFromClient) && opsFromClient.length;
+
+    const applyToPair = (xKey, yKey) => {
+      // Handle doubling/halving both or one item
+      if ((/double|doubled/.test(v) || /halve|halved/.test(v)) && v.includes('both')) {
+        if (/double|doubled/.test(v)) {
+          mutated[xKey] = Number(mutated[xKey]) * 2;
+          mutated[yKey] = Number(mutated[yKey]) * 2;
+        } else {
+          mutated[xKey] = Number(mutated[xKey]) / 2;
+          mutated[yKey] = Number(mutated[yKey]) / 2;
+        }
+        return;
+      }
+
+      // Double/halve a specifically named operand
+      if ((/double|doubled/.test(v) || /halve|halved/.test(v)) && v.includes('first')) {
+        if (/double|doubled/.test(v)) mutated[xKey] = Number(mutated[xKey]) * 2;
+        else mutated[xKey] = Number(mutated[xKey]) / 2;
+        return;
+      }
+      if ((/double|doubled/.test(v) || /halve|halved/.test(v)) && v.includes('second')) {
+        if (/double|doubled/.test(v)) mutated[yKey] = Number(mutated[yKey]) * 2;
+        else mutated[yKey] = Number(mutated[yKey]) / 2;
+        return;
+      }
+
+      // If phrase references "one" or "one number" without specifying which,
+      // default to applying change to the first operand (xKey).
+      if ((/double|doubled/.test(v) || /halve|halved/.test(v)) && /one( number)?/.test(v)) {
+        if (/double|doubled/.test(v)) mutated[xKey] = Number(mutated[xKey]) * 2;
+        else mutated[xKey] = Number(mutated[xKey]) / 2;
+        return;
+      }
+
+      if (v.includes('swap')) {
+        const tmp = mutated[xKey]; mutated[xKey] = mutated[yKey]; mutated[yKey] = tmp;
+        return;
+      }
+
+      // Specific patterns that target the second operand should be checked before
+      // the generic 'add'/'subtract' handlers so phrases like 'add 2 to second'
+      // don't get matched by the generic rule first.
+      // Handle phrases like 'add 5 to second' or 'add to second' (number may appear between 'add' and 'to')
+      if (/(?:add|plus)\b[\s\S]*?to\s+(?:the\s+)?second|\badd\s+second|\badd\s+the\s+second/.test(v)) {
+        const n = extractNumber(v); if (n !== null) mutated[yKey] = Number(mutated[yKey]) + n;
+        return;
+      }
+      if (/(?:subtract|minus)\b[\s\S]*?from\s+(?:the\s+)?second|\bsubtract\s+second|\bminus\s+second/.test(v)) {
+        const n = extractNumber(v); if (n !== null) mutated[yKey] = Number(mutated[yKey]) - n;
+        return;
+      }
+      if (/add|plus/.test(v)) {
+        const n = extractNumber(v);
+        if (n !== null) mutated[xKey] = Number(mutated[xKey]) + n;
+        return;
+      }
+      if (/subtract|minus/.test(v)) {
+        const n = extractNumber(v);
+        if (n !== null) mutated[xKey] = Number(mutated[xKey]) - n;
+        return;
+      }
+      if (v.includes('multiply') || v.includes('times')) {
+        const n = extractNumber(v);
+        if (n !== null) {
+          if (v.includes('both')) {
+            mutated[xKey] = Number(mutated[xKey]) * n;
+            mutated[yKey] = Number(mutated[yKey]) * n;
+          } else if (v.includes('second')) {
+            mutated[yKey] = Number(mutated[yKey]) * n;
+          } else {
+            // default: apply to first / xKey
+            mutated[xKey] = Number(mutated[xKey]) * n;
+          }
+        }
+        return;
+      }
+      if (v.includes('increment') || v.includes('increase')) {
+        const n = extractNumber(v) || 1; mutated[xKey] = Number(mutated[xKey]) + n;
+        return;
+      }
+    };
+
+    const applyOpObject = (opObj) => {
+      if (!opObj || typeof opObj !== 'object') return;
+      const t = String(opObj.type || '').toLowerCase();
+      const target = String(opObj.target || '').toLowerCase();
+      const val = opObj.value != null ? Number(opObj.value) : null;
+      if (t === 'invert') {
+        if (target.includes('first')) { const tmp = mutated.n1; mutated.n1 = mutated.d1; mutated.d1 = tmp; }
+        else if (target.includes('second')) { const tmp = mutated.n2; mutated.n2 = mutated.d2; mutated.d2 = tmp; }
+        else if (target === 'swap') { const tmpn = mutated.n1; const tmpd = mutated.d1; mutated.n1 = mutated.n2; mutated.d1 = mutated.d2; mutated.n2 = tmpn; mutated.d2 = tmpd; }
+        return;
+      }
+      if ((t === 'multiply' || t === 'add' || t === 'subtract') && val == null) return;
+      if (target === 'firstnumerator') {
+        if (t === 'multiply') mutated.n1 = Number(mutated.n1) * val;
+        if (t === 'add') mutated.n1 = Number(mutated.n1) + val;
+        if (t === 'subtract') mutated.n1 = Number(mutated.n1) - val;
+      } else if (target === 'firstdenominator') {
+        if (t === 'multiply') mutated.d1 = Number(mutated.d1) * val;
+        if (t === 'add') mutated.d1 = Number(mutated.d1) + val;
+        if (t === 'subtract') mutated.d1 = Number(mutated.d1) - val;
+      } else if (target === 'secondnumerator') {
+        if (t === 'multiply') mutated.n2 = Number(mutated.n2) * val;
+        if (t === 'add') mutated.n2 = Number(mutated.n2) + val;
+        if (t === 'subtract') mutated.n2 = Number(mutated.n2) - val;
+      } else if (target === 'seconddenominator') {
+        if (t === 'multiply') mutated.d2 = Number(mutated.d2) * val;
+        if (t === 'add') mutated.d2 = Number(mutated.d2) + val;
+        if (t === 'subtract') mutated.d2 = Number(mutated.d2) - val;
+      } else if (target === 'a' || target === 'coef_a' || target === 'coefficient_a') {
+        if (t === 'multiply') mutated.a = Number(mutated.a) * val;
+        if (t === 'add') mutated.a = Number(mutated.a) + val;
+        if (t === 'subtract') mutated.a = Number(mutated.a) - val;
+      } else if (target === 'b' || target === 'coef_b' || target === 'coefficient_b') {
+        if (t === 'multiply') mutated.b = Number(mutated.b) * val;
+        if (t === 'add') mutated.b = Number(mutated.b) + val;
+        if (t === 'subtract') mutated.b = Number(mutated.b) - val;
+      } else if (target === 'c' || target === 'coef_c' || target === 'constant') {
+        if (t === 'multiply') mutated.c = Number(mutated.c) * val;
+        if (t === 'add') mutated.c = Number(mutated.c) + val;
+        if (t === 'subtract') mutated.c = Number(mutated.c) - val;
+      } else if (target === 'x' || target === 'value_x') {
+        if (t === 'multiply') mutated.x = Number(mutated.x) * val;
+        if (t === 'add') mutated.x = Number(mutated.x) + val;
+        if (t === 'subtract') mutated.x = Number(mutated.x) - val;
+      }
+    }
+
+    // If structured ops are present, apply them now (once) so all problem types benefit
+    if (opsFromClient && Array.isArray(opsFromClient) && opsFromClient.length) {
+      for (const o of opsFromClient) applyOpObject(o);
+      appliedStructuredOps = true;
+    }
+
+    // Compute new problem and answer for a few supported types
+    let newProblem = null;
+    let newAnswer = null;
+    let mappedPath = null;
+
+    if (originalType === 'addition' || originalType === 'add') {
+      // Expect { a, b }
+      applyToPair('a', 'b');
+      const a = Number(mutated.a); const b = Number(mutated.b);
+      newProblem = { prompt: `${a} + ${b}`, a, b };
+      newAnswer = a + b;
+      mappedPath = '/addition-api/check';
+    } else if (originalType === 'basicarith') {
+      // Expect { a, b, op }
+      applyToPair('a', 'b');
+      const a = Number(mutated.a); const b = Number(mutated.b); const op = mutated.op || '+';
+      newProblem = { prompt: `${a} ${op} ${b}`, a, b, op };
+      if (op === '+' || op === '＋') newAnswer = a + b;
+      else if (op === '-' || op === '−') newAnswer = a - b;
+      else if (op === '×' || op === '*') newAnswer = a * b;
+      else if (op === '÷' || op === '/') newAnswer = b === 0 ? null : a / b;
+      mappedPath = '/basicarith-api/check';
+    } else if (originalType === 'multiply' || originalType === 'times') {
+      applyToPair('table', 'multiplier');
+      const table = Number(mutated.table); const multiplier = Number(mutated.multiplier);
+      newProblem = { prompt: `${table} × ${multiplier}`, table, multiplier };
+      newAnswer = table * multiplier;
+      mappedPath = '/multiply-api/check';
+    } else if (originalType === 'quadratic') {
+      // Expect { a, b, c, x }
+      // If structured ops were NOT provided, allow legacy free-text tweaks
+      if (!skipLegacy) {
+        if (v.includes('double') && v.includes('a')) mutated.a = Number(mutated.a) * 2;
+        if (v.includes('double') && v.includes('b')) mutated.b = Number(mutated.b) * 2;
+        if (v.includes('double') && v.includes('c')) mutated.c = Number(mutated.c) * 2;
+        if (v.includes('increase x') || v.includes('add to x')) {
+          const n = extractNumber(v) || 1; mutated.x = Number(mutated.x) + n;
+        }
+        if (v.includes('decrease x') || v.includes('subtract from x')) {
+          const n = extractNumber(v) || 1; mutated.x = Number(mutated.x) - n;
+        }
+      }
+      const a = Number(mutated.a), b = Number(mutated.b), c = Number(mutated.c), x = Number(mutated.x);
+      const opAB = (mutated.opAB || '+').toString();
+      const opBC = (mutated.opBC || '+').toString();
+      newProblem = { prompt: buildQuadraticPrompt(a, b, c, x, opAB, opBC), a, b, c, x, opAB, opBC };
+      // compute answer respecting provided operators
+      const left = a * x * x;
+      const mid = b * x;
+      const third = c;
+      const applyOpLocal = (lhs, op, rhs) => op === '-' ? lhs - rhs : lhs + rhs;
+      const afterMid = applyOpLocal(left, opAB, mid);
+      newAnswer = applyOpLocal(afterMid, opBC, third);
+      mappedPath = '/quadratic-api/check';
+    } else if (originalType === 'geometry' || originalType === 'mensur' || originalType === 'mensuration') {
+      // Expect { shape, measure, a, b }
+      // a is the first dimension: length/base/radius. b is the second dimension: width/height.
+      applyToPair('a', 'b');
+      const shape = String(mutated.shape || 'rectangle').toLowerCase();
+      let measure = String(mutated.measure || 'area').toLowerCase();
+      let a = Number(mutated.a);
+      let b = Number(mutated.b);
+      const round2 = (n) => Math.round(n * 100) / 100;
+      const fmt = (n) => Number.isInteger(n) ? String(n) : String(round2(n));
+      const positive = (n, fallback) => Number.isFinite(n) && n > 0 ? n : fallback;
+      a = positive(a, 1);
+      b = positive(b, 1);
+
+      if (shape === 'rectangle') {
+        if (measure !== 'perimeter') measure = 'area';
+        if (measure === 'perimeter') {
+          newAnswer = round2(2 * (a + b));
+          newProblem = { prompt: `Perimeter of rectangle: length = ${fmt(a)}, width = ${fmt(b)}`, shape, measure, a, b, answer: newAnswer, display: fmt(newAnswer) };
+        } else {
+          newAnswer = round2(a * b);
+          newProblem = { prompt: `Area of rectangle: length = ${fmt(a)}, width = ${fmt(b)}`, shape, measure, a, b, answer: newAnswer, display: fmt(newAnswer) };
+        }
+      } else if (shape === 'triangle') {
+        measure = 'area';
+        newAnswer = round2(a * b / 2);
+        newProblem = { prompt: `Area of triangle: base = ${fmt(a)}, height = ${fmt(b)}`, shape, measure, a, b, answer: newAnswer, display: fmt(newAnswer) };
+      } else if (shape === 'parallelogram') {
+        measure = 'area';
+        newAnswer = round2(a * b);
+        newProblem = { prompt: `Area of parallelogram: base = ${fmt(a)}, height = ${fmt(b)}`, shape, measure, a, b, answer: newAnswer, display: fmt(newAnswer) };
+      } else if (shape === 'circle') {
+        if (measure !== 'circumference') measure = 'area';
+        if (measure === 'circumference') {
+          newAnswer = round2(2 * Math.PI * a);
+          newProblem = { prompt: `Circumference of circle with radius ${fmt(a)} (to 2 d.p.)`, shape, measure, r: a, answer: newAnswer, display: fmt(newAnswer) };
+        } else {
+          newAnswer = round2(Math.PI * a * a);
+          newProblem = { prompt: `Area of circle with radius ${fmt(a)} (to 2 d.p.)`, shape, measure, r: a, answer: newAnswer, display: fmt(newAnswer) };
+        }
+      } else if (shape === 'cylinder') {
+        if (measure !== 'surface_area') measure = 'volume';
+        if (measure === 'surface_area') {
+          newAnswer = round2(2 * Math.PI * a * (a + b));
+          newProblem = { prompt: `Total surface area of cylinder: radius = ${fmt(a)}, height = ${fmt(b)} (2 d.p.)`, shape, measure, r: a, h: b, answer: newAnswer, display: fmt(newAnswer) };
+        } else {
+          newAnswer = round2(Math.PI * a * a * b);
+          newProblem = { prompt: `Volume of cylinder: radius = ${fmt(a)}, height = ${fmt(b)} (2 d.p.)`, shape, measure, r: a, h: b, answer: newAnswer, display: fmt(newAnswer) };
+        }
+      } else if (shape === 'cone') {
+        if (measure !== 'surface_area') measure = 'volume';
+        if (measure === 'surface_area') {
+          const slantHeight = Math.sqrt(a * a + b * b);
+          newAnswer = round2(Math.PI * a * (a + slantHeight));
+          newProblem = { prompt: `Total surface area of cone: radius = ${fmt(a)}, height = ${fmt(b)}, slant height = ${fmt(slantHeight)} (2 d.p.)`, shape, measure, r: a, h: b, l: slantHeight, answer: newAnswer, display: fmt(newAnswer) };
+        } else {
+          newAnswer = round2(Math.PI * a * a * b / 3);
+          newProblem = { prompt: `Volume of cone: radius = ${fmt(a)}, height = ${fmt(b)} (2 d.p.)`, shape, measure, r: a, h: b, answer: newAnswer, display: fmt(newAnswer) };
+        }
+      } else if (shape === 'sphere') {
+        if (measure !== 'surface_area') measure = 'volume';
+        if (measure === 'surface_area') {
+          newAnswer = round2(4 * Math.PI * a * a);
+          newProblem = { prompt: `Surface area of sphere with radius ${fmt(a)} (2 d.p.)`, shape, measure, r: a, answer: newAnswer, display: fmt(newAnswer) };
+        } else {
+          newAnswer = round2(4 / 3 * Math.PI * a * a * a);
+          newProblem = { prompt: `Volume of sphere with radius ${fmt(a)} (2 d.p.)`, shape, measure, r: a, answer: newAnswer, display: fmt(newAnswer) };
+        }
+      } else {
+        return res.status(400).json({ error: `unsupported geometry shape: ${shape}` });
+      }
+      mappedPath = '/mensur-api/check';
+    } else if (originalType === 'fraction' || originalType === 'fractionadd') {
+      // Expect { n1,d1,n2,d2, op }
+      // Support variations: double numerator1, double both, add N to numerator1, add N to numerator2, multiply numerator by N, swap fractions
+      const n1 = Number(mutated.n1 || mutated.numerator1 || 0);
+      const d1 = Number(mutated.d1 || mutated.denominator1 || mutated.d1 || 1);
+      const n2 = Number(mutated.n2 || mutated.numerator2 || 0);
+      const d2 = Number(mutated.d2 || mutated.denominator2 || mutated.d2 || 1);
+
+      // helpers
+      const applyToFraction = (vv) => {
+        vv = String(vv || '').toLowerCase();
+        const isDouble = /double|doubled/.test(vv)
+        const isHalve = /halve|halved/.test(vv)
+        const isMultiply = /multiply|times|\*|x|×/.test(vv)
+        const isAdd = /add|plus|\+/.test(vv)
+        const isSubtract = /subtract|minus|\-/.test(vv)
+        
+        const num = extractNumber(vv)
+        const mentionsNumerator = /numerator/.test(vv)
+        const mentionsDenominator = /denominator/.test(vv)
+        const mentionsFirst = /\bfirst\b/.test(vv)
+        const mentionsSecond = /\bsecond\b/.test(vv)
+        const mentionsBoth = mentionsFirst && mentionsSecond || vv.includes('both') || /first.*second|second.*first/.test(vv)
+
+        // detect explicit pair like '2 + 2' or '2 and 3' meaning apply 1st number to first field and 2nd to second field
+        const pairNumMatch = vv.match(/([-+]?[0-9]+(?:\.[0-9]+)?)\s*(?:\+|and|,|and then|then)\s*([-+]?[0-9]+(?:\.[0-9]+)?)/i);
+        if (pairNumMatch) {
+          const v1 = Number(pairNumMatch[1]);
+          const v2 = Number(pairNumMatch[2]);
+          // default target: numerators unless denominator explicitly mentioned
+          if (mentionsDenominator) {
+            // apply to denominators
+            if (isAdd) { mutated.d1 = Number(mutated.d1 || d1) + v1; mutated.d2 = Number(mutated.d2 || d2) + v2; return; }
+            if (isSubtract) { mutated.d1 = Number(mutated.d1 || d1) - v1; mutated.d2 = Number(mutated.d2 || d2) - v2; return; }
+            if (isMultiply) { mutated.d1 = Number(mutated.d1 || d1) * v1; mutated.d2 = Number(mutated.d2 || d2) * v2; return; }
+          } else {
+            // apply to numerators
+            if (isAdd) { mutated.n1 = Number(mutated.n1 || n1) + v1; mutated.n2 = Number(mutated.n2 || n2) + v2; return; }
+            if (isSubtract) { mutated.n1 = Number(mutated.n1 || n1) - v1; mutated.n2 = Number(mutated.n2 || n2) - v2; return; }
+            if (isMultiply) { mutated.n1 = Number(mutated.n1 || n1) * v1; mutated.n2 = Number(mutated.n2 || n2) * v2; return; }
+          }
+        }
+
+        const applyToField = (field, fn) => { mutated[field] = fn(Number(mutated[field] || 0)) }
+
+        // Double / halve
+        if ((isDouble || isHalve) && vv.includes('both')) {
+          if (mentionsNumerator) { applyToField('n1', x => isDouble ? x * 2 : x / 2); applyToField('n2', x => isDouble ? x * 2 : x / 2); }
+          else if (mentionsDenominator) { applyToField('d1', x => isDouble ? x * 2 : x / 2); applyToField('d2', x => isDouble ? x * 2 : x / 2); }
+          else { applyToField('n1', x => isDouble ? x * 2 : x / 2); applyToField('n2', x => isDouble ? x * 2 : x / 2); applyToField('d1', x => isDouble ? x * 2 : x / 2); applyToField('d2', x => isDouble ? x * 2 : x / 2); }
+          return;
+        }
+
+        if ((isDouble || isHalve) && vv.includes('first')) {
+          if (mentionsNumerator) applyToField('n1', x => isDouble ? x * 2 : x / 2);
+          else if (mentionsDenominator) applyToField('d1', x => isDouble ? x * 2 : x / 2);
+          else applyToField('n1', x => isDouble ? x * 2 : x / 2);
+          return;
+        }
+        if ((isDouble || isHalve) && vv.includes('second')) {
+          if (mentionsNumerator) applyToField('n2', x => isDouble ? x * 2 : x / 2);
+          else if (mentionsDenominator) applyToField('d2', x => isDouble ? x * 2 : x / 2);
+          else applyToField('n2', x => isDouble ? x * 2 : x / 2);
+          return;
+        }
+
+        // invert / flip a single fraction's numerator and denominator
+        if (/(invert|flip|reciprocal)/.test(vv) && vv.includes('first')) {
+          const t = mutated.n1; mutated.n1 = mutated.d1; mutated.d1 = t; return;
+        }
+        if (/(invert|flip|reciprocal)/.test(vv) && vv.includes('second')) {
+          const t = mutated.n2; mutated.n2 = mutated.d2; mutated.d2 = t; return;
+        }
+
+        if (vv.includes('swap')) { const tmpn = mutated.n1; const tmpd = mutated.d1; mutated.n1 = mutated.n2; mutated.d1 = mutated.d2; mutated.n2 = tmpn; mutated.d2 = tmpd; return; }
+
+        if (isAdd) {
+          if (num === null) return;
+          if (mentionsDenominator) {
+            if (mentionsBoth) { mutated.d1 = Number(mutated.d1 || d1) + num; mutated.d2 = Number(mutated.d2 || d2) + num; }
+            else if (mentionsSecond) mutated.d2 = Number(mutated.d2 || d2) + num;
+            else mutated.d1 = Number(mutated.d1 || d1) + num;
+          } else if (mentionsNumerator) {
+            if (mentionsBoth) { mutated.n1 = Number(mutated.n1 || n1) + num; mutated.n2 = Number(mutated.n2 || n2) + num; }
+            else if (mentionsSecond) mutated.n2 = Number(mutated.n2 || n2) + num;
+            else mutated.n1 = Number(mutated.n1 || n1) + num;
+          } else {
+            // default: numerator
+            if (mentionsBoth) { mutated.n1 = Number(mutated.n1 || n1) + num; mutated.n2 = Number(mutated.n2 || n2) + num; }
+            else if (mentionsSecond) mutated.n2 = Number(mutated.n2 || n2) + num;
+            else mutated.n1 = Number(mutated.n1 || n1) + num;
+          }
+          return;
+        }
+
+        if (isSubtract) {
+          if (num === null) return;
+          if (mentionsDenominator) {
+            if (mentionsBoth) { mutated.d1 = Number(mutated.d1 || d1) - num; mutated.d2 = Number(mutated.d2 || d2) - num; }
+            else if (mentionsSecond) mutated.d2 = Number(mutated.d2 || d2) - num;
+            else mutated.d1 = Number(mutated.d1 || d1) - num;
+          } else if (mentionsNumerator) {
+            if (mentionsBoth) { mutated.n1 = Number(mutated.n1 || n1) - num; mutated.n2 = Number(mutated.n2 || n2) - num; }
+            else if (mentionsSecond) mutated.n2 = Number(mutated.n2 || n2) - num;
+            else mutated.n1 = Number(mutated.n1 || n1) - num;
+          } else {
+            if (mentionsBoth) { mutated.n1 = Number(mutated.n1 || n1) - num; mutated.n2 = Number(mutated.n2 || n2) - num; }
+            else if (mentionsSecond) mutated.n2 = Number(mutated.n2 || n2) - num;
+            else mutated.n1 = Number(mutated.n1 || n1) - num;
+          }
+          return;
+        }
+
+        if (isMultiply) {
+          if (num === null) return;
+          if (mentionsDenominator) {
+            if (mentionsBoth) { mutated.d1 = Number(mutated.d1 || d1) * num; mutated.d2 = Number(mutated.d2 || d2) * num; }
+            else if (mentionsSecond) mutated.d2 = Number(mutated.d2 || d2) * num;
+            else mutated.d1 = Number(mutated.d1 || d1) * num;
+          } else if (mentionsNumerator) {
+            if (mentionsBoth) { mutated.n1 = Number(mutated.n1 || n1) * num; mutated.n2 = Number(mutated.n2 || n2) * num; }
+            else if (mentionsSecond) mutated.n2 = Number(mutated.n2 || n2) * num;
+            else mutated.n1 = Number(mutated.n1 || n1) * num;
+          } else {
+            if (mentionsBoth) { mutated.n1 = Number(mutated.n1 || n1) * num; mutated.n2 = Number(mutated.n2 || n2) * num; }
+            else if (mentionsSecond) mutated.n2 = Number(mutated.n2 || n2) * num;
+            else mutated.n1 = Number(mutated.n1 || n1) * num;
+          }
+          return;
+        }
+      };
+
+      // allow multiple semicolon-separated operations in the variation string
+      const originalV = v;
+      const parts = String(v).split(/;|\n/).map(s => s.trim()).filter(Boolean);
+      // Structured ops are already applied once before dispatch; only skip legacy
+      // free-text parsing here so manual fraction edits are not applied twice.
+      const skipLegacy = opsFromClient && Array.isArray(opsFromClient) && opsFromClient.length;
+      if (!skipLegacy) {
+        // Then apply any free-text parts (legacy support)
+        if (parts.length > 1) {
+          for (const p of parts) {
+            applyToFraction(p);
+          }
+        } else {
+          applyToFraction(v);
+        }
+      }
+      // build simple newProblem representation
+      const nn1 = Number(mutated.n1 || n1), nd1 = Number(mutated.d1 || d1), nn2 = Number(mutated.n2 || n2), nd2 = Number(mutated.d2 || d2);
+      newProblem = { prompt: `${nn1}/${nd1} ${mutated.op || mutated.op || '/'} ${nn2}/${nd2}`, n1: nn1, d1: nd1, n2: nn2, d2: nd2 };
+      // compute simple result for add/sub/mul/div when op present
+      // Prefer the mutated op if present, otherwise fall back to the originalData.op
+      const fop = (mutated.op != null && mutated.op !== '') ? mutated.op : (originalData && originalData.op) ? originalData.op : '+';
+      // Ensure the newProblem advertises the operator so explanation generation uses correct operation
+      if (newProblem) newProblem.op = fop;
+      if (fop === '+' || fop === '＋') {
+        // a/b + c/d = (ad + bc)/bd
+        newAnswer = { numerator: nn1 * nd2 + nn2 * nd1, denominator: nd1 * nd2 };
+      } else if (fop === '-' || fop === '−') {
+        newAnswer = { numerator: nn1 * nd2 - nn2 * nd1, denominator: nd1 * nd2 };
+      } else if (fop === '×' || fop === '*') {
+        newAnswer = { numerator: nn1 * nn2, denominator: nd1 * nd2 };
+      } else if (fop === '÷' || fop === '/') {
+        newAnswer = { numerator: nn1 * nd2, denominator: nd1 * nn2 };
+      }
+      // simplify fraction result if present
+      if (newAnswer && newAnswer.numerator != null && newAnswer.denominator != null) {
+        const num = Number(newAnswer.numerator);
+        const den = Number(newAnswer.denominator);
+        const gcd = (a, b) => {
+          a = Math.abs(a); b = Math.abs(b);
+          while (b) { const t = b; b = a % b; a = t; }
+          return a || 1;
+        };
+        const g = gcd(num, den);
+        const sn = Math.trunc(num / g);
+        const sd = Math.trunc(den / g);
+        newAnswer.simplified = { numerator: sn, denominator: sd };
+        newAnswer.display = sd === 1 ? String(sn) : `${sn}/${sd}`;
+        newAnswer.decimal = den === 0 ? null : Number((num / den).toFixed(6));
+      }
+      mappedPath = '/fractionadd-api/check';
+    } else {
+      return res.status(400).json({ error: `unsupported originalType: ${originalType}` });
+    }
+
+    const displayAnswer = (ans) => {
+      if (ans == null) return 'undefined';
+      if (typeof ans === 'object') {
+        if (ans.display != null) return String(ans.display);
+        if (ans.simplified && ans.simplified.numerator != null && ans.simplified.denominator != null) {
+          const n = ans.simplified.numerator;
+          const d = ans.simplified.denominator;
+          return d === 1 ? String(n) : `${n}/${d}`;
+        }
+        if (ans.numerator != null && ans.denominator != null) return `${ans.numerator}/${ans.denominator}`;
+        return JSON.stringify(ans);
+      }
+      return String(ans);
+    };
+
+    const round2Local = (n) => Math.round(Number(n) * 100) / 100;
+    const fmtLocal = (n) => Number.isInteger(Number(n)) ? String(Number(n)) : String(round2Local(n));
+    const opText = (op) => op === '*' ? 'x' : op === '/' ? '/' : op;
+    const applyArith = (x, operator, y) => {
+      if (operator === '+') return x + y;
+      if (operator === '-') return x - y;
+      if (operator === '*' || operator === 'Ã—') return x * y;
+      if (operator === '/' || operator === 'Ã·') return y === 0 ? null : x / y;
+      return null;
+    };
+    const fractionDisplay = (n, d) => `${n}/${d}`;
+
+    const buildCuriosityExplanation = () => {
+      const lines = [
+        `Curiosity variation: ${variation || (opsFromClient && opsFromClient.length ? 'manual edits' : 'none')}`,
+        `Original: ${JSON.stringify(originalData)}`,
+        `New problem: ${newProblem && newProblem.prompt ? newProblem.prompt : JSON.stringify(newProblem)}`,
+        '',
+      ];
+
+      if (originalType === 'addition' || originalType === 'add') {
+        lines.push(`Step 1: Apply the variation to the original numbers ${originalData.a} and ${originalData.b}.`);
+        lines.push(`Step 2: The new addition is ${newProblem.a} + ${newProblem.b}.`);
+        lines.push(`Step 3: ${newProblem.a} + ${newProblem.b} = ${newAnswer}.`);
+      } else if (originalType === 'basicarith') {
+        const oldA = Number(originalData.a), oldB = Number(originalData.b);
+        const oldOp = originalData.op || '+';
+        const oldAnswer = applyArith(oldA, oldOp, oldB);
+        lines.push(`Step 1: Original calculation: ${oldA} ${opText(oldOp)} ${oldB} = ${oldAnswer == null ? 'undefined' : fmtLocal(oldAnswer)}.`);
+        lines.push(`Step 2: Apply the variation, giving ${newProblem.a} ${opText(newProblem.op || oldOp)} ${newProblem.b}.`);
+        lines.push(`Step 3: Calculate the new answer: ${newProblem.a} ${opText(newProblem.op || oldOp)} ${newProblem.b} = ${displayAnswer(newAnswer)}.`);
+      } else if (originalType === 'multiply' || originalType === 'times') {
+        lines.push(`Step 1: Original multiplication: ${originalData.table} x ${originalData.multiplier} = ${Number(originalData.table) * Number(originalData.multiplier)}.`);
+        lines.push(`Step 2: Apply the variation, giving ${newProblem.table} x ${newProblem.multiplier}.`);
+        lines.push(`Step 3: ${newProblem.table} x ${newProblem.multiplier} = ${displayAnswer(newAnswer)}.`);
+      } else if (originalType === 'quadratic') {
+        const oldA = Number(originalData.a), oldB = Number(originalData.b), oldC = Number(originalData.c), oldX = Number(originalData.x);
+        const oldOpAB = (originalData.opAB || '+').toString();
+        const oldOpBC = (originalData.opBC || '+').toString();
+        const calcQuad = (qa, qb, qc, qx, firstOp, secondOp) => {
+          const left = qa * qx * qx;
+          const mid = qb * qx;
+          const afterMid = firstOp === '-' ? left - mid : left + mid;
+          const total = secondOp === '-' ? afterMid - qc : afterMid + qc;
+          return { left, mid, afterMid, total };
+        };
+        const oldCalc = calcQuad(oldA, oldB, oldC, oldX, oldOpAB, oldOpBC);
+        const newCalc = calcQuad(Number(newProblem.a), Number(newProblem.b), Number(newProblem.c), Number(newProblem.x), newProblem.opAB || '+', newProblem.opBC || '+');
+        lines.push(`Step 1: Original: ${buildQuadraticPrompt(oldA, oldB, oldC, oldX, oldOpAB, oldOpBC)} = ${oldCalc.total}.`);
+        lines.push(`Step 2: Apply the variation to get a=${newProblem.a}, b=${newProblem.b}, c=${newProblem.c}, x=${newProblem.x}.`);
+        lines.push(`Step 3: Substitute: ${newProblem.a} x ${newProblem.x}^2 ${newProblem.opAB || '+'} ${newProblem.b} x ${newProblem.x} ${newProblem.opBC || '+'} ${newProblem.c}.`);
+        lines.push(`Step 4: Compute terms: ${newProblem.a} x ${newProblem.x}^2 = ${newCalc.left}, and ${newProblem.b} x ${newProblem.x} = ${newCalc.mid}.`);
+        lines.push(`Step 5: Combine: ${newCalc.left} ${newProblem.opAB || '+'} ${newCalc.mid} ${newProblem.opBC || '+'} ${newProblem.c} = ${displayAnswer(newAnswer)}.`);
+      } else if (originalType === 'geometry' || originalType === 'mensur' || originalType === 'mensuration') {
+        const shape = String(newProblem.shape || originalData.shape || '').toLowerCase();
+        const measure = String(newProblem.measure || originalData.measure || '').toLowerCase();
+        const first = newProblem.r != null ? Number(newProblem.r) : Number(newProblem.a);
+        const second = newProblem.h != null ? Number(newProblem.h) : Number(newProblem.b);
+        lines.push(`Step 1: Apply the variation to the dimensions.`);
+        if (shape === 'rectangle') {
+          lines.push(`Step 2: New dimensions: length = ${fmtLocal(newProblem.a)}, width = ${fmtLocal(newProblem.b)}.`);
+          lines.push(measure === 'perimeter'
+            ? `Step 3: P = 2(length + width) = 2(${fmtLocal(newProblem.a)} + ${fmtLocal(newProblem.b)}) = ${displayAnswer(newAnswer)}.`
+            : `Step 3: A = length x width = ${fmtLocal(newProblem.a)} x ${fmtLocal(newProblem.b)} = ${displayAnswer(newAnswer)}.`);
+        } else if (shape === 'triangle') {
+          lines.push(`Step 2: New dimensions: base = ${fmtLocal(newProblem.a)}, height = ${fmtLocal(newProblem.b)}.`);
+          lines.push(`Step 3: A = (base x height) / 2 = (${fmtLocal(newProblem.a)} x ${fmtLocal(newProblem.b)}) / 2 = ${displayAnswer(newAnswer)}.`);
+        } else if (shape === 'parallelogram') {
+          lines.push(`Step 2: New dimensions: base = ${fmtLocal(newProblem.a)}, height = ${fmtLocal(newProblem.b)}.`);
+          lines.push(`Step 3: A = base x height = ${fmtLocal(newProblem.a)} x ${fmtLocal(newProblem.b)} = ${displayAnswer(newAnswer)}.`);
+        } else if (shape === 'circle') {
+          lines.push(`Step 2: New radius: r = ${fmtLocal(first)}.`);
+          lines.push(measure === 'circumference'
+            ? `Step 3: C = 2 pi r = 2 x pi x ${fmtLocal(first)} = ${displayAnswer(newAnswer)}.`
+            : `Step 3: A = pi r^2 = pi x ${fmtLocal(first)}^2 = ${displayAnswer(newAnswer)}.`);
+        } else if (shape === 'cylinder') {
+          lines.push(`Step 2: New dimensions: radius = ${fmtLocal(first)}, height = ${fmtLocal(second)}.`);
+          lines.push(measure === 'surface_area'
+            ? `Step 3: SA = 2 pi r(r + h) = 2 x pi x ${fmtLocal(first)}(${fmtLocal(first)} + ${fmtLocal(second)}) = ${displayAnswer(newAnswer)}.`
+            : `Step 3: V = pi r^2 h = pi x ${fmtLocal(first)}^2 x ${fmtLocal(second)} = ${displayAnswer(newAnswer)}.`);
+        } else if (shape === 'cone') {
+          lines.push(`Step 2: New dimensions: radius = ${fmtLocal(first)}, height = ${fmtLocal(second)}.`);
+          if (measure === 'surface_area') {
+            lines.push(`Step 3: Slant height l = sqrt(r^2 + h^2) = sqrt(${fmtLocal(first)}^2 + ${fmtLocal(second)}^2) = ${fmtLocal(newProblem.l)}.`);
+            lines.push(`Step 4: SA = pi r(r + l) = pi x ${fmtLocal(first)}(${fmtLocal(first)} + ${fmtLocal(newProblem.l)}) = ${displayAnswer(newAnswer)}.`);
+          } else {
+            lines.push(`Step 3: V = (pi r^2 h) / 3 = (pi x ${fmtLocal(first)}^2 x ${fmtLocal(second)}) / 3 = ${displayAnswer(newAnswer)}.`);
+          }
+        } else if (shape === 'sphere') {
+          lines.push(`Step 2: New radius: r = ${fmtLocal(first)}.`);
+          lines.push(measure === 'surface_area'
+            ? `Step 3: SA = 4 pi r^2 = 4 x pi x ${fmtLocal(first)}^2 = ${displayAnswer(newAnswer)}.`
+            : `Step 3: V = (4/3) pi r^3 = (4/3) x pi x ${fmtLocal(first)}^3 = ${displayAnswer(newAnswer)}.`);
+        }
+      } else if (originalType === 'fraction' || originalType === 'fractionadd') {
+        const oldLeft = fractionDisplay(originalData.n1, originalData.d1);
+        const oldRight = fractionDisplay(originalData.n2, originalData.d2);
+        const newLeft = fractionDisplay(newProblem.n1, newProblem.d1);
+        const newRight = fractionDisplay(newProblem.n2, newProblem.d2);
+        const fop = newProblem.op || originalData.op || '+';
+        lines.push(`Step 1: Original expression: ${oldLeft} ${opText(fop)} ${oldRight}.`);
+        lines.push(`Step 2: Apply the variation to get ${newLeft} ${opText(fop)} ${newRight}.`);
+        if (fop === '+') lines.push(`Step 3: Add: (${newProblem.n1} x ${newProblem.d2} + ${newProblem.n2} x ${newProblem.d1}) / (${newProblem.d1} x ${newProblem.d2}).`);
+        else if (fop === '-') lines.push(`Step 3: Subtract: (${newProblem.n1} x ${newProblem.d2} - ${newProblem.n2} x ${newProblem.d1}) / (${newProblem.d1} x ${newProblem.d2}).`);
+        else if (fop === '*' || fop === 'Ã—') lines.push(`Step 3: Multiply numerators and denominators: (${newProblem.n1} x ${newProblem.n2}) / (${newProblem.d1} x ${newProblem.d2}).`);
+        else if (fop === '/' || fop === 'Ã·') lines.push(`Step 3: Divide by multiplying by the reciprocal: (${newProblem.n1} x ${newProblem.d2}) / (${newProblem.d1} x ${newProblem.n2}).`);
+        lines.push(`Step 4: Simplify the result: ${displayAnswer(newAnswer)}.`);
+      }
+
+      lines.push(`Answer: ${displayAnswer(newAnswer)}`);
+      return lines.join('\n');
+    };
+
+    const curiosityExplanation = buildCuriosityExplanation();
+
+    // Build a fake req object so we can reuse generateExplanation()
+    const fakeReq = { path: mappedPath, body: Object.assign({}, newProblem, { solve: true }) };
+    const fakeData = { correctAnswer: newAnswer };
+    let explanation = curiosityExplanation || null;
+    if (!explanation) {
+      try { explanation = generateExplanation(fakeReq, fakeData); } catch (e) { explanation = null; }
+    }
+
+    // If generateExplanation left a placeholder 'undefined' for the answer, replace it
+    try {
+      if (explanation && newAnswer && newAnswer.display) {
+        explanation = explanation.replace(/Answer:\s*undefined/gi, `Answer: ${newAnswer.display}`);
+      }
+    } catch (e) { /* ignore string replace errors */ }
+
+    return res.json({ original: originalData, variation, newProblem, newAnswer, explanation });
+  } catch (err) {
+    console.error('[curiosity-api] error:', err && err.stack ? err.stack : err);
+    return res.status(500).json({ error: 'internal error' });
+  }
 });
 
 /**
