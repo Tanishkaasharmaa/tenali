@@ -1,37 +1,57 @@
 [
   {
+    "id": "arithmetic_kingdom",
     "worldId": "arithmetic_kingdom",
+    "name": "Arithmetic Kingdom",
     "worldName": "Arithmetic Kingdom",
+    "icon": "🔢",
+    "description": "The land of numbers — primes, factors, fractions, and everything that counts.",
+    "unlockRequirements": "Available from the start",
     "requiredUnlockXP": 0,
-    "themeColor": "#e8864a",
-    "levelRange": [1, 5]
+    "themeColor": "#e8864a"
   },
   {
+    "id": "geometry_kingdom",
     "worldId": "geometry_kingdom",
+    "name": "Geometry Kingdom",
     "worldName": "Geometry Kingdom",
-    "requiredUnlockXP": 200,
-    "themeColor": "#5cb87a",
-    "levelRange": [6, 10]
+    "icon": "📐",
+    "description": "A realm of shapes, angles, and the hidden symmetry of space.",
+    "unlockRequirements": "Complete the Arithmetic Kingdom Boss to unlock",
+    "requiredUnlockXP": 0,
+    "themeColor": "#2a9d8f"
   },
   {
+    "id": "algebra_kingdom",
     "worldId": "algebra_kingdom",
+    "name": "Algebra Kingdom",
     "worldName": "Algebra Kingdom",
-    "requiredUnlockXP": 500,
-    "themeColor": "#3b82f6",
-    "levelRange": [11, 15]
+    "icon": "🔠",
+    "description": "Where letters hold secrets — variables, equations, and functions wait to be solved.",
+    "unlockRequirements": "Complete the Geometry Kingdom Boss to unlock",
+    "requiredUnlockXP": 0,
+    "themeColor": "#3b82f6"
   },
   {
+    "id": "statistics_kingdom",
     "worldId": "statistics_kingdom",
+    "name": "Statistics Kingdom",
     "worldName": "Statistics Kingdom",
-    "requiredUnlockXP": 800,
-    "themeColor": "#a855f7",
-    "levelRange": [16, 20]
+    "icon": "📊",
+    "description": "The domain of data — patterns, probability, and the stories numbers tell.",
+    "unlockRequirements": "Complete the Algebra Kingdom Boss to unlock",
+    "requiredUnlockXP": 0,
+    "themeColor": "#a855f7"
   },
   {
+    "id": "trigonometry_kingdom",
     "worldId": "trigonometry_kingdom",
+    "name": "Trigonometry Kingdom",
     "worldName": "Trigonometry Kingdom",
-    "requiredUnlockXP": 1200,
-    "themeColor": "#ec4899",
-    "levelRange": [21, 25]
+    "icon": "🔭",
+    "description": "The final frontier — angles, ratios, and the mathematics of triangles.",
+    "unlockRequirements": "Complete the Statistics Kingdom Boss to unlock",
+    "requiredUnlockXP": 0,
+    "themeColor": "#ec4899"
   }
 ]
