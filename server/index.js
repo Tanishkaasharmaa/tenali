@@ -9202,6 +9202,9 @@ mindReaderEvents.on('challengeCompleted', async (data) => {
   }
 });
 
+// Adventure Game REST API Router
+app.use('/api/adventure', require('./adventure/adventureRoutes'));
+
 // Challenge Mode HTTP API Route definitions
 app.get('/api/mindreader/challenge/metadata', (req, res) => {
   try {

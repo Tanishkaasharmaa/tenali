@@ -1,0 +1,20 @@
+[
+  {
+    "id": "world_1",
+    "name": "Kingdom of Numbers",
+    "icon": "🔢",
+    "description": "Recover the fundamental Knowledge Crystals of arithmetic, primes, factors, and fractions.",
+    "themeColor": "#4A90E2",
+    "order": 1,
+    "unlockRequirements": "Unlocked by default"
+  },
+  {
+    "id": "world_2",
+    "name": "Algebraic Realm",
+    "icon": "📐",
+    "description": "Unlock equations, geometric paths, matrices, vectors, and unknown variables.",
+    "themeColor": "#50E3C2",
+    "order": 2,
+    "unlockRequirements": "Complete Kingdom of Numbers Boss Level"
+  }
+]
