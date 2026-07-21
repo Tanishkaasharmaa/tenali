@@ -9824,6 +9824,15 @@ app.get('/api/mindreader/worlds', async (req, res) => {
         .filter(lp => levelNums.includes(lp.levelNum))
         .reduce((sum, lp) => sum + (lp.starsEarned || 0), 0);
 
+      const levelsWithConceptNames = levelsInWorld.map(lvl => {
+        const concept = conceptsConfig[lvl.conceptId];
+        return {
+          levelNum: lvl.levelNum,
+          conceptId: lvl.conceptId,
+          conceptName: concept ? concept.name : lvl.conceptId
+        };
+      });
+
       return {
         worldId: w.worldId,
         worldName: w.worldName,
@@ -9831,7 +9840,8 @@ app.get('/api/mindreader/worlds', async (req, res) => {
         themeColor: w.themeColor,
         levelRange: w.levelRange,
         unlocked: isUnlocked,
-        stars
+        stars,
+        levels: levelsWithConceptNames
       };
     });
 
