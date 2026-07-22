@@ -3,9 +3,12 @@ import { useAdventure } from '../context/AdventureContext';
 
 export default function ReviewView() {
   const { state, startLevel, setView } = useAdventure();
-  const { reviewData, resultData } = state;
+  const { reviewData, resultData, session } = state;
 
   if (!reviewData) return null;
+
+  // Use simple child-friendly labels for worlds that use the thoughts voice
+  const isChildMode = session && session.useThoughts;
 
   const handleNext = () => {
     if (resultData && resultData.nextLevelId) {
@@ -18,44 +21,45 @@ export default function ReviewView() {
   return (
     <div className="adv-review-container">
       <div className="adv-card adv-review-card">
+
         <header className="adv-review-header">
-          <span className="adv-review-badge">📖 Educational Review</span>
+          <span className="adv-review-badge">
+            {isChildMode ? '📖 Let\'s Learn!' : '📖 Educational Review'}
+          </span>
           <h2 className="adv-review-concept">{reviewData.conceptName}</h2>
         </header>
 
-        {/* Section 1: Definition */}
+        {/* Definition */}
         <section className="adv-review-section">
-          <h4 className="adv-review-section-title">📘 Definition</h4>
+          <h4 className="adv-review-section-title">
+            {isChildMode ? '📘 What is it?' : '📘 Definition'}
+          </h4>
           <p className="adv-review-text">{reviewData.definition}</p>
         </section>
 
-        {/* Section 2: Why Clues Pointed Here */}
-        {reviewData.whyCluesPointedHere && (
-          <section className="adv-review-section">
-            <h4 className="adv-review-section-title">🔍 Clue Deduction Rationale</h4>
-            <p className="adv-review-text">{reviewData.whyCluesPointedHere}</p>
-          </section>
-        )}
-
-        {/* Section 3: Worked Example */}
+        {/* Examples — always show, renamed simply */}
         {reviewData.workedExample && (
           <section className="adv-review-section">
-            <h4 className="adv-review-section-title">✍️ Worked Example</h4>
+            <h4 className="adv-review-section-title">
+              {isChildMode ? '✏️ Examples' : '✍️ Worked Example'}
+            </h4>
             <div className="adv-review-example-box">
               {reviewData.workedExample}
             </div>
           </section>
         )}
 
-        {/* Section 4: Common Mistakes */}
+        {/* Common Mistakes — shown with friendlier title for children */}
         {reviewData.commonMistakes && (
           <section className="adv-review-section">
-            <h4 className="adv-review-section-title">⚠️ Common Pitfalls & Mistakes</h4>
+            <h4 className="adv-review-section-title">
+              {isChildMode ? '⚠️ Watch Out!' : '⚠️ Common Mistakes'}
+            </h4>
             <p className="adv-review-text">{reviewData.commonMistakes}</p>
           </section>
         )}
 
-        {/* Section 5: Fun Fact */}
+        {/* Fun Fact — always show */}
         {reviewData.funFact && (
           <section className="adv-review-section">
             <h4 className="adv-review-section-title">💡 Fun Fact</h4>
@@ -63,19 +67,27 @@ export default function ReviewView() {
           </section>
         )}
 
-        {/* Section 6: Practice Question */}
+        {/* Practice Question */}
         {reviewData.practiceQuestion && (
           <section className="adv-review-section">
-            <h4 className="adv-review-section-title">❓ Quick Practice Challenge</h4>
+            <h4 className="adv-review-section-title">
+              {isChildMode ? '❓ Try This!' : '❓ Practice Question'}
+            </h4>
             <div className="adv-review-practice-box">
-              <p className="adv-practice-q"><strong>Q:</strong> {reviewData.practiceQuestion}</p>
-              <p className="adv-practice-a"><strong>A:</strong> {reviewData.practiceAnswer}</p>
+              <p className="adv-practice-q">
+                <strong>Q:</strong> {reviewData.practiceQuestion}
+              </p>
+              {reviewData.practiceAnswer && (
+                <p className="adv-practice-a">
+                  <strong>A:</strong> {reviewData.practiceAnswer}
+                </p>
+              )}
             </div>
           </section>
         )}
 
-        {/* Section 7: Related Concepts */}
-        {reviewData.relatedConcepts && reviewData.relatedConcepts.length > 0 && (
+        {/* Related Concepts — hide for very young children to avoid overload */}
+        {!isChildMode && reviewData.relatedConcepts && reviewData.relatedConcepts.length > 0 && (
           <section className="adv-review-section">
             <h4 className="adv-review-section-title">🔗 Related Concepts</h4>
             <div className="adv-review-chips">
@@ -87,12 +99,14 @@ export default function ReviewView() {
         )}
 
         <div className="adv-review-actions">
-          <button 
+          <button
             className="adv-btn adv-btn-primary adv-full-width"
             onClick={handleNext}
-            aria-label="Proceed to Next Level"
+            aria-label={resultData?.nextLevelId ? 'Go to next level' : 'Return to level list'}
           >
-            {resultData && resultData.nextLevelId ? 'Next Level →' : 'Return to Journey Path →'}
+            {resultData?.nextLevelId
+              ? (isChildMode ? 'Next Level! →' : 'Next Level →')
+              : (isChildMode ? 'Back to Levels →' : 'Return to Journey Path →')}
           </button>
         </div>
       </div>

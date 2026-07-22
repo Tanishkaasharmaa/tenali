@@ -7,63 +7,121 @@ export default function GameplayView() {
 
   if (!session) return null;
 
+  const canRevealNextClue =
+    session.hasMoreClues !== false &&
+    session.clueNumber < session.totalClues;
+
+  const hintUsed = !!hintText;
+
+  // When the concept has child-friendly thoughts, use the Tenali-thinking voice.
+  // Otherwise fall back to the standard "Knowledge Clue" label for older content.
+  const useThoughts = session.useThoughts;
+
+  const badgeLabel = session.isBoss
+    ? '⚔️ Boss Challenge'
+    : useThoughts
+      ? "Tenali's Thought"
+      : '🔮 Knowledge Clue';
+
   return (
     <div className="adv-gameplay-container">
+
       {/* Tenali Avatar */}
       <div className="adv-avatar-wrapper">
-        <div className="adv-avatar-graphic">🧙‍♂️</div>
+        <div className="adv-avatar-graphic" role="img" aria-label="Tenali Raman">
+          🧙‍♂️
+        </div>
         <div className="adv-avatar-name">Tenali Raman</div>
       </div>
 
-      {/* Single Speech Bubble / Clue Card */}
-      <div className="adv-card adv-clue-card" aria-live="polite">
+      {/* Intro line — only shown for child-friendly thoughts mode */}
+      {useThoughts && (
+        <p className="adv-tenali-intro" aria-live="polite">
+          I&apos;m thinking of something...
+        </p>
+      )}
+
+      {/* Thought / Clue Card */}
+      <div className="adv-card adv-clue-card" aria-live="polite" aria-atomic="true">
         <div className="adv-clue-header">
-          <span className="adv-clue-badge">
-            {session.isBoss ? '⚔️ Boss Clue' : 'Knowledge Clue'}
-          </span>
+          <span className="adv-clue-badge">{badgeLabel}</span>
           <span className="adv-clue-counter">
-            Clue {session.clueNumber} of {session.totalClues}
+            {session.clueNumber} / {session.totalClues}
           </span>
         </div>
 
-        <p className="adv-clue-text">"{session.currentClue}"</p>
+        {/* Progress dots */}
+        <div className="adv-clue-dots" aria-hidden="true">
+          {Array.from({ length: session.totalClues }).map((_, i) => (
+            <span
+              key={i}
+              className={`adv-clue-dot ${i < session.clueNumber ? 'revealed' : ''}`}
+            />
+          ))}
+        </div>
+
+        <p className="adv-clue-text">
+          &ldquo;{session.currentClue}&rdquo;
+        </p>
 
         {hintText && (
-          <div className="adv-hint-box">
+          <div className="adv-hint-box" role="status">
             💡 <strong>Hint:</strong> {hintText}
           </div>
         )}
+
+        {!canRevealNextClue && !loading && (
+          <p className="adv-all-clues-note">
+            {useThoughts
+              ? 'All my thoughts are shown — can you guess what I am thinking?'
+              : 'All clues revealed — make your guess!'}
+          </p>
+        )}
       </div>
 
-      {/* Action Buttons Row */}
+      {/* Action Buttons */}
       <div className="adv-gameplay-actions">
-        <button 
+        <button
           className="adv-btn adv-btn-accent"
           onClick={() => dispatch({ type: 'SET_GUESS_MODAL', payload: true })}
           disabled={loading}
-          aria-label="Guess concept"
+          aria-label="Open guess dialog"
         >
           🔮 Guess
         </button>
 
-        <button 
+        <button
           className="adv-btn adv-btn-secondary"
           onClick={nextClue}
-          disabled={loading || session.clueNumber >= session.totalClues}
-          aria-label="Next clue"
+          disabled={loading || !canRevealNextClue}
+          aria-label={canRevealNextClue
+            ? (useThoughts ? 'Show next thought' : 'Reveal next clue')
+            : 'No more clues'}
         >
-          Next Clue →
+          {canRevealNextClue
+            ? (useThoughts ? 'Next Thought →' : 'Next Clue →')
+            : (useThoughts ? 'No More Thoughts' : 'No More Clues')}
         </button>
 
-        <button 
+        <button
           className="adv-btn adv-btn-ghost"
           onClick={getHint}
-          disabled={loading || !!hintText}
-          aria-label="Use hint"
+          disabled={loading || hintUsed}
+          aria-label={hintUsed ? 'Hint already used' : 'Use hint'}
+          title={hintUsed ? 'You have already used your hint.' : 'Use your one hint'}
         >
-          💡 Hint
+          {hintUsed ? '💡 Used' : '💡 Hint'}
         </button>
       </div>
+
+      {loading && (
+        <div className="adv-inline-loading" aria-live="polite">
+          <div
+            className="adv-loading-spinner"
+            style={{ width: 20, height: 20, borderWidth: 2 }}
+          />
+        </div>
+      )}
     </div>
   );
 }

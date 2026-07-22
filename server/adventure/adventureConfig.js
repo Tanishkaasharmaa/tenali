@@ -28,6 +28,6 @@ module.exports = {
   },
 
   // Progression & Unlock Defaults
-  DEFAULT_UNLOCKED_WORLDS: ["arithmetic_kingdom"],
+  DEFAULT_UNLOCKED_WORLDS: ["number_kingdom"],
   DEFAULT_UNLOCKED_LEVELS: ["lvl_1_1"]
 };

@@ -9,12 +9,23 @@
 const mongoose = require('mongoose');
 const StorageAdapterInterface = require('./StorageAdapterInterface');
 
+/** Mirror of the migration table in adventureProgressService — kept in sync manually. */
+const WORLD_ID_MIGRATION = {
+  'world_1':            'number_kingdom',
+  'arithmetic_kingdom': 'number_kingdom',
+};
+
+function migrateWorldIds(ids) {
+  if (!Array.isArray(ids) || ids.length === 0) return ['number_kingdom'];
+  return [...new Set(ids.map(id => WORLD_ID_MIGRATION[id] || id))];
+}
+
 const AdventureProgressSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
   xp: { type: Number, default: 0 },
   totalStars: { type: Number, default: 0 },
   completedLevels: { type: [String], default: [] },
-  unlockedWorlds: { type: [String], default: ["world_1"] },
+  unlockedWorlds: { type: [String], default: ["number_kingdom"] },
   levelStars: { type: Map, of: Number, default: {} },
   highestScore: { type: Number, default: 0 },
   updatedAt: { type: Date, default: Date.now }
@@ -35,18 +46,18 @@ class MongoAdapter extends StorageAdapterInterface {
           xp: 0,
           totalStars: 0,
           completedLevels: [],
-          unlockedWorlds: ["world_1"],
+          unlockedWorlds: ["number_kingdom"],
           levelStars: {},
           highestScore: 0
         });
       }
       return {
-        xp: doc.xp || 0,
-        totalStars: doc.totalStars || 0,
+        xp:              doc.xp || 0,
+        totalStars:      doc.totalStars || 0,
         completedLevels: doc.completedLevels || [],
-        unlockedWorlds: doc.unlockedWorlds || ["world_1"],
-        levelStars: doc.levelStars ? Object.fromEntries(doc.levelStars) : {},
-        highestScore: doc.highestScore || 0
+        unlockedWorlds:  migrateWorldIds(doc.unlockedWorlds || []),
+        levelStars:      doc.levelStars ? Object.fromEntries(doc.levelStars) : {},
+        highestScore:    doc.highestScore || 0
       };
     } catch (err) {
       console.error('[MongoAdapter] Error fetching progress:', err);

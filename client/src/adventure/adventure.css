@@ -716,6 +716,16 @@
   letter-spacing: 0.08em;
 }
 
+.adv-tenali-intro {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--adv-accent);
+  text-align: center;
+  margin: 0;
+  letter-spacing: 0.01em;
+  animation: adv-fade-up 0.3s ease both;
+}
+
 .adv-clue-card {
   position: relative;
   animation: adv-scale-in 0.3s ease both;
@@ -752,6 +762,41 @@
   line-height: 1.65;
   margin: 0 0 14px;
   text-align: center;
+}
+
+.adv-clue-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.adv-clue-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--adv-border);
+  transition: background 0.3s ease, transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.adv-clue-dot.revealed {
+  background: var(--adv-accent);
+  transform: scale(1.2);
+}
+
+.adv-all-clues-note {
+  font-size: 0.82rem;
+  color: var(--adv-text-soft);
+  text-align: center;
+  margin: 8px 0 0;
+  font-style: italic;
+}
+
+.adv-inline-loading {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
 }
 
 .adv-hint-box {
@@ -957,6 +1002,32 @@
   font-size: 0.9rem;
   font-weight: 700;
   color: var(--adv-gold);
+}
+
+.adv-result-answer-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 16px;
+  padding: 14px 20px;
+  background: rgba(232, 134, 74, 0.08);
+  border: 1px solid rgba(232, 134, 74, 0.25);
+  border-radius: var(--adv-radius-sm);
+}
+
+.adv-result-answer-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--adv-text-soft);
+}
+
+.adv-result-answer-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--adv-accent);
 }
 
 .adv-result-continue-btn {

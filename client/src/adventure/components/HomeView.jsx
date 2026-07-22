@@ -9,15 +9,15 @@ export default function HomeView() {
     <div className="adv-home-container">
       <header className="adv-home-header">
         <h1 className="adv-title">Crown of Knowledge</h1>
-        <p className="adv-subtitle">Knowledge Crystals Adventure</p>
+        <p className="adv-subtitle">Can you read Tenali's mind?</p>
       </header>
 
       <main className="adv-card adv-story-card">
-        <div className="adv-story-badge">📜 Royal Quest</div>
+        <div className="adv-story-badge">📜 The Quest</div>
         <p className="adv-story-text">
-          The magical Crown of Knowledge has shattered into Knowledge Crystals. 
-          Each crystal holds a mathematical concept known only to Tenali Raman. 
-          Uncover the clues, recover the crystals, and restore the Crown!
+          Tenali Raman is thinking of a secret mathematical concept.
+          He will give you clues one by one.
+          Read the clues carefully and guess what is on his mind!
         </p>
 
         <div className="adv-stats-strip">
@@ -32,19 +32,19 @@ export default function HomeView() {
         </div>
 
         <div className="adv-home-actions">
-          <button 
-            className="adv-btn adv-btn-primary" 
+          <button
+            className="adv-btn adv-btn-primary"
             onClick={continueAdventure}
             disabled={loading}
             aria-label="Continue Adventure"
           >
-            {loading ? 'Entering...' : 'Continue Adventure →'}
+            {loading ? 'Loading...' : 'Continue Adventure →'}
           </button>
-          
-          <button 
-            className="adv-btn adv-btn-secondary" 
+
+          <button
+            className="adv-btn adv-btn-secondary"
             onClick={() => setView('KINGDOM_SELECT')}
-            aria-label="Choose Kingdom"
+            aria-label="Choose a Kingdom"
           >
             Choose Kingdom
           </button>

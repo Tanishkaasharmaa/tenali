@@ -4,9 +4,21 @@
  * Central reducer handling view transitions and gameplay state machine.
  */
 
+/** Legacy world IDs → current world ID mapping. */
+const WORLD_ID_MIGRATION = {
+  'world_1':            'number_kingdom',
+  'arithmetic_kingdom': 'number_kingdom',
+};
+
+function migrateWorldIds(ids) {
+  if (!Array.isArray(ids) || ids.length === 0) return ['number_kingdom'];
+  const migrated = ids.map(id => WORLD_ID_MIGRATION[id] || id);
+  return [...new Set(migrated)];
+}
+
 export const initialState = {
   view: 'HOME', // 'HOME' | 'KINGDOM_SELECT' | 'LEVEL_SELECT' | 'GAMEPLAY' | 'RESULT' | 'REVIEW'
-  currentWorldId: 'world_1',
+  currentWorldId: 'number_kingdom',
   currentLevelId: null,
   worlds: [],
   levels: [],
@@ -15,11 +27,11 @@ export const initialState = {
     xp: 0,
     totalStars: 0,
     completedLevels: [],
-    unlockedWorlds: ['world_1'],
+    unlockedWorlds: ['number_kingdom'],
     levelStars: {},
     highestScore: 0
   },
-  session: null,       // { sessionId, levelId, firstClue, currentClue, clueNumber, totalClues, isBoss }
+  session: null,       // { sessionId, levelId, firstClue, currentClue, clueNumber, totalClues, isBoss, hasMoreClues }
   hintText: null,
   guessModalOpen: false,
   resultData: null,    // { correct, stars, xpGained, nextLevelId }
@@ -36,15 +48,22 @@ export function adventureReducer(state, action) {
     case 'SET_ERROR':
       return { ...state, error: action.payload, loading: false };
 
-    case 'SET_CONFIG':
+    case 'SET_CONFIG': {
+      const rawProgress = action.payload.progress || state.progress;
+      // Migrate stale world IDs that may have been saved in localStorage
+      const migratedProgress = {
+        ...rawProgress,
+        unlockedWorlds: migrateWorldIds(rawProgress.unlockedWorlds)
+      };
       return {
         ...state,
-        worlds: action.payload.worlds || [],
-        levels: action.payload.levels || [],
+        worlds:   action.payload.worlds   || [],
+        levels:   action.payload.levels   || [],
         concepts: action.payload.concepts || [],
-        progress: action.payload.progress || state.progress,
-        loading: false
+        progress: migratedProgress,
+        loading:  false
       };
+    }
 
     case 'SET_VIEW':
       return { ...state, view: action.payload, error: null };
@@ -56,22 +75,26 @@ export function adventureReducer(state, action) {
       return {
         ...state,
         session: {
-          sessionId: action.payload.sessionId,
-          levelId: action.payload.levelId,
-          worldId: action.payload.worldId,
+          sessionId:   action.payload.sessionId,
+          levelId:     action.payload.levelId,
+          worldId:     action.payload.worldId,
           levelNumber: action.payload.levelNumber,
-          isBoss: action.payload.isBoss,
+          isBoss:      action.payload.isBoss,
           currentClue: action.payload.firstClue,
-          clueNumber: action.payload.clueNumber || 1,
-          totalClues: action.payload.totalClues || 5
+          clueNumber:  action.payload.clueNumber || 1,
+          totalClues:  action.payload.totalClues || 5,
+          hasMoreClues: (action.payload.totalClues || 5) > 1,
+          // true  → show "Tenali's Thought N / 5" label (child-friendly voice)
+          // false → show "Knowledge Clue N / 5" label (older students)
+          useThoughts: action.payload.useThoughts || false
         },
-        hintText: null,
+        hintText:     null,
         guessModalOpen: false,
-        resultData: null,
-        reviewData: null,
-        view: 'GAMEPLAY',
-        loading: false,
-        error: null
+        resultData:   null,
+        reviewData:   null,
+        view:         'GAMEPLAY',
+        loading:      false,
+        error:        null
       };
 
     case 'UPDATE_CLUE':
@@ -80,7 +103,8 @@ export function adventureReducer(state, action) {
         session: {
           ...state.session,
           currentClue: action.payload.clue,
-          clueNumber: action.payload.clueNumber
+          clueNumber: action.payload.clueNumber,
+          hasMoreClues: action.payload.hasMoreClues !== false
         },
         loading: false
       };

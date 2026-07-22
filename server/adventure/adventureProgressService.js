@@ -19,6 +19,18 @@ const DEFAULT_PROGRESS = {
   highestScore: 0
 };
 
+/** Legacy world IDs that must be mapped to current IDs on the server side. */
+const WORLD_ID_MIGRATION = {
+  'world_1':            'number_kingdom',
+  'arithmetic_kingdom': 'number_kingdom',
+};
+
+function migrateWorldIds(ids) {
+  if (!Array.isArray(ids) || ids.length === 0) return [...config.DEFAULT_UNLOCKED_WORLDS];
+  const migrated = ids.map(id => WORLD_ID_MIGRATION[id] || id);
+  return [...new Set(migrated)];
+}
+
 class AdventureProgressService {
   /**
    * Normalizes raw progress input into a valid AdventureProgress object.
@@ -26,11 +38,16 @@ class AdventureProgressService {
   normalizeProgress(raw) {
     if (!raw || typeof raw !== 'object') return { ...DEFAULT_PROGRESS };
     return {
-      xp: typeof raw.xp === 'number' ? raw.xp : 0,
-      totalStars: typeof raw.totalStars === 'number' ? raw.totalStars : 0,
+      xp:              typeof raw.xp          === 'number' ? raw.xp : 0,
+      totalStars:      typeof raw.totalStars  === 'number' ? raw.totalStars : 0,
       completedLevels: Array.isArray(raw.completedLevels) ? raw.completedLevels : [],
-      unlockedWorlds: Array.isArray(raw.unlockedWorlds) && raw.unlockedWorlds.length > 0 ? raw.unlockedWorlds : config.DEFAULT_UNLOCKED_WORLDS,
-      levelStars: raw.levelStars && typeof raw.levelStars === 'object' ? raw.levelStars : {},
+      // Migrate stale world IDs from old versions
+      unlockedWorlds:  migrateWorldIds(
+        Array.isArray(raw.unlockedWorlds) && raw.unlockedWorlds.length > 0
+          ? raw.unlockedWorlds
+          : config.DEFAULT_UNLOCKED_WORLDS
+      ),
+      levelStars:  raw.levelStars && typeof raw.levelStars === 'object' ? raw.levelStars : {},
       highestScore: typeof raw.highestScore === 'number' ? raw.highestScore : 0
     };
   }
@@ -41,7 +58,10 @@ class AdventureProgressService {
   async getProgress(userContext, guestProgressPayload) {
     if (userContext && userContext._id) {
       const dbProgress = await mongoAdapter.getProgress(userContext._id);
-      if (dbProgress) return dbProgress;
+      if (dbProgress) {
+        // Always normalize DB results — catches any stale world IDs in MongoDB
+        return this.normalizeProgress(dbProgress);
+      }
     }
     return this.normalizeProgress(guestProgressPayload);
   }

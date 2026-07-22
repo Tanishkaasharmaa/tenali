@@ -9427,6 +9427,16 @@ app.get('/mindreader', (_req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
+// TENALI ADVENTURE GAME
+// ═══════════════════════════════════════════════════════════════════════════
+const adventureRoutes = require('./adventure/adventureRoutes');
+app.use('/api/adventure', adventureRoutes);
+
+app.get('/adventure', (_req, res) => {
+  res.sendFile(path.join(clientDistPath, 'index.html'));
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
 // TENALI REVERSE MIND READER (API)
 // ═══════════════════════════════════════════════════════════════════════════
 const { REVERSE_CONCEPTS, REVERSE_QUESTIONS, PERSONALITY_RESPONSES } = require('./mindReaderKB2');

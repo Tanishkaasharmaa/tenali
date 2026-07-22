@@ -7,6 +7,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { adventureReducer, initialState } from './adventureReducer';
 import { adventureApi } from '../services/adventureApi';
+import { LocalStorageAdapter } from '../adapters/LocalStorageAdapter';
 
 const AdventureContext = createContext();
 
@@ -16,6 +17,11 @@ export function AdventureProvider({ children }) {
   const loadGameConfig = async () => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
+      // 1. Version-check: wipes stale progress if data structure changed
+      LocalStorageAdapter.checkVersion();
+      // 2. Migrate any remaining stale world IDs in localStorage
+      LocalStorageAdapter.getProgress();
+
       const data = await adventureApi.fetchConfig();
       dispatch({ type: 'SET_CONFIG', payload: data });
     } catch (err) {

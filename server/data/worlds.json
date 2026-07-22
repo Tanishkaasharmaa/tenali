@@ -1,14 +1,25 @@
 [
   {
+    "id": "number_kingdom",
+    "worldId": "number_kingdom",
+    "name": "Number Kingdom",
+    "worldName": "Number Kingdom",
+    "icon": "🔢",
+    "description": "Master the fundamentals — addition, multiplication, decimals, fractions, and the building blocks of all mathematics.",
+    "unlockRequirements": "Available from the start",
+    "requiredUnlockXP": 0,
+    "themeColor": "#e8864a"
+  },
+  {
     "id": "arithmetic_kingdom",
     "worldId": "arithmetic_kingdom",
     "name": "Arithmetic Kingdom",
     "worldName": "Arithmetic Kingdom",
-    "icon": "🔢",
-    "description": "The land of numbers — primes, factors, fractions, and everything that counts.",
-    "unlockRequirements": "Available from the start",
+    "icon": "🧮",
+    "description": "Apply numbers to the real world — percentages, ratios, profit and loss, finance, and measurement.",
+    "unlockRequirements": "Complete the Number Kingdom Boss to unlock",
     "requiredUnlockXP": 0,
-    "themeColor": "#e8864a"
+    "themeColor": "#f4a261"
   },
   {
     "id": "geometry_kingdom",
@@ -27,31 +38,42 @@
     "name": "Algebra Kingdom",
     "worldName": "Algebra Kingdom",
     "icon": "🔠",
-    "description": "Where letters hold secrets — variables, equations, and functions wait to be solved.",
+    "description": "Where letters hold secrets — equations, inequalities, surds, and polynomials.",
     "unlockRequirements": "Complete the Geometry Kingdom Boss to unlock",
     "requiredUnlockXP": 0,
     "themeColor": "#3b82f6"
   },
   {
-    "id": "statistics_kingdom",
-    "worldId": "statistics_kingdom",
-    "name": "Statistics Kingdom",
-    "worldName": "Statistics Kingdom",
-    "icon": "📊",
-    "description": "The domain of data — patterns, probability, and the stories numbers tell.",
+    "id": "advanced_mathematics",
+    "worldId": "advanced_mathematics",
+    "name": "Advanced Mathematics",
+    "worldName": "Advanced Mathematics",
+    "icon": "🧠",
+    "description": "Matrices, vectors, logarithms, sequences, and complex numbers await the bold.",
     "unlockRequirements": "Complete the Algebra Kingdom Boss to unlock",
     "requiredUnlockXP": 0,
-    "themeColor": "#a855f7"
+    "themeColor": "#7c3aed"
   },
   {
-    "id": "trigonometry_kingdom",
-    "worldId": "trigonometry_kingdom",
-    "name": "Trigonometry Kingdom",
-    "worldName": "Trigonometry Kingdom",
-    "icon": "🔭",
-    "description": "The final frontier — angles, ratios, and the mathematics of triangles.",
-    "unlockRequirements": "Complete the Statistics Kingdom Boss to unlock",
+    "id": "coordinate_calculus",
+    "worldId": "coordinate_calculus",
+    "name": "Coordinate & Calculus",
+    "worldName": "Coordinate & Calculus",
+    "icon": "📈",
+    "description": "Lines, curves, limits, derivatives, and integrals — mathematics in motion.",
+    "unlockRequirements": "Complete the Advanced Mathematics Boss to unlock",
     "requiredUnlockXP": 0,
-    "themeColor": "#ec4899"
+    "themeColor": "#0ea5e9"
+  },
+  {
+    "id": "data_logic",
+    "worldId": "data_logic",
+    "name": "Data & Logic",
+    "worldName": "Data & Logic",
+    "icon": "📊",
+    "description": "Statistics, sets, logic, and language — the final frontier of mathematical reasoning.",
+    "unlockRequirements": "Complete the Coordinate & Calculus Boss to unlock",
+    "requiredUnlockXP": 0,
+    "themeColor": "#a855f7"
   }
 ]

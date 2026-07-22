@@ -1,8 +1,18 @@
 /**
  * TENALI ADVENTURE GAME - SERVICE
  * ══════════════════════════════════════════════════════════════════════
- * Core service coordinator for level sessions, clues, hints, guesses,
- * progress updates, and kingdom unlocking.
+ * Core service: level sessions, thoughts/clues, hints, guesses, progress.
+ *
+ * DATA MODEL NOTES
+ * ----------------
+ * concepts.json supports two clue formats:
+ *   - thoughts[]  child-friendly "Tenali thinking" voice (Grades 1-3)
+ *   - clues[]     standard textbook voice (older students)
+ * The service prefers thoughts over clues when both are present.
+ *
+ * Each concept may also have:
+ *   - hint        single friendly hint string  (preferred)
+ *   - hints[]     older array format           (fallback: first element used)
  */
 
 'use strict';
@@ -15,142 +25,154 @@ const bossEngine = require('./bossEngine');
 const reviewService = require('./reviewService');
 
 class AdventureService {
-  /**
-   * Returns current game worlds, levels, and user progress summary.
-   */
+  // ── Game data ────────────────────────────────────────────────────────────
+
   async getGameData(userContext, guestProgressPayload) {
     const progress = await progressService.getProgress(userContext, guestProgressPayload);
-    const worlds = kb.getWorlds();
-    const levels = kb.getLevels();
+    const worlds   = kb.getWorlds();
+    const levels   = kb.getLevels();
     const concepts = kb.getConcepts();
 
-    // Map worlds with lock status and progress percentage
-    const enrichedWorlds = worlds.map(w => {
-      const worldLevels = levels.filter(l => l.worldId === w.id);
-      const completedCount = worldLevels.filter(l => progress.completedLevels.includes(l.id)).length;
-      const isUnlocked = progress.unlockedWorlds.includes(w.id);
+    console.log(
+    worlds.map(w => ({
+      id: w.id,
+      unlocked: progress.unlockedWorlds.includes(w.id)
+      }))
+    );
 
+
+    const enrichedWorlds = worlds.map(w => {
+      const worldLevels   = levels.filter(l => l.worldId === w.id);
+      const completedCount = worldLevels.filter(l => progress.completedLevels.includes(l.id)).length;
+      const isUnlocked    = progress.unlockedWorlds.includes(w.id);
       return {
         ...w,
         isUnlocked,
-        totalLevels: worldLevels.length,
+        totalLevels:        worldLevels.length,
         completedLevelsCount: completedCount,
-        progressPercent: worldLevels.length > 0 ? Math.round((completedCount / worldLevels.length) * 100) : 0
+        progressPercent:    worldLevels.length > 0
+          ? Math.round((completedCount / worldLevels.length) * 100)
+          : 0
       };
     });
 
     return {
-      worlds: enrichedWorlds,
+      worlds:   enrichedWorlds,
       levels,
       concepts: concepts.map(c => ({ id: c.id, name: c.name, subject: c.subject })),
       progress
     };
   }
 
-  /**
-   * Starts a level gameplay session.
-   */
+  // ── Start level ──────────────────────────────────────────────────────────
+
   async startLevel(userContext, levelId) {
     const level = kb.getLevelById(levelId);
     if (!level) {
-      const error = new Error(`Level with ID '${levelId}' not found.`);
-      error.statusCode = 404;
-      throw error;
+      const err = new Error(`Level '${levelId}' not found.`);
+      err.statusCode = 404;
+      throw err;
     }
 
     const concept = kb.getConceptById(level.conceptId);
     if (!concept) {
-      const error = new Error(`Concept for level '${levelId}' not found.`);
-      error.statusCode = 404;
-      throw error;
+      const err = new Error(`Concept for level '${levelId}' not found.`);
+      err.statusCode = 404;
+      throw err;
     }
 
     const session = sessionManager.createSession({
-      userId: userContext ? userContext._id : null,
-      levelId: level.id,
+      userId:    userContext ? userContext._id : null,
+      levelId:   level.id,
       conceptId: concept.id,
-      isBoss: level.isBoss
+      isBoss:    level.isBoss
     });
 
-    const clues = level.isBoss
+    // Prefer thoughts (child-friendly), fall back to clues
+    const allClues = level.isBoss
       ? bossEngine.generateBossClues(level)
-      : (concept.clues && concept.clues.length > 0 ? concept.clues : [`I am ${concept.name}.`]);
+      : (concept.thoughts || concept.clues || [`I am ${concept.name}.`]);
 
-    // Store generated clues in session for audit
     sessionManager.updateSession(session.sessionId, {
-      allClues: clues,
-      revealedClues: [clues[0]],
+      allClues,
+      revealedClues:   [allClues[0]],
       currentClueIndex: 0
     });
 
+    // Does this concept use the child-friendly thoughts voice?
+    const useThoughts = !!(concept.thoughts && concept.thoughts.length > 0);
+
     return {
-      sessionId: session.sessionId,
-      levelId: level.id,
-      worldId: level.worldId,
+      sessionId:   session.sessionId,
+      levelId:     level.id,
+      worldId:     level.worldId,
       levelNumber: level.levelNumber,
-      isBoss: level.isBoss,
-      firstClue: clues[0],
-      clueNumber: 1,
-      totalClues: clues.length
+      isBoss:      level.isBoss,
+      firstClue:   allClues[0],
+      clueNumber:  1,
+      totalClues:  allClues.length,
+      useThoughts               // tells client to show "Tenali's Thought" label
     };
   }
 
-  /**
-   * Advances to and returns the next clue for an active session.
-   */
+  // ── Next clue ────────────────────────────────────────────────────────────
+
   async getNextClue(sessionId) {
     const session = sessionManager.getSession(sessionId);
     if (!session) {
-      const error = new Error('Invalid or expired gameplay session.');
-      error.statusCode = 404;
-      throw error;
+      const err = new Error('Invalid or expired gameplay session.');
+      err.statusCode = 404;
+      throw err;
     }
-
     if (session.completed) {
-      const error = new Error('This gameplay session has already ended.');
-      error.statusCode = 400;
-      throw error;
+      const err = new Error('This gameplay session has already ended.');
+      err.statusCode = 400;
+      throw err;
     }
 
     const nextIndex = session.currentClueIndex + 1;
+
     if (nextIndex >= session.allClues.length) {
+      // Already on last clue — return it again with hasMoreClues:false
       return {
         hasMoreClues: false,
-        clue: session.allClues[session.currentClueIndex],
-        clueNumber: session.currentClueIndex + 1,
-        totalClues: session.allClues.length
+        clue:         session.allClues[session.currentClueIndex],
+        clueNumber:   session.currentClueIndex + 1,
+        totalClues:   session.allClues.length
       };
     }
 
-    const nextClueText = session.allClues[nextIndex];
-    const updatedRevealed = [...session.revealedClues, nextClueText];
-
+    const nextClue = session.allClues[nextIndex];
     sessionManager.updateSession(sessionId, {
       currentClueIndex: nextIndex,
-      revealedClues: updatedRevealed
+      revealedClues: [...session.revealedClues, nextClue]
     });
 
     return {
       hasMoreClues: nextIndex < session.allClues.length - 1,
-      clue: nextClueText,
-      clueNumber: nextIndex + 1,
-      totalClues: session.allClues.length
+      clue:         nextClue,
+      clueNumber:   nextIndex + 1,
+      totalClues:   session.allClues.length
     };
   }
 
-  /**
-   * Retrieves hint for active session.
-   */
+  // ── Hint ─────────────────────────────────────────────────────────────────
+
   async getHint(sessionId) {
     const session = sessionManager.getSession(sessionId);
     if (!session) {
-      const error = new Error('Invalid or expired gameplay session.');
-      error.statusCode = 404;
-      throw error;
+      const err = new Error('Invalid or expired gameplay session.');
+      err.statusCode = 404;
+      throw err;
     }
 
     const concept = kb.getConceptById(session.conceptId);
-    const hintText = concept ? concept.hint || 'Analyze the characteristics of the concept.' : 'No hint available.';
+
+    // Prefer single `hint` string (World 1 child-friendly format)
+    const hintText = (concept && concept.hint)
+      || (concept && Array.isArray(concept.hints) && concept.hints.length > 0
+          ? concept.hints[0]
+          : 'Think about what makes this concept special.');
 
     if (!session.hintsUsed.includes(hintText)) {
       sessionManager.updateSession(sessionId, {
@@ -161,41 +183,44 @@ class AdventureService {
     return { hint: hintText };
   }
 
-  /**
-   * Validates user's concept guess and updates progression.
-   */
+  // ── Submit guess ─────────────────────────────────────────────────────────
+
   async submitGuess(sessionId, guessConceptId, userContext, guestProgressPayload) {
     const session = sessionManager.getSession(sessionId);
     if (!session) {
-      const error = new Error('Invalid or expired gameplay session.');
-      error.statusCode = 404;
-      throw error;
+      const err = new Error('Invalid or expired gameplay session.');
+      err.statusCode = 404;
+      throw err;
     }
-
     if (session.completed) {
-      const error = new Error('This gameplay session has already concluded.');
-      error.statusCode = 400;
-      throw error;
+      const err = new Error('This gameplay session has already concluded.');
+      err.statusCode = 400;
+      throw err;
     }
 
     const targetConcept = kb.getConceptById(session.conceptId);
+
     const isCorrect = session.isBoss
       ? bossEngine.validateBossGuess(session.conceptId, guessConceptId)
-      : (targetConcept && (targetConcept.id === guessConceptId || targetConcept.name.toLowerCase() === String(guessConceptId).toLowerCase()));
+      : (targetConcept && (
+          targetConcept.id === guessConceptId ||
+          targetConcept.name.toLowerCase() === String(guessConceptId).toLowerCase()
+        ));
 
     const currentProgress = await progressService.getProgress(userContext, guestProgressPayload);
 
+    // ── Correct guess ──────────────────────────────────────────────────────
     if (isCorrect) {
       sessionManager.endSession(sessionId, 'win');
 
-      // Calculate Stars and XP
-      let stars = 1;
+      // Stars & XP
+      let stars    = 1;
       let xpGained = config.BASE_LEVEL_XP;
 
       if (session.isBoss) {
-        const bossRewards = bossEngine.calculateBossRewards(session.currentClueIndex + 1, session.hintsUsed.length);
-        stars = bossRewards.stars;
-        xpGained = bossRewards.xpGained;
+        const rewards = bossEngine.calculateBossRewards(session.currentClueIndex + 1, session.hintsUsed.length);
+        stars    = rewards.stars;
+        xpGained = rewards.xpGained;
       } else {
         const clueCount = session.currentClueIndex + 1;
         const hintCount = session.hintsUsed.length;
@@ -206,97 +231,91 @@ class AdventureService {
         }
       }
 
-      // Update progress datastructure
-      const levelId = session.levelId;
-      const completedLevelsSet = new Set(currentProgress.completedLevels);
-      completedLevelsSet.add(levelId);
+      // Update progress
+      const levelId           = session.levelId;
+      const completedSet      = new Set(currentProgress.completedLevels);
+      completedSet.add(levelId);
 
-      const levelStarsMap = { ...currentProgress.levelStars };
-      const prevStars = levelStarsMap[levelId] || 0;
-      levelStarsMap[levelId] = Math.max(prevStars, stars);
+      const levelStarsMap     = { ...currentProgress.levelStars };
+      levelStarsMap[levelId]  = Math.max(levelStarsMap[levelId] || 0, stars);
+      const newTotalStars     = Object.values(levelStarsMap).reduce((s, v) => s + v, 0);
 
-      // Recalculate total stars
-      const newTotalStars = Object.values(levelStarsMap).reduce((sum, val) => sum + val, 0);
-
-      // Check for World Unlocks if Boss level completed
-      const currentLevel = kb.getLevelById(levelId);
-      const unlockedWorldsSet = new Set(currentProgress.unlockedWorlds);
-
+      // Unlock next world when a boss level is cleared
+      const currentLevel      = kb.getLevelById(levelId);
+      const unlockedSet       = new Set(currentProgress.unlockedWorlds);
       if (currentLevel && currentLevel.isBoss) {
-        const allWorlds = kb.getWorlds();
-        const currentWorldIdx = allWorlds.findIndex(w => w.id === currentLevel.worldId);
-        if (currentWorldIdx !== -1 && currentWorldIdx < allWorlds.length - 1) {
-          unlockedWorldsSet.add(allWorlds[currentWorldIdx + 1].id);
+        const allWorlds  = kb.getWorlds();
+        const worldIdx   = allWorlds.findIndex(w => w.id === currentLevel.worldId);
+        if (worldIdx !== -1 && worldIdx < allWorlds.length - 1) {
+          unlockedSet.add(allWorlds[worldIdx + 1].id);
         }
       }
 
       const updatedProgress = {
-        xp: currentProgress.xp + xpGained,
-        totalStars: newTotalStars,
-        completedLevels: Array.from(completedLevelsSet),
-        unlockedWorlds: Array.from(unlockedWorldsSet),
-        levelStars: levelStarsMap,
-        highestScore: Math.max(currentProgress.highestScore, (currentProgress.xp + xpGained))
+        xp:               currentProgress.xp + xpGained,
+        totalStars:       newTotalStars,
+        completedLevels:  Array.from(completedSet),
+        unlockedWorlds:   Array.from(unlockedSet),
+        levelStars:       levelStarsMap,
+        highestScore:     Math.max(currentProgress.highestScore, currentProgress.xp + xpGained)
       };
 
       const savedProgress = await progressService.saveProgress(userContext, updatedProgress);
-      const review = reviewService.generateReview(session.conceptId);
-      const nextLevel = kb.getNextLevel(levelId);
+      const review        = reviewService.generateReview(session.conceptId);
+      const nextLevel     = kb.getNextLevel(levelId);
 
       return {
-        correct: true,
-        ended: true,
+        correct:        true,
+        ended:          true,
         stars,
         xpGained,
         correctConcept: targetConcept,
         review,
-        progress: savedProgress,
-        nextLevelId: nextLevel ? nextLevel.id : null
+        progress:       savedProgress,
+        nextLevelId:    nextLevel ? nextLevel.id : null
       };
     }
 
-    // Incorrect guess handling
+    // ── Incorrect guess ────────────────────────────────────────────────────
     const isFinalClue = session.currentClueIndex >= session.allClues.length - 1;
     if (isFinalClue) {
       sessionManager.endSession(sessionId, 'loss');
       const review = reviewService.generateReview(session.conceptId);
       return {
-        correct: false,
-        ended: true,
+        correct:        false,
+        ended:          true,
         correctConcept: targetConcept,
         review,
-        progress: currentProgress
+        progress:       currentProgress
       };
     }
 
     return {
       correct: false,
-      ended: false,
-      message: 'Incorrect guess. Try taking another clue!'
+      ended:   false,
+      message: 'Not quite! Try the next thought.'
     };
   }
 
-  /**
-   * Automatically resolves the "Continue Adventure" level for a player.
-   */
+  // ── Continue adventure ───────────────────────────────────────────────────
+
   async getContinueLevel(userContext, guestProgressPayload) {
     const progress = await progressService.getProgress(userContext, guestProgressPayload);
-    const levels = kb.getLevels();
+    const levels   = kb.getLevels();
 
     for (const level of levels) {
       if (!progress.completedLevels.includes(level.id)) {
-        return {
-          levelId: level.id,
-          worldId: level.worldId,
-          levelNumber: level.levelNumber
-        };
+        return { levelId: level.id, worldId: level.worldId, levelNumber: level.levelNumber };
       }
     }
 
-    // If all levels are completed, return the final level
     const lastLevel = levels[levels.length - 1];
-    return lastLevel ? { levelId: lastLevel.id, worldId: lastLevel.worldId, levelNumber: lastLevel.levelNumber } : null;
+    return lastLevel
+      ? { levelId: lastLevel.id, worldId: lastLevel.worldId, levelNumber: lastLevel.levelNumber }
+      : null;
   }
 }
 
 module.exports = new AdventureService();
+console.log("Progress:", progress.unlockedWorlds);
+

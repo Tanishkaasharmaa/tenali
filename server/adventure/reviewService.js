@@ -28,7 +28,7 @@ module.exports = {
       };
     }
 
-    const review = concept.educationalReview || {};
+    const review = concept.educationalReview || concept.educationalInfo || {};
 
     return {
       conceptId: concept.id,
@@ -36,12 +36,17 @@ module.exports = {
       subject: concept.subject,
       definition: review.definition || concept.description || '',
       whyCluesPointedHere: review.whyCluesPointedHere || 'The clues narrowed down the mathematical properties unique to this concept.',
-      workedExample: review.workedExample || 'Review the core definition and apply it to basic practice problems.',
+      workedExample: review.workedExample
+        || (Array.isArray(review.examples) ? review.examples.join('  •  ') : null)
+        || 'Review the core definition and apply it to basic practice problems.',
       commonMistakes: review.commonMistakes || 'Be careful not to confuse this concept with related topics in the same realm.',
       funFact: review.funFact || 'Mathematical concepts like this form the foundation of science, technology, and nature!',
-      practiceQuestion: review.practiceQuestion || `What is the primary characteristic of ${concept.name}?`,
-      practiceAnswer: review.practiceAnswer || review.definition || '',
-      relatedConcepts: review.relatedConcepts || []
+      practiceQuestion: review.practiceQuestion
+        || (Array.isArray(review.practiceQuestions) && review.practiceQuestions[0]) || `What is the primary characteristic of ${concept.name}?`,
+      practiceAnswer: review.practiceAnswer
+        || (Array.isArray(review.practiceQuestions) && review.practiceQuestions[1]) || review.definition || '',
+      relatedConcepts: review.relatedConcepts
+        || (review.relatedLesson ? [review.relatedLesson] : [])
     };
   }
 };

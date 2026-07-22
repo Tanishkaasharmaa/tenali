@@ -8,47 +8,61 @@ export default function ResultView() {
   if (!resultData) return null;
 
   const isWin = resultData.correct;
+  const conceptName = resultData.correctConcept?.name || '';
 
   return (
     <div className="adv-result-container">
       <div className="adv-card adv-result-card">
-        {/* Large Avatar Illustration */}
+
+        {/* Illustration */}
         <div className="adv-result-illustration">
           {isWin ? '🏆' : '🦉'}
         </div>
 
         <h2 className="adv-result-title">
-          {isWin ? 'Knowledge Crystal Recovered!' : 'Crystal Sharded...'}
+          {isWin ? 'You got it!' : 'Not quite!'}
         </h2>
 
+        {/* Show the concept name on loss so the student learns immediately */}
+        {!isWin && conceptName && (
+          <div className="adv-result-answer-reveal">
+            <span className="adv-result-answer-label">Tenali was thinking of:</span>
+            <span className="adv-result-answer-name">{conceptName}</span>
+          </div>
+        )}
+
         <p className="adv-result-desc">
-          {isWin 
-            ? 'Your deduction was sharp! The knowledge of this crystal has been restored to the Crown.'
-            : 'Tenali’s secret concept remained hidden this time. Study the Educational Review to master this crystal!'}
+          {isWin
+            ? 'Great job! You read Tenali\'s mind. Keep going!'
+            : 'Don\'t worry! Read the review below and try again.'}
         </p>
 
+        {/* Stars + XP on win */}
         {isWin && (
           <div className="adv-result-rewards">
             <div className="adv-result-stars">
               {Array.from({ length: 3 }).map((_, i) => (
-                <span key={i} className={`adv-result-star ${i < resultData.stars ? 'filled' : 'empty'}`}>
+                <span
+                  key={i}
+                  className={`adv-result-star ${i < resultData.stars ? 'filled' : 'empty'}`}
+                  aria-hidden="true"
+                >
                   ★
                 </span>
               ))}
             </div>
-
             <div className="adv-result-xp-badge">
               ⚡ +{resultData.xpGained} XP
             </div>
           </div>
         )}
 
-        <button 
+        <button
           className="adv-btn adv-btn-primary adv-result-continue-btn"
           onClick={() => setView('REVIEW')}
-          aria-label="Continue to Educational Review"
+          aria-label="See the educational review"
         >
-          Continue to Educational Review →
+          {isWin ? 'See Review →' : 'Learn About It →'}
         </button>
       </div>
     </div>

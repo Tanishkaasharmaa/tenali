@@ -1,89 +1,115 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useAdventure } from '../context/AdventureContext';
 
 export default function GuessModal() {
   const { state, submitGuess, dispatch } = useAdventure();
-  const { concepts, guessModalOpen, loading } = state;
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedConceptId, setSelectedConceptId] = useState('');
+  const { concepts, levels, session, guessModalOpen, loading } = state;
+
+  const [searchTerm, setSearchTerm]         = useState('');
+  const [selectedConceptId, setSelected]    = useState('');
+
+  // Build the concept list scoped to the current world's levels.
+  // This stops a 7-year-old from being confronted with 100 options.
+  // Falls back to all concepts if world can't be determined.
+  const worldConcepts = useMemo(() => {
+    if (!session || !levels || levels.length === 0) return concepts;
+
+    const worldId = session.worldId;
+    if (!worldId) return concepts;
+
+    // Get conceptIds used in this world
+    const worldConceptIds = new Set(
+      levels.filter(l => l.worldId === worldId).map(l => l.conceptId)
+    );
+
+    const scoped = concepts.filter(c => worldConceptIds.has(c.id));
+    return scoped.length > 0 ? scoped : concepts;
+  }, [concepts, levels, session]);
+
+  const filtered = useMemo(() => {
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return worldConcepts;
+    return worldConcepts.filter(c =>
+      c.name.toLowerCase().includes(q) ||
+      (c.subject && c.subject.toLowerCase().includes(q))
+    );
+  }, [worldConcepts, searchTerm]);
 
   if (!guessModalOpen) return null;
 
-  const filteredConcepts = concepts.filter(c => 
-    c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.subject.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (selectedConceptId) {
-      submitGuess(selectedConceptId);
-    }
+    if (selectedConceptId) submitGuess(selectedConceptId);
+  };
+
+  const close = () => {
+    dispatch({ type: 'SET_GUESS_MODAL', payload: false });
+    setSearchTerm('');
+    setSelected('');
   };
 
   return (
-    <div 
+    <div
       className="adv-modal-overlay"
-      onClick={() => dispatch({ type: 'SET_GUESS_MODAL', payload: false })}
+      onClick={close}
       role="dialog"
       aria-modal="true"
       aria-labelledby="guess-modal-title"
     >
-      <div 
-        className="adv-card adv-guess-modal-card" 
-        onClick={(e) => e.stopPropagation()}
+      <div
+        className="adv-card adv-guess-modal-card"
+        onClick={e => e.stopPropagation()}
       >
-        <h3 id="guess-modal-title" className="adv-modal-title">What is on Tenali's Mind?</h3>
-        
+        <h3 id="guess-modal-title" className="adv-modal-title">
+          What is Tenali thinking of?
+        </h3>
+
         <form onSubmit={handleSubmit} className="adv-guess-form">
-          <div className="adv-search-box-wrapper">
-            <input 
-              type="text"
-              className="adv-input adv-search-input"
-              placeholder="Search or type concept name..."
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setSelectedConceptId('');
-              }}
-              autoFocus
-              aria-label="Search concept name"
-            />
-          </div>
+          {/* Search box — only useful when there are many options */}
+          {worldConcepts.length > 6 && (
+            <div className="adv-search-box-wrapper">
+              <input
+                type="text"
+                className="adv-input adv-search-input"
+                placeholder="Type to search..."
+                value={searchTerm}
+                onChange={e => { setSearchTerm(e.target.value); setSelected(''); }}
+                autoFocus
+                aria-label="Search concept name"
+              />
+            </div>
+          )}
 
           <div className="adv-concept-results-list" role="listbox">
-            {filteredConcepts.map((concept) => (
-              <div 
+            {filtered.map(concept => (
+              <div
                 key={concept.id}
                 className={`adv-concept-option ${selectedConceptId === concept.id ? 'selected' : ''}`}
-                onClick={() => setSelectedConceptId(concept.id)}
+                onClick={() => setSelected(concept.id)}
                 role="option"
                 aria-selected={selectedConceptId === concept.id}
               >
                 <span className="adv-concept-option-name">{concept.name}</span>
-                <span className="adv-concept-option-sub">{concept.subject}</span>
+                {concept.subject && (
+                  <span className="adv-concept-option-sub">{concept.subject}</span>
+                )}
               </div>
             ))}
-            {filteredConcepts.length === 0 && (
-              <div className="adv-no-results">No matching concepts found.</div>
+            {filtered.length === 0 && (
+              <div className="adv-no-results">No concepts match your search.</div>
             )}
           </div>
 
           <div className="adv-modal-actions">
-            <button 
-              type="button" 
-              className="adv-btn adv-btn-ghost"
-              onClick={() => dispatch({ type: 'SET_GUESS_MODAL', payload: false })}
-            >
+            <button type="button" className="adv-btn adv-btn-ghost" onClick={close}>
               Cancel
             </button>
-            
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="adv-btn adv-btn-primary"
               disabled={!selectedConceptId || loading}
             >
-              {loading ? 'Submitting...' : 'Submit Guess →'}
+              {loading ? 'Checking...' : 'Guess! →'}
             </button>
           </div>
         </form>
