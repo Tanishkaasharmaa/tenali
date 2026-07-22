@@ -71,23 +71,27 @@ export function adventureReducer(state, action) {
     case 'SELECT_WORLD':
       return { ...state, currentWorldId: action.payload, view: 'LEVEL_SELECT', error: null };
 
-    case 'START_SESSION':
+    case 'START_SESSION': {
+      console.log('[DEBUG Step 7] START_SESSION reducer - payload:', JSON.stringify(action.payload));
+      console.log('[DEBUG Step 7b] firstClue from payload:', action.payload.firstClue);
+      const newSession = {
+        sessionId:   action.payload.sessionId,
+        levelId:     action.payload.levelId,
+        worldId:     action.payload.worldId,
+        levelNumber: action.payload.levelNumber,
+        isBoss:      action.payload.isBoss,
+        currentClue: action.payload.firstClue,
+        clueNumber:  action.payload.clueNumber || 1,
+        totalClues:  action.payload.totalClues || 5,
+        hasMoreClues: (action.payload.totalClues || 5) > 1,
+        // true  → show "Tenali's Thought N / 5" label (child-friendly voice)
+        // false → show "Knowledge Clue N / 5" label (older students)
+        useThoughts: action.payload.useThoughts || false
+      };
+      console.log('[DEBUG Step 8] New session.currentClue:', newSession.currentClue);
       return {
         ...state,
-        session: {
-          sessionId:   action.payload.sessionId,
-          levelId:     action.payload.levelId,
-          worldId:     action.payload.worldId,
-          levelNumber: action.payload.levelNumber,
-          isBoss:      action.payload.isBoss,
-          currentClue: action.payload.firstClue,
-          clueNumber:  action.payload.clueNumber || 1,
-          totalClues:  action.payload.totalClues || 5,
-          hasMoreClues: (action.payload.totalClues || 5) > 1,
-          // true  → show "Tenali's Thought N / 5" label (child-friendly voice)
-          // false → show "Knowledge Clue N / 5" label (older students)
-          useThoughts: action.payload.useThoughts || false
-        },
+        session: newSession,
         hintText:     null,
         guessModalOpen: false,
         resultData:   null,
@@ -96,6 +100,7 @@ export function adventureReducer(state, action) {
         loading:      false,
         error:        null
       };
+    }
 
     case 'UPDATE_CLUE':
       return {

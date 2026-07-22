@@ -33,18 +33,13 @@ class AdventureService {
     const levels   = kb.getLevels();
     const concepts = kb.getConcepts();
 
-    console.log(
-    worlds.map(w => ({
-      id: w.id,
-      unlocked: progress.unlockedWorlds.includes(w.id)
-      }))
-    );
+  
 
 
     const enrichedWorlds = worlds.map(w => {
       const worldLevels   = levels.filter(l => l.worldId === w.id);
       const completedCount = worldLevels.filter(l => progress.completedLevels.includes(l.id)).length;
-      const isUnlocked    = progress.unlockedWorlds.includes(w.id);
+      const isUnlocked    = w.id === 'number_kingdom' || w.isUnlocked || (progress.unlockedWorlds || []).includes(w.id);
       return {
         ...w,
         isUnlocked,
@@ -317,5 +312,5 @@ class AdventureService {
 }
 
 module.exports = new AdventureService();
-console.log("Progress:", progress.unlockedWorlds);
+
 

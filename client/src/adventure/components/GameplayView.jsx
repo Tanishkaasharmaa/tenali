@@ -7,6 +7,9 @@ export default function GameplayView() {
 
   if (!session) return null;
 
+  console.log('[DEBUG Step 9] GameplayView rendering - session.currentClue:', session.currentClue);
+  console.log('[DEBUG Step 9b] Full session:', JSON.stringify(session));
+
   const canRevealNextClue =
     session.hasMoreClues !== false &&
     session.clueNumber < session.totalClues;
@@ -61,7 +64,7 @@ export default function GameplayView() {
         </div>
 
         <p className="adv-clue-text">
-          &ldquo;{session.currentClue}&rdquo;
+          &ldquo;{session.currentClue || 'I am thinking of a mathematical concept...'}&rdquo;
         </p>
 
         {hintText && (

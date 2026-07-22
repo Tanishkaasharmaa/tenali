@@ -29,13 +29,13 @@ export default function MindReaderApp2({ onBack }) {
   // Player Stats
   const [xp, setXp] = useState(0);
   const [mrr, setMrr] = useState(1000);
-  const [unlockedWorlds, setUnlockedWorlds] = useState(['arithmetic_kingdom']);
+  const [unlockedWorlds, setUnlockedWorlds] = useState(['number_kingdom']);
   const [levelProgress, setLevelProgress] = useState({}); // levelNum -> starsEarned
 
   // Active game navigation states
   const [worlds, setWorlds] = useState([]);
   const [activeWorldIndex, setActiveWorldIndex] = useState(0);
-  const [activeWorldId, setActiveWorldId] = useState('arithmetic_kingdom');
+  const [activeWorldId, setActiveWorldId] = useState('number_kingdom');
   const [levelNum, setLevelNum] = useState(1);
 
   // Active game session playing states
@@ -47,14 +47,15 @@ export default function MindReaderApp2({ onBack }) {
   const [avatarExpression, setAvatarExpression] = useState('thinking');
   const [tenaliSpeech, setTenaliSpeech] = useState('');
 
-  // 4 Blank Thought Boxes (2x2 Grid Layout)
-  const [thoughtGuesses, setThoughtGuesses] = useState(['', '', '', '']);
+  // Searchable Concept Selector
+  const [guessSearchQuery, setGuessSearchQuery] = useState('');
+  const [wrongGuessFeedback, setWrongGuessFeedback] = useState('');
 
   // Hint Overlay Box
   const [showHintOverlay, setShowHintOverlay] = useState(false);
   const [hintText, setHintText] = useState('');
 
-  // Guess Modal Free-text Input
+  // Guess Modal Selector
   const [showGuess, setShowGuess] = useState(false);
   const [guessQuery, setGuessQuery] = useState('');
 
@@ -82,6 +83,7 @@ export default function MindReaderApp2({ onBack }) {
       const res = await fetch(`${API}/api/mindreader/worlds`, { headers });
       if (res.ok) {
         const data = await res.json();
+        console.log('[MindReaderApp2 Debug] Received worlds from API:', data.worlds?.map(w => ({ worldId: w.worldId, worldName: w.worldName, unlocked: w.unlocked })));
         setXp(data.xp || 0);
         setWorlds(data.worlds || []);
         setLevelProgress(data.levelProgress || {});
@@ -111,14 +113,41 @@ export default function MindReaderApp2({ onBack }) {
   // Level selector maps
   const getLevelsForActiveWorld = () => {
     if (!worlds || worlds.length === 0) return [];
-    const worldObj = worlds[activeWorldIndex];
-    if (!worldObj) return [];
-    const [start, end] = worldObj.levelRange;
+    const activeWorld = worlds.find(w => w.worldId === activeWorldId) || worlds[activeWorldIndex] || worlds[0];
+    if (!activeWorld) return [];
+
+    // 1. If activeWorld directly contains a levels array
+    if (Array.isArray(activeWorld.levels)) {
+      return activeWorld.levels.map((lvl) => {
+        const num = typeof lvl === 'number' ? lvl : (lvl.levelNum || lvl.id);
+        let unlocked = false;
+        if (num === 1) {
+          unlocked = true;
+        } else {
+          const prevStars = levelProgress[num - 1];
+          unlocked = prevStars !== undefined && prevStars > 0;
+        }
+        return {
+          levelNum: num,
+          stars: levelProgress[num] || (typeof lvl === 'object' ? lvl.stars : 0) || 0,
+          unlocked: (typeof lvl === 'object' && lvl.unlocked !== undefined) ? lvl.unlocked : unlocked
+        };
+      });
+    }
+
+    // 2. If activeWorld contains levelRange array [start, end] or fallback to default [1, 10]
+    const levelRange = Array.isArray(activeWorld.levelRange)
+      ? activeWorld.levelRange
+      : (typeof activeWorld.levelRange === 'string' && activeWorld.levelRange.includes('-')
+          ? activeWorld.levelRange.split('-').map(Number)
+          : [1, 10]);
+
+    const [start, end] = levelRange;
     const list = [];
     for (let i = start; i <= end; i++) {
       let unlocked = false;
-      if (i === 1) {
-        unlocked = true;
+      if (i === start) {
+        unlocked = activeWorld.unlocked !== undefined ? activeWorld.unlocked : true;
       } else {
         const prevStars = levelProgress[i - 1];
         unlocked = prevStars !== undefined && prevStars > 0;
@@ -135,20 +164,34 @@ export default function MindReaderApp2({ onBack }) {
   // World Carousel Handlers
   const nextWorld = () => {
     if (activeWorldIndex < worlds.length - 1) {
-      setActiveWorldIndex(activeWorldIndex + 1);
+      const nextIdx = activeWorldIndex + 1;
+      setActiveWorldIndex(nextIdx);
+      if (worlds[nextIdx]) setActiveWorldId(worlds[nextIdx].worldId);
     }
   };
 
   const prevWorld = () => {
     if (activeWorldIndex > 0) {
-      setActiveWorldIndex(activeWorldIndex - 1);
+      const prevIdx = activeWorldIndex - 1;
+      setActiveWorldIndex(prevIdx);
+      if (worlds[prevIdx]) setActiveWorldId(worlds[prevIdx].worldId);
     }
+  };
+
+  const handleSelectWorld = (world) => {
+    if (!world.unlocked) return;
+    setActiveWorldId(world.worldId);
+    const idx = worlds.findIndex(w => w.worldId === world.worldId);
+    if (idx !== -1) setActiveWorldIndex(idx);
+    setPhase('levels');
   };
 
   // Start Level API
   const handleStartLevel = async (lvl) => {
     setLoading(true);
     setErrorMsg('');
+    setWrongGuessFeedback('');
+    setGuessSearchQuery('');
     try {
       const token = authGetToken();
       const headers = { 'Content-Type': 'application/json' };
@@ -164,13 +207,17 @@ export default function MindReaderApp2({ onBack }) {
         const data = await res.json();
         setGameId(data.gameId);
         setLevelNum(data.levelNum);
+        if (data.worldId) {
+          setActiveWorldId(data.worldId);
+          const idx = worlds.findIndex(w => w.worldId === data.worldId);
+          if (idx !== -1) setActiveWorldIndex(idx);
+        }
         setClue(data.clue);
         setClueIndex(data.clueIndex);
         setRevealedClues([data.clue]);
         setLocalClueIndex(0);
         setHintsRemaining(data.hintsRemaining);
         setCluesExhausted(false);
-        setThoughtGuesses(['', '', '', '']);
         setShowHintOverlay(false);
         setHintText('');
         setGuessQuery('');
@@ -190,6 +237,7 @@ export default function MindReaderApp2({ onBack }) {
 
   // Next Clue API
   const handleNextClue = async () => {
+    setWrongGuessFeedback('');
     if (localClueIndex < revealedClues.length - 1) {
       setLocalClueIndex(localClueIndex + 1);
       setClue(revealedClues[localClueIndex + 1]);
@@ -247,9 +295,11 @@ export default function MindReaderApp2({ onBack }) {
   };
 
   // Submit Guess API
-  const handleSubmitGuess = async () => {
-    if (!guessQuery.trim()) return;
+  const handleSubmitGuess = async (selectedConceptName) => {
+    const guessToSubmit = selectedConceptName || guessQuery;
+    if (!guessToSubmit || !guessToSubmit.trim()) return;
     setLoading(true);
+    setWrongGuessFeedback('');
     try {
       const token = authGetToken();
       const headers = { 'Content-Type': 'application/json' };
@@ -258,27 +308,43 @@ export default function MindReaderApp2({ onBack }) {
       const res = await fetch(`${API}/api/mindreader/submit-guess`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ gameId, guess: guessQuery })
+        body: JSON.stringify({ gameId, guess: guessToSubmit })
       });
 
       if (res.ok) {
         const data = await res.json();
         setIsCorrectGuess(data.correct);
-        setStarsEarned(data.starsEarned);
-        setXpEarned(data.xpEarned);
-        setMrrChange(data.reward.mrrChange);
-        setActualConcept(data.actualConcept);
+        setStarsEarned(data.starsEarned || 0);
+        setXpEarned(data.xpEarned || 0);
+        setMrrChange(data.reward ? data.reward.mrrChange : 0);
         setEducationalInfo(data.educationalInfo);
-        
-        if (data.correct) {
-          setAvatarExpression('victory');
-          setTenaliSpeech(`Outstanding! You correctly guessed "${data.actualConcept}"!`);
-        } else {
-          setAvatarExpression('loss');
-          setTenaliSpeech(`Alas! The correct concept was "${data.actualConcept}".`);
-        }
         setShowGuess(false);
-        setPhase('gameover');
+
+        if (data.correct) {
+          // Unlock level locally
+          setLevelProgress(prev => ({
+            ...prev,
+            [levelNum]: Math.max(prev[levelNum] || 0, data.starsEarned || 1)
+          }));
+          if (data.xpEarned) {
+            setXp(prev => prev + data.xpEarned);
+          }
+          setActualConcept(data.actualConcept || guessToSubmit);
+          setAvatarExpression('victory');
+          setTenaliSpeech(`Outstanding! You correctly guessed "${data.actualConcept || guessToSubmit}"!`);
+          setPhase('gameover');
+        } else {
+          if (data.cluesRemaining) {
+            // Keep in playing phase and allow trying next clue / guessing again
+            setWrongGuessFeedback("❌ Not quite! That's not the secret concept. Try reading another clue or guessing again!");
+          } else {
+            // All clues exhausted -> End level & show revision card (without revealing answer name)
+            setActualConcept('');
+            setAvatarExpression('loss');
+            setTenaliSpeech("All 5 clues are completed. Review the educational revision card below!");
+            setPhase('gameover');
+          }
+        }
       }
     } catch (err) {
       console.error(err);
@@ -512,7 +578,7 @@ export default function MindReaderApp2({ onBack }) {
         </div>
       )}
 
-      {/* ─── PHASE 4: GAMEPLAY BOARD (WORD CREATOR INSPIRATION) ────────────────── */}
+      {/* ─── PHASE 4: GAMEPLAY BOARD ────────────────── */}
       {phase === 'playing' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '4px', width: '100%', maxWidth: '420px' }}>
           {/* Top Control Header Bar */}
@@ -547,52 +613,29 @@ export default function MindReaderApp2({ onBack }) {
             </span>
           </div>
 
-          {/* Focused Italic Clue Box (No Tip Text) */}
-          <div style={{ margin: '15px auto 25px auto', maxWidth: '400px', textAlign: 'center' }}>
+          {/* Focused Italic Clue Box */}
+          <div style={{ margin: '15px auto 20px auto', maxWidth: '400px', textAlign: 'center' }}>
             <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '1.48rem', lineHeight: '1.45', color: 'var(--clr-text)', margin: 0 }}>
-              "{clue}"
+              "{clue || 'I am thinking of a mathematical concept...'}"
             </p>
-          </div>
-
-          {/* 4 Thought Input Fields in a Compact 2x2 Grid Layout */}
-          <div style={{
-            width: '100%',
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '8px',
-            margin: '10px 0 15px 0'
-          }}>
-            {thoughtGuesses.map((val, idx) => (
-              <input
-                key={idx}
-                type="text"
-                style={{
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  padding: '10px 14px',
-                  background: 'var(--clr-input)',
-                  border: '1.5px solid var(--clr-border)',
-                  borderRadius: '10px',
-                  color: 'var(--clr-text)',
-                  fontSize: '0.88rem',
-                  outline: 'none'
-                }}
-                placeholder={`Topic ${idx + 1}...`}
-                value={val}
-                onChange={(e) => handleThoughtChange(idx, e.target.value)}
-              />
-            ))}
           </div>
 
           {/* Clue Hint details popup if requested */}
           {showHintOverlay && (
-            <div className="feedback correct" style={{ width: '100%', padding: '6px', margin: '4px 0', textAlign: 'center', fontSize: '0.85rem' }}>
+            <div className="feedback correct" style={{ width: '100%', padding: '8px 12px', margin: '6px 0', textAlign: 'center', fontSize: '0.85rem', borderRadius: '10px' }}>
               💡 Hint: <strong>{hintText}</strong>
             </div>
           )}
 
+          {/* Wrong Guess Feedback Banner */}
+          {wrongGuessFeedback && (
+            <div style={{ width: '100%', padding: '10px 14px', margin: '8px 0', textAlign: 'center', fontSize: '0.85rem', background: 'rgba(231, 76, 60, 0.15)', border: '1px solid #e74c3c', color: '#e74c3c', borderRadius: '10px', fontWeight: '600' }}>
+              {wrongGuessFeedback}
+            </div>
+          )}
+
           {/* Primary Action Button (Centered) */}
-          <div style={{ textAlign: 'center', margin: '14px 0 8px 0' }}>
+          <div style={{ textAlign: 'center', margin: '18px 0 12px 0' }}>
             <button 
               className="gm-primary-action-btn" 
               style={{
@@ -614,7 +657,7 @@ export default function MindReaderApp2({ onBack }) {
           </div>
 
           {/* Footer Navigation Row */}
-          <div className="gm-footer-nav" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '10px', borderTop: '1px solid var(--clr-border)' }}>
+          <div className="gm-footer-nav" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '10px', borderTop: '1px solid var(--clr-border)', paddingTop: '10px' }}>
             <button 
               style={{
                 ...outlineBtnStyle,
@@ -642,53 +685,116 @@ export default function MindReaderApp2({ onBack }) {
             </button>
           </div>
 
-          {/* Fullscreen Free-text Guess Modal (Compact) */}
-          {showGuess && (
-            <div className="gm-guess-modal" style={{ padding: '20px', background: 'var(--clr-card)', border: '1px solid var(--clr-border)' }}>
-              <h3 style={{ margin: '20px 0 10px 0', color: 'var(--clr-text)' }}>Type Your Guess</h3>
-              <p className="subtitle" style={{ fontSize: '0.88rem', margin: 0, color: 'var(--clr-text-soft)' }}>Warning: Only 1 final attempt allowed!</p>
+          {/* Searchable Concept Selector Modal */}
+          {showGuess && (() => {
+            const activeWorldObj = worlds.find(w => w.worldId === activeWorldId) || worlds[activeWorldIndex] || worlds[0];
+            const activeWorldConcepts = activeWorldObj?.concepts || [];
+            const filteredConcepts = activeWorldConcepts.filter(c => c.name.toLowerCase().includes(guessSearchQuery.toLowerCase().trim()));
 
-              <input
-                className="gm-search-input"
-                type="text"
-                style={{ margin: '20px 0 15px 0', padding: '12px 16px', fontSize: '1rem', width: '100%', maxWidth: '400px', background: 'var(--clr-input)', border: '1.5px solid var(--clr-border)', color: 'var(--clr-text)' }}
-                placeholder="Type your guess here..."
-                value={guessQuery}
-                onChange={(e) => setGuessQuery(e.target.value)}
-                autoFocus
-              />
+            return (
+              <div className="gm-guess-modal" style={{ padding: '20px', background: 'var(--clr-card)', border: '1px solid var(--clr-border)', borderRadius: '16px', maxWidth: '420px', margin: '0 auto' }}>
+                <h3 style={{ margin: '10px 0 6px 0', color: 'var(--clr-text)', textAlign: 'center', fontFamily: 'var(--font-display)' }}>
+                  Select Concept
+                </h3>
+                <p className="subtitle" style={{ fontSize: '0.84rem', margin: '0 0 15px 0', color: 'var(--clr-text-soft)', textAlign: 'center' }}>
+                  Which concept from {activeWorldObj?.worldName || 'this world'} is Tenali thinking of?
+                </p>
 
-              <div style={{ display: 'flex', gap: '12px', width: '100%', maxWidth: '400px', marginTop: '20px' }}>
-                <button className="btn-outline" style={{ flex: 1, padding: '10px', fontSize: '0.9rem' }} onClick={() => {
-                  setShowGuess(false);
-                  setGuessQuery('');
+                <input
+                  className="gm-search-input"
+                  type="text"
+                  style={{
+                    margin: '0 0 15px 0',
+                    padding: '10px 14px',
+                    fontSize: '0.9rem',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    background: 'var(--clr-input)',
+                    border: '1.5px solid var(--clr-border)',
+                    borderRadius: '10px',
+                    color: 'var(--clr-text)',
+                    outline: 'none'
+                  }}
+                  placeholder={`Search ${activeWorldObj?.worldName || 'world'} concepts...`}
+                  value={guessSearchQuery}
+                  onChange={(e) => setGuessSearchQuery(e.target.value)}
+                  autoFocus
+                />
+
+                <div style={{
+                  maxHeight: '220px',
+                  overflowY: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                  paddingRight: '4px',
+                  margin: '10px 0 15px 0'
                 }}>
-                  &larr; Close
-                </button>
-                <button 
-                  className="btn-primary" 
-                  style={{ flex: 1, padding: '10px', fontSize: '0.9rem', background: 'var(--clr-accent)', color: 'var(--clr-text)' }} 
-                  disabled={!guessQuery.trim()}
-                  onClick={handleSubmitGuess}
-                >
-                  Confirm Guess
-                </button>
+                  {filteredConcepts.map((conceptObj) => (
+                    <button
+                      key={conceptObj.id}
+                      style={{
+                        padding: '10px 14px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid var(--clr-border)',
+                        borderRadius: '10px',
+                        color: 'var(--clr-text)',
+                        fontSize: '0.9rem',
+                        fontWeight: '600',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = 'var(--clr-accent)';
+                        e.currentTarget.style.background = 'var(--clr-accent-soft)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = 'var(--clr-border)';
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                      }}
+                      onClick={() => handleSubmitGuess(conceptObj.name)}
+                    >
+                      <span>{conceptObj.name}</span>
+                      <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>&rarr;</span>
+                    </button>
+                  ))}
+                  {filteredConcepts.length === 0 && (
+                    <div style={{ textAlign: 'center', padding: '15px', color: 'var(--clr-text-soft)', fontSize: '0.85rem' }}>
+                      No concepts found matching "{guessSearchQuery}"
+                    </div>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', gap: '12px', width: '100%', marginTop: '10px' }}>
+                  <button className="btn-outline" style={{ flex: 1, padding: '10px', fontSize: '0.88rem' }} onClick={() => {
+                    setShowGuess(false);
+                    setGuessSearchQuery('');
+                  }}>
+                    &larr; Cancel
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
       )}
 
-      {/* ─── PHASE 5: GAMEOVER RESULT SCREEN (SCROLL-FREE REFRACTORED RESULTS) ─── */}
+      {/* ─── PHASE 5: GAMEOVER RESULT SCREEN ─── */}
       {phase === 'gameover' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '5px', width: '100%', maxWidth: '420px', padding: '10px 15px' }}>
           {/* Centered Serif Heading */}
           <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--clr-text)', fontSize: '2.2rem', margin: '20px 0 4px 0', textAlign: 'center', fontWeight: 'bold' }}>
-            {isCorrectGuess ? '🎉 Correct!' : '❌ Game Over'}
+            {isCorrectGuess ? '🎉 Correct!' : 'Level Complete'}
           </h2>
-          <p style={{ fontSize: '0.95rem', color: 'var(--clr-text-soft)', margin: '0 0 10px 0', textAlign: 'center' }}>
-            The concept was <strong style={{ color: 'var(--clr-text)' }}>"{actualConcept}"</strong>
-          </p>
+          {isCorrectGuess && actualConcept && (
+            <p style={{ fontSize: '0.95rem', color: 'var(--clr-text-soft)', margin: '0 0 10px 0', textAlign: 'center' }}>
+              The concept was <strong style={{ color: 'var(--clr-text)' }}>"{actualConcept}"</strong>
+            </p>
+          )}
 
           {/* Stars Display */}
           {isCorrectGuess && (
@@ -703,14 +809,16 @@ export default function MindReaderApp2({ onBack }) {
           )}
 
           {/* Reward Badges */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', margin: '15px 0' }}>
-            <span className="gm-pill-badge" style={{ background: 'var(--clr-accent-soft)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: 'var(--clr-text-soft)' }}>
-              XP: <strong style={{ color: 'var(--clr-accent)' }}>+{xpEarned}</strong>
-            </span>
-            <span className="gm-pill-badge" style={{ background: 'var(--clr-accent-soft)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: 'var(--clr-text-soft)' }}>
-              Rating: <strong style={{ color: 'var(--clr-accent)' }}>{mrrChange >= 0 ? `+${mrrChange}` : mrrChange}</strong>
-            </span>
-          </div>
+          {isCorrectGuess && (
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', margin: '15px 0' }}>
+              <span className="gm-pill-badge" style={{ background: 'var(--clr-accent-soft)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: 'var(--clr-text-soft)' }}>
+                XP: <strong style={{ color: 'var(--clr-accent)' }}>+{xpEarned}</strong>
+              </span>
+              <span className="gm-pill-badge" style={{ background: 'var(--clr-accent-soft)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: 'var(--clr-text-soft)' }}>
+                Rating: <strong style={{ color: 'var(--clr-accent)' }}>{mrrChange >= 0 ? `+${mrrChange}` : mrrChange}</strong>
+              </span>
+            </div>
+          )}
 
           {/* Premium Charcoal Revision Card */}
           {educationalInfo && (
@@ -727,15 +835,19 @@ export default function MindReaderApp2({ onBack }) {
                 Revision Card
               </h4>
 
-              <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--clr-text-soft)', letterSpacing: '0.05em', fontWeight: 'bold' }}>Definition</div>
-                <div style={{ color: 'var(--clr-text)', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.definition}</div>
-              </div>
+              {educationalInfo.definition && (
+                <div style={{ marginBottom: '10px' }}>
+                  <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--clr-text-soft)', letterSpacing: '0.05em', fontWeight: 'bold' }}>Definition</div>
+                  <div style={{ color: 'var(--clr-text)', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.definition}</div>
+                </div>
+              )}
 
-              <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--clr-text-soft)', letterSpacing: '0.05em', fontWeight: 'bold' }}>Examples</div>
-                <div style={{ color: 'var(--clr-text)', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.examples.join(', ')}</div>
-              </div>
+              {educationalInfo.examples && (
+                <div style={{ marginBottom: '10px' }}>
+                  <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--clr-text-soft)', letterSpacing: '0.05em', fontWeight: 'bold' }}>Examples</div>
+                  <div style={{ color: 'var(--clr-text)', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{Array.isArray(educationalInfo.examples) ? educationalInfo.examples.join(', ') : educationalInfo.examples}</div>
+                </div>
+              )}
 
               {educationalInfo.commonMistakes && (
                 <div>
@@ -746,25 +858,32 @@ export default function MindReaderApp2({ onBack }) {
             </div>
           )}
 
-          {/* Centered Proceed Button */}
-          <div style={{ textAlign: 'center', marginTop: '15px', width: '100%' }}>
+          {/* Action Buttons */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px', width: '100%' }}>
+            {isCorrectGuess && (
+              <button 
+                style={{
+                  background: 'var(--clr-accent)',
+                  color: 'var(--clr-text)',
+                  borderRadius: '12px',
+                  border: 'none',
+                  padding: '12px 32px',
+                  fontSize: '0.95rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  width: '100%',
+                  boxSizing: 'border-box'
+                }}
+                onClick={() => handleStartLevel(levelNum + 1)}
+              >
+                Play Next Level &rarr;
+              </button>
+            )}
             <button 
-              style={{
-                background: 'var(--clr-accent)',
-                color: 'var(--clr-text)',
-                borderRadius: '12px',
-                border: 'none',
-                padding: '12px 32px',
-                fontSize: '0.95rem',
-                fontWeight: '700',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                width: '100%',
-                boxSizing: 'border-box'
-              }}
+              style={outlineBtnStyle}
               onClick={() => setPhase('levels')}
             >
-              Next Level Map &rarr;
+              &larr; Back to Map
             </button>
           </div>
         </div>

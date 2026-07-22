@@ -5,7 +5,7 @@
     "name": "Number Kingdom",
     "worldName": "Number Kingdom",
     "icon": "🔢",
-    "description": "Master the fundamentals — addition, multiplication, decimals, fractions, and the building blocks of all mathematics.",
+    "isUnlocked": true,
     "unlockRequirements": "Available from the start",
     "requiredUnlockXP": 0,
     "themeColor": "#e8864a"

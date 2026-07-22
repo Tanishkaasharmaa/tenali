@@ -60,7 +60,7 @@ export default function LevelPathView() {
                   !completed && unlocked ? 'unlocked' : '',
                   !unlocked   ? 'locked'   : ''
                 ].filter(Boolean).join(' ')}
-                onClick={() => unlocked && !loading && startLevel(lvl.id)}
+                onClick={() => { if (unlocked && !loading) { console.log('[DEBUG Step 1] Level clicked - lvl.id:', lvl.id); startLevel(lvl.id); } }}
                 role="button"
                 tabIndex={unlocked ? 0 : -1}
                 onKeyDown={e => {

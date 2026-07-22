@@ -3309,5 +3309,285 @@
         "Explain the difference between 'solve' and 'evaluate'."
       ]
     }
+  },
+  "arithmetic": {
+    "id": "arithmetic",
+    "conceptId": "arithmetic",
+    "name": "Arithmetic",
+    "subject": "Arithmetic Kingdom",
+    "clues": [
+      "I help you solve everyday number problems.",
+      "You have used me since your first maths class.",
+      "I include different ways of working with numbers.",
+      "I am the foundation of almost every maths topic.",
+      "I include addition, subtraction, multiplication and division."
+    ],
+    "thoughts": [
+      "I help you solve everyday number problems.",
+      "You have used me since your first maths class.",
+      "I include different ways of working with numbers.",
+      "I am the foundation of almost every maths topic.",
+      "I include addition, subtraction, multiplication and division."
+    ],
+    "hints": [
+      "Think about the basic operations of mathematics."
+    ],
+    "educationalInfo": {
+      "definition": "The elementary branch of mathematics that deals with calculations involving numbers using basic operations.",
+      "examples": ["15 + 25 = 40", "100 ÷ 4 = 25"],
+      "commonMistakes": "Not paying attention to operational order (BODMAS/PEMDAS) in long calculations."
+    }
+  },
+  "percentage": {
+    "id": "percentage",
+    "conceptId": "percentage",
+    "name": "Percentages",
+    "subject": "Arithmetic Kingdom",
+    "clues": [
+      "I tell how much of a whole you have.",
+      "Shops use me during discounts and sales.",
+      "Exam marks are often written using me.",
+      "I mean \"out of every 100.\"",
+      "I am written using the % symbol."
+    ],
+    "thoughts": [
+      "I tell how much of a whole you have.",
+      "Shops use me during discounts and sales.",
+      "Exam marks are often written using me.",
+      "I mean \"out of every 100.\"",
+      "I am written using the % symbol."
+    ],
+    "hints": [
+      "Think about discounts and marks."
+    ],
+    "educationalInfo": {
+      "definition": "A rate, number, or amount in each hundred; a fraction expressed as a portion of 100.",
+      "examples": ["50% = 50/100 = 0.5", "20% discount on $50 = $10 off"],
+      "commonMistakes": "Forgetting to divide by 100 when converting percentage to a decimal."
+    }
+  },
+  "ratio": {
+    "id": "ratio",
+    "conceptId": "ratio",
+    "name": "Ratio",
+    "subject": "Arithmetic Kingdom",
+    "clues": [
+      "I compare two quantities.",
+      "Recipes often use me.",
+      "Maps and scale drawings also use me.",
+      "I tell how much of one thing there is compared to another.",
+      "I am written using the : symbol."
+    ],
+    "thoughts": [
+      "I compare two quantities.",
+      "Recipes often use me.",
+      "Maps and scale drawings also use me.",
+      "I tell how much of one thing there is compared to another.",
+      "I am written using the : symbol."
+    ],
+    "hints": [
+      "Think about comparing two quantities."
+    ],
+    "educationalInfo": {
+      "definition": "The quantitative relation between two amounts showing the number of times one value contains or is contained within the other.",
+      "examples": ["Ratio of flour to sugar is 2:1", "Scale 1:1000 on a map"],
+      "commonMistakes": "Adding ratios together directly or reversing the order of terms."
+    }
+  },
+  "profit_loss": {
+    "id": "profit_loss",
+    "conceptId": "profit_loss",
+    "name": "Profit & Loss",
+    "subject": "Arithmetic Kingdom",
+    "clues": [
+      "I am about buying and selling.",
+      "Shopkeepers use me every day.",
+      "Sometimes you earn money, sometimes you lose money.",
+      "I compare the cost price and selling price.",
+      "I use CP and SP to find the result."
+    ],
+    "thoughts": [
+      "I am about buying and selling.",
+      "Shopkeepers use me every day.",
+      "Sometimes you earn money, sometimes you lose money.",
+      "I compare the cost price and selling price.",
+      "I use CP and SP to find the result."
+    ],
+    "hints": [
+      "Think about business and money."
+    ],
+    "educationalInfo": {
+      "definition": "Financial metric showing gain (Profit = SP - CP) or loss (Loss = CP - SP) incurred in commercial transactions.",
+      "examples": ["Cost Price = $10, Selling Price = $15 → Profit = $5", "Cost Price = $20, Selling Price = $18 → Loss = $2"],
+      "commonMistakes": "Calculating Profit% on Selling Price instead of Cost Price."
+    }
+  },
+  "gst": {
+    "id": "gst",
+    "conceptId": "gst",
+    "name": "GST",
+    "subject": "Arithmetic Kingdom",
+    "clues": [
+      "I am added when you buy many products.",
+      "Governments collect me.",
+      "You can find me on bills and receipts.",
+      "I am a tax on goods and services.",
+      "My amount is usually shown as a %."
+    ],
+    "thoughts": [
+      "I am added when you buy many products.",
+      "Governments collect me.",
+      "You can find me on bills and receipts.",
+      "I am a tax on goods and services.",
+      "My amount is usually shown as a %."
+    ],
+    "hints": [
+      "Think about the tax printed on bills."
+    ],
+    "educationalInfo": {
+      "definition": "Goods and Services Tax (GST) is an indirect tax levied on the supply of goods and services.",
+      "examples": ["18% GST on a $100 product adds $18 to total bill ($118 total)"],
+      "commonMistakes": "Confusing exclusive GST (tax added on top) with inclusive GST (tax already included in price)."
+    }
+  },
+  "banking": {
+    "id": "banking",
+    "conceptId": "banking",
+    "name": "Recurring Deposit (RD)",
+    "subject": "Arithmetic Kingdom",
+    "clues": [
+      "I help people save money regularly.",
+      "Banks offer me.",
+      "You deposit the same amount every month.",
+      "I earn interest over time.",
+      "People often call me RD."
+    ],
+    "thoughts": [
+      "I help people save money regularly.",
+      "Banks offer me.",
+      "You deposit the same amount every month.",
+      "I earn interest over time.",
+      "People often call me RD."
+    ],
+    "hints": [
+      "Think about monthly savings."
+    ],
+    "educationalInfo": {
+      "definition": "A banking scheme where an individual deposits a fixed monthly amount for a specific period and earns compounding interest.",
+      "examples": ["Depositing $100 every month for 12 months at 6% per annum interest"],
+      "commonMistakes": "Calculating interest as if the full total was deposited on day one."
+    }
+  },
+  "shares_dividends": {
+    "id": "shares_dividends",
+    "conceptId": "shares_dividends",
+    "name": "Shares & Dividends",
+    "subject": "Arithmetic Kingdom",
+    "clues": [
+      "I am connected with companies.",
+      "People buy a small part of a business through me.",
+      "Investors use me to grow their money.",
+      "Companies may share part of their profit with owners.",
+      "My short forms include EPS and DPS."
+    ],
+    "thoughts": [
+      "I am connected with companies.",
+      "People buy a small part of a business through me.",
+      "Investors use me to grow their money.",
+      "Companies may share part of their profit with owners.",
+      "My short forms include EPS and DPS."
+    ],
+    "hints": [
+      "Think about the stock market."
+    ],
+    "educationalInfo": {
+      "definition": "Shares represent units of ownership in a corporation; Dividends are profit distributions paid by companies to shareholders.",
+      "examples": ["Owning 100 shares of a company paying $2 dividend per share = $200 income"],
+      "commonMistakes": "Confusing Nominal Value (Face Value) of a share with Market Value."
+    }
+  },
+  "speed_distance_time": {
+    "id": "speed_distance_time",
+    "conceptId": "speed_distance_time",
+    "name": "Speed, Distance & Time",
+    "subject": "Arithmetic Kingdom",
+    "clues": [
+      "I describe how people and vehicles travel.",
+      "Cars, trains and planes all use me.",
+      "Three quantities are connected in me.",
+      "If you know any two, you can find the third.",
+      "I use the formula Speed = Distance ÷ Time."
+    ],
+    "thoughts": [
+      "I describe how people and vehicles travel.",
+      "Cars, trains and planes all use me.",
+      "Three quantities are connected in me.",
+      "If you know any two, you can find the third.",
+      "I use the formula Speed = Distance ÷ Time."
+    ],
+    "hints": [
+      "Think about travelling."
+    ],
+    "educationalInfo": {
+      "definition": "The kinematic relationship relating motion: Speed = Distance / Time, Distance = Speed × Time, Time = Distance / Speed.",
+      "examples": ["Traveling 120 km in 2 hours = Speed of 60 km/h"],
+      "commonMistakes": "Inconsistent units (e.g., mixing km/h with seconds without conversion)."
+    }
+  },
+  "standard_form": {
+    "id": "standard_form",
+    "conceptId": "standard_form",
+    "name": "Standard Form",
+    "subject": "Arithmetic Kingdom",
+    "clues": [
+      "I make very large or very small numbers easier to write.",
+      "Scientists use me very often.",
+      "I help avoid writing long strings of zeros.",
+      "I use powers of ten.",
+      "I am written as a × 10ⁿ."
+    ],
+    "thoughts": [
+      "I make very large or very small numbers easier to write.",
+      "Scientists use me very often.",
+      "I help avoid writing long strings of zeros.",
+      "I use powers of ten.",
+      "I am written as a × 10ⁿ."
+    ],
+    "hints": [
+      "Think about scientific notation."
+    ],
+    "educationalInfo": {
+      "definition": "A system of writing numbers using powers of 10 in the format a × 10ⁿ, where 1 ≤ a < 10 and n is an integer.",
+      "examples": ["300,000,000 = 3 × 10⁸", "0.00005 = 5 × 10⁻⁵"],
+      "commonMistakes": "Writing the coefficient 'a' as less than 1 or 10 or greater (e.g., 35 × 10⁴ instead of 3.5 × 10⁵)."
+    }
+  },
+  "number_bases": {
+    "id": "number_bases",
+    "conceptId": "number_bases",
+    "name": "Number Bases",
+    "subject": "Arithmetic Kingdom",
+    "clues": [
+      "I change the way numbers are written.",
+      "Computers use one of my systems every day.",
+      "I am not always based on ten.",
+      "Binary, octal and hexadecimal belong to me.",
+      "My common bases are 2, 8, 10 and 16."
+    ],
+    "thoughts": [
+      "I change the way numbers are written.",
+      "Computers use one of my systems every day.",
+      "I am not always based on ten.",
+      "Binary, octal and hexadecimal belong to me.",
+      "My common bases are 2, 8, 10 and 16."
+    ],
+    "hints": [
+      "Think about different counting systems used in mathematics and computers."
+    ],
+    "educationalInfo": {
+      "definition": "Positional numeral systems defined by a base number of unique digits (Base-2 Binary, Base-8 Octal, Base-10 Decimal, Base-16 Hexadecimal).",
+      "examples": ["Binary 1011₂ = Decimal 11", "Hexadecimal 1A₁₆ = Decimal 26"],
+      "commonMistakes": "Using digits equal to or greater than the base (e.g., using digit '2' in Base-2)."
+    }
   }
 }

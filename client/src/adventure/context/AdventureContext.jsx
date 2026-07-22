@@ -58,11 +58,17 @@ export function AdventureProvider({ children }) {
     },
 
     startLevel: async (levelId) => {
+      console.log('[DEBUG Step 2] startLevel called with levelId:', levelId);
       dispatch({ type: 'SET_LOADING', payload: true });
       try {
+        console.log('[DEBUG Step 3] Calling API: POST /api/adventure/start', { levelId });
         const sessionData = await adventureApi.startLevel(levelId);
+        console.log('[DEBUG Step 4] API response received:', JSON.stringify(sessionData));
+        console.log('[DEBUG Step 5] firstClue value:', sessionData && sessionData.firstClue);
         dispatch({ type: 'START_SESSION', payload: sessionData });
+        console.log('[DEBUG Step 6] START_SESSION dispatched');
       } catch (err) {
+        console.error('[DEBUG ERROR] startLevel failed:', err.message);
         dispatch({ type: 'SET_ERROR', payload: err.message });
       }
     },

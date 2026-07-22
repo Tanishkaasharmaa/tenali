@@ -37,17 +37,18 @@ class AdventureProgressService {
    */
   normalizeProgress(raw) {
     if (!raw || typeof raw !== 'object') return { ...DEFAULT_PROGRESS };
+    // Start with defaults and overlay provided values
+    const unlocked = Array.isArray(raw.unlockedWorlds) && raw.unlockedWorlds.length > 0
+      ? migrateWorldIds(raw.unlockedWorlds)
+      : config.DEFAULT_UNLOCKED_WORLDS;
+    // Ensure default worlds are always present
+    const finalUnlocked = Array.from(new Set([...config.DEFAULT_UNLOCKED_WORLDS, ...unlocked]));
     return {
-      xp:              typeof raw.xp          === 'number' ? raw.xp : 0,
-      totalStars:      typeof raw.totalStars  === 'number' ? raw.totalStars : 0,
+      xp: typeof raw.xp === 'number' ? raw.xp : 0,
+      totalStars: typeof raw.totalStars === 'number' ? raw.totalStars : 0,
       completedLevels: Array.isArray(raw.completedLevels) ? raw.completedLevels : [],
-      // Migrate stale world IDs from old versions
-      unlockedWorlds:  migrateWorldIds(
-        Array.isArray(raw.unlockedWorlds) && raw.unlockedWorlds.length > 0
-          ? raw.unlockedWorlds
-          : config.DEFAULT_UNLOCKED_WORLDS
-      ),
-      levelStars:  raw.levelStars && typeof raw.levelStars === 'object' ? raw.levelStars : {},
+      unlockedWorlds: finalUnlocked,
+      levelStars: raw.levelStars && typeof raw.levelStars === 'object' ? raw.levelStars : {},
       highestScore: typeof raw.highestScore === 'number' ? raw.highestScore : 0
     };
   }
