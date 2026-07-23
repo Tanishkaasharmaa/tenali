@@ -9457,6 +9457,50 @@ try {
   console.error('[GuessMind] Error loading configuration files:', err);
 }
 
+// Seeded random number generator
+function seededRandom(seed) {
+  const x = Math.sin(seed++) * 10000;
+  return x - Math.floor(x);
+}
+
+// Seeded shuffle of array based on string seed
+function seededShuffle(array, seedString) {
+  let seed = 0;
+  for (let i = 0; i < seedString.length; i++) {
+    seed += seedString.charCodeAt(i);
+  }
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const r = seededRandom(seed + i);
+    const j = Math.floor(r * (i + 1));
+    const temp = shuffled[i];
+    shuffled[i] = shuffled[j];
+    shuffled[j] = temp;
+  }
+  return shuffled;
+}
+
+// Get randomized levelsConfig matching the seed string
+function getRandomizedLevelsConfig(seedString) {
+  const randomized = [];
+  const worlds = [...new Set(levelsConfig.map(l => l.worldId))];
+  
+  for (const worldId of worlds) {
+    const worldLevels = levelsConfig.filter(l => l.worldId === worldId);
+    const worldConceptIds = worldLevels.map(l => l.conceptId);
+    const shuffledConceptIds = seededShuffle(worldConceptIds, seedString + '_' + worldId);
+    
+    worldLevels.forEach((l, idx) => {
+      randomized.push({
+        ...l,
+        conceptId: shuffledConceptIds[idx]
+      });
+    });
+  }
+  
+  return randomized;
+}
+
 // In-memory guess mind sessions
 const guessMindSessions = new Map();
 
@@ -9801,6 +9845,9 @@ app.post('/api/game/guess', express.json(), async (req, res) => {
 app.get('/api/mindreader/worlds', async (req, res) => {
   try {
     const user = await getOptionalUser(req);
+    const seedString = user ? user.username : 'guest';
+    const activeLevelsConfig = getRandomizedLevelsConfig(seedString);
+
     let xp = 0;
     let unlockedWorlds = ['number_kingdom'];
     let levelProgressList = [];
@@ -9829,10 +9876,10 @@ app.get('/api/mindreader/worlds', async (req, res) => {
       const prevWorld = idx > 0 ? worldsConfig[idx - 1] : null;
       let prevWorldCompleted = false;
       if (prevWorld) {
-        const prevWorldLevelNums = levelsConfig.filter(lvl => lvl.worldId === prevWorld.worldId).map(lvl => lvl.levelNum);
+        const prevWorldLevelNums = activeLevelsConfig.filter(lvl => lvl.worldId === prevWorld.worldId).map(lvl => lvl.levelNum);
         const prevWorldCompletedLevels = levelProgressList.filter(lp => prevWorldLevelNums.includes(lp.levelNum) && lp.starsEarned > 0);
         prevWorldCompleted = prevWorldCompletedLevels.length >= prevWorldLevelNums.length || prevWorldCompletedLevels.some(lp => {
-          const lvlObj = levelsConfig.find(l => l.levelNum === lp.levelNum && l.worldId === prevWorld.worldId);
+          const lvlObj = activeLevelsConfig.find(l => l.levelNum === lp.levelNum && l.worldId === prevWorld.worldId);
           return lvlObj && lvlObj.isBoss;
         });
       }
@@ -9840,7 +9887,7 @@ app.get('/api/mindreader/worlds', async (req, res) => {
       const isUnlocked = unlockedWorlds.includes(w.worldId) || w.worldId === 'number_kingdom' || w.requiredUnlockXP === 0 || (w.requiredUnlockXP > 0 && xp >= w.requiredUnlockXP) || prevWorldCompleted;
 
       // levels in this world
-      const levelsInWorld = levelsConfig.filter(lvl => lvl.worldId === w.worldId);
+      const levelsInWorld = activeLevelsConfig.filter(lvl => lvl.worldId === w.worldId);
       const levelNums = levelsInWorld.map(lvl => lvl.levelNum);
       const stars = levelProgressList
         .filter(lp => levelNums.includes(lp.levelNum))
@@ -9901,46 +9948,65 @@ app.get('/api/mindreader/worlds', async (req, res) => {
 
 app.post('/api/mindreader/start', express.json(), async (req, res) => {
   try {
-    const { levelNum } = req.body;
+    const { levelNum, worldId: requestedWorldId } = req.body;
     if (!levelNum) {
       return res.status(400).json({ error: 'Missing levelNum' });
     }
 
-    const level = levelsConfig.find(l => l.levelNum === parseInt(levelNum, 10));
-    if (!level) {
-      return res.status(400).json({ error: 'Invalid levelNum' });
-    }
-
-    const concept = conceptsConfig[level.conceptId];
-    if (!concept) {
-      return res.status(404).json({ error: 'Concept configuration not found' });
-    }
-
-    // Optional progression verification for authenticated users
     const user = await getOptionalUser(req);
+
+    // Determine which world this level belongs to
+    // levelNum is just a sequential completion counter — we need to know the world
+    // The client always sends worldId as context
+    const targetWorldId = requestedWorldId || 'number_kingdom';
+    const world = worldsConfig.find(w => w.worldId === targetWorldId);
+    if (!world) {
+      return res.status(400).json({ error: 'Invalid worldId' });
+    }
+
+    // Progression verification for authenticated users
     if (user) {
       const xp = user.xp || 0;
-      const world = worldsConfig.find(w => w.worldId === level.worldId);
-      if (world && xp < world.requiredUnlockXP) {
+      if (xp < world.requiredUnlockXP) {
         return res.status(403).json({ error: `World locked. Requires ${world.requiredUnlockXP} XP.` });
       }
 
-      if (level.levelNum > 1) {
-        const prevLevel = levelsConfig.find(l => l.levelNum === level.levelNum - 1);
-        if (prevLevel) {
-          const completedPrev = user.levelProgress.find(lp => lp.levelNum === prevLevel.levelNum && lp.starsEarned > 0);
-          if (!completedPrev) {
-            return res.status(403).json({ error: 'Previous level not completed.' });
-          }
+      // Sequential: level N requires level N-1 to be completed in this world
+      if (parseInt(levelNum, 10) > 1) {
+        const completedPrev = user.levelProgress.find(
+          lp => lp.levelNum === parseInt(levelNum, 10) - 1 && lp.starsEarned > 0
+        );
+        if (!completedPrev) {
+          return res.status(403).json({ error: 'Previous level not completed.' });
         }
       }
     }
 
+    // Get all concepts for this world
+    const worldLevels = levelsConfig.filter(l => l.worldId === targetWorldId);
+    const allConceptIds = [...new Set(worldLevels.map(l => l.conceptId))];
+
+    // Filter out already-completed concepts for this user
+    let availableConceptIds = allConceptIds;
+    // Use a world-scoped seed (not level-scoped) so all levels share the same consistent shuffled ordering.
+    // This prevents concept repetition: level 1 = shuffled[0], level 2 = shuffled[1], etc.
+    const shuffleSeed = (user ? user.username : 'guest') + '_' + targetWorldId;
+    availableConceptIds = seededShuffle(allConceptIds, shuffleSeed);
+
+    // Pick the concept for this level (index cycles through shuffled list)
+    const levelIdx = (parseInt(levelNum, 10) - 1) % availableConceptIds.length;
+    const selectedConceptId = availableConceptIds[levelIdx];
+    const concept = conceptsConfig[selectedConceptId];
+
+    if (!concept) {
+      return res.status(404).json({ error: 'Concept configuration not found' });
+    }
+
     const gameId = 'sess_gm_' + crypto.randomUUID().replace(/-/g, '');
-    const session = new GuessMindSession(gameId, level.levelNum, concept);
+    const session = new GuessMindSession(gameId, parseInt(levelNum, 10), concept);
     guessMindSessions.set(gameId, session);
 
-    console.log(`[GuessMind] Session ${gameId} started for level ${levelNum} with concept "${concept.name}"`);
+    console.log(`[GuessMind] Session ${gameId} started for level ${levelNum} (world: ${targetWorldId}) with concept "${concept.name}"`);
 
     const cluesList = (concept.thoughts && concept.thoughts.length > 0)
       ? concept.thoughts
@@ -9950,8 +10016,8 @@ app.post('/api/mindreader/start', express.json(), async (req, res) => {
 
     res.json({
       gameId,
-      levelNum: level.levelNum,
-      worldId: level.worldId,
+      levelNum: parseInt(levelNum, 10),
+      worldId: targetWorldId,
       clue: firstClue,
       clueIndex: 0,
       hintsRemaining: session.hintsRemaining
@@ -10039,10 +10105,12 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
   const normalizedConceptName = concept.name.trim().toLowerCase().replace(/\s+/g, '');
 
   const isCorrect = normalizedGuess === normalizedConceptName;
+  const cluesRemaining = session.clueIndex < 4;
   
   let starsEarned = 0;
   let mrrChange = -5;
   let xpEarned = 0;
+  let xpBreakdown = null;
   let user = null;
 
   try {
@@ -10064,24 +10132,59 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
     // Calculate MRR
     mrrChange = Math.max(5, 15 + (5 * (4 - session.clueIndex)) - (3 * session.hintsUsed));
 
-    // Calculate XP
+    // Calculate dynamic XP based on World/Kingdom Difficulty
+    let baseXp = 100;
+    const currentLevel = levelsConfig.find(l => l.levelNum === session.levelNum);
+    const worldId = currentLevel ? currentLevel.worldId : 'number_kingdom';
+    switch (worldId) {
+      case 'number_kingdom': baseXp = 100; break;
+      case 'arithmetic_kingdom': baseXp = 120; break;
+      case 'geometry_kingdom': baseXp = 140; break;
+      case 'algebra_kingdom': baseXp = 160; break;
+      case 'advanced_math': baseXp = 180; break;
+      case 'coordinate_calculus': baseXp = 200; break;
+      case 'data_logic': baseXp = 220; break;
+      default: baseXp = 100; break;
+    }
+
+    const isReplay = user && user.levelProgress.some(lp => lp.levelNum === session.levelNum);
+    const resolvedBaseXp = isReplay ? Math.round(baseXp * 0.3) : baseXp;
+
+    // Speed bonus
+    const speedBonus = Math.max(0, 50 - (session.clueIndex * 10));
+
+    // No-Hint bonus
+    const noHintBonus = session.hintsUsed === 0 ? 30 : 0;
+
+    // Win Streak logic
+    let streakBonus = 0;
+    let currentStreak = 0;
     if (user) {
-      const prevRecord = user.levelProgress.find(lp => lp.levelNum === session.levelNum);
-      if (prevRecord) {
-        xpEarned = 20; // Replaying level
-      } else {
-        xpEarned = 100; // First completion
-        // Perfect run bonus
-        if (starsEarned >= 3 && session.hintsUsed === 0) {
-          xpEarned += 50;
-        }
+      user.guessMindWinStreak = (user.guessMindWinStreak || 0) + 1;
+      currentStreak = user.guessMindWinStreak;
+      if (currentStreak >= 5) {
+        streakBonus = 50;
+      } else if (currentStreak === 4) {
+        streakBonus = 40;
+      } else if (currentStreak === 3) {
+        streakBonus = 30;
+      } else if (currentStreak === 2) {
+        streakBonus = 20;
       }
     } else {
-      xpEarned = 100; // Guest first completion
-      if (starsEarned >= 3 && session.hintsUsed === 0) {
-        xpEarned += 50;
-      }
+      currentStreak = 1; // Fallback for guest users
     }
+
+    xpEarned = resolvedBaseXp + speedBonus + noHintBonus + streakBonus;
+
+    xpBreakdown = {
+      baseXp: resolvedBaseXp,
+      speedBonus,
+      noHintBonus,
+      streakBonus,
+      streak: currentStreak,
+      isReplay
+    };
   }
 
   let finalMrr = 1000;
@@ -10090,6 +10193,9 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
 
   if (user) {
     authenticated = true;
+    if (!isCorrect && !cluesRemaining) {
+      user.guessMindWinStreak = 0; // Reset streak on level failure
+    }
     user.mrr = Math.max(1000, (user.mrr || 1000) + mrrChange);
     user.xp = (user.xp || 0) + xpEarned;
 
@@ -10144,7 +10250,6 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
     }).catch(err => console.error('[GuessMind] Failed to save analytic:', err));
   }
 
-  const cluesRemaining = session.clueIndex < 4;
   if (isCorrect || !cluesRemaining) {
     guessMindSessions.delete(gameId);
   }
@@ -10161,7 +10266,8 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
       mrrChange,
       mrr: finalMrr,
       xp: finalXp,
-      authenticated
+      authenticated,
+      xpBreakdown
     },
     educationalInfo: concept.educationalInfo
   });

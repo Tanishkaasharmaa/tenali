@@ -32,6 +32,7 @@ export default function MindReaderApp2({ onBack }) {
   const [mrr, setMrr] = useState(1000);
   const [unlockedWorlds, setUnlockedWorlds] = useState(['number_kingdom']);
   const [levelProgress, setLevelProgress] = useState({}); // levelNum -> starsEarned
+  const [thoughtGuesses, setThoughtGuesses] = useState(['', '', '', '']);
 
   // Active game navigation states
   const [worlds, setWorlds] = useState([]);
@@ -67,10 +68,27 @@ export default function MindReaderApp2({ onBack }) {
   const [mrrChange, setMrrChange] = useState(0);
   const [actualConcept, setActualConcept] = useState('');
   const [educationalInfo, setEducationalInfo] = useState(null);
+  const [xpBreakdown, setXpBreakdown] = useState(null);
 
   // Clues history navigation
   const [revealedClues, setRevealedClues] = useState([]);
   const [localClueIndex, setLocalClueIndex] = useState(0);
+
+  const syncGlobalXp = (newXp) => {
+    try {
+      const userStr = localStorage.getItem('tenali-auth-user');
+      if (userStr) {
+        const userObj = JSON.parse(userStr);
+        if (userObj) {
+          userObj.xp = newXp;
+          localStorage.setItem('tenali-auth-user', JSON.stringify(userObj));
+          window.dispatchEvent(new Event('tenali-auth-change'));
+        }
+      }
+    } catch (e) {
+      console.error('[MindReaderApp2] Error syncing global XP:', e);
+    }
+  };
 
   // Load user profile, XP, levels stars on load
   const loadWorldsAndProgress = async () => {
@@ -84,23 +102,361 @@ export default function MindReaderApp2({ onBack }) {
       const res = await fetch(`${API}/api/mindreader/worlds`, { headers });
       if (res.ok) {
         const data = await res.json();
-
         console.log('[MindReaderApp2 Debug] Received worlds from API:', data.worlds?.map(w => ({ worldId: w.worldId, worldName: w.worldName, unlocked: w.unlocked })));
-        setXp(data.xp || 0);
-        setWorlds(data.worlds || []);
-        setLevelProgress(data.levelProgress || {});
+        
+        let loadedXp = data.xp || 0;
+        let loadedProgress = data.levelProgress || {};
 
+        if (!token) {
+          try {
+            const guestXp = localStorage.getItem('tenali-guess-mind-guest-xp');
+            if (guestXp !== null) {
+              loadedXp = parseInt(guestXp, 10);
+            }
+            const guestProg = localStorage.getItem('tenali-guess-mind-guest-progress');
+            if (guestProg !== null) {
+              loadedProgress = JSON.parse(guestProg);
+            }
+          } catch (e) {
+            console.error('Error loading guest progress:', e);
+          }
+        }
+
+        setXp(loadedXp);
+        setLevelProgress(loadedProgress);
+        
+        if (loadedXp !== undefined) {
+          syncGlobalXp(loadedXp);
+        }
+
+        let resolvedWorlds = data.worlds || [];
+        if (!token) {
+          resolvedWorlds = resolvedWorlds.map((w, idx) => {
+            const requiredUnlockXP = w.requiredUnlockXP || 0;
+            let unlocked = w.worldId === 'number_kingdom' || loadedXp >= requiredUnlockXP;
+            if (!unlocked && idx > 0) {
+              const prevWorld = resolvedWorlds[idx - 1];
+              if (prevWorld && Array.isArray(prevWorld.levels)) {
+                const prevCompleted = prevWorld.levels.every(lvl => {
+                  const num = typeof lvl === 'number' ? lvl : (lvl.levelNum || lvl.id);
+                  return (loadedProgress[num] || 0) > 0;
+                });
+                if (prevCompleted) unlocked = true;
+              }
+            }
+            return {
+              ...w,
+              unlocked
+            };
+          });
+        }
+        setWorlds(resolvedWorlds);
+
+        // Determine first uncompleted level
+        const completedLevels = Object.keys(loadedProgress).map(Number);
+        const highestCompleted = completedLevels.length > 0 ? Math.max(...completedLevels) : 0;
+        const resumeLevel = highestCompleted + 1;
+
+        let startLevel = resumeLevel;
+        try {
+          const savedLastLevel = localStorage.getItem('tenali-guess-mind-last-level');
+          if (savedLastLevel) {
+            const parsedSaved = parseInt(savedLastLevel, 10);
+            if (parsedSaved > 0) {
+              startLevel = parsedSaved;
+            }
+          }
+        } catch (e) {}
+
+        if (phase === 'setup' || phase === 'levels' || !levelNum) {
+          setLevelNum(startLevel);
+        }
+      } else {
+        setErrorMsg('Failed to load levels progress.');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMsg('Server connection failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadWorldsAndProgress();
+  }, [phase]);
+
+  // Set Tenali greeting message on lobby setup
+  useEffect(() => {
+    if (phase === 'setup') {
+      setAvatarExpression('thinking');
+      setTenaliSpeech("I have hidden a mathematical concept inside my mind. Can you guess it in 5 clues?");
+    }
+  }, [phase]);
+
+  // Level selector maps
+  const getLevelsForActiveWorld = () => {
+    if (!worlds || worlds.length === 0) return [];
+    const activeWorld = worlds.find(w => w.worldId === activeWorldId) || worlds[activeWorldIndex] || worlds[0];
+    if (!activeWorld) return [];
+
+    // Determine the minimum level number of the active world
+    let minLevel = 1;
+    if (Array.isArray(activeWorld.levels) && activeWorld.levels.length > 0) {
+      const levelNums = activeWorld.levels.map(l => typeof l === 'number' ? l : (l.levelNum || l.id));
+      minLevel = Math.min(...levelNums);
+    } else if (Array.isArray(activeWorld.levelRange)) {
+      minLevel = activeWorld.levelRange[0] || 1;
+    }
+
+    // 1. If activeWorld directly contains a levels array
+    if (Array.isArray(activeWorld.levels)) {
+      let isPrevUnlockedAndCompleted = true; // minLevel is unlocked by default
+
+      return activeWorld.levels.map((lvl, index) => {
+        const num = typeof lvl === 'number' ? lvl : (lvl.levelNum || lvl.id);
+        let unlocked = false;
+        if (num === minLevel) {
+          unlocked = activeWorld.unlocked !== undefined ? activeWorld.unlocked : true;
+        } else {
+          // It is unlocked if the previous node in the list was unlocked AND completed (stars > 0)
+          const prevLvl = activeWorld.levels[index - 1];
+          const prevNum = typeof prevLvl === 'number' ? prevLvl : (prevLvl.levelNum || prevLvl.id);
+          const prevCompleted = (levelProgress[prevNum] || 0) > 0;
+          
+          unlocked = isPrevUnlockedAndCompleted && prevCompleted;
+        }
+        
+        // Track the current node's status for the next iteration
+        isPrevUnlockedAndCompleted = unlocked && (levelProgress[num] || 0) > 0;
+
+        return {
+          levelNum: num,
+          stars: levelProgress[num] || (typeof lvl === 'object' ? lvl.stars : 0) || 0,
+          unlocked: (typeof lvl === 'object' && lvl.unlocked !== undefined) ? (lvl.unlocked && unlocked) : unlocked
+        };
+      });
+    }
+
+    // 2. If activeWorld contains levelRange array [start, end] or fallback to default [1, 10]
+    const levelRange = Array.isArray(activeWorld.levelRange)
+      ? activeWorld.levelRange
+      : (typeof activeWorld.levelRange === 'string' && activeWorld.levelRange.includes('-')
+          ? activeWorld.levelRange.split('-').map(Number)
+          : [1, 10]);
+
+    const [start, end] = levelRange;
+    const list = [];
+    let isPrevUnlockedAndCompleted = true; // start level is unlocked by default
+    for (let i = start; i <= end; i++) {
+      let unlocked = false;
+      if (i === start) {
+        unlocked = activeWorld.unlocked !== undefined ? activeWorld.unlocked : true;
+      } else {
+        const prevCompleted = (levelProgress[i - 1] || 0) > 0;
+        unlocked = isPrevUnlockedAndCompleted && prevCompleted;
+      }
+      isPrevUnlockedAndCompleted = unlocked && (levelProgress[i] || 0) > 0;
+      list.push({
+        levelNum: i,
+        stars: levelProgress[i] || 0,
+        unlocked
+      });
+    }
+    return list;
+  };
+
+  // World Carousel Handlers
+  const nextWorld = () => {
+    if (activeWorldIndex < worlds.length - 1) {
+      const nextIdx = activeWorldIndex + 1;
+      setActiveWorldIndex(nextIdx);
+      if (worlds[nextIdx]) setActiveWorldId(worlds[nextIdx].worldId);
+    }
+  };
+
+  const prevWorld = () => {
+    if (activeWorldIndex > 0) {
+      const prevIdx = activeWorldIndex - 1;
+      setActiveWorldIndex(prevIdx);
+      if (worlds[prevIdx]) setActiveWorldId(worlds[prevIdx].worldId);
+    }
+  };
+
+  const handleSelectWorld = (world) => {
+    if (!world.unlocked) return;
+    setActiveWorldId(world.worldId);
+    const idx = worlds.findIndex(w => w.worldId === world.worldId);
+    if (idx !== -1) setActiveWorldIndex(idx);
+    setPhase('levels');
+  };
+
+  // Start Level API
+  const handleStartLevel = async (lvl) => {
+    setLoading(true);
+    setErrorMsg('');
+    setWrongGuessFeedback('');
+    setGuessSearchQuery('');
+    try {
+      localStorage.setItem('tenali-guess-mind-last-level', lvl);
+    } catch (e) {}
+    try {
+      const token = authGetToken();
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const res = await fetch(`${API}/api/mindreader/start`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ levelNum: lvl, worldId: activeWorldId })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setGameId(data.gameId);
+        setLevelNum(data.levelNum);
+        if (data.worldId) {
+          setActiveWorldId(data.worldId);
+          const idx = worlds.findIndex(w => w.worldId === data.worldId);
+          if (idx !== -1) setActiveWorldIndex(idx);
+        }
+        setClue(data.clue);
+        setClueIndex(data.clueIndex);
+        setRevealedClues([data.clue]);
+        setLocalClueIndex(0);
+        setHintsRemaining(data.hintsRemaining);
+        setCluesExhausted(false);
+        setShowHintOverlay(false);
+        setHintText('');
+        setGuessQuery('');
+        setAvatarExpression('thinking');
+        setPhase('playing');
+      } else {
+        const errData = await res.json();
+        setErrorMsg(errData.error || 'Failed to start level.');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMsg('Server connection failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Next Clue API
+  const handleNextClue = async () => {
+    setWrongGuessFeedback('');
+    if (localClueIndex < revealedClues.length - 1) {
+      setLocalClueIndex(localClueIndex + 1);
+      setClue(revealedClues[localClueIndex + 1]);
+      return;
+    }
+
+    if (cluesExhausted) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/api/mindreader/next-clue`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameId })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setClue(data.clue);
+        setClueIndex(data.clueIndex);
+        setRevealedClues([...revealedClues, data.clue]);
+        setLocalClueIndex(localClueIndex + 1);
+        setCluesExhausted(data.cluesExhausted);
+        setAvatarExpression('happy');
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Request Hint API
+  const handleUseHint = async () => {
+    if (hintsRemaining <= 0) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/api/mindreader/use-hint`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameId })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setHintText(data.hint);
+        setHintsRemaining(data.hintsRemaining);
+        setShowHintOverlay(true);
+        setAvatarExpression('smirk');
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Submit Guess API
+  const handleSubmitGuess = async (selectedConceptName) => {
+    const guessToSubmit = selectedConceptName || guessQuery;
+    if (!guessToSubmit || !guessToSubmit.trim()) return;
+    setLoading(true);
+    setWrongGuessFeedback('');
+    try {
+      const token = authGetToken();
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const res = await fetch(`${API}/api/mindreader/submit-guess`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ gameId, guess: guessToSubmit })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setIsCorrectGuess(data.correct);
+        setStarsEarned(data.starsEarned || 0);
+        setXpEarned(data.xpEarned || 0);
+        setMrrChange(data.reward ? data.reward.mrrChange : 0);
+        setXpBreakdown(data.reward ? data.reward.xpBreakdown : null);
+        setEducationalInfo(data.educationalInfo);
         setShowGuess(false);
 
         if (data.correct) {
           // Unlock level locally
-          setLevelProgress(prev => ({
-            ...prev,
-            [levelNum]: Math.max(prev[levelNum] || 0, data.starsEarned || 1)
-          }));
+          const updatedStars = Math.max(levelProgress[levelNum] || 0, data.starsEarned || 1);
+          const nextProgress = {
+            ...levelProgress,
+            [levelNum]: updatedStars
+          };
+          setLevelProgress(nextProgress);
+
+          let nextXp = xp;
           if (data.xpEarned) {
-            setXp(prev => prev + data.xpEarned);
+            nextXp = xp + data.xpEarned;
+            setXp(nextXp);
           }
+          if (data.reward && data.reward.xp !== undefined) {
+            syncGlobalXp(data.reward.xp);
+          } else {
+            syncGlobalXp(nextXp);
+          }
+          if (!token) {
+            try {
+              localStorage.setItem('tenali-guess-mind-guest-xp', nextXp.toString());
+              localStorage.setItem('tenali-guess-mind-guest-progress', JSON.stringify(nextProgress));
+            } catch (e) {}
+          }
+          try {
+            localStorage.setItem('tenali-guess-mind-last-level', levelNum + 1);
+          } catch (e) {}
           setActualConcept(data.actualConcept || guessToSubmit);
           setAvatarExpression('victory');
           setTenaliSpeech(`Outstanding! You correctly guessed "${data.actualConcept || guessToSubmit}"!`);
@@ -146,6 +502,68 @@ export default function MindReaderApp2({ onBack }) {
     }
   };
 
+  const renderSvgPath = () => {
+    const levels = getLevelsForActiveWorld();
+    if (levels.length === 0) return null;
+    
+    const nodeHeight = 100;
+    const width = 400;
+    const height = levels.length * nodeHeight;
+    
+    let pathD = "";
+    levels.forEach((lvl, idx) => {
+      const offsetSign = idx % 4 === 1 ? 80 : idx % 4 === 3 ? -80 : 0;
+      const x = 200 + offsetSign;
+      const y = 50 + idx * nodeHeight; // center of the 100px block
+      
+      if (idx === 0) {
+        pathD += `M ${x} ${y}`;
+      } else {
+        const prevOffsetSign = (idx - 1) % 4 === 1 ? 80 : (idx - 1) % 4 === 3 ? -80 : 0;
+        const prevX = 200 + prevOffsetSign;
+        const prevY = 50 + (idx - 1) * nodeHeight;
+        
+        const cpY1 = prevY + nodeHeight / 2;
+        const cpY2 = y - nodeHeight / 2;
+        pathD += ` C ${prevX} ${cpY1}, ${x} ${cpY2}, ${x} ${y}`;
+      }
+    });
+    
+    return (
+      <svg 
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 1,
+          pointerEvents: 'none'
+        }}
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="none"
+      >
+        <path
+          d={pathD}
+          fill="none"
+          stroke="url(#trackGradient)"
+          strokeWidth="6"
+          strokeLinecap="round"
+          strokeDasharray="8 8"
+          style={{
+            animation: 'dashMove 20s linear infinite'
+          }}
+        />
+        <defs>
+          <linearGradient id="trackGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="var(--clr-accent)" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#4a90e2" stopOpacity="0.8" />
+          </linearGradient>
+        </defs>
+      </svg>
+    );
+  };
+
   // Clean outline button style
   const outlineBtnStyle = {
     background: 'rgba(255, 255, 255, 0.04)',
@@ -162,6 +580,49 @@ export default function MindReaderApp2({ onBack }) {
   };
   return (
     <div className="mr2-container" style={{ background: 'transparent', padding: '10px 15px', minHeight: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Global Navigation Header at the top */}
+      {phase !== 'playing' && (
+        <div style={{
+          width: '100%',
+          maxWidth: '500px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '15px',
+          paddingBottom: '10px',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
+        }}>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {phase === 'setup' && onBack && (
+              <button style={outlineBtnStyle} onClick={onBack}>
+                &larr; Lobby
+              </button>
+            )}
+            {phase === 'worlds' && (
+              <button style={outlineBtnStyle} onClick={() => setPhase('setup')}>
+                &larr; Setup
+              </button>
+            )}
+            {phase === 'levels' && (
+              <button style={outlineBtnStyle} onClick={() => setPhase('worlds')}>
+                &larr; Worlds
+              </button>
+            )}
+            {phase === 'gameover' && (
+              <button style={outlineBtnStyle} onClick={() => setPhase('levels')}>
+                &larr; Map
+              </button>
+            )}
+          </div>
+
+          {onBack && (
+            <button style={outlineBtnStyle} onClick={onBack}>
+              🏠 Home
+            </button>
+          )}
+        </div>
+      )}
+
       {/* 🔮 Sequential Game Header */}
       {phase !== 'playing' && (
         <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px', width: '100%', maxWidth: '500px' }}>
@@ -188,11 +649,6 @@ export default function MindReaderApp2({ onBack }) {
           <button style={{ width: '100%', maxWidth: '320px', padding: '12px', marginTop: '10px' }} onClick={() => setPhase('worlds')}>
             Enter the Kingdoms
           </button>
-          {onBack && (
-            <button className="secondary" style={{ width: '100%', maxWidth: '320px', padding: '10px', marginTop: '8px' }} onClick={onBack}>
-              &larr; Back to Lobby
-            </button>
-          )}
         </div>
       )}
 
@@ -261,65 +717,119 @@ export default function MindReaderApp2({ onBack }) {
           ) : (
             <div>Loading worlds...</div>
           )}
-
-          <button className="secondary" style={{ marginTop: '10px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('setup')}>
-            &larr; Lobby
-          </button>
         </div>
       )}
 
-      {/* ─── PHASE 3: LEVEL SELECTION GRID ──────────────────── */}
+      {/* ─── PHASE 3: LEVEL SELECTION TRACK (CANDY CRUSH STYLE) ──────────────────── */}
       {phase === 'levels' && (
-        <div className="gm-container" style={{ minHeight: 'auto', gap: '15px', width: '100%', maxWidth: '800px' }}>
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '15px', width: '100%', maxWidth: '420px', margin: '0 auto' }}>
           <h4 style={{ margin: '5px 0 10px 0', color: 'var(--clr-text)', fontFamily: 'var(--font-display)', fontSize: '1.6rem', textAlign: 'center' }}>
             {worlds[activeWorldIndex]?.worldName}
           </h4>
 
-          {/* Premium Grid Layout matching user's reference */}
-          <div className="gm-level-grid">
-            {getLevelsForActiveWorld().map((node) => {
-              const activeWorld = worlds[activeWorldIndex];
-              const levelInfo = activeWorld?.levels?.find(l => l.levelNum === node.levelNum);
-              const conceptName = levelInfo ? levelInfo.conceptName : '';
+          {(() => {
+            const levelsList = getLevelsForActiveWorld();
+            return (
+              <div className="gm-level-track" style={{ position: 'relative', width: '100%', height: `${levelsList.length * 100}px`, padding: 0, boxSizing: 'border-box' }}>
+                {renderSvgPath()}
 
-              return (
-                <div
-                  key={node.levelNum}
-                  className={`gm-level-card ${node.unlocked ? 'unlocked' : 'locked'}`}
-                  onClick={() => {
-                    if (node.unlocked) {
-                      handleStartLevel(node.levelNum);
-                    }
-                  }}
-                >
-                  {/* Level Pill */}
-                  <div className="gm-level-pill">
-                    Level {node.levelNum}
-                  </div>
+                {levelsList.map((node, index) => {
+                  const activeWorld = worlds[activeWorldIndex];
 
-                  {/* Subtitle (Concept Name) */}
-                  <div className="gm-level-subtitle">
-                    {node.unlocked ? conceptName : '🔒 Locked'}
-                  </div>
+                  // Calculate horizontal offset for zigzag pattern (0, +80, 0, -80)
+                  const offsetSign = index % 4 === 1 ? '80px' : index % 4 === 3 ? '-80px' : '0px';
+                  const isActive = node.levelNum === levelNum;
+                  const isCompleted = node.stars > 0;
 
-                  {/* Stars Display */}
-                  {node.unlocked && (
-                    <div className="gm-level-card-stars">
-                      {node.stars > 0 ? (
-                        Array.from({ length: node.stars }).map((_, i) => <span key={i}>★</span>)
-                      ) : (
-                        <span style={{ color: 'rgba(255, 255, 255, 0.15)' }}>☆☆☆</span>
+                  return (
+                    <div
+                      key={node.levelNum}
+                      className="gm-level-node-wrapper"
+                      style={{
+                        position: 'absolute',
+                        top: `${index * 100}px`,
+                        left: '50%',
+                        transform: `translateX(-50%) translateX(${offsetSign})`,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100px',
+                        height: '100px',
+                        zIndex: 2,
+                        boxSizing: 'border-box',
+                        transition: 'all 0.3s'
+                      }}
+                    >
+                      <div
+                        className={`gm-level-node ${node.unlocked ? 'unlocked' : ''} ${isActive ? 'active-node' : ''}`}
+                        style={{
+                          width: isActive ? '64px' : '56px',
+                          height: isActive ? '64px' : '56px',
+                          borderRadius: '50%',
+                          background: isCompleted
+                            ? 'radial-gradient(circle, #2ecc71 0%, #27ae60 100%)'
+                            : isActive
+                            ? 'var(--clr-accent)'
+                            : node.unlocked
+                            ? 'radial-gradient(circle, var(--clr-surface) 0%, var(--clr-card) 100%)'
+                            : 'rgba(30, 39, 46, 0.9)',
+                          border: isCompleted
+                            ? '3px solid #2ecc71'
+                            : isActive
+                            ? '3px solid #fff'
+                            : node.unlocked
+                            ? '3px solid var(--clr-accent)'
+                            : '3px solid rgba(255, 255, 255, 0.1)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '1.2rem',
+                          fontWeight: '700',
+                          color: (isCompleted || isActive) ? '#fff' : (node.unlocked ? 'var(--clr-text)' : 'rgba(255, 255, 255, 0.3)'),
+                          cursor: node.unlocked ? 'pointer' : 'not-allowed',
+                          boxShadow: isCompleted
+                            ? '0 0 12px rgba(46, 204, 113, 0.5)'
+                            : isActive
+                            ? '0 0 20px var(--clr-accent)'
+                            : '0 4px 10px rgba(0, 0, 0, 0.3)',
+                          transition: 'all 0.25s'
+                        }}
+                        onClick={() => {
+                          if (node.unlocked) {
+                            handleStartLevel(node.levelNum);
+                          }
+                        }}
+                        onMouseEnter={e => {
+                          if (node.unlocked && !isActive) {
+                            e.currentTarget.style.transform = 'scale(1.12)';
+                          }
+                        }}
+                        onMouseLeave={e => {
+                          if (node.unlocked && !isActive) {
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }
+                        }}
+                      >
+                        {isCompleted ? '✓' : node.unlocked ? node.levelNum : '🔒'}
+                      </div>
+
+                      {/* Stars display beneath node — only show for played levels */}
+                      {node.unlocked && (
+                        <div style={{ display: 'flex', gap: '2px', marginTop: '6px', color: '#f1c40f', fontSize: '0.7rem', minHeight: '14px' }}>
+                          {node.stars > 0 ? (
+                            Array.from({ length: node.stars }).map((_, i) => <span key={i}>★</span>)
+                          ) : (
+                            <span style={{ color: 'rgba(255, 255, 255, 0.15)', fontSize: '0.65rem' }}>☆☆☆</span>
+                          )}
+                        </div>
                       )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          <button className="secondary" style={{ marginTop: '15px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('worlds')}>
-            &larr; Worlds
-          </button>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </div>
       )}
 
@@ -343,9 +853,16 @@ export default function MindReaderApp2({ onBack }) {
                 💡 Hint ({hintsRemaining}/3)
               </button>
             </div>
-            <span style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--clr-text)', display: 'flex', alignItems: 'center' }}>
-              XP: <span style={{ color: 'var(--clr-accent)', marginLeft: '4px' }}>{xp} XP</span>
-            </span>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--clr-text)', display: 'flex', alignItems: 'center', marginRight: '5px' }}>
+                XP: <span style={{ color: 'var(--clr-accent)', marginLeft: '4px' }}>{xp} XP</span>
+              </span>
+              {onBack && (
+                <button style={outlineBtnStyle} onClick={onBack}>
+                  🏠 Home
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Serif Level Display Header */}
@@ -608,6 +1125,46 @@ export default function MindReaderApp2({ onBack }) {
             </div>
           )}
 
+          {/* Detailed XP Breakdown Receipt */}
+          {isCorrectGuess && xpBreakdown && (
+            <div className="gm-xp-breakdown" style={{
+              background: 'rgba(255, 255, 255, 0.02)',
+              border: '1px solid var(--clr-border)',
+              borderRadius: '12px',
+              padding: '12px 16px',
+              width: '100%',
+              margin: '10px 0',
+              fontSize: '0.85rem'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                <span style={{ color: 'var(--clr-text-soft)' }}>{xpBreakdown.isReplay ? 'Replay Base XP (30%):' : 'Base XP:'}</span>
+                <span style={{ fontWeight: 'bold', color: 'var(--clr-text)' }}>+{xpBreakdown.baseXp} XP</span>
+              </div>
+              {xpBreakdown.speedBonus > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span style={{ color: 'var(--clr-text-soft)' }}>⚡ Speed Bonus:</span>
+                  <span style={{ color: 'var(--clr-accent)', fontWeight: 'bold' }}>+{xpBreakdown.speedBonus} XP</span>
+                </div>
+              )}
+              {xpBreakdown.noHintBonus > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span style={{ color: 'var(--clr-text-soft)' }}>💡 No-Hint Bonus:</span>
+                  <span style={{ color: 'var(--clr-correct)', fontWeight: 'bold' }}>+{xpBreakdown.noHintBonus} XP</span>
+                </div>
+              )}
+              {xpBreakdown.streakBonus > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span style={{ color: 'var(--clr-text-soft)' }}>🔥 Streak Bonus (Streak: {xpBreakdown.streak}):</span>
+                  <span style={{ color: '#f1c40f', fontWeight: 'bold' }}>+{xpBreakdown.streakBonus} XP</span>
+                </div>
+              )}
+              <div style={{ borderTop: '1px dashed var(--clr-border)', marginTop: '8px', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '0.92rem' }}>
+                <span style={{ color: 'var(--clr-text)' }}>Total XP Earned:</span>
+                <span style={{ color: 'var(--clr-accent)' }}>+{xpEarned} XP</span>
+              </div>
+            </div>
+          )}
+
           {/* Premium Charcoal Revision Card */}
           {educationalInfo && (
             <div style={{
@@ -667,12 +1224,6 @@ export default function MindReaderApp2({ onBack }) {
                 Play Next Level &rarr;
               </button>
             )}
-            <button 
-              style={outlineBtnStyle}
-              onClick={() => setPhase('levels')}
-            >
-              &larr; Back to Map
-            </button>
           </div>
         </div>
       )}
