@@ -92,6 +92,7 @@ import CuriosityApp from './Curiosity.jsx';
 import PercentExplanationApp from './PercentExplanationApp';
 import { playSound } from './audioContext';
 import GeometryApp from './GeometryApp';
+import AdventureApp from './adventure/AdventureApp';
 
 // API base URL from environment variables (Vite)
 const API = import.meta.env.VITE_API_BASE_URL || '';
@@ -43037,6 +43038,12 @@ function App() {
     )
   }
 
+  if (pathname === '/adventure') {
+    return (
+      <AdventureApp onBack={() => { window.location.href = '/' }} />
+    )
+  }
+
   // Route: /geocraft → Kids Geometry Workspace
   if (pathname === '/geocraft') {
     return (
@@ -44373,6 +44380,8 @@ function App() {
         onSelect={(key) => {
           if (key === 'goalpractice') {
             setMode('goalpractice');
+          } else if (key === 'adventure') {
+            window.location.href = '/adventure';
           } else {
             setMode(key);
             setIsGoalMode(false);
@@ -44422,6 +44431,7 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
     { key: 'gym', name: 'Gym', subtitle: 'Adaptive workout across all 7 gym puzzles', color: 'featured' },
     { key: 'vachana', name: 'Vachana', subtitle: 'Mathematical Literacy Lab', color: 'featured' },
     { key: 'mindreader', name: 'Mind Reader', subtitle: 'Let Tenali read your mind!', color: 'featured' },
+    { key: 'adventure', name: '👑 Adventure', subtitle: 'Knowledge Crystals — story-driven learning', color: 'featured', isRedirect: true, path: '/adventure' },
   ]
   // Visual Learning Universe lives only in the hamburger menu
   const mathLabEntry = { key: 'math-lab', name: '🔬 Visual Learning Universe', subtitle: 'Visual, Mensuration & Addition labs', color: 'orange' }
@@ -44434,6 +44444,7 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
 
   // All regular quiz apps sorted alphabetically by name
   const regularApps = [
+    { key: 'adventure', name: '👑 Adventure', subtitle: 'Knowledge Crystals — story-driven kingdom quest', color: 'featured' },
     { key: 'detective', name: '🔍 Detective Agency', subtitle: 'Solve math mysteries and crack cases!', color: 'indigo' },
     { key: 'comic-addition', name: 'Comic Addition', subtitle: 'Story Mode', color: 'purple' },
     { key: 'addition', name: 'Addition', subtitle: '20-question addition practice', color: 'blue' },

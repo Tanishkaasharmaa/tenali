@@ -9427,6 +9427,16 @@ app.get('/mindreader', (_req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
+// TENALI ADVENTURE GAME
+// ═══════════════════════════════════════════════════════════════════════════
+const adventureRoutes = require('./adventure/adventureRoutes');
+app.use('/api/adventure', adventureRoutes);
+
+app.get('/adventure', (_req, res) => {
+  res.sendFile(path.join(clientDistPath, 'index.html'));
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
 // TENALI REVERSE MIND READER (API)
 // ═══════════════════════════════════════════════════════════════════════════
 const { REVERSE_CONCEPTS, REVERSE_QUESTIONS, PERSONALITY_RESPONSES } = require('./mindReaderKB2');
@@ -9815,8 +9825,20 @@ app.get('/api/mindreader/worlds', async (req, res) => {
     }
 
     // Map worlds and add aggregate star counts
-    const worlds = worldsConfig.map(w => {
-      const isUnlocked = unlockedWorlds.includes(w.worldId);
+    const worlds = worldsConfig.map((w, idx) => {
+      const prevWorld = idx > 0 ? worldsConfig[idx - 1] : null;
+      let prevWorldCompleted = false;
+      if (prevWorld) {
+        const prevWorldLevelNums = levelsConfig.filter(lvl => lvl.worldId === prevWorld.worldId).map(lvl => lvl.levelNum);
+        const prevWorldCompletedLevels = levelProgressList.filter(lp => prevWorldLevelNums.includes(lp.levelNum) && lp.starsEarned > 0);
+        prevWorldCompleted = prevWorldCompletedLevels.length >= prevWorldLevelNums.length || prevWorldCompletedLevels.some(lp => {
+          const lvlObj = levelsConfig.find(l => l.levelNum === lp.levelNum && l.worldId === prevWorld.worldId);
+          return lvlObj && lvlObj.isBoss;
+        });
+      }
+
+      const isUnlocked = unlockedWorlds.includes(w.worldId) || w.worldId === 'number_kingdom' || w.requiredUnlockXP === 0 || (w.requiredUnlockXP > 0 && xp >= w.requiredUnlockXP) || prevWorldCompleted;
+
       // levels in this world
       const levelsInWorld = levelsConfig.filter(lvl => lvl.worldId === w.worldId);
       const levelNums = levelsInWorld.map(lvl => lvl.levelNum);
@@ -9833,17 +9855,35 @@ app.get('/api/mindreader/worlds', async (req, res) => {
         };
       });
 
-      return {
+      const minLevel = levelNums.length > 0 ? Math.min(...levelNums) : 1;
+      const maxLevel = levelNums.length > 0 ? Math.max(...levelNums) : 10;
+
+      const worldConcepts = levelsInWorld.map(lvl => {
+        const c = conceptsConfig[lvl.conceptId];
+        return {
+          id: lvl.conceptId,
+          name: c ? c.name : (lvl.conceptId.charAt(0).toUpperCase() + lvl.conceptId.slice(1).replace(/_/g, ' '))
+        };
+      });
+
+      const resWorld = {
         worldId: w.worldId,
         worldName: w.worldName,
         requiredUnlockXP: w.requiredUnlockXP,
         themeColor: w.themeColor,
-        levelRange: w.levelRange,
+        levelRange: w.levelRange || [minLevel, maxLevel],
+        concepts: worldConcepts,
         unlocked: isUnlocked,
         stars,
         levels: levelsWithConceptNames
       };
+
+      console.log(`[MindReader Worlds Debug] worldId=${w.worldId}, requiredUnlockXP=${w.requiredUnlockXP}, isUnlocked=${isUnlocked}, res.unlocked=${resWorld.unlocked}`);
+
+      return resWorld;
     });
+
+    console.log(`[MindReader Worlds Debug] Sending worlds response. Total worlds: ${worlds.length}, Unlocked count: ${worlds.filter(w => w.unlocked).length}`);
 
     res.json({
       xp,
@@ -9902,10 +9942,17 @@ app.post('/api/mindreader/start', express.json(), async (req, res) => {
 
     console.log(`[GuessMind] Session ${gameId} started for level ${levelNum} with concept "${concept.name}"`);
 
+    const cluesList = (concept.thoughts && concept.thoughts.length > 0)
+      ? concept.thoughts
+      : (concept.clues && concept.clues.length > 0 ? concept.clues : [`I am ${concept.name}.`]);
+
+    const firstClue = cluesList[0] || `I am thinking of ${concept.name}.`;
+
     res.json({
       gameId,
       levelNum: level.levelNum,
-      clue: concept.clues[0],
+      worldId: level.worldId,
+      clue: firstClue,
       clueIndex: 0,
       hintsRemaining: session.hintsRemaining
     });
@@ -9926,17 +9973,22 @@ app.post('/api/mindreader/next-clue', express.json(), (req, res) => {
     return res.status(404).json({ error: 'Game session not found or expired' });
   }
 
-  if (session.clueIndex >= 4) {
+  const concept = session.selectedConcept;
+  const cluesList = (concept.thoughts && concept.thoughts.length > 0)
+    ? concept.thoughts
+    : (concept.clues && concept.clues.length > 0 ? concept.clues : [`I am ${concept.name}.`]);
+
+  if (session.clueIndex >= cluesList.length - 1) {
     return res.status(400).json({ error: 'All clues already revealed' });
   }
 
   session.clueIndex += 1;
-  const clue = session.selectedConcept.clues[session.clueIndex];
+  const clue = cluesList[session.clueIndex] || cluesList[cluesList.length - 1];
 
   res.json({
     clue,
     clueIndex: session.clueIndex,
-    cluesExhausted: session.clueIndex === 4
+    cluesExhausted: session.clueIndex >= cluesList.length - 1
   });
 });
 
@@ -9955,7 +10007,13 @@ app.post('/api/mindreader/use-hint', express.json(), (req, res) => {
     return res.status(400).json({ error: 'No hints remaining' });
   }
 
-  const hint = session.selectedConcept.hints[3 - session.hintsRemaining];
+  const concept = session.selectedConcept;
+  const hintIndex = 3 - session.hintsRemaining;
+  const hint = concept.hint
+    || (Array.isArray(concept.hints) && concept.hints.length > 0
+        ? concept.hints[hintIndex % concept.hints.length]
+        : `Think about what makes ${concept.name} special.`);
+
   session.hintsRemaining -= 1;
   session.hintsUsed += 1;
 
@@ -10086,13 +10144,17 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
     }).catch(err => console.error('[GuessMind] Failed to save analytic:', err));
   }
 
-  guessMindSessions.delete(gameId);
+  const cluesRemaining = session.clueIndex < 4;
+  if (isCorrect || !cluesRemaining) {
+    guessMindSessions.delete(gameId);
+  }
 
   console.log(`[GuessMind] Session ${gameId} guess: "${guess}" | Secret: "${concept.name}" | Correct: ${isCorrect} | Stars: ${starsEarned} | XP: ${xpEarned}`);
 
   res.json({
     correct: isCorrect,
-    actualConcept: concept.name,
+    actualConcept: isCorrect ? concept.name : null,
+    cluesRemaining,
     starsEarned,
     xpEarned,
     reward: {
