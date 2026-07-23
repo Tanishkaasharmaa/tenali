@@ -48,7 +48,7 @@ async function runTests() {
     const startData = await startRes.json();
     assert(startData.gameId, 'Response contains gameId');
     assert(startData.levelNum === 1, 'levelNum matches requested level');
-    assert(startData.clue === 'I am the most fundamental arithmetic operation.', 'First clue matches configuration');
+    assert(startData.clue === 'I help numbers come together.', 'First clue matches configuration');
     assert(startData.clueIndex === 0, 'clueIndex is 0');
     assert(startData.hintsRemaining === 3, 'hintsRemaining is 3');
 
@@ -63,7 +63,7 @@ async function runTests() {
     });
     assert(clueRes.status === 200, 'Next clue endpoint returned status 200');
     const clueData = await clueRes.json();
-    assert(clueData.clue === 'I combine two or more groups to find a total sum.', 'Second clue matches configuration');
+    assert(clueData.clue === 'I make the answer bigger.', 'Second clue matches configuration');
     assert(clueData.clueIndex === 1, 'clueIndex incremented to 1');
     assert(clueData.cluesExhausted === false, 'cluesExhausted is false');
 
@@ -76,7 +76,7 @@ async function runTests() {
     });
     assert(hintRes.status === 200, 'Use hint endpoint returned status 200');
     const hintData = await hintRes.json();
-    assert(hintData.hint === 'Number Kingdom topic.', 'First hint text matches');
+    assert(hintData.hint === 'Think about putting numbers together.', 'First hint text matches');
     assert(hintData.hintsRemaining === 2, 'hintsRemaining decremented to 2');
 
     // Test 5: POST /api/mindreader/submit-guess (Correct Guess)
@@ -93,7 +93,7 @@ async function runTests() {
     assert(guessData.starsEarned === 3, 'Stars earned is 3 (guessed at Clue 2)');
     assert(guessData.xpEarned === 100, 'xpEarned is 100 (Guest first completion, perfect run bonus not given due to hint use)');
     assert(guessData.educationalInfo, 'Response contains educationalInfo');
-    assert(guessData.educationalInfo.funFact === 'The plus sign (+) is believed to have originated as an abbreviation for the Latin word \'et\', which means \'and\'.', 'Educational fun fact matches');
+    assert(guessData.educationalInfo.funFact === 'The + symbol was first used in a German manuscript in 1489 by Johannes Widmann.', 'Educational fun fact matches');
 
     // Test 6: Verify Session Eviction
     console.log('\n--- Test 6: Verify Session Eviction ---');

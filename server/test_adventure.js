@@ -27,7 +27,7 @@ async function runTests() {
   assert(concepts.length >= 18, 'Should have at least 18 concepts');
 
   const lvl1 = kb.getLevelById('lvl_1_1');
-  assert(lvl1 && lvl1.conceptId === 'prime_number', 'lvl_1_1 should map to prime_number');
+  assert(lvl1 && lvl1.conceptId === 'addition', 'lvl_1_1 should map to addition');
   console.log('  ✅ adventureKB passed!\n');
 
   // 2. Test adventureSessionManager
@@ -35,7 +35,7 @@ async function runTests() {
   const sess = sessionManager.createSession({
     userId: 'test_user_1',
     levelId: 'lvl_1_1',
-    conceptId: 'prime_number',
+    conceptId: 'addition',
     isBoss: false
   });
 
@@ -48,8 +48,8 @@ async function runTests() {
 
   // 3. Test bossEngine
   console.log('3️⃣ Testing bossEngine...');
-  const bossLevel = kb.getLevelById('lvl_1_9');
-  assert(bossLevel.isBoss === true, 'lvl_1_9 should be a Boss level');
+  const bossLevel = kb.getLevelById('lvl_1_10');
+  assert(bossLevel.isBoss === true, 'lvl_1_10 should be a Boss level');
 
   const bossClues = bossEngine.generateBossClues(bossLevel);
   assert(bossClues.length > 0, 'Boss clues should be generated');
@@ -64,8 +64,8 @@ async function runTests() {
 
   // 4. Test reviewService
   console.log('4️⃣ Testing reviewService...');
-  const review = reviewService.generateReview('prime_number');
-  assert.strictEqual(review.conceptName, 'Prime Number', 'Review concept name should match');
+  const review = reviewService.generateReview('addition');
+  assert.strictEqual(review.conceptName, 'Addition', 'Review concept name should match');
   assert(review.definition.length > 0, 'Review definition should be non-empty');
   assert(review.workedExample.length > 0, 'Review worked example should be non-empty');
   console.log('  ✅ reviewService passed!\n');
@@ -89,12 +89,12 @@ async function runTests() {
   assert(hintData.hint.length > 0, 'getHint should return hint string');
 
   // Submit Correct Guess
-  const guessResult = await adventureService.submitGuess(sessionData.sessionId, 'prime_number', null, null);
-  assert.strictEqual(guessResult.correct, true, 'submitGuess should be correct for prime_number');
+  const guessResult = await adventureService.submitGuess(sessionData.sessionId, 'addition', null, null);
+  assert.strictEqual(guessResult.correct, true, 'submitGuess should be correct for addition');
   assert.strictEqual(guessResult.ended, true, 'Game session should end on correct guess');
   assert(guessResult.progress.completedLevels.includes('lvl_1_1'), 'lvl_1_1 should be added to completedLevels');
   assert(guessResult.progress.xp > 0, 'XP should increase');
-  assert(guessResult.review.conceptName === 'Prime Number', 'Review card should be returned');
+  assert(guessResult.review.conceptName === 'Addition', 'Review card should be returned');
   console.log('  ✅ adventureService full flow passed!\n');
 
   console.log('🎉 ALL TENALI ADVENTURE BACKEND TESTS PASSED SUCCESSFULLY!');
