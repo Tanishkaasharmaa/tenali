@@ -7,6 +7,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { TenaliAvatar } from './App';
+import confetti from 'canvas-confetti';
 import './MindReader2.css';
 
 const API = import.meta.env.VITE_API_BASE_URL || '';
@@ -83,241 +84,12 @@ export default function MindReaderApp2({ onBack }) {
       const res = await fetch(`${API}/api/mindreader/worlds`, { headers });
       if (res.ok) {
         const data = await res.json();
+
         console.log('[MindReaderApp2 Debug] Received worlds from API:', data.worlds?.map(w => ({ worldId: w.worldId, worldName: w.worldName, unlocked: w.unlocked })));
         setXp(data.xp || 0);
         setWorlds(data.worlds || []);
         setLevelProgress(data.levelProgress || {});
-      } else {
-        setErrorMsg('Failed to load levels progress.');
-      }
-    } catch (err) {
-      console.error(err);
-      setErrorMsg('Server connection failed.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    loadWorldsAndProgress();
-  }, [phase]);
-
-  // Set Tenali greeting message on lobby setup
-  useEffect(() => {
-    if (phase === 'setup') {
-      setAvatarExpression('thinking');
-      setTenaliSpeech("I have hidden a mathematical concept inside my mind. Can you guess it in 5 clues?");
-    }
-  }, [phase]);
-
-  // Level selector maps
-  const getLevelsForActiveWorld = () => {
-    if (!worlds || worlds.length === 0) return [];
-    const activeWorld = worlds.find(w => w.worldId === activeWorldId) || worlds[activeWorldIndex] || worlds[0];
-    if (!activeWorld) return [];
-
-    // 1. If activeWorld directly contains a levels array
-    if (Array.isArray(activeWorld.levels)) {
-      return activeWorld.levels.map((lvl) => {
-        const num = typeof lvl === 'number' ? lvl : (lvl.levelNum || lvl.id);
-        let unlocked = false;
-        if (num === 1) {
-          unlocked = true;
-        } else {
-          const prevStars = levelProgress[num - 1];
-          unlocked = prevStars !== undefined && prevStars > 0;
-        }
-        return {
-          levelNum: num,
-          stars: levelProgress[num] || (typeof lvl === 'object' ? lvl.stars : 0) || 0,
-          unlocked: (typeof lvl === 'object' && lvl.unlocked !== undefined) ? lvl.unlocked : unlocked
-        };
-      });
-    }
-
-    // 2. If activeWorld contains levelRange array [start, end] or fallback to default [1, 10]
-    const levelRange = Array.isArray(activeWorld.levelRange)
-      ? activeWorld.levelRange
-      : (typeof activeWorld.levelRange === 'string' && activeWorld.levelRange.includes('-')
-          ? activeWorld.levelRange.split('-').map(Number)
-          : [1, 10]);
-
-    const [start, end] = levelRange;
-    const list = [];
-    for (let i = start; i <= end; i++) {
-      let unlocked = false;
-      if (i === start) {
-        unlocked = activeWorld.unlocked !== undefined ? activeWorld.unlocked : true;
-      } else {
-        const prevStars = levelProgress[i - 1];
-        unlocked = prevStars !== undefined && prevStars > 0;
-      }
-      list.push({
-        levelNum: i,
-        stars: levelProgress[i] || 0,
-        unlocked
-      });
-    }
-    return list;
-  };
-
-  // World Carousel Handlers
-  const nextWorld = () => {
-    if (activeWorldIndex < worlds.length - 1) {
-      const nextIdx = activeWorldIndex + 1;
-      setActiveWorldIndex(nextIdx);
-      if (worlds[nextIdx]) setActiveWorldId(worlds[nextIdx].worldId);
-    }
-  };
-
-  const prevWorld = () => {
-    if (activeWorldIndex > 0) {
-      const prevIdx = activeWorldIndex - 1;
-      setActiveWorldIndex(prevIdx);
-      if (worlds[prevIdx]) setActiveWorldId(worlds[prevIdx].worldId);
-    }
-  };
-
-  const handleSelectWorld = (world) => {
-    if (!world.unlocked) return;
-    setActiveWorldId(world.worldId);
-    const idx = worlds.findIndex(w => w.worldId === world.worldId);
-    if (idx !== -1) setActiveWorldIndex(idx);
-    setPhase('levels');
-  };
-
-  // Start Level API
-  const handleStartLevel = async (lvl) => {
-    setLoading(true);
-    setErrorMsg('');
-    setWrongGuessFeedback('');
-    setGuessSearchQuery('');
-    try {
-      const token = authGetToken();
-      const headers = { 'Content-Type': 'application/json' };
-      if (token) headers['Authorization'] = `Bearer ${token}`;
-
-      const res = await fetch(`${API}/api/mindreader/start`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ levelNum: lvl })
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setGameId(data.gameId);
-        setLevelNum(data.levelNum);
-        if (data.worldId) {
-          setActiveWorldId(data.worldId);
-          const idx = worlds.findIndex(w => w.worldId === data.worldId);
-          if (idx !== -1) setActiveWorldIndex(idx);
-        }
-        setClue(data.clue);
-        setClueIndex(data.clueIndex);
-        setRevealedClues([data.clue]);
-        setLocalClueIndex(0);
-        setHintsRemaining(data.hintsRemaining);
-        setCluesExhausted(false);
-        setShowHintOverlay(false);
-        setHintText('');
-        setGuessQuery('');
-        setAvatarExpression('thinking');
-        setPhase('playing');
-      } else {
-        const errData = await res.json();
-        setErrorMsg(errData.error || 'Failed to start level.');
-      }
-    } catch (err) {
-      console.error(err);
-      setErrorMsg('Server connection failed.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Next Clue API
-  const handleNextClue = async () => {
-    setWrongGuessFeedback('');
-    if (localClueIndex < revealedClues.length - 1) {
-      setLocalClueIndex(localClueIndex + 1);
-      setClue(revealedClues[localClueIndex + 1]);
-      return;
-    }
-
-    if (cluesExhausted) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`${API}/api/mindreader/next-clue`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId })
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setClue(data.clue);
-        setClueIndex(data.clueIndex);
-        setRevealedClues([...revealedClues, data.clue]);
-        setLocalClueIndex(localClueIndex + 1);
-        setCluesExhausted(data.cluesExhausted);
-        setAvatarExpression('happy');
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Request Hint API
-  const handleUseHint = async () => {
-    if (hintsRemaining <= 0) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`${API}/api/mindreader/use-hint`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId })
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setHintText(data.hint);
-        setHintsRemaining(data.hintsRemaining);
-        setShowHintOverlay(true);
-        setAvatarExpression('smirk');
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Submit Guess API
-  const handleSubmitGuess = async (selectedConceptName) => {
-    const guessToSubmit = selectedConceptName || guessQuery;
-    if (!guessToSubmit || !guessToSubmit.trim()) return;
-    setLoading(true);
-    setWrongGuessFeedback('');
-    try {
-      const token = authGetToken();
-      const headers = { 'Content-Type': 'application/json' };
-      if (token) headers['Authorization'] = `Bearer ${token}`;
-
-      const res = await fetch(`${API}/api/mindreader/submit-guess`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ gameId, guess: guessToSubmit })
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setIsCorrectGuess(data.correct);
-        setStarsEarned(data.starsEarned || 0);
-        setXpEarned(data.xpEarned || 0);
-        setMrrChange(data.reward ? data.reward.mrrChange : 0);
-        setEducationalInfo(data.educationalInfo);
         setShowGuess(false);
 
         if (data.correct) {
@@ -332,6 +104,13 @@ export default function MindReaderApp2({ onBack }) {
           setActualConcept(data.actualConcept || guessToSubmit);
           setAvatarExpression('victory');
           setTenaliSpeech(`Outstanding! You correctly guessed "${data.actualConcept || guessToSubmit}"!`);
+          if (typeof confetti === 'function') {
+            confetti({
+              particleCount: 120,
+              spread: 70,
+              origin: { y: 0.6 }
+            });
+          }
           setPhase('gameover');
         } else {
           if (data.cluesRemaining) {
@@ -381,9 +160,8 @@ export default function MindReaderApp2({ onBack }) {
     boxShadow: 'none',
     margin: 0
   };
-
   return (
-    <div className="mr2-container" style={{ background: 'transparent', padding: '10px 15px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className="mr2-container" style={{ background: 'transparent', padding: '10px 15px', minHeight: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* 🔮 Sequential Game Header */}
       {phase !== 'playing' && (
         <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px', width: '100%', maxWidth: '500px' }}>
@@ -399,7 +177,7 @@ export default function MindReaderApp2({ onBack }) {
       {phase === 'setup' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '15px' }}>
           <h2 style={{ margin: '10px 0 0 0', fontFamily: 'var(--font-display)', color: 'var(--clr-text)', fontSize: '2rem' }}>Read Tenali's Mind</h2>
-          
+
           <div className="mr2-char-hub-vertical" style={{ margin: '10px 0', gap: '10px' }}>
             <TenaliAvatar expression={avatarExpression} skin="classic" />
             <div className="mr2-speech-bubble" style={{ maxWidth: '320px', padding: '12px 18px' }}>
@@ -407,9 +185,14 @@ export default function MindReaderApp2({ onBack }) {
             </div>
           </div>
 
-          <button className="btn-primary" style={{ width: '100%', maxWidth: '320px', padding: '12px', marginTop: '10px', background: 'var(--clr-accent)', color: 'var(--clr-text)' }} onClick={() => setPhase('worlds')}>
+          <button style={{ width: '100%', maxWidth: '320px', padding: '12px', marginTop: '10px' }} onClick={() => setPhase('worlds')}>
             Enter the Kingdoms
           </button>
+          {onBack && (
+            <button className="secondary" style={{ width: '100%', maxWidth: '320px', padding: '10px', marginTop: '8px' }} onClick={onBack}>
+              &larr; Back to Lobby
+            </button>
+          )}
         </div>
       )}
 
@@ -420,7 +203,7 @@ export default function MindReaderApp2({ onBack }) {
           {worlds.length > 0 ? (
             <div className="gm-carousel-wrapper" style={{ margin: '15px 0', gap: '10px' }}>
               <button 
-                className="btn-secondary" 
+                className="secondary" 
                 onClick={prevWorld} 
                 disabled={activeWorldIndex === 0}
                 style={{ borderRadius: '50%', width: '38px', height: '38px', padding: 0 }}
@@ -433,7 +216,7 @@ export default function MindReaderApp2({ onBack }) {
                   World {activeWorldIndex + 1} of {worlds.length}
                 </div>
                 <h4 className="gm-world-title" style={{ fontSize: '1.45rem', margin: '0 0 10px 0', color: 'var(--clr-text)' }}>{worlds[activeWorldIndex].worldName}</h4>
-                
+
                 <div className="gm-world-badge" style={{ padding: '2px 8px', fontSize: '0.75rem', marginBottom: '12px', background: 'var(--clr-badge)', color: 'var(--clr-text)' }}>
                   ⭐ {worlds[activeWorldIndex].stars} Stars
                 </div>
@@ -448,8 +231,8 @@ export default function MindReaderApp2({ onBack }) {
                   </div>
                 )}
 
-                <button 
-                  className="gm-world-btn" 
+                <button
+                  className="gm-world-btn"
                   style={{
                     padding: '10px',
                     fontSize: '0.9rem',
@@ -467,7 +250,7 @@ export default function MindReaderApp2({ onBack }) {
               </div>
 
               <button 
-                className="btn-secondary" 
+                className="secondary" 
                 onClick={nextWorld} 
                 disabled={activeWorldIndex === worlds.length - 1}
                 style={{ borderRadius: '50%', width: '38px', height: '38px', padding: 0 }}
@@ -479,7 +262,7 @@ export default function MindReaderApp2({ onBack }) {
             <div>Loading worlds...</div>
           )}
 
-          <button className="btn-outline" style={{ marginTop: '10px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('setup')}>
+          <button className="secondary" style={{ marginTop: '10px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('setup')}>
             &larr; Lobby
           </button>
         </div>
@@ -534,7 +317,7 @@ export default function MindReaderApp2({ onBack }) {
             })}
           </div>
 
-          <button className="btn-outline" style={{ marginTop: '15px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('worlds')}>
+          <button className="secondary" style={{ marginTop: '15px', padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setPhase('worlds')}>
             &larr; Worlds
           </button>
         </div>
@@ -546,15 +329,15 @@ export default function MindReaderApp2({ onBack }) {
           {/* Top Control Header Bar */}
           <div className="gm-top-bar" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <button 
+              <button
                 style={outlineBtnStyle}
                 onClick={() => setPhase('levels')}
               >
                 &larr; Map
               </button>
-              <button 
+              <button
                 style={outlineBtnStyle}
-                onClick={handleUseHint} 
+                onClick={handleUseHint}
                 disabled={hintsRemaining <= 0}
               >
                 💡 Hint ({hintsRemaining}/3)
@@ -582,6 +365,47 @@ export default function MindReaderApp2({ onBack }) {
             </p>
           </div>
 
+          {/* Scratchpad Header with Clear Button */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '6px', marginTop: '10px' }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--clr-text-soft)', fontWeight: '600' }}>✍️ Scratchpad (Notes)</span>
+            <button 
+              style={{ background: 'none', border: 'none', color: 'var(--clr-accent)', fontSize: '0.78rem', cursor: 'pointer', padding: 0 }}
+              onClick={() => setThoughtGuesses(['', '', '', ''])}
+            >
+              Clear all
+            </button>
+          </div>
+
+          {/* 4 Thought Input Fields in a Compact 2x2 Grid Layout */}
+          <div style={{
+            width: '100%',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '8px',
+            margin: '0 0 15px 0'
+          }}>
+            {thoughtGuesses.map((val, idx) => (
+              <input
+                key={idx}
+                type="text"
+                style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  padding: '10px 14px',
+                  background: 'var(--clr-input)',
+                  border: '1.5px solid var(--clr-border)',
+                  borderRadius: '10px',
+                  color: 'var(--clr-text)',
+                  fontSize: '0.88rem',
+                  outline: 'none'
+                }}
+                placeholder={`Topic ${idx + 1}...`}
+                value={val}
+                onChange={(e) => handleThoughtChange(idx, e.target.value)}
+              />
+            ))}
+          </div>
+
           {/* Clue Hint details popup if requested */}
           {showHintOverlay && (
             <div className="feedback correct" style={{ width: '100%', padding: '8px 12px', margin: '6px 0', textAlign: 'center', fontSize: '0.85rem', borderRadius: '10px' }}>
@@ -599,7 +423,7 @@ export default function MindReaderApp2({ onBack }) {
           {/* Primary Action Button (Centered) */}
           <div style={{ textAlign: 'center', margin: '18px 0 12px 0' }}>
             <button 
-              className="gm-primary-action-btn" 
+              className="gm-primary-action-btn"
               style={{
                 background: 'var(--clr-accent-soft)',
                 border: '1.5px solid var(--clr-accent)',
@@ -620,13 +444,13 @@ export default function MindReaderApp2({ onBack }) {
 
           {/* Footer Navigation Row */}
           <div className="gm-footer-nav" style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '10px', borderTop: '1px solid var(--clr-border)', paddingTop: '10px' }}>
-            <button 
+            <button
               style={{
                 ...outlineBtnStyle,
                 opacity: localClueIndex === 0 ? 0.35 : 1,
                 cursor: localClueIndex === 0 ? 'not-allowed' : 'pointer'
               }}
-              disabled={localClueIndex === 0} 
+              disabled={localClueIndex === 0}
               onClick={handlePrevLocalClue}
             >
               &larr; Prev Clue
@@ -643,7 +467,7 @@ export default function MindReaderApp2({ onBack }) {
               disabled={cluesExhausted && localClueIndex === revealedClues.length - 1} 
               onClick={handleNextClue}
             >
-              Next Clue &rarr;
+              {localClueIndex < revealedClues.length - 1 ? 'Forward \u2192' : (cluesExhausted ? 'All Clues Revealed' : 'Unlock Next Clue \u2192')}
             </button>
           </div>
 
@@ -652,6 +476,7 @@ export default function MindReaderApp2({ onBack }) {
             const activeWorldObj = worlds.find(w => w.worldId === activeWorldId) || worlds[activeWorldIndex] || worlds[0];
             const activeWorldConcepts = activeWorldObj?.concepts || [];
             const filteredConcepts = activeWorldConcepts.filter(c => c.name.toLowerCase().includes(guessSearchQuery.toLowerCase().trim()));
+
 
             return (
               <div className="gm-guess-modal" style={{ padding: '20px', background: 'var(--clr-card)', border: '1px solid var(--clr-border)', borderRadius: '16px', maxWidth: '420px', margin: '0 auto' }}>
@@ -739,6 +564,7 @@ export default function MindReaderApp2({ onBack }) {
                     &larr; Cancel
                   </button>
                 </div>
+
               </div>
             );
           })()}

@@ -604,6 +604,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -611,8 +612,13 @@
 }
 
 @keyframes pulse-opacity {
-  from { opacity: 0.75; }
-  to { opacity: 1; }
+  from {
+    opacity: 0.75;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .mr2-music-bar {
@@ -623,15 +629,39 @@
   animation: bounceBar 1.2s ease-in-out infinite alternate;
 }
 
-.mr2-music-bar.bar-1 { animation-delay: 0.1s; height: 10px; }
-.mr2-music-bar.bar-2 { animation-delay: 0.3s; height: 25px; }
-.mr2-music-bar.bar-3 { animation-delay: 0.5s; height: 15px; }
-.mr2-music-bar.bar-4 { animation-delay: 0.2s; height: 35px; }
-.mr2-music-bar.bar-5 { animation-delay: 0.4s; height: 20px; }
+.mr2-music-bar.bar-1 {
+  animation-delay: 0.1s;
+  height: 10px;
+}
+
+.mr2-music-bar.bar-2 {
+  animation-delay: 0.3s;
+  height: 25px;
+}
+
+.mr2-music-bar.bar-3 {
+  animation-delay: 0.5s;
+  height: 15px;
+}
+
+.mr2-music-bar.bar-4 {
+  animation-delay: 0.2s;
+  height: 35px;
+}
+
+.mr2-music-bar.bar-5 {
+  animation-delay: 0.4s;
+  height: 20px;
+}
 
 @keyframes bounceBar {
-  from { height: 5px; }
-  to { height: 38px; }
+  from {
+    height: 5px;
+  }
+
+  to {
+    height: 38px;
+  }
 }
 
 /* Lobby Dashboard Styles */
@@ -708,6 +738,7 @@
   .mr2-lobby-columns {
     grid-template-columns: 1fr;
   }
+
   .mr2-lobby-panel-right {
     min-height: auto;
   }
@@ -755,8 +786,15 @@
 }
 
 @keyframes mr2-float-cloud {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
 }
 
 /* ─── GUESS WHAT'S ON TENALI'S MIND (SEQUENTIAL STYLES) ──────────────────────── */
@@ -774,8 +812,15 @@
 }
 
 @keyframes gm-fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* World Carousel Select */
@@ -896,7 +941,7 @@
   color: var(--clr-text-soft);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .gm-level-node.unlocked {
@@ -983,7 +1028,7 @@
   width: 320px;
   background: var(--clr-surface);
   border-left: 1.5px solid var(--clr-border);
-  box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -991,8 +1036,13 @@
 }
 
 @keyframes gm-slide-in {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 .gm-notebook-header {
@@ -1397,6 +1447,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
+
   .gm-level-card {
     padding: 16px 12px;
   }
