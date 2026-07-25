@@ -41204,90 +41204,7 @@ function TenthApp({ onBack }) {
 }
 
 function MindReaderWrapper({ onBack }) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const initialMode = urlParams.get('mode'); // 'tenali' | 'you' | null
-
-  const [gameMode, setGameMode] = useState(initialMode);
-
-  useEffect(() => {
-    const handleUrlChange = () => {
-      const params = new URLSearchParams(window.location.search);
-      setGameMode(params.get('mode'));
-    };
-    window.addEventListener('popstate', handleUrlChange);
-    const interval = setInterval(handleUrlChange, 500);
-    return () => {
-      window.removeEventListener('popstate', handleUrlChange);
-      clearInterval(interval);
-    };
-  }, []);
-
-  const handleSelectMode = (mode) => {
-    setGameMode(mode);
-    const newUrl = `${window.location.pathname}?mode=${mode}`;
-    window.history.pushState({ path: newUrl }, '', newUrl);
-  };
-
-  const handleBackToLobby = () => {
-    setGameMode(null);
-    const newUrl = window.location.pathname;
-    window.history.pushState({ path: newUrl }, '', newUrl);
-  };
-
-  if (gameMode === 'tenali') {
-    return <MindReaderApp onBack={handleBackToLobby} />;
-  }
-
-  if (gameMode === 'you') {
-    return <MindReaderApp2 onBack={handleBackToLobby} />;
-  }
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px', maxWidth: '800px', margin: '40px auto', padding: '20px', textAlign: 'center' }}>
-      <button className="back-button" onClick={onBack} style={{ alignSelf: 'flex-start' }}>← Home</button>
-
-      <h2 style={{ fontSize: '1.8rem', color: 'var(--clr-accent)', letterSpacing: '0.5px' }}>Choose Your Mind Reader Mode</h2>
-      <p style={{ color: 'var(--clr-text-soft)', fontSize: '1.05rem', maxWidth: '550px', margin: '0 auto 10px', lineHeight: 1.5 }}>
-        Play the mathematical mind reading challenges. Do you want Tenali to read your mind, or do you want to guess Tenali's secret?
-      </p>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', width: '100%', maxWidth: '640px', marginTop: '10px' }}>
-
-        {/* Mode 1: Tenali guesses */}
-        <div
-          onClick={() => handleSelectMode('tenali')}
-          style={{
-            background: 'rgba(30, 39, 46, 0.4)', border: '2px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '30px 20px', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 8px 32px rgba(0,0,0,0.2)'
-          }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--clr-accent)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.transform = 'none' }}
-        >
-          <span style={{ fontSize: '3rem', display: 'block', marginBottom: '15px' }}>🔮</span>
-          <h3 style={{ color: 'var(--clr-accent)', margin: '0 0 10px 0', fontSize: '1.25rem' }}>Tenali will guess</h3>
-          <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.85rem', lineHeight: '1.4', margin: 0 }}>
-            Think of a mathematical concept, answer Tenali's binary questions, and see if he can read your mind!
-          </p>
-        </div>
-
-        {/* Mode 2: You guess */}
-        <div
-          onClick={() => handleSelectMode('you')}
-          style={{
-            background: 'rgba(30, 39, 46, 0.4)', border: '2px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '30px 20px', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 8px 32px rgba(0,0,0,0.2)'
-          }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--clr-accent)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.transform = 'none' }}
-        >
-          <span style={{ fontSize: '3rem', display: 'block', marginBottom: '15px' }}>🙋‍♂️</span>
-          <h3 style={{ color: 'var(--clr-accent)', margin: '0 0 10px 0', fontSize: '1.25rem' }}>Read Tenali's Mind</h3>
-          <p style={{ color: 'var(--clr-text-soft)', fontSize: '0.85rem', lineHeight: '1.4', margin: 0 }}>
-            Tenali secretly selects a mathematical concept. Ask him questions, collect hints, and make your guess!
-          </p>
-        </div>
-
-      </div>
-    </div>
-  );
+  return <MindReaderApp2 onBack={onBack} />;
 }
 
 
@@ -44430,7 +44347,7 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
     { key: 'custom', name: 'Custom Lesson', subtitle: 'Build your own mixed quiz', color: 'featured' },
     { key: 'gym', name: 'Gym', subtitle: 'Adaptive workout across all 7 gym puzzles', color: 'featured' },
     { key: 'vachana', name: 'Vachana', subtitle: 'Mathematical Literacy Lab', color: 'featured' },
-    { key: 'mindreader', name: 'Mind Reader', subtitle: 'Let Tenali read your mind!', color: 'featured' },
+    { key: 'mindreader', name: 'Mind Reader', subtitle: "Read Tenali's mind!", color: 'featured' },
     { key: 'adventure', name: '👑 Adventure', subtitle: 'Knowledge Crystals — story-driven learning', color: 'featured', isRedirect: true, path: '/adventure' },
   ]
   // Visual Learning Universe lives only in the hamburger menu

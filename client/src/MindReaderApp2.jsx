@@ -34,6 +34,10 @@ export default function MindReaderApp2({ onBack }) {
   const [levelProgress, setLevelProgress] = useState({}); // levelNum -> starsEarned
   const [thoughtGuesses, setThoughtGuesses] = useState(['', '', '', '']);
 
+  // Animation states for flying plane
+  const [animatingFrom, setAnimatingFrom] = useState(null);
+  const [animatingTo, setAnimatingTo] = useState(null);
+
   // Active game navigation states
   const [worlds, setWorlds] = useState([]);
   const [activeWorldIndex, setActiveWorldIndex] = useState(0);
@@ -193,6 +197,17 @@ export default function MindReaderApp2({ onBack }) {
       setTenaliSpeech("I have hidden a mathematical concept inside my mind. Can you guess it in 5 clues?");
     }
   }, [phase]);
+
+  // Auto-cleanup for flying plane animation
+  useEffect(() => {
+    if (animatingFrom !== null && animatingTo !== null) {
+      const timer = setTimeout(() => {
+        setAnimatingFrom(null);
+        setAnimatingTo(null);
+      }, 2000); // matches the 1.8s animation duration plus buffer
+      return () => clearTimeout(timer);
+    }
+  }, [animatingFrom, animatingTo]);
 
   // Level selector maps
   const getLevelsForActiveWorld = () => {
@@ -528,6 +543,23 @@ export default function MindReaderApp2({ onBack }) {
         pathD += ` C ${prevX} ${cpY1}, ${x} ${cpY2}, ${x} ${y}`;
       }
     });
+
+    const fromIdx = animatingFrom !== null ? levels.findIndex(n => n.levelNum === animatingFrom) : -1;
+    const toIdx = animatingTo !== null ? levels.findIndex(n => n.levelNum === animatingTo) : -1;
+
+    let x1, y1, x2, y2, cpY1, cpY2;
+    if (fromIdx !== -1 && toIdx !== -1) {
+      const fromOffsetSign = fromIdx % 4 === 1 ? 80 : fromIdx % 4 === 3 ? -80 : 0;
+      x1 = 200 + fromOffsetSign;
+      y1 = 50 + fromIdx * nodeHeight;
+
+      const toOffsetSign = toIdx % 4 === 1 ? 80 : toIdx % 4 === 3 ? -80 : 0;
+      x2 = 200 + toOffsetSign;
+      y2 = 50 + toIdx * nodeHeight;
+
+      cpY1 = y1 + nodeHeight / 2;
+      cpY2 = y2 - nodeHeight / 2;
+    }
     
     return (
       <svg 
@@ -554,6 +586,26 @@ export default function MindReaderApp2({ onBack }) {
             animation: 'dashMove 20s linear infinite'
           }}
         />
+        {fromIdx !== -1 && toIdx !== -1 && (
+          <g
+            style={{
+              offsetPath: `path('M ${x1} ${y1} C ${x1} ${cpY1}, ${x2} ${cpY2}, ${x2} ${y2}')`,
+              offsetRotate: 'auto',
+              animation: 'flyPlane 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards'
+            }}
+          >
+            {/* Beautiful paper plane SVG path */}
+            <path
+              d="M-8 -8 L12 0 L-8 8 L-4 0 Z"
+              fill="var(--clr-accent)"
+              stroke="#fff"
+              strokeWidth="1.5"
+              style={{
+                filter: 'drop-shadow(0 0 6px var(--clr-accent))'
+              }}
+            />
+          </g>
+        )}
         <defs>
           <linearGradient id="trackGradient" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="var(--clr-accent)" stopOpacity="0.8" />
@@ -593,11 +645,6 @@ export default function MindReaderApp2({ onBack }) {
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
         }}>
           <div style={{ display: 'flex', gap: '8px' }}>
-            {phase === 'setup' && onBack && (
-              <button style={outlineBtnStyle} onClick={onBack}>
-                &larr; Lobby
-              </button>
-            )}
             {phase === 'worlds' && (
               <button style={outlineBtnStyle} onClick={() => setPhase('setup')}>
                 &larr; Setup
@@ -1205,7 +1252,7 @@ export default function MindReaderApp2({ onBack }) {
 
           {/* Action Buttons */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px', width: '100%' }}>
-            {isCorrectGuess && (
+            {isCorrectGuess ? (
               <button 
                 style={{
                   background: 'var(--clr-accent)',
@@ -1219,9 +1266,36 @@ export default function MindReaderApp2({ onBack }) {
                   width: '100%',
                   boxSizing: 'border-box'
                 }}
-                onClick={() => handleStartLevel(levelNum + 1)}
+                onClick={() => {
+                  const completedLvl = levelNum;
+                  const nextLvl = levelNum + 1;
+                  setAnimatingFrom(completedLvl);
+                  setAnimatingTo(nextLvl);
+                  setLevelNum(nextLvl);
+                  setPhase('levels');
+                }}
               >
-                Play Next Level &rarr;
+                Continue to Map &rarr;
+              </button>
+            ) : (
+              <button 
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  color: 'var(--clr-text)',
+                  borderRadius: '12px',
+                  border: '1px solid var(--clr-border)',
+                  padding: '12px 32px',
+                  fontSize: '0.95rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  width: '100%',
+                  boxSizing: 'border-box'
+                }}
+                onClick={() => {
+                  setPhase('levels');
+                }}
+              >
+                Return to Map
               </button>
             )}
           </div>
