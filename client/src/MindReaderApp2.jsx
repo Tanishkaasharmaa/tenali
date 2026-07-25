@@ -697,6 +697,18 @@ export default function MindReaderApp2({ onBack }) {
           <button style={{ width: '100%', maxWidth: '320px', padding: '12px', marginTop: '10px' }} onClick={() => setPhase('worlds')}>
             Enter the Kingdoms
           </button>
+
+          <div style={{ marginTop: '15px', width: '100%', maxWidth: '320px', padding: '15px', border: '1px solid var(--clr-border)', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--clr-text-soft)', letterSpacing: '0.05em', fontWeight: 'bold', textAlign: 'center' }}>Test Transition Whooshes</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
+              <button className="secondary" style={{ padding: '8px 4px', fontSize: '0.78rem' }} onClick={() => playSound('plane_whoosh1')}>Whoosh 1 🍃</button>
+              <button className="secondary" style={{ padding: '8px 4px', fontSize: '0.78rem', borderColor: 'var(--clr-accent)', color: 'var(--clr-accent)' }} onClick={() => playSound('plane_whoosh2')}>Whoosh 2 ✨</button>
+              <button className="secondary" style={{ padding: '8px 4px', fontSize: '0.78rem' }} onClick={() => playSound('plane_whoosh3')}>Whoosh 3 💨</button>
+            </div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--clr-text-soft)', textAlign: 'center', marginTop: '4px', lineHeight: '1.3' }}>
+              Click to preview. <strong>Whoosh 2</strong> is currently set as the level transition sound.
+            </div>
+          </div>
         </div>
       )}
 
@@ -1274,7 +1286,7 @@ export default function MindReaderApp2({ onBack }) {
                   setAnimatingTo(nextLvl);
                   setLevelNum(nextLvl);
                   setPhase('levels');
-                  playSound('plane');
+                  playSound('plane_whoosh2');
                 }}
               >
                 Continue to Map &rarr;
