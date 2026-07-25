@@ -7,6 +7,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { TenaliAvatar } from './App';
+import { playSound } from './audioContext';
 import confetti from 'canvas-confetti';
 import './MindReader2.css';
 
@@ -1273,6 +1274,7 @@ export default function MindReaderApp2({ onBack }) {
                   setAnimatingTo(nextLvl);
                   setLevelNum(nextLvl);
                   setPhase('levels');
+                  playSound('plane');
                 }}
               >
                 Continue to Map &rarr;
