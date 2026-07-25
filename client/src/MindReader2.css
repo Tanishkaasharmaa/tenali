@@ -1479,3 +1479,10 @@
     transform: scale(0.6);
   }
 }
+
+/* World Grid Card Hover Effects */
+.gm-world-grid-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--clr-accent) !important;
+  box-shadow: 0 8px 24px rgba(232, 134, 74, 0.15);
+}

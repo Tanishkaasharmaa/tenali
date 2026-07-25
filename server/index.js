@@ -9884,7 +9884,7 @@ app.get('/api/mindreader/worlds', async (req, res) => {
         });
       }
 
-      const isUnlocked = unlockedWorlds.includes(w.worldId) || w.worldId === 'number_kingdom' || w.requiredUnlockXP === 0 || (w.requiredUnlockXP > 0 && xp >= w.requiredUnlockXP) || prevWorldCompleted;
+      const isUnlocked = true; // Force unlock every kingdom
 
       // levels in this world
       const levelsInWorld = activeLevelsConfig.filter(lvl => lvl.worldId === w.worldId);

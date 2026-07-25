@@ -134,27 +134,10 @@ export default function MindReaderApp2({ onBack }) {
           syncGlobalXp(loadedXp);
         }
 
-        let resolvedWorlds = data.worlds || [];
-        if (!token) {
-          resolvedWorlds = resolvedWorlds.map((w, idx) => {
-            const requiredUnlockXP = w.requiredUnlockXP || 0;
-            let unlocked = w.worldId === 'number_kingdom' || loadedXp >= requiredUnlockXP;
-            if (!unlocked && idx > 0) {
-              const prevWorld = resolvedWorlds[idx - 1];
-              if (prevWorld && Array.isArray(prevWorld.levels)) {
-                const prevCompleted = prevWorld.levels.every(lvl => {
-                  const num = typeof lvl === 'number' ? lvl : (lvl.levelNum || lvl.id);
-                  return (loadedProgress[num] || 0) > 0;
-                });
-                if (prevCompleted) unlocked = true;
-              }
-            }
-            return {
-              ...w,
-              unlocked
-            };
-          });
-        }
+        let resolvedWorlds = (data.worlds || []).map(w => ({
+          ...w,
+          unlocked: true // Force unlock every kingdom
+        }));
         setWorlds(resolvedWorlds);
 
         // Determine first uncompleted level
@@ -706,62 +689,74 @@ export default function MindReaderApp2({ onBack }) {
         <div className="gm-container" style={{ minHeight: 'auto', gap: '10px' }}>
           <h3 style={{ margin: '10px 0', color: 'var(--clr-text)' }}>Select a World</h3>
           {worlds.length > 0 ? (
-            <div className="gm-carousel-wrapper" style={{ margin: '15px 0', gap: '10px' }}>
-              <button 
-                className="secondary" 
-                onClick={prevWorld} 
-                disabled={activeWorldIndex === 0}
-                style={{ borderRadius: '50%', width: '38px', height: '38px', padding: 0 }}
-              >
-                &larr;
-              </button>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+              gap: '16px',
+              width: '100%',
+              maxWidth: '800px',
+              margin: '15px auto',
+              boxSizing: 'border-box',
+              padding: '0 10px'
+            }}>
+              {worlds.map((w, idx) => {
+                const levelRangeText = w.levelRange ? `Levels ${w.levelRange[0]}–${w.levelRange[1]}` : '10 Levels';
+                const starsCount = w.stars || 0;
 
-              <div className={`gm-world-card ${worlds[activeWorldIndex].unlocked ? 'active-world' : 'locked-world'}`} style={{ padding: '20px 16px', maxWidth: '300px', background: 'var(--clr-card)', border: '1px solid var(--clr-border)' }}>
-                <div className="gm-world-header" style={{ color: worlds[activeWorldIndex].themeColor || 'var(--clr-accent)', fontSize: '0.8rem' }}>
-                  World {activeWorldIndex + 1} of {worlds.length}
-                </div>
-                <h4 className="gm-world-title" style={{ fontSize: '1.45rem', margin: '0 0 10px 0', color: 'var(--clr-text)' }}>{worlds[activeWorldIndex].worldName}</h4>
+                return (
+                  <div
+                    key={w.worldId}
+                    className="gm-world-grid-card"
+                    style={{
+                      background: 'var(--clr-card)',
+                      border: '1px solid var(--clr-border)',
+                      borderRadius: '20px',
+                      padding: '24px 16px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      textAlign: 'center',
+                      gap: '12px',
+                      cursor: 'pointer',
+                      transition: 'transform 0.2s, border-color 0.2s, box-shadow 0.2s',
+                      boxSizing: 'border-box'
+                    }}
+                    onClick={() => {
+                      setActiveWorldIndex(idx);
+                      setActiveWorldId(w.worldId);
+                      setPhase('levels');
+                    }}
+                  >
+                    {/* Inner badge container (mimicking "Level 1" in screenshot) */}
+                    <div style={{
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      border: '1px solid rgba(255, 255, 255, 0.05)',
+                      borderRadius: '12px',
+                      padding: '10px 14px',
+                      fontSize: '0.92rem',
+                      fontWeight: '700',
+                      color: 'var(--clr-text)',
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden'
+                    }}>
+                      {w.worldName}
+                    </div>
 
-                <div className="gm-world-badge" style={{ padding: '2px 8px', fontSize: '0.75rem', marginBottom: '12px', background: 'var(--clr-badge)', color: 'var(--clr-text)' }}>
-                  ⭐ {worlds[activeWorldIndex].stars} Stars
-                </div>
-
-                {!worlds[activeWorldIndex].unlocked ? (
-                  <div style={{ color: 'var(--clr-wrong)', marginBottom: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}>
-                    🔒 Locked ({worlds[activeWorldIndex].requiredUnlockXP} XP)
+                    {/* Details subtext (mimicking "3-letter, 1 blank" in screenshot) */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                      <div style={{ color: 'var(--clr-text-soft)', fontSize: '0.8rem' }}>
+                        {levelRangeText}
+                      </div>
+                      <div style={{ color: 'var(--clr-accent)', fontSize: '0.78rem', fontWeight: 'bold' }}>
+                        ⭐ {starsCount} Stars
+                      </div>
+                    </div>
                   </div>
-                ) : (
-                  <div style={{ color: 'var(--clr-correct)', marginBottom: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}>
-                    🔓 Unlocked
-                  </div>
-                )}
-
-                <button
-                  className="gm-world-btn"
-                  style={{
-                    padding: '10px',
-                    fontSize: '0.9rem',
-                    background: worlds[activeWorldIndex].unlocked ? 'var(--clr-accent)' : 'var(--clr-input)',
-                    color: worlds[activeWorldIndex].unlocked ? 'var(--clr-text)' : 'var(--clr-text-soft)'
-                  }}
-                  disabled={!worlds[activeWorldIndex].unlocked}
-                  onClick={() => {
-                    setActiveWorldId(worlds[activeWorldIndex].worldId);
-                    setPhase('levels');
-                  }}
-                >
-                  {worlds[activeWorldIndex].unlocked ? 'Enter Kingdom' : 'Locked'}
-                </button>
-              </div>
-
-              <button 
-                className="secondary" 
-                onClick={nextWorld} 
-                disabled={activeWorldIndex === worlds.length - 1}
-                style={{ borderRadius: '50%', width: '38px', height: '38px', padding: 0 }}
-              >
-                &rarr;
-              </button>
+                );
+              })}
             </div>
           ) : (
             <div>Loading worlds...</div>
