@@ -87,8 +87,35 @@ export function playSound(type, enabled = true) {
       osc2.start(now);
       osc2.stop(now + 1.4);
     } else if (type === 'plane') {
-      // Default to Whoosh 2 as requested
-      playSound('plane_whoosh2', enabled);
+      const now = ctx.currentTime;
+      // Classic glider wind whoosh sound
+      const bufferSize = ctx.sampleRate * 1.5;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.Q.setValueAtTime(1.2, now);
+      filter.frequency.setValueAtTime(120, now);
+      filter.frequency.exponentialRampToValueAtTime(800, now + 1.0);
+
+      noise.connect(filter);
+      filter.connect(gain);
+
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.linearRampToValueAtTime(0.10, now + 0.3);
+      gain.gain.linearRampToValueAtTime(0.10, now + 0.9);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+
+      noise.start(now);
+      noise.stop(now + 1.5);
+      osc.start(now);
+      osc.stop(now);
     }
   } catch (e) {
     console.warn('AudioContext playback failed:', e);
