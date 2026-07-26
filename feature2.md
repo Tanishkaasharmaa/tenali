@@ -157,18 +157,17 @@ Compares the guess with the secret concept, logs telemetry, updates user databas
 
 ## 6. Frontend Sequential Screen Mockups
 
-### Screen 1: World Select (Kingdom Cards with Kingdom Highest Level)
+### Screen 1: World Select (Minimal Uncluttered Kingdom Cards)
 ```
 ==============================================================
-                     Top HUD: [🏆 XP: 1450]
-                     
-                       Select a World
+  [🏠 Home]                                     [🏆 XP: 1450]
+==============================================================
+                       Select a Kingdom
              
        ┌───────────────────────────────────────────┐
-       │             ARITHMETIC KINGDOM            │
-       │               Levels 11–20                │
-       │      👑 Highest Level: Level 14            │
-       │              ⭐ 12 Stars                  │
+       │             Arithmetic Kingdom            │
+       │           👑 Highest: Level 14            │
+       │            Levels 11–20 • ⭐ 12           │
        └───────────────────────────────────────────┘
 ==============================================================
 ```

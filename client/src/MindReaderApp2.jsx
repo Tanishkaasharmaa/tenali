@@ -751,15 +751,15 @@ export default function MindReaderApp2({ onBack }) {
       {/* ─── PHASE 2: WORLD SELECT CAROUSEL ───────────────────────────────────── */}
       {phase === 'worlds' && (
         <div className="gm-container" style={{ minHeight: 'auto', gap: '10px' }}>
-          <h3 style={{ margin: '10px 0', color: 'var(--clr-text)' }}>Select a World</h3>
+          <h3 style={{ margin: '0 0 10px 0', color: 'var(--clr-text)', fontSize: '1.25rem', fontFamily: 'var(--font-display)' }}>Select a Kingdom</h3>
           {worlds.length > 0 ? (
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
-              gap: '16px',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: '14px',
               width: '100%',
               maxWidth: '800px',
-              margin: '15px auto',
+              margin: '10px auto',
               boxSizing: 'border-box',
               padding: '0 10px'
             }}>
@@ -775,16 +775,16 @@ export default function MindReaderApp2({ onBack }) {
                     style={{
                       background: 'var(--clr-card)',
                       border: '1px solid var(--clr-border)',
-                      borderRadius: '20px',
-                      padding: '24px 16px',
+                      borderRadius: '16px',
+                      padding: '18px 14px',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
                       justifyContent: 'center',
                       textAlign: 'center',
-                      gap: '12px',
+                      gap: '8px',
                       cursor: 'pointer',
-                      transition: 'transform 0.2s, border-color 0.2s, box-shadow 0.2s',
+                      transition: 'all 0.2s ease',
                       boxSizing: 'border-box'
                     }}
                     onClick={() => {
@@ -793,34 +793,21 @@ export default function MindReaderApp2({ onBack }) {
                       setPhase('levels');
                     }}
                   >
-                    {/* Inner badge container (mimicking "Level 1" in screenshot) */}
-                    <div style={{
-                      background: 'rgba(255, 255, 255, 0.08)',
-                      border: '1px solid rgba(255, 255, 255, 0.05)',
-                      borderRadius: '12px',
-                      padding: '10px 14px',
-                      fontSize: '0.92rem',
-                      fontWeight: '700',
-                      color: 'var(--clr-text)',
-                      width: '100%',
-                      boxSizing: 'border-box',
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden'
-                    }}>
+                    {/* Kingdom Title */}
+                    <div style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--clr-text)' }}>
                       {w.worldName}
                     </div>
 
-                    {/* Details subtext */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                      <div style={{ color: 'var(--clr-text-soft)', fontSize: '0.8rem' }}>
-                        {levelRangeText}
-                      </div>
-                      <div style={{ color: 'var(--clr-accent)', fontSize: '0.78rem', fontWeight: 'bold' }}>
-                        👑 Highest Level: {highestCompletedInKingdom > 0 ? `Level ${highestCompletedInKingdom}` : 'None'}
-                      </div>
-                      <div style={{ color: 'var(--clr-accent)', fontSize: '0.78rem', fontWeight: 'bold' }}>
-                        ⭐ {starsCount} Stars
-                      </div>
+                    {/* Highest Level Completed */}
+                    <div style={{ fontSize: '0.84rem', color: 'var(--clr-accent)', fontWeight: '700' }}>
+                      👑 Highest: {highestCompletedInKingdom > 0 ? `Level ${highestCompletedInKingdom}` : 'None'}
+                    </div>
+
+                    {/* Level Range & Stars */}
+                    <div style={{ fontSize: '0.78rem', color: 'var(--clr-text-soft)', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                      <span>{levelRangeText}</span>
+                      <span>•</span>
+                      <span style={{ color: '#f1c40f', fontWeight: 'bold' }}>⭐ {starsCount}</span>
                     </div>
                   </div>
                 );
