@@ -22,6 +22,74 @@ function authGetToken() {
   }
 }
 
+function playCoinSound() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    const now = ctx.currentTime;
+    osc.frequency.setValueAtTime(987.77, now);
+    osc.frequency.setValueAtTime(1318.51, now + 0.08);
+
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.25);
+  } catch (e) {}
+}
+
+function playConfettiSound() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+
+    // 1. Victory Fanfare Arpeggio (C Major chord cascade)
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      const startTime = ctx.currentTime + idx * 0.07;
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.28, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.35);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(startTime);
+      osc.stop(startTime + 0.35);
+    });
+
+    // 2. High Sparkle Chime Effect
+    const sparkleOsc = ctx.createOscillator();
+    const sparkleGain = ctx.createGain();
+    sparkleOsc.type = 'sine';
+    const sparkleStart = ctx.currentTime + 0.35;
+    sparkleOsc.frequency.setValueAtTime(1760.00, sparkleStart);
+    sparkleOsc.frequency.exponentialRampToValueAtTime(2637.02, sparkleStart + 0.2);
+
+    sparkleGain.gain.setValueAtTime(0.2, sparkleStart);
+    sparkleGain.gain.exponentialRampToValueAtTime(0.001, sparkleStart + 0.25);
+
+    sparkleOsc.connect(sparkleGain);
+    sparkleGain.connect(ctx.destination);
+
+    sparkleOsc.start(sparkleStart);
+    sparkleOsc.stop(sparkleStart + 0.25);
+  } catch (e) {}
+}
+
 export default function MindReaderApp2({ onBack }) {
   // Game Phase: 'setup' | 'worlds' | 'levels' | 'playing' | 'gameover'
   const [phase, setPhase] = useState('setup');
@@ -74,10 +142,12 @@ export default function MindReaderApp2({ onBack }) {
   const [actualConcept, setActualConcept] = useState('');
   const [educationalInfo, setEducationalInfo] = useState(null);
   const [xpBreakdown, setXpBreakdown] = useState(null);
+  const [xpStep, setXpStep] = useState(0);
 
-  // Clues history navigation
+  // Clues history navigation & review
   const [revealedClues, setRevealedClues] = useState([]);
   const [localClueIndex, setLocalClueIndex] = useState(0);
+  const [showReviewedClues, setShowReviewedClues] = useState(false);
 
   const syncGlobalXp = (newXp) => {
     try {
@@ -192,6 +262,40 @@ export default function MindReaderApp2({ onBack }) {
       return () => clearTimeout(timer);
     }
   }, [animatingFrom, animatingTo]);
+
+  // Animated XP receipt steps & confetti sound effect sequence on gameover screen
+  useEffect(() => {
+    if (phase === 'gameover' && isCorrectGuess && xpEarned > 0) {
+      setXpStep(0);
+
+      // Trigger confetti sound & particle burst
+      try {
+        playConfettiSound();
+        confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+      } catch (e) {}
+
+      // Determine valid steps to execute based on earned bonuses
+      const steps = [1]; // Base XP
+      if (xpBreakdown?.speedBonus > 0) steps.push(2);
+      if (xpBreakdown?.noHintBonus > 0) steps.push(3);
+      if (xpBreakdown?.streakBonus > 0) steps.push(4);
+      steps.push(5); // Total Sum
+
+      let stepIdx = 0;
+      const interval = setInterval(() => {
+        if (stepIdx < steps.length) {
+          const currentStep = steps[stepIdx];
+          setXpStep(currentStep);
+          playCoinSound();
+          stepIdx++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 420);
+
+      return () => clearInterval(interval);
+    }
+  }, [phase, isCorrectGuess, xpEarned, xpBreakdown]);
 
   // Auto-scroll to the active/current level when opening the levels map page
   useEffect(() => {
@@ -1301,134 +1405,144 @@ export default function MindReaderApp2({ onBack }) {
 
       {/* ─── PHASE 5: GAMEOVER RESULT SCREEN ─── */}
       {phase === 'gameover' && (
-        <div className="gm-container" style={{ minHeight: 'auto', gap: '5px', width: '100%', maxWidth: '420px', padding: '10px 15px' }}>
-          {/* Centered Serif Heading */}
-          <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--clr-text)', fontSize: '2.2rem', margin: '20px 0 4px 0', textAlign: 'center', fontWeight: 'bold' }}>
-            {isCorrectGuess ? '🎉 Correct!' : 'Level Complete'}
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '8px', width: '100%', maxWidth: '440px', padding: '10px 15px' }}>
+          {/* Centered Display Heading */}
+          <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--clr-text)', fontSize: '2.2rem', margin: '15px 0 2px 0', textAlign: 'center', fontWeight: 'bold' }}>
+            {isCorrectGuess ? '🎉 Victory!' : 'Level Complete'}
           </h2>
           {isCorrectGuess && actualConcept && (
-            <p style={{ fontSize: '0.95rem', color: 'var(--clr-text-soft)', margin: '0 0 10px 0', textAlign: 'center' }}>
-              The concept was <strong style={{ color: 'var(--clr-text)' }}>"{actualConcept}"</strong>
+            <p style={{ fontSize: '0.95rem', color: 'var(--clr-text-soft)', margin: '0 0 8px 0', textAlign: 'center' }}>
+              Concept: <strong style={{ color: 'var(--clr-accent)' }}>"{actualConcept}"</strong>
             </p>
           )}
 
-          {/* Stars Display */}
+          {/* Reactive Tenali Character Avatar & Dialogue Speech Bubble */}
+          <div className="mr2-char-hub-vertical" style={{ margin: '10px 0', gap: '8px', alignItems: 'center' }}>
+            <TenaliAvatar
+              expression={isCorrectGuess ? (starsEarned === 3 ? 'cheering' : 'happy') : 'thinking'}
+              skin="classic"
+            />
+            <div className="mr2-speech-bubble" style={{ maxWidth: '360px', padding: '10px 16px', border: '1px solid var(--clr-accent)' }}>
+              <p className="mr2-dialogue-text" style={{ fontSize: '0.92rem', margin: 0, color: 'var(--clr-text)', fontWeight: '600' }}>
+                {isCorrectGuess
+                  ? (starsEarned === 3
+                      ? "Brilliant deduction! You read my mind like an open manuscript! 🧠✨"
+                      : "Great job! You cracked the mystery! Can you aim for 3 stars next time?")
+                  : "A tough puzzle! Even royal masterminds learn from clues. Let's try again!"}
+              </p>
+            </div>
+          </div>
+
+          {/* Sequential Animated Star Pop-In */}
           {isCorrectGuess && (
-            <div style={{ fontSize: '2rem', color: '#f1c40f', margin: '5px 0', textAlign: 'center', letterSpacing: '4px' }}>
-              {Array.from({ length: starsEarned }).map((_, idx) => (
-                <span key={idx}>★</span>
-              ))}
-              {Array.from({ length: 3 - starsEarned }).map((_, idx) => (
-                <span key={idx} style={{ opacity: 0.15 }}>★</span>
-              ))}
+            <div style={{ fontSize: '2.4rem', color: '#f1c40f', margin: '4px 0', textAlign: 'center', letterSpacing: '8px' }}>
+              {Array.from({ length: 3 }).map((_, idx) => {
+                const isEarned = idx < starsEarned;
+                return (
+                  <span
+                    key={idx}
+                    className={isEarned ? 'gm-star-animated' : ''}
+                    style={{
+                      animationDelay: `${idx * 0.15}s`,
+                      opacity: isEarned ? 1 : 0.18,
+                      filter: isEarned ? 'drop-shadow(0 0 10px rgba(241, 196, 15, 0.6))' : 'none'
+                    }}
+                  >
+                    ★
+                  </span>
+                );
+              })}
             </div>
           )}
 
-          {/* Reward Badges */}
-          {isCorrectGuess && (
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', margin: '15px 0' }}>
-              <span className="gm-pill-badge" style={{ background: 'var(--clr-accent-soft)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: 'var(--clr-text-soft)' }}>
-                XP: <strong style={{ color: 'var(--clr-accent)' }}>+{xpEarned}</strong>
-              </span>
-              <span className="gm-pill-badge" style={{ background: 'var(--clr-accent-soft)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '6px 14px', fontSize: '0.82rem', color: 'var(--clr-text-soft)' }}>
-                Rating: <strong style={{ color: 'var(--clr-accent)' }}>{mrrChange >= 0 ? `+${mrrChange}` : mrrChange}</strong>
-              </span>
-            </div>
-          )}
-
-          {/* Detailed XP Breakdown Receipt */}
+          {/* Sequential Audio-Enabled XP Breakdown Receipt */}
           {isCorrectGuess && xpBreakdown && (
             <div className="gm-xp-breakdown" style={{
               background: 'rgba(255, 255, 255, 0.02)',
-              border: '1px solid var(--clr-border)',
-              borderRadius: '12px',
-              padding: '12px 16px',
+              border: '1.5px solid var(--clr-border)',
+              borderRadius: '14px',
+              padding: '14px 18px',
               width: '100%',
-              margin: '10px 0',
-              fontSize: '0.85rem'
+              margin: '12px 0',
+              fontSize: '0.9rem',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.2)'
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                <span style={{ color: 'var(--clr-text-soft)' }}>{xpBreakdown.isReplay ? 'Replay Base XP (30%):' : 'Base XP:'}</span>
-                <span style={{ fontWeight: 'bold', color: 'var(--clr-text)' }}>+{xpBreakdown.baseXp} XP</span>
-              </div>
-              {xpBreakdown.speedBonus > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+              {/* Step 1: Base XP */}
+              {xpStep >= 1 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', animation: 'gm-fade-in 0.3s ease-out' }}>
+                  <span style={{ color: 'var(--clr-text-soft)' }}>🪙 {xpBreakdown.isReplay ? 'Replay Base XP (30%):' : 'Base XP:'}</span>
+                  <span style={{ fontWeight: 'bold', color: 'var(--clr-text)' }}>+{xpBreakdown.baseXp} XP</span>
+                </div>
+              )}
+
+              {/* Step 2: Speed Bonus */}
+              {xpStep >= 2 && xpBreakdown.speedBonus > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', animation: 'gm-fade-in 0.3s ease-out' }}>
                   <span style={{ color: 'var(--clr-text-soft)' }}>⚡ Speed Bonus:</span>
                   <span style={{ color: 'var(--clr-accent)', fontWeight: 'bold' }}>+{xpBreakdown.speedBonus} XP</span>
                 </div>
               )}
-              {xpBreakdown.noHintBonus > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+
+              {/* Step 3: No-Hint Bonus */}
+              {xpStep >= 3 && xpBreakdown.noHintBonus > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', animation: 'gm-fade-in 0.3s ease-out' }}>
                   <span style={{ color: 'var(--clr-text-soft)' }}>💡 No-Hint Bonus:</span>
                   <span style={{ color: 'var(--clr-correct)', fontWeight: 'bold' }}>+{xpBreakdown.noHintBonus} XP</span>
                 </div>
               )}
-              {xpBreakdown.streakBonus > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+
+              {/* Step 4: Streak Bonus */}
+              {xpStep >= 4 && xpBreakdown.streakBonus > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', animation: 'gm-fade-in 0.3s ease-out' }}>
                   <span style={{ color: 'var(--clr-text-soft)' }}>🔥 Streak Bonus (Streak: {xpBreakdown.streak}):</span>
                   <span style={{ color: '#f1c40f', fontWeight: 'bold' }}>+{xpBreakdown.streakBonus} XP</span>
                 </div>
               )}
-              <div style={{ borderTop: '1px dashed var(--clr-border)', marginTop: '8px', paddingTop: '8px', display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '0.92rem' }}>
-                <span style={{ color: 'var(--clr-text)' }}>Total XP Earned:</span>
-                <span style={{ color: 'var(--clr-accent)' }}>+{xpEarned} XP</span>
-              </div>
-            </div>
-          )}
 
-          {/* Premium Charcoal Revision Card */}
-          {educationalInfo && (
-            <div style={{
-              background: 'var(--clr-card)',
-              border: '1.5px solid var(--clr-border)',
-              borderRadius: '12px',
-              padding: '16px',
-              width: '100%',
-              margin: '10px 0',
-              textAlign: 'left'
-            }}>
-              <h4 style={{ margin: '0 0 12px 0', fontFamily: 'var(--font-display)', color: 'var(--clr-accent)', borderBottom: '1px solid var(--clr-border)', paddingBottom: '6px', fontSize: '1.05rem', fontWeight: 'bold' }}>
-                Revision Card
-              </h4>
-
-              {educationalInfo.definition && (
-                <div style={{ marginBottom: '10px' }}>
-                  <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--clr-text-soft)', letterSpacing: '0.05em', fontWeight: 'bold' }}>Definition</div>
-                  <div style={{ color: 'var(--clr-text)', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.definition}</div>
-                </div>
-              )}
-
-              {educationalInfo.examples && (
-                <div style={{ marginBottom: '10px' }}>
-                  <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--clr-text-soft)', letterSpacing: '0.05em', fontWeight: 'bold' }}>Examples</div>
-                  <div style={{ color: 'var(--clr-text)', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{Array.isArray(educationalInfo.examples) ? educationalInfo.examples.join(', ') : educationalInfo.examples}</div>
-                </div>
-              )}
-
-              {educationalInfo.commonMistakes && (
-                <div>
-                  <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--clr-text-soft)', letterSpacing: '0.05em', fontWeight: 'bold' }}>Common Mistakes</div>
-                  <div style={{ color: 'var(--clr-wrong)', fontSize: '0.85rem', marginTop: '2px', lineHeight: '1.4' }}>{educationalInfo.commonMistakes}</div>
+              {/* Step 5: Total Sum */}
+              {xpStep >= 5 && (
+                <div style={{ borderTop: '1px dashed var(--clr-border)', marginTop: '10px', paddingTop: '10px', display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '1rem', animation: 'gm-fade-in 0.3s ease-out' }}>
+                  <span style={{ color: 'var(--clr-text)' }}>Total XP Earned:</span>
+                  <span style={{ color: 'var(--clr-accent)', fontSize: '1.1rem' }}>+{xpEarned} XP</span>
                 </div>
               )}
             </div>
           )}
 
-          {/* Action Buttons */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px', width: '100%' }}>
+          {/* Side-by-Side Action Buttons Flow */}
+          <div style={{ display: 'flex', gap: '12px', marginTop: '15px', width: '100%' }}>
+            <button
+              style={{
+                flex: 1,
+                background: 'rgba(255, 255, 255, 0.06)',
+                color: 'var(--clr-text)',
+                borderRadius: '12px',
+                border: '1px solid var(--clr-border)',
+                padding: '12px 16px',
+                fontSize: '0.92rem',
+                fontWeight: '700',
+                cursor: 'pointer',
+                boxSizing: 'border-box'
+              }}
+              onClick={() => setPhase('levels')}
+            >
+              🗺️ Map
+            </button>
+
             {isCorrectGuess ? (
-              <button 
+              <button
                 style={{
+                  flex: 1,
                   background: 'var(--clr-accent)',
                   color: 'var(--clr-text)',
                   borderRadius: '12px',
                   border: 'none',
-                  padding: '12px 32px',
-                  fontSize: '0.95rem',
+                  padding: '12px 16px',
+                  fontSize: '0.92rem',
                   fontWeight: '700',
                   cursor: 'pointer',
-                  width: '100%',
-                  boxSizing: 'border-box'
+                  boxSizing: 'border-box',
+                  boxShadow: '0 4px 14px rgba(232, 134, 74, 0.3)'
                 }}
                 onClick={() => {
                   const completedLvl = levelNum;
@@ -1440,27 +1554,27 @@ export default function MindReaderApp2({ onBack }) {
                   playSound('plane');
                 }}
               >
-                Continue to Map &rarr;
+                🚀 Next Level &rarr;
               </button>
             ) : (
-              <button 
+              <button
                 style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
+                  flex: 1,
+                  background: 'var(--clr-accent)',
                   color: 'var(--clr-text)',
                   borderRadius: '12px',
-                  border: '1px solid var(--clr-border)',
-                  padding: '12px 32px',
-                  fontSize: '0.95rem',
+                  border: 'none',
+                  padding: '12px 16px',
+                  fontSize: '0.92rem',
                   fontWeight: '700',
                   cursor: 'pointer',
-                  width: '100%',
                   boxSizing: 'border-box'
                 }}
                 onClick={() => {
-                  setPhase('levels');
+                  handleStartLevel(levelNum);
                 }}
               >
-                Return to Map
+                🔄 Try Again
               </button>
             )}
           </div>

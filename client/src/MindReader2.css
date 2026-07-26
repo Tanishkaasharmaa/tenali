@@ -1505,3 +1505,97 @@
   color: var(--clr-text-soft);
   opacity: 0.5;
 }
+
+/* Gamified Result Screen Styles & Animations */
+@keyframes starPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.2) rotate(-30deg);
+  }
+  70% {
+    transform: scale(1.4) rotate(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.gm-star-animated {
+  display: inline-block;
+  animation: starPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.gm-wisdom-scroll {
+  background: var(--clr-card);
+  border: 1.5px solid var(--clr-accent);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(232, 134, 74, 0.12);
+  margin: 14px 0;
+  text-align: left;
+}
+
+.gm-mastery-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(232, 134, 74, 0.12);
+  border: 1px solid var(--clr-accent);
+  color: var(--clr-text);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Flying XP Particle Animation to Top-Right Header */
+@keyframes flyXpToTopRight {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.35);
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    top: 25px;
+    left: calc(100% - 80px);
+    transform: translate(0, 0) scale(0.35);
+  }
+}
+
+.gm-flying-xp {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #e8864a 0%, #f39c12 100%);
+  color: #ffffff;
+  padding: 8px 20px;
+  border-radius: 24px;
+  font-weight: 800;
+  font-size: 1.15rem;
+  box-shadow: 0 0 24px rgba(232, 134, 74, 0.9), 0 0 12px #f1c40f;
+  border: 2px solid #ffffff;
+  z-index: 9999;
+  pointer-events: none;
+  animation: flyXpToTopRight 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Top Navigation Bar XP Pill Bounce Effect */
+@keyframes xpPillBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); border-color: var(--clr-accent); box-shadow: 0 0 16px var(--clr-accent); }
+  100% { transform: scale(1); }
+}
+
+.gm-xp-pill-pulse {
+  animation: xpPillBounce 0.45s ease-out;
+}

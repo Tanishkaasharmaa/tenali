@@ -236,20 +236,32 @@ Compares the guess with the secret concept, logs telemetry, updates user databas
 ==============================================================
 ```
 
-### Screen 5: Outcome & Educational Details Review
+### Screen 5: Outcome & Gamified Result Screen (Tenali Wisdom Scroll)
 ```
 ==============================================================
-                        🎉 CORRECT!
-                   +30 MRR  |  +150 XP  |  ⭐⭐⭐
-                   
-             Definition: A whole number greater than 1 with
-             exactly two divisors: 1 and itself.
-             
-             Examples: 2, 3, 5, 7, 11, 13
-             
-             Related Lesson: Factors and Multiples
-             
-                    [ Next Level Map -> ]
+                         🎉 Victory!
+                  Concept: "Prime Numbers"
+                  
+                      (\_/)
+                      (o.o)   <- Cheering Tenali Avatar
+                     (>   <)
+            "Brilliant deduction! Mastermind status!"
+            
+                      ★   ★   ★   <- Animated Star Pops
+            [⚡ Speedster]  [💡 Pure Deductor]  [🔥 Streak]
+            
+                   +150 XP  |  +30 Rating
+            
+            📜 Tenali's Wisdom Scroll:
+            Definition: A whole number greater than 1...
+            Examples: 2, 3, 5, 7, 11
+            Common Pitfalls: 1 is not a prime number.
+            
+            ▶ Review Deciphered Clues (5)
+            
+               [ 🚀 Play Next Level → ]
+               [ 🔄 Replay for 3 Stars ]
+               [ 🗺️ Kingdom Map ]
 ==============================================================
 ```
 
