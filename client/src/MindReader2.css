@@ -1250,10 +1250,12 @@
   height: 8px !important;
 }
 
-/* Ensure the outer container can scroll if the screen height is extremely small, preventing cut-offs */
+/* Extend container background height naturally to fit content and eliminate internal scrollbar */
 .mr2-container {
-  max-height: 100vh !important;
-  overflow-y: auto !important;
+  max-height: none !important;
+  height: auto !important;
+  min-height: auto !important;
+  overflow: visible !important;
 }
 
 
