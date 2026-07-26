@@ -764,9 +764,9 @@ export default function MindReaderApp2({ onBack }) {
               padding: '0 10px'
             }}>
               {worlds.map((w, idx) => {
-                const levelRangeText = w.levelRange ? `Levels ${w.levelRange[0]}–${w.levelRange[1]}` : '10 Levels';
                 const starsCount = w.stars || 0;
                 const highestCompletedInKingdom = getHighestCompletedLevelForWorld(w);
+                const hasStarted = highestCompletedInKingdom > 0;
 
                 return (
                   <div
@@ -775,16 +775,16 @@ export default function MindReaderApp2({ onBack }) {
                     style={{
                       background: 'var(--clr-card)',
                       border: '1px solid var(--clr-border)',
-                      borderRadius: '16px',
-                      padding: '18px 14px',
+                      borderRadius: '20px',
+                      padding: '24px 16px',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
                       justifyContent: 'center',
                       textAlign: 'center',
-                      gap: '8px',
+                      gap: '12px',
                       cursor: 'pointer',
-                      transition: 'all 0.2s ease',
+                      transition: 'transform 0.2s, border-color 0.2s, box-shadow 0.2s',
                       boxSizing: 'border-box'
                     }}
                     onClick={() => {
@@ -793,22 +793,38 @@ export default function MindReaderApp2({ onBack }) {
                       setPhase('levels');
                     }}
                   >
-                    {/* Kingdom Title */}
-                    <div style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--clr-text)' }}>
+                    {/* Inner badge container (Title) */}
+                    <div style={{
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      border: '1px solid rgba(255, 255, 255, 0.05)',
+                      borderRadius: '12px',
+                      padding: '10px 14px',
+                      fontSize: '0.92rem',
+                      fontWeight: '700',
+                      color: 'var(--clr-text)',
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden'
+                    }}>
                       {w.worldName}
                     </div>
 
-                    {/* Highest Level Completed */}
-                    <div style={{ fontSize: '0.84rem', color: 'var(--clr-accent)', fontWeight: '700' }}>
-                      👑 Highest: {highestCompletedInKingdom > 0 ? `Level ${highestCompletedInKingdom}` : 'None'}
-                    </div>
-
-                    {/* Level Range & Stars */}
-                    <div style={{ fontSize: '0.78rem', color: 'var(--clr-text-soft)', display: 'flex', gap: '6px', alignItems: 'center' }}>
-                      <span>{levelRangeText}</span>
-                      <span>•</span>
-                      <span style={{ color: '#f1c40f', fontWeight: 'bold' }}>⭐ {starsCount}</span>
-                    </div>
+                    {/* Subtext: Level X ⭐ Stars or Yet to start */}
+                    {hasStarted ? (
+                      <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem' }}>
+                        <span style={{ color: 'var(--clr-accent)', fontWeight: '700' }}>
+                          Level {highestCompletedInKingdom}
+                        </span>
+                        <span style={{ color: '#f1c40f', fontWeight: '700' }}>
+                          ⭐ {starsCount}
+                        </span>
+                      </div>
+                    ) : (
+                      <div style={{ color: 'var(--clr-text-soft)', fontSize: '0.82rem', fontStyle: 'italic' }}>
+                        Yet to start
+                      </div>
+                    )}
                   </div>
                 );
               })}
