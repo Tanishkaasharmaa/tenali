@@ -150,7 +150,7 @@ Compares the guess with the secret concept, logs telemetry, updates user databas
 ### HUD & Top Header Layout Rules
 1. **Lobby Screen ("Read Tenali's Mind")**: Top header bar displays **Home button on the left** (`🏠 Home`) and **XP on the right** (`🏆 XP: {xp}`). The separate HUD box above the "Read Tenali's Mind" text is removed.
 2. **Worlds Page**: Top header displays navigation buttons on the left and **XP on the right** (`🏆 XP: {xp}`). Every kingdom is 100% independent with distinct level boundaries. All kingdom title text boxes and card containers are locked to identical, uniform dimensions (`height: 56px`, `display: flex`, `align-items: center`) so single-line and multi-line titles align perfectly across the grid. If started, subtext displays `Level {relativeLevel} ⭐ {stars}`. If unstarted, subtext displays `Yet to start`.
-3. **Level Section**: Top header displays **only XP and highest level completed** (`🏆 XP: {xp}` and `👑 Highest Level Completed: Level {X}`). Hints and current level counters are removed from the top navigation bar.
+3. **Level Section**: Top header displays **only navigation buttons on the left** (`← Worlds`, `🏠 Home`) and **XP on the right** (`🏆 XP: {xp}`). The "Highest Level Completed" pill is removed. Opening the level map automatically smooth-scrolls to center on the active level node to be played next.
 
 ---
 
@@ -174,11 +174,20 @@ Compares the guess with the secret concept, logs telemetry, updates user databas
 ==============================================================
 ```
 
-### Screen 2: Level Selection Track
+### Screen 2: Level Selection Track (Auto-Centered Active Level)
 ```
 ==============================================================
-  Top HUD: [🏆 XP: 1450]  |  [👑 Highest Level Completed: Level 14]
+  [← Worlds]  [🏠 Home]                          [🏆 XP: 1450]
 ==============================================================
+                      Arithmetic Kingdom
+                      
+                           (Level 1 ✓)
+                              |
+                     ⭐ [ Level 2 ] ⭐  <- Auto-centered active level
+                              |
+                           ( 🔒 3 )
+==============================================================
+```
                 [<- Back to Worlds]
                 
                     ( Level 3 ) [🔒]

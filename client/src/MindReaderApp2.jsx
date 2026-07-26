@@ -193,6 +193,20 @@ export default function MindReaderApp2({ onBack }) {
     }
   }, [animatingFrom, animatingTo]);
 
+  // Auto-scroll to the active/current level when opening the levels map page
+  useEffect(() => {
+    if (phase === 'levels') {
+      const timer = setTimeout(() => {
+        const targetElement = document.querySelector('.active-target-level') ||
+                              document.querySelector('.gm-level-node.active-node');
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, activeWorldId, activeWorldIndex]);
+
   // Kingdom Level Boundaries Map (guarantees complete independence for every kingdom)
   const WORLD_LEVEL_RANGES = {
     'number_kingdom': [1, 10],
@@ -281,7 +295,22 @@ export default function MindReaderApp2({ onBack }) {
       });
     }
 
-    return list;
+    // Determine current level to play (first unlocked level with 0 stars, or last unlocked level if all completed)
+    let currentPlayLevelNum = null;
+    const firstUncompletedUnlocked = list.find(n => n.unlocked && n.stars === 0);
+    if (firstUncompletedUnlocked) {
+      currentPlayLevelNum = firstUncompletedUnlocked.levelNum;
+    } else {
+      const unlockedNodes = list.filter(n => n.unlocked);
+      if (unlockedNodes.length > 0) {
+        currentPlayLevelNum = unlockedNodes[unlockedNodes.length - 1].levelNum;
+      }
+    }
+
+    return list.map(n => ({
+      ...n,
+      isCurrent: n.levelNum === currentPlayLevelNum
+    }));
   };
 
   // Get highest level completed overall across all worlds
@@ -735,14 +764,7 @@ export default function MindReaderApp2({ onBack }) {
         </div>
       )}
 
-      {/* 🔮 Sequential Game Header (Level Map View) */}
-      {phase === 'levels' && (
-        <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px', width: '100%', maxWidth: '500px' }}>
-          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem', color: 'var(--clr-text)' }}>
-            👑 Highest Level Completed: <strong>{getHighestCompletedLevelOverall() > 0 ? `Level ${getHighestCompletedLevelOverall()}` : 'None'}</strong>
-          </div>
-        </div>
-      )}
+
 
 
       {errorMsg && <div className="feedback wrong" style={{ textAlign: 'center', padding: '6px', margin: '4px 0', fontSize: '0.9rem' }}>{errorMsg}</div>}
@@ -892,13 +914,13 @@ export default function MindReaderApp2({ onBack }) {
 
                   // Calculate horizontal offset for zigzag pattern (0, +80, 0, -80)
                   const offsetSign = index % 4 === 1 ? '80px' : index % 4 === 3 ? '-80px' : '0px';
-                  const isActive = node.levelNum === levelNum;
+                  const isActive = node.levelNum === levelNum || node.isCurrent;
                   const isCompleted = node.stars > 0;
 
                   return (
                     <div
                       key={node.levelNum}
-                      className="gm-level-node-wrapper"
+                      className={`gm-level-node-wrapper ${node.isCurrent ? 'active-target-level' : ''}`}
                       style={{
                         position: 'absolute',
                         top: `${index * 100}px`,
