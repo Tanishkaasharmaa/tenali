@@ -193,75 +193,94 @@ export default function MindReaderApp2({ onBack }) {
     }
   }, [animatingFrom, animatingTo]);
 
+  // Kingdom Level Boundaries Map (guarantees complete independence for every kingdom)
+  const WORLD_LEVEL_RANGES = {
+    'number_kingdom': [1, 10],
+    'arithmetic_kingdom': [11, 20],
+    'geometry_kingdom': [21, 30],
+    'algebra_kingdom': [31, 40],
+    'advanced_math_kingdom': [41, 50],
+    'coordinate_calculus_kingdom': [51, 60],
+    'data_logic_kingdom': [61, 66]
+  };
+
+  const getKingdomLevelNumbers = (w) => {
+    if (!w) return Array.from({ length: 10 }, (_, i) => i + 1);
+
+    // 1. Check w.levels if levelNum values are distinct per kingdom
+    if (Array.isArray(w.levels) && w.levels.length > 0) {
+      const nums = w.levels.map(l => typeof l === 'number' ? l : (l.levelNum || l.id));
+      if (nums.some(n => n > 10) || w.worldId === 'number_kingdom') {
+        return nums;
+      }
+    }
+
+    // 2. Check w.levelRange if explicit
+    if (Array.isArray(w.levelRange) && w.levelRange.length === 2) {
+      const [s, e] = w.levelRange;
+      if (s !== 1 || e !== 10 || w.worldId === 'number_kingdom') {
+        const nums = [];
+        for (let i = s; i <= e; i++) nums.push(i);
+        return nums;
+      }
+    }
+
+    // 3. Fallback to predefined distinct range map for each kingdom
+    if (w.worldId && WORLD_LEVEL_RANGES[w.worldId]) {
+      const [s, e] = WORLD_LEVEL_RANGES[w.worldId];
+      const nums = [];
+      for (let i = s; i <= e; i++) nums.push(i);
+      return nums;
+    }
+
+    return Array.from({ length: 10 }, (_, i) => i + 1);
+  };
+
+  const getLevelStars = (worldId, lvlNum, progressMap) => {
+    if (!progressMap) return 0;
+    // Check scoped key first (e.g. 'arithmetic_kingdom_11' or 'arithmetic_kingdom_1')
+    if (worldId && progressMap[`${worldId}_${lvlNum}`] !== undefined) {
+      return progressMap[`${worldId}_${lvlNum}`];
+    }
+    // Check global level index (e.g. 11 for arithmetic kingdom)
+    if (progressMap[lvlNum] !== undefined) {
+      return progressMap[lvlNum];
+    }
+    return 0;
+  };
+
   // Level selector maps
   const getLevelsForActiveWorld = () => {
     if (!worlds || worlds.length === 0) return [];
     const activeWorld = worlds.find(w => w.worldId === activeWorldId) || worlds[activeWorldIndex] || worlds[0];
     if (!activeWorld) return [];
 
-    // Determine the minimum level number of the active world
-    let minLevel = 1;
-    if (Array.isArray(activeWorld.levels) && activeWorld.levels.length > 0) {
-      const levelNums = activeWorld.levels.map(l => typeof l === 'number' ? l : (l.levelNum || l.id));
-      minLevel = Math.min(...levelNums);
-    } else if (Array.isArray(activeWorld.levelRange)) {
-      minLevel = activeWorld.levelRange[0] || 1;
-    }
+    const levelNums = getKingdomLevelNumbers(activeWorld);
 
-    // 1. If activeWorld directly contains a levels array
-    if (Array.isArray(activeWorld.levels)) {
-      let isPrevUnlockedAndCompleted = true; // minLevel is unlocked by default
-
-      return activeWorld.levels.map((lvl, index) => {
-        const num = typeof lvl === 'number' ? lvl : (lvl.levelNum || lvl.id);
-        let unlocked = false;
-        if (num === minLevel) {
-          unlocked = activeWorld.unlocked !== undefined ? activeWorld.unlocked : true;
-        } else {
-          // It is unlocked if the previous node in the list was unlocked AND completed (stars > 0)
-          const prevLvl = activeWorld.levels[index - 1];
-          const prevNum = typeof prevLvl === 'number' ? prevLvl : (prevLvl.levelNum || prevLvl.id);
-          const prevCompleted = (levelProgress[prevNum] || 0) > 0;
-          
-          unlocked = isPrevUnlockedAndCompleted && prevCompleted;
-        }
-        
-        // Track the current node's status for the next iteration
-        isPrevUnlockedAndCompleted = unlocked && (levelProgress[num] || 0) > 0;
-
-        return {
-          levelNum: num,
-          stars: levelProgress[num] || (typeof lvl === 'object' ? lvl.stars : 0) || 0,
-          unlocked: (typeof lvl === 'object' && lvl.unlocked !== undefined) ? (lvl.unlocked && unlocked) : unlocked
-        };
-      });
-    }
-
-    // 2. If activeWorld contains levelRange array [start, end] or fallback to default [1, 10]
-    const levelRange = Array.isArray(activeWorld.levelRange)
-      ? activeWorld.levelRange
-      : (typeof activeWorld.levelRange === 'string' && activeWorld.levelRange.includes('-')
-          ? activeWorld.levelRange.split('-').map(Number)
-          : [1, 10]);
-
-    const [start, end] = levelRange;
     const list = [];
-    let isPrevUnlockedAndCompleted = true; // start level is unlocked by default
-    for (let i = start; i <= end; i++) {
+    let isPrevUnlockedAndCompleted = true; // first level in kingdom is unlocked by default
+
+    for (let idx = 0; idx < levelNums.length; idx++) {
+      const num = levelNums[idx];
       let unlocked = false;
-      if (i === start) {
+      if (idx === 0) {
         unlocked = activeWorld.unlocked !== undefined ? activeWorld.unlocked : true;
       } else {
-        const prevCompleted = (levelProgress[i - 1] || 0) > 0;
+        const prevNum = levelNums[idx - 1];
+        const prevCompleted = getLevelStars(activeWorld.worldId, prevNum, levelProgress) > 0;
         unlocked = isPrevUnlockedAndCompleted && prevCompleted;
       }
-      isPrevUnlockedAndCompleted = unlocked && (levelProgress[i] || 0) > 0;
+      const currentStars = getLevelStars(activeWorld.worldId, num, levelProgress);
+      isPrevUnlockedAndCompleted = unlocked && currentStars > 0;
+
       list.push({
-        levelNum: i,
-        stars: levelProgress[i] || 0,
+        levelNum: num,
+        relativeNum: idx + 1,
+        stars: currentStars,
         unlocked
       });
     }
+
     return list;
   };
 
@@ -273,22 +292,13 @@ export default function MindReaderApp2({ onBack }) {
     return completedLevels.length > 0 ? Math.max(...completedLevels) : 0;
   };
 
-  // Get highest completed level info for a specific world/kingdom (dynamic relative level calculation)
+  // Get highest completed level info for a specific world/kingdom (independent per kingdom)
   const getHighestCompletedLevelForWorld = (w) => {
     if (!w) return { globalLevel: 0, relativeLevel: 0, hasStarted: false };
-    let worldLevelNums = [];
-    let startLevel = 1;
+    const levelNums = getKingdomLevelNumbers(w);
+    const startLevel = levelNums[0] || 1;
 
-    if (Array.isArray(w.levels) && w.levels.length > 0) {
-      worldLevelNums = w.levels.map(l => typeof l === 'number' ? l : (l.levelNum || l.id));
-      startLevel = Math.min(...worldLevelNums);
-    } else if (Array.isArray(w.levelRange)) {
-      const [start, end] = w.levelRange;
-      startLevel = start;
-      for (let i = start; i <= end; i++) worldLevelNums.push(i);
-    }
-
-    const completed = worldLevelNums.filter(lvl => (levelProgress[lvl] || 0) > 0);
+    const completed = levelNums.filter(lvl => getLevelStars(w.worldId, lvl, levelProgress) > 0);
     if (completed.length === 0) {
       return { globalLevel: 0, relativeLevel: 0, hasStarted: false };
     }
@@ -306,15 +316,8 @@ export default function MindReaderApp2({ onBack }) {
   // Dynamically calculate total stars earned in a specific kingdom
   const getKingdomStarsCount = (w) => {
     if (!w) return 0;
-    let worldLevelNums = [];
-    if (Array.isArray(w.levels)) {
-      worldLevelNums = w.levels.map(l => typeof l === 'number' ? l : (l.levelNum || l.id));
-    } else if (Array.isArray(w.levelRange)) {
-      const [start, end] = w.levelRange;
-      for (let i = start; i <= end; i++) worldLevelNums.push(i);
-    }
-    const totalStars = worldLevelNums.reduce((sum, lvl) => sum + (levelProgress[lvl] || 0), 0);
-    return totalStars || w.stars || 0;
+    const levelNums = getKingdomLevelNumbers(w);
+    return levelNums.reduce((sum, lvl) => sum + getLevelStars(w.worldId, lvl, levelProgress), 0);
   };
 
 
@@ -956,7 +959,7 @@ export default function MindReaderApp2({ onBack }) {
                           }
                         }}
                       >
-                        {isCompleted ? '✓' : node.unlocked ? node.levelNum : '🔒'}
+                        {isCompleted ? '✓' : node.unlocked ? (node.relativeNum || node.levelNum) : '🔒'}
                       </div>
 
                       {/* Stars display beneath node — only show for played levels */}
