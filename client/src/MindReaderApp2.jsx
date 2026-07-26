@@ -703,9 +703,25 @@ export default function MindReaderApp2({ onBack }) {
             </div>
           </div>
 
-          <button style={{ width: '100%', maxWidth: '320px', padding: '12px', marginTop: '10px' }} onClick={() => setPhase('worlds')}>
+          <button
+            className="gm-primary-action-btn"
+            style={{
+              width: '100%',
+              maxWidth: '320px',
+              padding: '12px 24px',
+              marginTop: '10px',
+              background: 'var(--clr-accent)',
+              border: 'none',
+              borderRadius: '12px',
+              color: '#fff',
+              fontWeight: '700',
+              cursor: 'pointer'
+            }}
+            onClick={() => setPhase('worlds')}
+          >
             Enter the Kingdoms
           </button>
+
 
         </div>
       )}
@@ -950,11 +966,23 @@ export default function MindReaderApp2({ onBack }) {
           </div>
 
           {/* Focused Italic Clue Box */}
-          <div style={{ margin: '15px auto 20px auto', maxWidth: '400px', textAlign: 'center' }}>
-            <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '1.48rem', lineHeight: '1.45', color: 'var(--clr-text)', margin: 0 }}>
+          <div style={{
+            margin: '10px auto 16px auto',
+            width: '100%',
+            maxWidth: '400px',
+            textAlign: 'center',
+            background: 'var(--clr-card)',
+            border: '1px solid var(--clr-border)',
+            borderRadius: '16px',
+            padding: '18px 16px',
+            boxSizing: 'border-box',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+          }}>
+            <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '1.25rem', lineHeight: '1.45', color: 'var(--clr-text)', margin: 0 }}>
               "{clue || 'I am thinking of a mathematical concept...'}"
             </p>
           </div>
+
 
           {/* Scratchpad Header with Clear Button */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '6px', marginTop: '10px' }}>
