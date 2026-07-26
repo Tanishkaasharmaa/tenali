@@ -148,9 +148,10 @@ Compares the guess with the secret concept, logs telemetry, updates user databas
 ---
 
 ### HUD & Top Header Layout Rules
-1. **Lobby Screen ("Read Tenali's Mind")**: Top header displays **XP only** (`🏆 XP: {xp}`). Level and Hints counters are removed from top.
-2. **Worlds Page**: Top header displays **XP only** (`🏆 XP: {xp}`). Level and Hints counters are removed from top. Each Kingdom card displays the **highest level completed in that kingdom** (e.g. `👑 Highest Level: Level 14` or `None`).
+1. **Lobby Screen ("Read Tenali's Mind")**: Top header bar displays **Home button on the left** (`🏠 Home`) and **XP on the right** (`🏆 XP: {xp}`). The separate HUD box above the "Read Tenali's Mind" text is removed.
+2. **Worlds Page**: Top header displays navigation buttons on the left and **XP on the right** (`🏆 XP: {xp}`). Each Kingdom card displays the **highest level completed in that kingdom** (e.g. `👑 Highest Level: Level 14` or `None`).
 3. **Level Section**: Top header displays **only XP and highest level completed** (`🏆 XP: {xp}` and `👑 Highest Level Completed: Level {X}`). Hints and current level counters are removed from the top navigation bar.
+
 
 ---
 

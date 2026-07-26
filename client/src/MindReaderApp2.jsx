@@ -652,42 +652,64 @@ export default function MindReaderApp2({ onBack }) {
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
         }}>
           <div style={{ display: 'flex', gap: '8px' }}>
-            {phase === 'worlds' && (
-              <button style={outlineBtnStyle} onClick={() => setPhase('setup')}>
-                &larr; Setup
+            {phase === 'setup' && onBack && (
+              <button style={outlineBtnStyle} onClick={onBack}>
+                🏠 Home
               </button>
+            )}
+            {phase === 'worlds' && (
+              <>
+                <button style={outlineBtnStyle} onClick={() => setPhase('setup')}>
+                  &larr; Setup
+                </button>
+                {onBack && (
+                  <button style={outlineBtnStyle} onClick={onBack}>
+                    🏠 Home
+                  </button>
+                )}
+              </>
             )}
             {phase === 'levels' && (
-              <button style={outlineBtnStyle} onClick={() => setPhase('worlds')}>
-                &larr; Worlds
-              </button>
+              <>
+                <button style={outlineBtnStyle} onClick={() => setPhase('worlds')}>
+                  &larr; Worlds
+                </button>
+                {onBack && (
+                  <button style={outlineBtnStyle} onClick={onBack}>
+                    🏠 Home
+                  </button>
+                )}
+              </>
             )}
             {phase === 'gameover' && (
-              <button style={outlineBtnStyle} onClick={() => setPhase('levels')}>
-                &larr; Map
-              </button>
+              <>
+                <button style={outlineBtnStyle} onClick={() => setPhase('levels')}>
+                  &larr; Map
+                </button>
+                {onBack && (
+                  <button style={outlineBtnStyle} onClick={onBack}>
+                    🏠 Home
+                  </button>
+                )}
+              </>
             )}
           </div>
 
-          {onBack && (
-            <button style={outlineBtnStyle} onClick={onBack}>
-              🏠 Home
-            </button>
-          )}
+          <div style={{ fontSize: '0.88rem', color: 'var(--clr-text)', fontWeight: '600', background: 'rgba(255, 255, 255, 0.04)', padding: '6px 14px', borderRadius: '20px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            🏆 XP: <strong style={{ color: 'var(--clr-accent)' }}>{xp}</strong>
+          </div>
         </div>
       )}
 
-      {/* 🔮 Sequential Game Header */}
-      {phase !== 'playing' && (
+      {/* 🔮 Sequential Game Header (Level Map View) */}
+      {phase === 'levels' && (
         <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px', width: '100%', maxWidth: '500px' }}>
-          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem', color: 'var(--clr-text)' }}>🏆 XP: <strong>{xp}</strong></div>
-          {phase === 'levels' && (
-            <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem', color: 'var(--clr-text)' }}>
-              👑 Highest Level Completed: <strong>{getHighestCompletedLevelOverall() > 0 ? `Level ${getHighestCompletedLevelOverall()}` : 'None'}</strong>
-            </div>
-          )}
+          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem', color: 'var(--clr-text)' }}>
+            👑 Highest Level Completed: <strong>{getHighestCompletedLevelOverall() > 0 ? `Level ${getHighestCompletedLevelOverall()}` : 'None'}</strong>
+          </div>
         </div>
       )}
+
 
       {errorMsg && <div className="feedback wrong" style={{ textAlign: 'center', padding: '6px', margin: '4px 0', fontSize: '0.9rem' }}>{errorMsg}</div>}
 
