@@ -265,6 +265,29 @@ export default function MindReaderApp2({ onBack }) {
     return list;
   };
 
+  // Get highest level completed overall across all worlds
+  const getHighestCompletedLevelOverall = () => {
+    const completedLevels = Object.keys(levelProgress)
+      .map(Number)
+      .filter(lvl => (levelProgress[lvl] || 0) > 0);
+    return completedLevels.length > 0 ? Math.max(...completedLevels) : 0;
+  };
+
+  // Get highest level completed in a specific world/kingdom
+  const getHighestCompletedLevelForWorld = (w) => {
+    if (!w) return 0;
+    let worldLevelNums = [];
+    if (Array.isArray(w.levels)) {
+      worldLevelNums = w.levels.map(l => typeof l === 'number' ? l : (l.levelNum || l.id));
+    } else if (Array.isArray(w.levelRange)) {
+      const [start, end] = w.levelRange;
+      for (let i = start; i <= end; i++) worldLevelNums.push(i);
+    }
+    const completed = worldLevelNums.filter(lvl => (levelProgress[lvl] || 0) > 0);
+    return completed.length > 0 ? Math.max(...completed) : 0;
+  };
+
+
   // World Carousel Handlers
   const nextWorld = () => {
     if (activeWorldIndex < worlds.length - 1) {
@@ -658,8 +681,11 @@ export default function MindReaderApp2({ onBack }) {
       {phase !== 'playing' && (
         <div className="mr2-hud" style={{ padding: '8px 16px', borderRadius: '12px', marginBottom: '8px', width: '100%', maxWidth: '500px' }}>
           <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem', color: 'var(--clr-text)' }}>🏆 XP: <strong>{xp}</strong></div>
-          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem', color: 'var(--clr-text)' }}>👑 Level: <strong>{levelNum}</strong></div>
-          <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem', color: 'var(--clr-text)' }}>💡 Hints: <strong>{hintsRemaining}/3</strong></div>
+          {phase === 'levels' && (
+            <div className="mr2-hud-pill" style={{ padding: '6px 12px', fontSize: '0.88rem', color: 'var(--clr-text)' }}>
+              👑 Highest Level Completed: <strong>{getHighestCompletedLevelOverall() > 0 ? `Level ${getHighestCompletedLevelOverall()}` : 'None'}</strong>
+            </div>
+          )}
         </div>
       )}
 
@@ -702,6 +728,7 @@ export default function MindReaderApp2({ onBack }) {
               {worlds.map((w, idx) => {
                 const levelRangeText = w.levelRange ? `Levels ${w.levelRange[0]}–${w.levelRange[1]}` : '10 Levels';
                 const starsCount = w.stars || 0;
+                const highestCompletedInKingdom = getHighestCompletedLevelForWorld(w);
 
                 return (
                   <div
@@ -745,10 +772,13 @@ export default function MindReaderApp2({ onBack }) {
                       {w.worldName}
                     </div>
 
-                    {/* Details subtext (mimicking "3-letter, 1 blank" in screenshot) */}
+                    {/* Details subtext */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
                       <div style={{ color: 'var(--clr-text-soft)', fontSize: '0.8rem' }}>
                         {levelRangeText}
+                      </div>
+                      <div style={{ color: 'var(--clr-accent)', fontSize: '0.78rem', fontWeight: 'bold' }}>
+                        👑 Highest Level: {highestCompletedInKingdom > 0 ? `Level ${highestCompletedInKingdom}` : 'None'}
                       </div>
                       <div style={{ color: 'var(--clr-accent)', fontSize: '0.78rem', fontWeight: 'bold' }}>
                         ⭐ {starsCount} Stars

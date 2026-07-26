@@ -147,38 +147,53 @@ Compares the guess with the secret concept, logs telemetry, updates user databas
 
 ---
 
+### HUD & Top Header Layout Rules
+1. **Lobby Screen ("Read Tenali's Mind")**: Top header displays **XP only** (`🏆 XP: {xp}`). Level and Hints counters are removed from top.
+2. **Worlds Page**: Top header displays **XP only** (`🏆 XP: {xp}`). Level and Hints counters are removed from top. Each Kingdom card displays the **highest level completed in that kingdom** (e.g. `👑 Highest Level: Level 14` or `None`).
+3. **Level Section**: Top header displays **only XP and highest level completed** (`🏆 XP: {xp}` and `👑 Highest Level Completed: Level {X}`). Hints and current level counters are removed from the top navigation bar.
+
+---
+
 ## 6. Frontend Sequential Screen Mockups
 
-### Screen 1: World Carousel Select (Single Focused Item)
+### Screen 1: World Select (Kingdom Cards with Kingdom Highest Level)
 ```
 ==============================================================
-                      <  WORLD 1 OF 5  >
+                     Top HUD: [🏆 XP: 1450]
+                     
+                       Select a World
              
-              👑 ARITHMETIC KINGDOM (12 ⭐)
-                     Unlocked (0 XP)
-              
-                 [ Enter Kingdom Button ]
+       ┌───────────────────────────────────────────┐
+       │             ARITHMETIC KINGDOM            │
+       │               Levels 11–20                │
+       │      👑 Highest Level: Level 14            │
+       │              ⭐ 12 Stars                  │
+       └───────────────────────────────────────────┘
 ==============================================================
 ```
 
-### Screen 2: Level Selection (Vertical Track)
+### Screen 2: Level Selection Track
 ```
 ==============================================================
-                [<- Back to Kingdoms]
+  Top HUD: [🏆 XP: 1450]  |  [👑 Highest Level Completed: Level 14]
+==============================================================
+                [<- Back to Worlds]
                 
                     ( Level 3 ) [🔒]
                            |
                     ( Level 2 ) [⭐]
                            |
-                   ( Level 1 ) [⭐⭐⭐]
+                    ( Level 1 ) [⭐⭐⭐]
 ==============================================================
 ```
 
 ### Screen 3: Gameplay Clue Dashboard (Mind Cloud + Thought Fields)
 ```
 ==============================================================
-  🏆 Level 1  |  💡 Hints: 2/3  |  ⭐ Stars Potential: 3
+  Top HUD: [<- Map] [💡 Hint (3/3)]          [XP: 1450 XP] [🏠]
 ==============================================================
+                Tenali's Mind • Level 1
+                     Clue 1 of 5
   
                      (\_/)
                      (o.o)
@@ -186,15 +201,12 @@ Compares the guess with the secret concept, logs telemetry, updates user databas
             
          "I belong to the world of numbers."  <- Clue in Speech Bubble
     
-            *  o  o  o  o  <- Progress Timeline
-            
-    [ Guessed Topic 1: Prime Number                  ]
-    [ Guessed Topic 2:                               ]
-    [ Guessed Topic 3:                               ]
-    [ Guessed Topic 4:                               ]
+     ✍️ Scratchpad (Notes)
+     [ Topic 1: Prime Number          ] [ Topic 2:                      ]
+     [ Topic 3:                       ] [ Topic 4:                      ]
     
     --------------------------------------------------------
-    [💡 Get Hint]   |   [🔎 Make Guess]   |   [Next Clue ->]
+    [<- Prev Clue]   |   [Verify Guess]   |   [Unlock Next Clue ->]
 ==============================================================
 ```
 
