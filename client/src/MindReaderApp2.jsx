@@ -691,142 +691,37 @@ export default function MindReaderApp2({ onBack }) {
 
       {errorMsg && <div className="feedback wrong" style={{ textAlign: 'center', padding: '6px', margin: '4px 0', fontSize: '0.9rem' }}>{errorMsg}</div>}
 
-      {/* ─── PHASE 1: SETUP LOBBY SCREEN (REFINED HERO CARD) ────────────────────────── */}
+      {/* ─── PHASE 1: SETUP LOBBY SCREEN (MINIMAL TEXT) ────────────────────────── */}
       {phase === 'setup' && (
-        <div className="gm-container" style={{ minHeight: 'auto', gap: '20px', width: '100%', maxWidth: '480px', margin: '0 auto' }}>
-          
-          {/* Glassmorphic Hero Card */}
-          <div style={{
-            width: '100%',
-            background: 'var(--clr-card)',
-            border: '1px solid var(--clr-border)',
-            borderRadius: '24px',
-            padding: '28px 20px',
-            boxSizing: 'border-box',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            gap: '18px',
-            boxShadow: '0 12px 36px rgba(0, 0, 0, 0.25)',
-            backdropFilter: 'blur(10px)',
-            position: 'relative',
-            overflow: 'hidden'
-          }}>
-            {/* Subtle Top Glow Accent */}
-            <div style={{
-              position: 'absolute',
-              top: '-40px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '200px',
-              height: '80px',
-              background: 'radial-gradient(ellipse at center, rgba(232, 134, 74, 0.25) 0%, rgba(0,0,0,0) 70%)',
-              pointerEvents: 'none'
-            }} />
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '15px' }}>
+          <h2 style={{ margin: '10px 0 0 0', fontFamily: 'var(--font-display)', color: 'var(--clr-text)', fontSize: '2rem' }}>Read Tenali's Mind</h2>
 
-            {/* Title & Tagline */}
-            <div>
-              <span className="gm-pill-badge" style={{ background: 'rgba(232, 134, 74, 0.12)', border: '1px solid rgba(232, 134, 74, 0.3)', borderRadius: '20px', padding: '4px 14px', fontSize: '0.76rem', color: 'var(--clr-accent)', fontWeight: '700', letterSpacing: '0.5px' }}>
-                🔮 REVERSE RECALL GAME
-              </span>
-              <h2 style={{ margin: '10px 0 4px 0', fontFamily: 'var(--font-display)', color: 'var(--clr-text)', fontSize: '2.1rem', fontWeight: 'bold' }}>
-                Read Tenali's Mind
-              </h2>
-              <p style={{ margin: 0, fontSize: '0.86rem', color: 'var(--clr-text-soft)', lineHeight: '1.4' }}>
-                Deduce Tenali's secret mathematical concept in 5 progressive clues.
-              </p>
+          <div className="mr2-char-hub-vertical" style={{ margin: '10px 0', gap: '10px' }}>
+            <TenaliAvatar expression={avatarExpression} skin="classic" />
+            <div className="mr2-speech-bubble" style={{ maxWidth: '320px', padding: '12px 18px' }}>
+              <p className="mr2-dialogue-text" style={{ fontSize: '1rem', margin: 0, color: 'var(--clr-text)' }}>{tenaliSpeech}</p>
             </div>
-
-            {/* Tenali Character Hub */}
-            <div className="mr2-char-hub-vertical" style={{ margin: '4px 0', gap: '12px', alignItems: 'center' }}>
-              <div style={{
-                position: 'relative',
-                borderRadius: '50%',
-                padding: '4px',
-                background: 'linear-gradient(135deg, var(--clr-accent) 0%, rgba(255, 255, 255, 0.1) 100%)',
-                boxShadow: '0 0 16px rgba(232, 134, 74, 0.25)'
-              }}>
-                <TenaliAvatar expression={avatarExpression} skin="classic" />
-              </div>
-              
-              <div className="mr2-speech-bubble" style={{ maxWidth: '340px', padding: '12px 18px', background: 'rgba(0, 0, 0, 0.25)', border: '1.5px solid var(--clr-border)', borderRadius: '16px' }}>
-                <p className="mr2-dialogue-text" style={{ fontSize: '0.95rem', margin: 0, color: 'var(--clr-text)', fontStyle: 'italic' }}>
-                  "{tenaliSpeech}"
-                </p>
-              </div>
-            </div>
-
-            {/* Feature Highlights Grid */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '8px',
-              width: '100%',
-              margin: '4px 0'
-            }}>
-              <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '10px 6px', textAlign: 'center' }}>
-                <div style={{ fontSize: '1.1rem' }}>👑</div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--clr-text)', marginTop: '2px' }}>7 Kingdoms</div>
-                <div style={{ fontSize: '0.68rem', color: 'var(--clr-text-soft)' }}>66 Levels</div>
-              </div>
-              <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '10px 6px', textAlign: 'center' }}>
-                <div style={{ fontSize: '1.1rem' }}>💡</div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--clr-text)', marginTop: '2px' }}>5 Clues</div>
-                <div style={{ fontSize: '0.68rem', color: 'var(--clr-text-soft)' }}>Deduction</div>
-              </div>
-              <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--clr-border)', borderRadius: '12px', padding: '10px 6px', textAlign: 'center' }}>
-                <div style={{ fontSize: '1.1rem' }}>🏆</div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--clr-text)', marginTop: '2px' }}>XP & Stars</div>
-                <div style={{ fontSize: '0.68rem', color: 'var(--clr-text-soft)' }}>Rewards</div>
-              </div>
-            </div>
-
-            {/* CTAs Row */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', marginTop: '6px' }}>
-              <button
-                className="gm-primary-action-btn"
-                style={{
-                  width: '100%',
-                  padding: '14px 24px',
-                  background: 'linear-gradient(135deg, var(--clr-accent) 0%, #d35400 100%)',
-                  border: 'none',
-                  borderRadius: '14px',
-                  color: '#fff',
-                  fontSize: '1rem',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  boxShadow: '0 6px 20px rgba(232, 134, 74, 0.3)',
-                  transition: 'transform 0.2s, box-shadow 0.2s'
-                }}
-                onClick={() => {
-                  const nextLvl = getHighestCompletedLevelOverall() + 1;
-                  handleStartLevel(nextLvl);
-                }}
-              >
-                ▶ Play Level {getHighestCompletedLevelOverall() + 1}
-              </button>
-
-              <button
-                style={{
-                  width: '100%',
-                  padding: '12px 24px',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid var(--clr-border)',
-                  borderRadius: '14px',
-                  color: 'var(--clr-text-soft)',
-                  fontSize: '0.9rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-                onClick={() => setPhase('worlds')}
-              >
-                👑 Explore All Kingdoms →
-              </button>
-            </div>
-
           </div>
+
+          <button
+            className="gm-primary-action-btn"
+            style={{
+              width: '100%',
+              maxWidth: '320px',
+              padding: '12px 24px',
+              marginTop: '10px',
+              background: 'var(--clr-accent)',
+              border: 'none',
+              borderRadius: '12px',
+              color: '#fff',
+              fontWeight: '700',
+              cursor: 'pointer'
+            }}
+            onClick={() => setPhase('worlds')}
+          >
+            Enter the Kingdoms
+          </button>
+
 
         </div>
       )}
