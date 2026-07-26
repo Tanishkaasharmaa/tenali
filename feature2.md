@@ -149,23 +149,23 @@ Compares the guess with the secret concept, logs telemetry, updates user databas
 
 ### HUD & Top Header Layout Rules
 1. **Lobby Screen ("Read Tenali's Mind")**: Top header bar displays **Home button on the left** (`🏠 Home`) and **XP on the right** (`🏆 XP: {xp}`). The separate HUD box above the "Read Tenali's Mind" text is removed.
-2. **Worlds Page**: Top header displays navigation buttons on the left and **XP on the right** (`🏆 XP: {xp}`). Each Kingdom card features the kingdom title inside an inner badge box. If started, subtext displays `Level {X} ⭐ {stars}`. If unstarted, subtext displays `Yet to start` (level ranges and "Highest Level" prefix text removed).
+2. **Worlds Page**: Top header displays navigation buttons on the left and **XP on the right** (`🏆 XP: {xp}`). Each Kingdom card features the kingdom title inside an inner badge box. Level progress is dynamically computed relative to that kingdom's starting level index (`relativeLevel = globalLevel - kingdomStartLevel + 1`). If started, subtext displays `Level {relativeLevel} ⭐ {stars}`. If unstarted, subtext displays `Yet to start`.
 3. **Level Section**: Top header displays **only XP and highest level completed** (`🏆 XP: {xp}` and `👑 Highest Level Completed: Level {X}`). Hints and current level counters are removed from the top navigation bar.
 
 ---
 
 ## 6. Frontend Sequential Screen Mockups
 
-### Screen 1: World Select (Kingdom Cards with Clean Status Subtext)
+### Screen 1: World Select (Kingdom Cards with Relative Level Calculation)
 ```
 ==============================================================
   [🏠 Home]                                     [🏆 XP: 1450]
 ==============================================================
                        Select a Kingdom
-             
+
        ┌───────────────────────────────────────────┐
        │             Arithmetic Kingdom            │  <- Inner Title Badge
-       │              Level 14  ⭐ 12              │  <- Started Kingdom
+       │               Level 4  ⭐ 12              │  <- Relative Level (4th in Kingdom)
        └───────────────────────────────────────────┘
        ┌───────────────────────────────────────────┐
        │              Geometry Kingdom             │  <- Inner Title Badge

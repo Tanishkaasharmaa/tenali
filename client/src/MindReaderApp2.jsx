@@ -273,8 +273,38 @@ export default function MindReaderApp2({ onBack }) {
     return completedLevels.length > 0 ? Math.max(...completedLevels) : 0;
   };
 
-  // Get highest level completed in a specific world/kingdom
+  // Get highest completed level info for a specific world/kingdom (dynamic relative level calculation)
   const getHighestCompletedLevelForWorld = (w) => {
+    if (!w) return { globalLevel: 0, relativeLevel: 0, hasStarted: false };
+    let worldLevelNums = [];
+    let startLevel = 1;
+
+    if (Array.isArray(w.levels) && w.levels.length > 0) {
+      worldLevelNums = w.levels.map(l => typeof l === 'number' ? l : (l.levelNum || l.id));
+      startLevel = Math.min(...worldLevelNums);
+    } else if (Array.isArray(w.levelRange)) {
+      const [start, end] = w.levelRange;
+      startLevel = start;
+      for (let i = start; i <= end; i++) worldLevelNums.push(i);
+    }
+
+    const completed = worldLevelNums.filter(lvl => (levelProgress[lvl] || 0) > 0);
+    if (completed.length === 0) {
+      return { globalLevel: 0, relativeLevel: 0, hasStarted: false };
+    }
+
+    const globalLevel = Math.max(...completed);
+    const relativeLevel = globalLevel - startLevel + 1;
+
+    return {
+      globalLevel,
+      relativeLevel,
+      hasStarted: true
+    };
+  };
+
+  // Dynamically calculate total stars earned in a specific kingdom
+  const getKingdomStarsCount = (w) => {
     if (!w) return 0;
     let worldLevelNums = [];
     if (Array.isArray(w.levels)) {
@@ -283,9 +313,10 @@ export default function MindReaderApp2({ onBack }) {
       const [start, end] = w.levelRange;
       for (let i = start; i <= end; i++) worldLevelNums.push(i);
     }
-    const completed = worldLevelNums.filter(lvl => (levelProgress[lvl] || 0) > 0);
-    return completed.length > 0 ? Math.max(...completed) : 0;
+    const totalStars = worldLevelNums.reduce((sum, lvl) => sum + (levelProgress[lvl] || 0), 0);
+    return totalStars || w.stars || 0;
   };
+
 
 
   // World Carousel Handlers
@@ -764,9 +795,8 @@ export default function MindReaderApp2({ onBack }) {
               padding: '0 10px'
             }}>
               {worlds.map((w, idx) => {
-                const starsCount = w.stars || 0;
-                const highestCompletedInKingdom = getHighestCompletedLevelForWorld(w);
-                const hasStarted = highestCompletedInKingdom > 0;
+                const starsCount = getKingdomStarsCount(w);
+                const kingdomProgress = getHighestCompletedLevelForWorld(w);
 
                 return (
                   <div
@@ -811,10 +841,10 @@ export default function MindReaderApp2({ onBack }) {
                     </div>
 
                     {/* Subtext: Level X ⭐ Stars or Yet to start */}
-                    {hasStarted ? (
+                    {kingdomProgress.hasStarted ? (
                       <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem' }}>
                         <span style={{ color: 'var(--clr-accent)', fontWeight: '700' }}>
-                          Level {highestCompletedInKingdom}
+                          Level {kingdomProgress.relativeLevel}
                         </span>
                         <span style={{ color: '#f1c40f', fontWeight: '700' }}>
                           ⭐ {starsCount}
