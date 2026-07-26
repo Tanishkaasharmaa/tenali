@@ -809,13 +809,13 @@ export default function MindReaderApp2({ onBack }) {
                       background: 'var(--clr-card)',
                       border: '1px solid var(--clr-border)',
                       borderRadius: '20px',
-                      padding: '24px 16px',
+                      padding: '16px',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
-                      justifyContent: 'center',
+                      justifyContent: 'space-between',
                       textAlign: 'center',
-                      gap: '12px',
+                      height: '130px',
                       cursor: 'pointer',
                       transition: 'transform 0.2s, border-color 0.2s, box-shadow 0.2s',
                       boxSizing: 'border-box'
@@ -826,16 +826,22 @@ export default function MindReaderApp2({ onBack }) {
                       setPhase('levels');
                     }}
                   >
-                    {/* Inner badge container (Title) */}
+                    {/* Inner badge container (Title) - Fixed height & centered alignment */}
                     <div style={{
                       background: 'rgba(255, 255, 255, 0.08)',
                       border: '1px solid rgba(255, 255, 255, 0.05)',
                       borderRadius: '12px',
-                      padding: '10px 14px',
-                      fontSize: '0.92rem',
+                      padding: '8px 12px',
+                      fontSize: '0.9rem',
                       fontWeight: '700',
                       color: 'var(--clr-text)',
                       width: '100%',
+                      height: '56px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      textAlign: 'center',
+                      lineHeight: '1.25',
                       boxSizing: 'border-box',
                       textOverflow: 'ellipsis',
                       overflow: 'hidden'
@@ -845,7 +851,7 @@ export default function MindReaderApp2({ onBack }) {
 
                     {/* Subtext: Level X ⭐ Stars or Yet to start */}
                     {kingdomProgress.hasStarted ? (
-                      <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem' }}>
+                      <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', height: '24px' }}>
                         <span style={{ color: 'var(--clr-accent)', fontWeight: '700' }}>
                           Level {kingdomProgress.relativeLevel}
                         </span>
@@ -854,7 +860,7 @@ export default function MindReaderApp2({ onBack }) {
                         </span>
                       </div>
                     ) : (
-                      <div style={{ color: 'var(--clr-text-soft)', fontSize: '0.82rem', fontStyle: 'italic' }}>
+                      <div style={{ color: 'var(--clr-text-soft)', fontSize: '0.82rem', fontStyle: 'italic', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         Yet to start
                       </div>
                     )}
