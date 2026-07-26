@@ -156,6 +156,27 @@ Compares the guess with the secret concept, logs telemetry, updates user databas
 
 ## 6. Frontend Sequential Screen Mockups
 
+### Screen 0: Home Page (Glassmorphic Hero Card & CTAs)
+```
+==============================================================
+                     Top HUD: [🏆 XP: 1450]
+                     
+        ┌──────────────────────────────────────────────┐
+        │          🔮 REVERSE RECALL GAME              │
+        │            Read Tenali's Mind                │
+        │    Deduce concepts in 5 progressive clues    │
+        │                                              │
+        │                 ( Avatar )                   │
+        │     "I have hidden a concept in my mind..."  │
+        │                                              │
+        │  [👑 7 Kingdoms]  [💡 5 Clues]  [🏆 XP&Stars] │
+        │                                              │
+        │        [ ▶ Play Level 15 (Direct Jump) ]     │
+        │        [ 👑 Explore All Kingdoms →     ]     │
+        └──────────────────────────────────────────────┘
+==============================================================
+```
+
 ### Screen 1: World Select (Kingdom Cards with Kingdom Highest Level)
 ```
 ==============================================================
