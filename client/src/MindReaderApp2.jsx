@@ -916,6 +916,8 @@ export default function MindReaderApp2({ onBack }) {
                   const offsetSign = index % 4 === 1 ? '80px' : index % 4 === 3 ? '-80px' : '0px';
                   const isActive = node.levelNum === levelNum || node.isCurrent;
                   const isCompleted = node.stars > 0;
+                  const isNodeOnRight = index % 4 === 1;
+                  const labelSide = isNodeOnRight ? 'left' : 'right';
 
                   return (
                     <div
@@ -930,18 +932,14 @@ export default function MindReaderApp2({ onBack }) {
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        width: '100px',
-                        height: '100px',
+                        width: '64px',
+                        height: '64px',
                         zIndex: 2,
                         boxSizing: 'border-box',
                         transition: 'all 0.3s'
                       }}
                     >
-                      {/* Hover Tooltip Badge */}
-                      <div className="gm-node-tooltip">
-                        Level {node.relativeNum || node.levelNum}
-                      </div>
-
+                      {/* Circle Node - Centered Exactly on Connecting SVG Line Path */}
                       <div
                         className={`gm-level-node ${node.unlocked ? 'unlocked' : ''} ${isActive ? 'active-node' : ''}`}
                         title={`Level ${node.relativeNum || node.levelNum}`}
@@ -975,7 +973,8 @@ export default function MindReaderApp2({ onBack }) {
                             : isActive
                             ? '0 0 20px var(--clr-accent)'
                             : '0 4px 10px rgba(0, 0, 0, 0.3)',
-                          transition: 'all 0.25s'
+                          transition: 'all 0.25s',
+                          flexShrink: 0
                         }}
                         onClick={() => {
                           if (node.unlocked) {
@@ -996,16 +995,34 @@ export default function MindReaderApp2({ onBack }) {
                         {isCompleted ? '✓' : node.unlocked ? (node.relativeNum || node.levelNum) : '🔒'}
                       </div>
 
-                      {/* Stars display beneath node — only show for played levels */}
-                      {node.unlocked && (
-                        <div style={{ display: 'flex', gap: '2px', marginTop: '6px', color: '#f1c40f', fontSize: '0.7rem', minHeight: '14px' }}>
-                          {node.stars > 0 ? (
-                            Array.from({ length: node.stars }).map((_, i) => <span key={i}>★</span>)
-                          ) : (
-                            <span style={{ color: 'rgba(255, 255, 255, 0.15)', fontSize: '0.65rem' }}>☆☆☆</span>
-                          )}
+                      {/* Side Level Label & Stars (Positioned Absolutely on the Side) */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          [labelSide]: '72px',
+                          textAlign: labelSide === 'left' ? 'right' : 'left',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: labelSide === 'left' ? 'flex-end' : 'flex-start',
+                          whiteSpace: 'nowrap',
+                          pointerEvents: 'none'
+                        }}
+                      >
+                        <div className={`gm-node-label ${node.unlocked ? '' : 'locked'}`} style={{ margin: 0, fontSize: '0.88rem' }}>
+                          Level {node.relativeNum || node.levelNum}
                         </div>
-                      )}
+                        {node.unlocked && (
+                          <div style={{ display: 'flex', gap: '2px', color: '#f1c40f', fontSize: '0.7rem', marginTop: '2px' }}>
+                            {node.stars > 0 ? (
+                              Array.from({ length: node.stars }).map((_, i) => <span key={i}>★</span>)
+                            ) : (
+                              <span style={{ color: 'rgba(255, 255, 255, 0.15)', fontSize: '0.65rem' }}>☆☆☆</span>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
