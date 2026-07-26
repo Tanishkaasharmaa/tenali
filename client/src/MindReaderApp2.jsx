@@ -937,8 +937,14 @@ export default function MindReaderApp2({ onBack }) {
                         transition: 'all 0.3s'
                       }}
                     >
+                      {/* Hover Tooltip Badge */}
+                      <div className="gm-node-tooltip">
+                        Level {node.relativeNum || node.levelNum}
+                      </div>
+
                       <div
                         className={`gm-level-node ${node.unlocked ? 'unlocked' : ''} ${isActive ? 'active-node' : ''}`}
+                        title={`Level ${node.relativeNum || node.levelNum}`}
                         style={{
                           width: isActive ? '64px' : '56px',
                           height: isActive ? '64px' : '56px',

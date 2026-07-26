@@ -1488,3 +1488,31 @@
   border-color: var(--clr-accent) !important;
   box-shadow: 0 8px 24px rgba(232, 134, 74, 0.15);
 }
+
+/* Level Node Hover Tooltip */
+.gm-node-tooltip {
+  position: absolute;
+  bottom: 85%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  background: var(--clr-card, #1e272e);
+  border: 1px solid var(--clr-accent, #e8864a);
+  color: var(--clr-text, #ffffff);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.gm-level-node-wrapper:hover .gm-node-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-6px);
+}
