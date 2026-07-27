@@ -10692,13 +10692,6 @@ app.post('/darts-api/check', express.json(), (req, res) => {
   res.json({ correct, message: correct ? 'Bullseye!' : 'Missed!' });
 });
 
-// WORD CREATOR PUZZLE ROUTER (wordcreator-api)
-// ═══════════════════════════════════════════════════════════════════════════
-const wordCreatorRouter = require('./routes/wordCreator');
-app.use('/wordcreator-api', wordCreatorRouter);
-
-<<<<<<< HEAD
-=======
 // PROCTOR API — Session management, anomaly logging, emotion tracking
 // ═══════════════════════════════════════════════════════════════════════════
 const { ProctorSession, ProctorEvent, Emotion } = require('./proctorSchema');
@@ -11207,7 +11200,6 @@ app.post('/riddle-api/solution', (req, res) => {
   if (!riddle) return res.status(400).json({ error: 'Riddle not found' });
   res.json({ steps: generateRiddleSolution(riddle), answer: riddle.answer });
 });
->>>>>>> upstream/main
 
 // ═══════════════════════════════════════════════════════════════════════════
 // /graph — Prerequisite DAG visualisation
