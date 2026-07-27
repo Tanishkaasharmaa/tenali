@@ -278,7 +278,6 @@ export default function MindReaderApp2({ onBack }) {
 
       // Determine valid steps to execute based on earned bonuses
       const steps = [1]; // Base XP
-      if (xpBreakdown?.speedBonus > 0) steps.push(2);
       if (xpBreakdown?.noHintBonus > 0) steps.push(3);
       if (xpBreakdown?.streakBonus > 0) steps.push(4);
       steps.push(5); // Total Sum
@@ -1544,14 +1543,6 @@ export default function MindReaderApp2({ onBack }) {
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', animation: 'gm-fade-in 0.3s ease-out' }}>
                   <span style={{ color: 'var(--clr-text-soft)' }}>🪙 {xpBreakdown.isReplay ? 'Replay Base XP (30%):' : 'Base XP:'}</span>
                   <span style={{ fontWeight: 'bold', color: 'var(--clr-text)' }}>+{xpBreakdown.baseXp} XP</span>
-                </div>
-              )}
-
-              {/* Step 2: Speed Bonus */}
-              {xpStep >= 2 && xpBreakdown.speedBonus > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', animation: 'gm-fade-in 0.3s ease-out' }}>
-                  <span style={{ color: 'var(--clr-text-soft)' }}>⚡ Speed Bonus:</span>
-                  <span style={{ color: 'var(--clr-accent)', fontWeight: 'bold' }}>+{xpBreakdown.speedBonus} XP</span>
                 </div>
               )}
 

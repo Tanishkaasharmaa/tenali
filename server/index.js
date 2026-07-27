@@ -10130,17 +10130,17 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
   }
 
   if (isCorrect) {
-    // Calculate stars
-    if (session.clueIndex <= 1) {
+    // Calculate stars: since final guess is made after all 5 rounds, stars are evaluated by hint usage & pure deduction
+    if (session.hintsUsed === 0) {
       starsEarned = 3;
-    } else if (session.clueIndex <= 3) {
+    } else if (session.hintsUsed === 1) {
       starsEarned = 2;
     } else {
       starsEarned = 1;
     }
 
     // Calculate MRR
-    mrrChange = Math.max(5, 15 + (5 * (4 - session.clueIndex)) - (3 * session.hintsUsed));
+    mrrChange = Math.max(5, 20 - (4 * session.hintsUsed));
 
     // Calculate dynamic XP based on World/Kingdom Difficulty
     let baseXp = 100;
@@ -10159,9 +10159,6 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
 
     const isReplay = user && user.levelProgress.some(lp => lp.levelNum === session.levelNum);
     const resolvedBaseXp = isReplay ? Math.round(baseXp * 0.3) : baseXp;
-
-    // Speed bonus
-    const speedBonus = Math.max(0, 50 - (session.clueIndex * 10));
 
     // No-Hint bonus
     const noHintBonus = session.hintsUsed === 0 ? 30 : 0;
@@ -10185,11 +10182,10 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
       currentStreak = 1; // Fallback for guest users
     }
 
-    xpEarned = resolvedBaseXp + speedBonus + noHintBonus + streakBonus;
+    xpEarned = resolvedBaseXp + noHintBonus + streakBonus;
 
     xpBreakdown = {
       baseXp: resolvedBaseXp,
-      speedBonus,
       noHintBonus,
       streakBonus,
       streak: currentStreak,
