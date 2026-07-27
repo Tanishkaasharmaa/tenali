@@ -12,7 +12,12 @@
       "Fractions",
       "Decimal Numbers"
     ],
-    "conceptPool": ["whole_numbers", "integers", "fractions", "decimal_numbers"],
+    "conceptPool": [
+      "whole_numbers",
+      "integers",
+      "fractions",
+      "decimal_numbers"
+    ],
     "isBoss": false
   },
   {
@@ -20,7 +25,20 @@
     "levelNum": 2,
     "levelNumber": 2,
     "worldId": "number_kingdom",
-    "conceptId": "column_addition",
+    "levelName": "Number Properties",
+    "conceptId": "even_numbers",
+    "options": [
+      "Even Numbers",
+      "Odd Numbers",
+      "Prime Numbers",
+      "Composite Numbers"
+    ],
+    "conceptPool": [
+      "even_numbers",
+      "odd_numbers",
+      "prime_numbers",
+      "composite_numbers"
+    ],
     "isBoss": false
   },
   {
@@ -28,7 +46,20 @@
     "levelNum": 3,
     "levelNumber": 3,
     "worldId": "number_kingdom",
-    "conceptId": "subtraction",
+    "levelName": "Factors & Multiples",
+    "conceptId": "factor",
+    "options": [
+      "Factor",
+      "Multiple",
+      "HCF (GCD)",
+      "LCM"
+    ],
+    "conceptPool": [
+      "factor",
+      "multiple",
+      "hcf",
+      "lcm"
+    ],
     "isBoss": false
   },
   {
@@ -36,7 +67,20 @@
     "levelNum": 4,
     "levelNumber": 4,
     "worldId": "number_kingdom",
-    "conceptId": "multiplication",
+    "levelName": "Divisibility",
+    "conceptId": "divisible_by_2",
+    "options": [
+      "Divisible by 2",
+      "Divisible by 3",
+      "Divisible by 5",
+      "Divisible by 9"
+    ],
+    "conceptPool": [
+      "divisible_by_2",
+      "divisible_by_3",
+      "divisible_by_5",
+      "divisible_by_9"
+    ],
     "isBoss": false
   },
   {
@@ -44,7 +88,20 @@
     "levelNum": 5,
     "levelNumber": 5,
     "worldId": "number_kingdom",
-    "conceptId": "column_multiplication",
+    "levelName": "Place Value",
+    "conceptId": "ones_place",
+    "options": [
+      "Ones",
+      "Tens",
+      "Hundreds",
+      "Thousands"
+    ],
+    "conceptPool": [
+      "ones_place",
+      "tens_place",
+      "hundreds_place",
+      "thousands_place"
+    ],
     "isBoss": false
   },
   {
@@ -52,7 +109,20 @@
     "levelNum": 6,
     "levelNumber": 6,
     "worldId": "number_kingdom",
-    "conceptId": "decimal",
+    "levelName": "Number Comparison",
+    "conceptId": "greater_than",
+    "options": [
+      "Greater Than (>)",
+      "Less Than (<)",
+      "Equal To (=)",
+      "Ascending Order"
+    ],
+    "conceptPool": [
+      "greater_than",
+      "less_than",
+      "equal_to",
+      "ascending_order"
+    ],
     "isBoss": false
   },
   {
@@ -60,7 +130,20 @@
     "levelNum": 7,
     "levelNumber": 7,
     "worldId": "number_kingdom",
-    "conceptId": "fraction",
+    "levelName": "Fractions",
+    "conceptId": "proper_fraction",
+    "options": [
+      "Proper Fraction",
+      "Improper Fraction",
+      "Mixed Fraction",
+      "Equivalent Fraction"
+    ],
+    "conceptPool": [
+      "proper_fraction",
+      "improper_fraction",
+      "mixed_fraction",
+      "equivalent_fraction"
+    ],
     "isBoss": false
   },
   {
@@ -68,7 +151,20 @@
     "levelNum": 8,
     "levelNumber": 8,
     "worldId": "number_kingdom",
-    "conceptId": "hcf_lcm",
+    "levelName": "Decimal Concepts",
+    "conceptId": "tenths",
+    "options": [
+      "Tenths",
+      "Hundredths",
+      "Thousandths",
+      "Decimal Number"
+    ],
+    "conceptPool": [
+      "tenths",
+      "hundredths",
+      "thousandths",
+      "decimal_number_concept"
+    ],
     "isBoss": false
   },
   {
@@ -76,7 +172,20 @@
     "levelNum": 9,
     "levelNumber": 9,
     "worldId": "number_kingdom",
-    "conceptId": "prime_factors",
+    "levelName": "Fraction Forms",
+    "conceptId": "fraction_form",
+    "options": [
+      "Fraction",
+      "Decimal",
+      "Percentage",
+      "Ratio"
+    ],
+    "conceptPool": [
+      "fraction_form",
+      "decimal_form",
+      "percentage_form",
+      "ratio_form"
+    ],
     "isBoss": false
   },
   {
@@ -84,15 +193,126 @@
     "levelNum": 10,
     "levelNumber": 10,
     "worldId": "number_kingdom",
-    "conceptId": "rounding",
-    "isBoss": true,
-    "bossConcepts": [
-      "addition",
-      "decimal",
-      "fraction",
-      "hcf_lcm",
-      "prime_factors"
-    ]
+    "levelName": "Number Patterns",
+    "conceptId": "arithmetic_pattern",
+    "options": [
+      "Arithmetic Pattern",
+      "Geometric Pattern",
+      "Square Numbers",
+      "Cube Numbers"
+    ],
+    "conceptPool": [
+      "arithmetic_pattern",
+      "geometric_pattern",
+      "square_numbers",
+      "cube_numbers"
+    ],
+    "isBoss": false
+  },
+  {
+    "id": "lvl_1_11",
+    "levelNum": 11,
+    "levelNumber": 11,
+    "worldId": "number_kingdom",
+    "levelName": "Number Operations",
+    "conceptId": "addition_op",
+    "options": [
+      "Addition",
+      "Subtraction",
+      "Multiplication",
+      "Division"
+    ],
+    "conceptPool": [
+      "addition_op",
+      "subtraction_op",
+      "multiplication_op",
+      "division_op"
+    ],
+    "isBoss": false
+  },
+  {
+    "id": "lvl_1_12",
+    "levelNum": 12,
+    "levelNumber": 12,
+    "worldId": "number_kingdom",
+    "levelName": "Estimation & Rounding",
+    "conceptId": "round_to_nearest_10",
+    "options": [
+      "Round to Nearest 10",
+      "Round to Nearest 100",
+      "Estimate Sum",
+      "Estimate Difference"
+    ],
+    "conceptPool": [
+      "round_to_nearest_10",
+      "round_to_nearest_100",
+      "estimate_sum",
+      "estimate_difference"
+    ],
+    "isBoss": false
+  },
+  {
+    "id": "lvl_1_13",
+    "levelNum": 13,
+    "levelNumber": 13,
+    "worldId": "number_kingdom",
+    "levelName": "Powers & Roots",
+    "conceptId": "square_power",
+    "options": [
+      "Square",
+      "Cube",
+      "Square Root",
+      "Cube Root"
+    ],
+    "conceptPool": [
+      "square_power",
+      "cube_power",
+      "square_root",
+      "cube_root"
+    ],
+    "isBoss": false
+  },
+  {
+    "id": "lvl_1_14",
+    "levelNum": 14,
+    "levelNumber": 14,
+    "worldId": "number_kingdom",
+    "levelName": "Number Representation",
+    "conceptId": "roman_numerals",
+    "options": [
+      "Roman Numerals",
+      "Hindu-Arabic Numerals",
+      "Expanded Form",
+      "Standard Form"
+    ],
+    "conceptPool": [
+      "roman_numerals",
+      "hindu_arabic_numerals",
+      "expanded_form",
+      "standard_form"
+    ],
+    "isBoss": false
+  },
+  {
+    "id": "lvl_1_15",
+    "levelNum": 15,
+    "levelNumber": 15,
+    "worldId": "number_kingdom",
+    "levelName": "Number Kingdom Boss",
+    "conceptId": "prime_numbers",
+    "options": [
+      "Prime Number",
+      "HCF",
+      "Equivalent Fraction",
+      "Decimal Number"
+    ],
+    "conceptPool": [
+      "prime_numbers",
+      "hcf",
+      "equivalent_fraction",
+      "decimal_numbers"
+    ],
+    "isBoss": true
   },
   {
     "id": "lvl_2_1",

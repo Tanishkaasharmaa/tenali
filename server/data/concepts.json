@@ -17,15 +17,16 @@
       "No broken or decimal parts."
     ],
     "educationalInfo": {
-      "definition": "Whole numbers are simple counting numbers starting from 0 (0, 1, 2, 3...) without fractional or decimal parts.",
-      "examples": ["0", "1", "2", "3", "42"],
+      "definition": "Whole numbers are non-negative numbers starting from 0 without fractional or decimal parts.",
+      "examples": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "42"
+      ],
       "commonMistakes": "Thinking negative numbers or fractions can be whole numbers.",
-      "funFact": "Zero was added to counting numbers to form Whole Numbers!",
-      "relatedLesson": "Number Sets",
-      "practiceQuestions": [
-        "Is 0 a whole number?",
-        "Is -5 a whole number?"
-      ]
+      "funFact": "Zero was added to counting numbers to form Whole Numbers!"
     }
   },
   "integers": {
@@ -47,14 +48,14 @@
     ],
     "educationalInfo": {
       "definition": "Integers are all positive full numbers, negative full numbers, and zero (..., -2, -1, 0, 1, 2, ...).",
-      "examples": ["-5", "-1", "0", "7"],
+      "examples": [
+        "-5",
+        "-1",
+        "0",
+        "7"
+      ],
       "commonMistakes": "Thinking integers can include decimals like -2.5.",
-      "funFact": "The word 'Integer' comes from Latin and means 'whole' or 'intact'!",
-      "relatedLesson": "Number Sets",
-      "practiceQuestions": [
-        "Is -10 an integer?",
-        "Is 3/4 an integer?"
-      ]
+      "funFact": "The word 'Integer' comes from Latin and means 'whole' or 'intact'!"
     }
   },
   "fractions": {
@@ -76,14 +77,13 @@
     ],
     "educationalInfo": {
       "definition": "A fraction represents a part of a whole unit, written as a numerator over a denominator (a/b).",
-      "examples": ["1/2", "3/4", "2/5"],
+      "examples": [
+        "1/2",
+        "3/4",
+        "2/5"
+      ],
       "commonMistakes": "Confusing numerator (top) and denominator (bottom).",
-      "funFact": "The word 'fraction' comes from the Latin word 'fractio', which means 'to break'!",
-      "relatedLesson": "Number Sets",
-      "practiceQuestions": [
-        "What is the numerator in 3/4?",
-        "If you eat 2 slices of an 8-slice pizza, what fraction did you eat?"
-      ]
+      "funFact": "The word 'fraction' comes from the Latin word 'fractio', which means 'to break'!"
     }
   },
   "decimal_numbers": {
@@ -104,15 +104,14 @@
       "Uses a decimal point to separate whole units from parts."
     ],
     "educationalInfo": {
-      "definition": "A decimal number uses a decimal point (dot) to separate whole units from fractional place values like tenths and hundredths.",
-      "examples": ["0.5", "12.50", "2.75"],
-      "commonMistakes": "Putting the decimal point in the wrong place when adding or subtracting.",
-      "funFact": "The word 'decimal' comes from the Latin 'decem', meaning 'ten'!",
-      "relatedLesson": "Number Sets",
-      "practiceQuestions": [
-        "What does the dot in 4.5 mean?",
-        "How do you write half a dollar ($0.50) as a decimal?"
-      ]
+      "definition": "A decimal number uses a decimal point (dot) to separate whole units from fractional place values.",
+      "examples": [
+        "0.5",
+        "12.50",
+        "2.75"
+      ],
+      "commonMistakes": "Putting the decimal point in the wrong place.",
+      "funFact": "The word 'decimal' comes from the Latin 'decem', meaning 'ten'!"
     }
   },
   "prime_number": {
@@ -254,62 +253,50 @@
     "name": "LCM",
     "subject": "Arithmetic",
     "clues": [
-      "I help add fractions with different denominators.",
-      "I am the smallest positive multiple shared by two or more numbers.",
-      "For prime numbers a and b, I am simply equal to their product: a * b.",
-      "You can find me by listing multiples or using prime factorization.",
-      "For 4 and 6, I am 12."
+      "For numbers 4 and 6, multiples are 4, 8, 12... and 6, 12, 18... I am 12!",
+      "I find the SMALLEST multiple shared by two or more numbers.",
+      "I am essential when adding or subtracting fractions with different denominators!",
+      "I stand for Least Common Multiple.",
+      "I am the smallest positive integer that is divisible by all given numbers."
     ],
     "hints": [
-      "Arithmetic category topic.",
-      "Grade 6 level topic.",
-      "Starts with 'L'."
+      "Least common multiple.",
+      "Used for common denominators in fractions.",
+      "Smallest shared multiple."
     ],
     "educationalInfo": {
-      "definition": "Lowest Common Multiple: the smallest positive integer that is divisible by all numbers in a given set.",
+      "definition": "The Least Common Multiple (LCM) is the smallest positive integer divisible by each of the given numbers.",
       "examples": [
-        "LCM(3, 5) = 15",
-        "LCM(8, 12) = 24"
+        "LCM of 4 and 6 is 12"
       ],
-      "commonMistakes": "Listing factors instead of multiples when looking for the LCM, resulting in a number that is too small.",
-      "funFact": "The LCM of any two consecutive numbers is always their product!",
-      "relatedLesson": "HCF and LCM",
-      "practiceQuestions": [
-        "Find the LCM of 6 and 8.",
-        "What is the LCM of 5 and 7?"
-      ]
+      "commonMistakes": "Confusing LCM with HCF.",
+      "funFact": "For any two numbers a and b: HCF(a,b) × LCM(a,b) = a × b!"
     }
   },
   "hcf": {
     "id": "hcf",
     "conceptId": "hcf",
-    "name": "HCF",
+    "name": "HCF (GCD)",
     "subject": "Arithmetic",
     "clues": [
-      "I am also known as the Greatest Common Divisor.",
-      "I am the largest positive integer that divides two or more numbers without a remainder.",
-      "For coprime numbers, I am always equal to 1.",
-      "Euclid created a famous recursive algorithm to compute me.",
-      "For 12 and 18, I am 6."
+      "For numbers 12 and 18, the shared factors are 1, 2, 3, 6. I am 6!",
+      "I find the LARGEST factor shared by two or more numbers.",
+      "I am super useful when simplifying fractions to their lowest terms!",
+      "Also known as the Greatest Common Divisor (GCD).",
+      "I am the highest common factor that divides two or more numbers exactly."
     ],
     "hints": [
-      "Arithmetic category topic.",
-      "Grade 6 level topic.",
-      "Starts with 'H'."
+      "Highest common factor.",
+      "Used to simplify fractions.",
+      "Also called GCD."
     ],
     "educationalInfo": {
-      "definition": "Highest Common Factor: the greatest common divisor that divides two or more numbers without remainder.",
+      "definition": "The Highest Common Factor (HCF) is the largest positive integer that divides two or more numbers without remainder.",
       "examples": [
-        "HCF(8, 12) = 4",
-        "HCF(15, 20) = 5"
+        "HCF of 12 and 18 is 6"
       ],
-      "commonMistakes": "Finding the lowest common divisor (which is usually 1) instead of the highest.",
-      "funFact": "The product of HCF(a,b) and LCM(a,b) is always equal to a * b!",
-      "relatedLesson": "HCF and LCM",
-      "practiceQuestions": [
-        "What is the HCF of 24 and 36?",
-        "Find the HCF of 17 and 23."
-      ]
+      "commonMistakes": "Confusing HCF (largest factor) with LCM (smallest multiple).",
+      "funFact": "If the HCF of two numbers is 1, they are called co-prime numbers!"
     }
   },
   "fraction": {
@@ -1615,65 +1602,54 @@
     "id": "square_root",
     "conceptId": "square_root",
     "name": "Square Root",
-    "subject": "Trigonometry",
+    "subject": "Arithmetic",
     "clues": [
-      "I am the inverse operation of squaring.",
-      "I find the number that, when multiplied by itself, gives you the original number.",
-      "My symbol looks like a tick with a horizontal bar stretching over the number.",
-      "The square root of 144 is 12.",
-      "I can produce irrational numbers — for example, my value for 2 is approximately 1.414."
+      "√25 = 5.",
+      "I ask: 'Which number multiplied by itself gives 25?' Answer: 5!",
+      "Written using the special radical symbol '√'!",
+      "The inverse operation of squaring a number.",
+      "A value that, when multiplied by itself, gives the target number."
     ],
     "hints": [
-      "Trigonometry category topic.",
-      "Grade 7 level topic.",
-      "Starts with 'S'."
+      "Radical symbol √.",
+      "Inverse of square.",
+      "√16 = 4."
     ],
     "educationalInfo": {
-      "definition": "A value that, when multiplied by itself, gives the original number. Denoted by the √ symbol.",
+      "definition": "The square root (√) of a number is a value that, when multiplied by itself, yields the original number.",
       "examples": [
-        "√25 = 5",
-        "√2 ≈ 1.414 (irrational)"
+        "√9 = 3",
+        "√16 = 4"
       ],
-      "commonMistakes": "Thinking √(a+b) = √a + √b (this is incorrect). Forgetting negative roots exist: both +3 and -3 square to 9.",
-      "funFact": "The ancient Greeks discovered that √2 is irrational — a result so shocking it reportedly caused a crisis in their mathematical philosophy.",
-      "relatedLesson": "Surds and Indices",
-      "practiceQuestions": [
-        "What is √169?",
-        "Is √3 rational or irrational?"
-      ]
+      "commonMistakes": "Dividing by 2 instead of finding the square root.",
+      "funFact": "Square root of 2 (√2 ≈ 1.414) was the first irrational number discovered!"
     }
   },
   "cube_root": {
     "id": "cube_root",
     "conceptId": "cube_root",
     "name": "Cube Root",
-    "subject": "Trigonometry",
+    "subject": "Arithmetic",
     "clues": [
-      "I am the inverse operation of cubing.",
-      "I find the number that multiplied by itself three times gives the original.",
-      "My symbol is the square root symbol with a small 3 in the notch.",
-      "The cube root of 27 is 3.",
-      "Unlike square roots, I can also produce negative results — the cube root of -8 is -2."
+      "∛27 = 3.",
+      "I ask: 'Which number multiplied by itself three times gives 27?' Answer: 3!",
+      "Written using a radical symbol with a tiny 3: '∛'!",
+      "The inverse operation of cubing a number.",
+      "A value that, when multiplied by itself twice, yields the target number."
     ],
     "hints": [
-      "Trigonometry category topic.",
-      "Grade 8 level topic.",
-      "Starts with 'C'."
+      "Symbol ∛.",
+      "Inverse of cube.",
+      "∛8 = 2."
     ],
     "educationalInfo": {
-      "definition": "A value that when cubed (multiplied by itself three times) gives the original number. Denoted ∛.",
+      "definition": "The cube root (∛) of a number is a value that, when multiplied by itself twice, yields the target number.",
       "examples": [
         "∛8 = 2",
-        "∛-27 = -3",
-        "∛125 = 5"
+        "∛64 = 4"
       ],
-      "commonMistakes": "Assuming cube roots always produce positive values (they can be negative for negative inputs).",
-      "funFact": "Finding cube roots was a major challenge for ancient mathematicians — no simple geometric method exists unlike for square roots.",
-      "relatedLesson": "Surds and Indices",
-      "practiceQuestions": [
-        "What is ∛64?",
-        "Find ∛-125."
-      ]
+      "commonMistakes": "Confusing square root and cube root.",
+      "funFact": "The cube root of a volume gives the side length of a 3D cube!"
     }
   },
   "square": {
@@ -2249,31 +2225,27 @@
     "id": "standard_form",
     "conceptId": "standard_form",
     "name": "Standard Form",
-    "subject": "Arithmetic Kingdom",
+    "subject": "Arithmetic",
     "clues": [
-      "I make very large or very small numbers easier to write.",
-      "Scientists use me very often.",
-      "I help avoid writing long strings of zeros.",
-      "I use powers of ten.",
-      "I am written as a × 10ⁿ."
-    ],
-    "thoughts": [
-      "I make very large or very small numbers easier to write.",
-      "Scientists use me very often.",
-      "I help avoid writing long strings of zeros.",
-      "I use powers of ten.",
-      "I am written as a × 10ⁿ."
+      "300 + 50 + 4 becomes 354!",
+      "I write numbers in the compact everyday format using digits side by side.",
+      "The normal way you see numbers written in textbooks.",
+      "Opposite of expanded form.",
+      "Writing a number using digits in standard base-10 format."
     ],
     "hints": [
-      "Think about scientific notation."
+      "Everyday compact format: 354.",
+      "Normal number format.",
+      "Opposite of expanded form."
     ],
     "educationalInfo": {
-      "definition": "A system of writing numbers using powers of 10 in the format a × 10ⁿ, where 1 ≤ a < 10 and n is an integer.",
+      "definition": "Standard form is the standard way of writing numbers using digits (e.g. 354).",
       "examples": [
-        "300,000,000 = 3 × 10⁸",
-        "0.00005 = 5 × 10⁻⁵"
+        "354",
+        "1,250"
       ],
-      "commonMistakes": "Writing the coefficient 'a' as less than 1 or 10 or greater (e.g., 35 × 10⁴ instead of 3.5 × 10⁵)."
+      "commonMistakes": "Confusing scientific standard form with elementary standard form.",
+      "funFact": "Standard form is the most compact way to write numbers!"
     }
   },
   "number_bases": {
@@ -3440,5 +3412,1275 @@
       ]
     },
     "id": "algebraic_fraction"
+  },
+  "even_numbers": {
+    "id": "even_numbers",
+    "conceptId": "even_numbers",
+    "name": "Even Numbers",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at these items: 2 shoes, 4 wheels on a car, 6 legs on an insect...",
+      "I can always be split into 2 equal pairs with zero leftover!",
+      "Numbers like 1, 3, 5 get left out, but 0, 2, 4, 6, 8 love joining my group!",
+      "Any large number ending in 0, 2, 4, 6, or 8 belongs to me!",
+      "I am any integer that is perfectly divisible by 2 with no remainder."
+    ],
+    "hints": [
+      "Divisible by 2.",
+      "Ends in 0, 2, 4, 6, or 8.",
+      "Can be split into equal pairs."
+    ],
+    "educationalInfo": {
+      "definition": "Even numbers are integers divisible by 2 without leaving any remainder (0, 2, 4, 6, 8...).",
+      "examples": [
+        "2",
+        "4",
+        "10",
+        "48"
+      ],
+      "commonMistakes": "Thinking 0 is not an even number (0 is even!).",
+      "funFact": "Adding two even numbers always gives another even number!"
+    }
+  },
+  "odd_numbers": {
+    "id": "odd_numbers",
+    "conceptId": "odd_numbers",
+    "name": "Odd Numbers",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at these items: 1 nose, 3 tricycle wheels, 5 fingers on a hand...",
+      "When you try to split me into 2 equal teams, 1 member is always left out!",
+      "Numbers like 2, 4, 6 stay away, but 1, 3, 5, 7, 9 are my best friends!",
+      "If a number ends in 1, 3, 5, 7, or 9, it belongs to me!",
+      "I am any integer that leaves a remainder of 1 when divided by 2."
+    ],
+    "hints": [
+      "Leaves a remainder of 1 when divided by 2.",
+      "Ends in 1, 3, 5, 7, or 9.",
+      "Cannot be paired equally."
+    ],
+    "educationalInfo": {
+      "definition": "Odd numbers are integers that leave a remainder of 1 when divided by 2 (1, 3, 5, 7, 9...).",
+      "examples": [
+        "1",
+        "3",
+        "7",
+        "29"
+      ],
+      "commonMistakes": "Thinking odd numbers cannot be prime numbers.",
+      "funFact": "Multiplying any odd number by another odd number always yields an odd number!"
+    }
+  },
+  "prime_numbers": {
+    "id": "prime_numbers",
+    "conceptId": "prime_numbers",
+    "name": "Prime Numbers",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at these special numbers: 2, 3, 5, 7, 11, 13...",
+      "I am very picky—I have EXACTLY two factors: 1 and myself!",
+      "Number 4 (2×2) and 6 (2×3) cannot join me because they have extra factors!",
+      "The number 2 is the ONLY even member in my entire infinite family!",
+      "I am a whole number greater than 1 that cannot be formed by multiplying two smaller whole numbers."
+    ],
+    "hints": [
+      "Has exactly 2 factors: 1 and itself.",
+      "Number 2 is the only even prime.",
+      "Number 1 is NOT a prime number."
+    ],
+    "educationalInfo": {
+      "definition": "A prime number is a whole number greater than 1 with exactly two factors: 1 and itself.",
+      "examples": [
+        "2",
+        "3",
+        "5",
+        "7",
+        "11"
+      ],
+      "commonMistakes": "Believing 1 is a prime number or that all odd numbers are prime.",
+      "funFact": "Modern internet security and encryption rely on giant prime numbers!"
+    }
+  },
+  "composite_numbers": {
+    "id": "composite_numbers",
+    "conceptId": "composite_numbers",
+    "name": "Composite Numbers",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at these numbers: 4, 6, 8, 9, 10, 12...",
+      "I am made by multiplying smaller whole numbers together!",
+      "Unlike prime numbers, I have MORE than 2 factors!",
+      "Number 4 is the smallest member of my family (1, 2, 4).",
+      "I am any positive integer greater than 1 that is NOT prime."
+    ],
+    "hints": [
+      "Has more than 2 factors.",
+      "Can be broken down into prime factors.",
+      "Smallest composite number is 4."
+    ],
+    "educationalInfo": {
+      "definition": "A composite number is a positive whole number greater than 1 that has more than two factors.",
+      "examples": [
+        "4",
+        "6",
+        "8",
+        "9",
+        "15"
+      ],
+      "commonMistakes": "Thinking 1 is composite (1 is neither prime nor composite).",
+      "funFact": "Every composite number can be written as a unique product of prime numbers!"
+    }
+  },
+  "factor": {
+    "id": "factor",
+    "conceptId": "factor",
+    "name": "Factor",
+    "subject": "Arithmetic",
+    "clues": [
+      "For the number 12, my members are 1, 2, 3, 4, 6, and 12.",
+      "I am a number that divides another number completely with zero remainder!",
+      "I am always smaller than or equal to the target number.",
+      "Every number has at least 1 and itself as members of my family.",
+      "I am a whole number that multiplies with another number to produce a given product."
+    ],
+    "hints": [
+      "Divides a number evenly.",
+      "Always smaller than or equal to the number.",
+      "1 is a factor of every number."
+    ],
+    "educationalInfo": {
+      "definition": "A factor is a number that divides another number completely without leaving a remainder.",
+      "examples": [
+        "Factors of 10: 1, 2, 5, 10"
+      ],
+      "commonMistakes": "Confusing factors (smaller) with multiples (larger).",
+      "funFact": "Number 1 is a factor of every single whole number!"
+    }
+  },
+  "multiple": {
+    "id": "multiple",
+    "conceptId": "multiple",
+    "name": "Multiple",
+    "subject": "Arithmetic",
+    "clues": [
+      "For the number 5, my members are 5, 10, 15, 20, 25, 30...",
+      "I am what you get when you multiply a number by 1, 2, 3, 4, 5...",
+      "Unlike factors, my family grows bigger and bigger infinitely!",
+      "When you chant your multiplication tables, you are reciting my numbers!",
+      "I am the product of a given number and any positive integer."
+    ],
+    "hints": [
+      "Result of multiplying by 1, 2, 3...",
+      "Grows infinitely larger.",
+      "Found in multiplication tables."
+    ],
+    "educationalInfo": {
+      "definition": "A multiple is the product obtained by multiplying a number by any whole integer.",
+      "examples": [
+        "Multiples of 3: 3, 6, 9, 12, 15..."
+      ],
+      "commonMistakes": "Thinking a number has a limited count of multiples.",
+      "funFact": "Every number has an infinite number of multiples!"
+    }
+  },
+  "divisible_by_2": {
+    "id": "divisible_by_2",
+    "conceptId": "divisible_by_2",
+    "name": "Divisible by 2",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at numbers: 14, 28, 50, 102, 346...",
+      "Check my last digit—if it is 0, 2, 4, 6, or 8, I pass with flying colors!",
+      "Every even number in the universe satisfies my test.",
+      "I divide any even number into 2 equal parts with 0 remainder.",
+      "A number is divisible by 2 if its last digit is even."
+    ],
+    "hints": [
+      "Ends in 0, 2, 4, 6, 8.",
+      "Divides even numbers.",
+      "Remainder is zero."
+    ],
+    "educationalInfo": {
+      "definition": "A number is divisible by 2 if its last digit is an even number (0, 2, 4, 6, 8).",
+      "examples": [
+        "24",
+        "150",
+        "998"
+      ],
+      "commonMistakes": "Checking the first digit instead of the last digit.",
+      "funFact": "This is the fastest divisibility test in mathematics!"
+    }
+  },
+  "divisible_by_3": {
+    "id": "divisible_by_3",
+    "conceptId": "divisible_by_3",
+    "name": "Divisible by 3",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at number 123: 1 + 2 + 3 = 6. 6 is divisible by 3!",
+      "Do NOT just look at the last digit! Add ALL the digits together first!",
+      "If the sum of all digits is a multiple of 3, the whole number is divisible by 3.",
+      "Number 456 (4+5+6 = 15) passes my test easily!",
+      "A number is divisible by 3 if the sum of its digits is divisible by 3."
+    ],
+    "hints": [
+      "Add all digits together.",
+      "If sum is in 3 times table, it passes.",
+      "Does not depend on last digit alone."
+    ],
+    "educationalInfo": {
+      "definition": "A number is divisible by 3 if the sum of its digits is divisible by 3.",
+      "examples": [
+        "123 (1+2+3=6)",
+        "456 (4+5+6=15)"
+      ],
+      "commonMistakes": "Thinking odd ending numbers are automatically divisible by 3.",
+      "funFact": "Summing digits works because 10 = 9 + 1, and 9 is divisible by 3!"
+    }
+  },
+  "divisible_by_5": {
+    "id": "divisible_by_5",
+    "conceptId": "divisible_by_5",
+    "name": "Divisible by 5",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at numbers: 5, 10, 15, 20, 25, 30, 35...",
+      "Look ONLY at the very last digit of the number!",
+      "If the last digit is 0 or 5, it belongs to me!",
+      "Number 1,005 and 2,490 both pass my test immediately.",
+      "A number is divisible by 5 if its unit digit is 0 or 5."
+    ],
+    "hints": [
+      "Ends in 0 or 5.",
+      "Very easy to check.",
+      "Found on 5-rupee/dollar bills."
+    ],
+    "educationalInfo": {
+      "definition": "A number is divisible by 5 if its last digit is either 0 or 5.",
+      "examples": [
+        "35",
+        "100",
+        "555"
+      ],
+      "commonMistakes": "Thinking numbers ending in 5 are the only ones (0 also counts!).",
+      "funFact": "Every multiple of 10 is automatically divisible by 5!"
+    }
+  },
+  "divisible_by_9": {
+    "id": "divisible_by_9",
+    "conceptId": "divisible_by_9",
+    "name": "Divisible by 9",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at number 729: 7 + 2 + 9 = 18. 18 is in the 9 times table!",
+      "Just like the 3 test, add ALL the digits of the number together!",
+      "If the sum of digits is divisible by 9, the number is divisible by 9.",
+      "Number 999 (9+9+9 = 27) passes my test easily!",
+      "A number is divisible by 9 if the sum of its digits is divisible by 9."
+    ],
+    "hints": [
+      "Add all digits together.",
+      "Sum must be divisible by 9.",
+      "Stronger condition than divisible by 3."
+    ],
+    "educationalInfo": {
+      "definition": "A number is divisible by 9 if the sum of its digits is divisible by 9.",
+      "examples": [
+        "729 (7+2+9=18)",
+        "999 (9+9+9=27)"
+      ],
+      "commonMistakes": "Confusing divisible by 3 with divisible by 9.",
+      "funFact": "Every number divisible by 9 is also divisible by 3!"
+    }
+  },
+  "ones_place": {
+    "id": "ones_place",
+    "conceptId": "ones_place",
+    "name": "Ones",
+    "subject": "Arithmetic",
+    "clues": [
+      "In the number 3,457, I am the digit 7 sitting at the far right!",
+      "I represent single individual units from 0 to 9.",
+      "I am the first position to the left of the decimal point.",
+      "I multiply the digit by 1.",
+      "The position representing single units in the place value system."
+    ],
+    "hints": [
+      "Far right position in whole numbers.",
+      "Multiplies digit by 1.",
+      "Represents single units."
+    ],
+    "educationalInfo": {
+      "definition": "The ones place represents individual units (10^0 = 1) at the rightmost position of a whole number.",
+      "examples": [
+        "In 42, 2 is in the ones place"
+      ],
+      "commonMistakes": "Reading place values from left to right instead of right to left.",
+      "funFact": "Ones place is the starting anchor for all place value calculations!"
+    }
+  },
+  "tens_place": {
+    "id": "tens_place",
+    "conceptId": "tens_place",
+    "name": "Tens",
+    "subject": "Arithmetic",
+    "clues": [
+      "In the number 3,457, I am the digit 5!",
+      "I sit one step to the left of the ones place.",
+      "Each unit in my place is worth 10 single ones.",
+      "I multiply the digit by 10.",
+      "The position representing groups of ten (10^1)."
+    ],
+    "hints": [
+      "Second position from the right.",
+      "Multiplies digit by 10.",
+      "Represents groups of 10."
+    ],
+    "educationalInfo": {
+      "definition": "The tens place represents groups of ten (10^1 = 10), sitting immediately to the left of the ones place.",
+      "examples": [
+        "In 54, 5 is in the tens place (50)"
+      ],
+      "commonMistakes": "Forgetting that digit 5 in tens place means 50.",
+      "funFact": "Our decimal system is built around powers of 10!"
+    }
+  },
+  "hundreds_place": {
+    "id": "hundreds_place",
+    "conceptId": "hundreds_place",
+    "name": "Hundreds",
+    "subject": "Arithmetic",
+    "clues": [
+      "In the number 3,457, I am the digit 4!",
+      "I sit two positions to the left of the ones place.",
+      "Each unit in my place is worth 100 single ones.",
+      "I multiply the digit by 100.",
+      "The position representing groups of hundred (10^2)."
+    ],
+    "hints": [
+      "Third position from the right.",
+      "Multiplies digit by 100.",
+      "Represents groups of 100."
+    ],
+    "educationalInfo": {
+      "definition": "The hundreds place represents groups of one hundred (10^2 = 100).",
+      "examples": [
+        "In 345, 3 is in the hundreds place (300)"
+      ],
+      "commonMistakes": "Confusing hundreds with hundredths.",
+      "funFact": "1 hundred equals 10 tens or 100 ones!"
+    }
+  },
+  "thousands_place": {
+    "id": "thousands_place",
+    "conceptId": "thousands_place",
+    "name": "Thousands",
+    "subject": "Arithmetic",
+    "clues": [
+      "In the number 3,457, I am the digit 3!",
+      "I sit three positions to the left of the ones place.",
+      "Each unit in my place is worth 1,000 single ones.",
+      "In Indian/International system, a comma often comes right after me!",
+      "The position representing groups of thousand (10^3)."
+    ],
+    "hints": [
+      "Fourth position from the right.",
+      "Multiplies digit by 1,000.",
+      "Followed by a comma in 1,000."
+    ],
+    "educationalInfo": {
+      "definition": "The thousands place represents groups of one thousand (10^3 = 1000).",
+      "examples": [
+        "In 2,500, 2 is in the thousands place"
+      ],
+      "commonMistakes": "Miscounting positions when zeros are present.",
+      "funFact": "1 thousand equals 10 hundreds or 1,000 ones!"
+    }
+  },
+  "greater_than": {
+    "id": "greater_than",
+    "conceptId": "greater_than",
+    "name": "Greater Than (>)",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at this statement: 8 > 5.",
+      "My hungry alligator mouth ALWAYS opens towards the BIGGER number!",
+      "My pointed tail points to the smaller number.",
+      "Used when comparing two values where the left number is larger.",
+      "The mathematical symbol '>' indicating that the left quantity is strictly larger than the right."
+    ],
+    "hints": [
+      "Symbol > opens to the left.",
+      "Alligator mouth eats the bigger number.",
+      "Indicates left side is larger."
+    ],
+    "educationalInfo": {
+      "definition": "The greater than symbol (>) indicates that the value on the left is larger than the value on the right.",
+      "examples": [
+        "10 > 3",
+        "100 > 99"
+      ],
+      "commonMistakes": "Confusing > (greater than) with < (less than).",
+      "funFact": "Think of > as an arrow pointing to the smaller number!"
+    }
+  },
+  "less_than": {
+    "id": "less_than",
+    "conceptId": "less_than",
+    "name": "Less Than (<)",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at this statement: 4 < 9.",
+      "My symbol looks like a tilted letter 'L' for 'Less'!",
+      "My small closed point points towards the left smaller number.",
+      "Used when the left quantity is smaller than the right quantity.",
+      "The mathematical symbol '<' indicating that the left quantity is strictly smaller than the right."
+    ],
+    "hints": [
+      "Symbol < looks like an 'L'.",
+      "Points to the smaller left number.",
+      "Indicates left side is smaller."
+    ],
+    "educationalInfo": {
+      "definition": "The less than symbol (<) indicates that the value on the left is smaller than the value on the right.",
+      "examples": [
+        "2 < 7",
+        "15 < 20"
+      ],
+      "commonMistakes": "Confusing < with >.",
+      "funFact": "The symbol '<' actually resembles an 'L' for 'Less'!"
+    }
+  },
+  "equal_to": {
+    "id": "equal_to",
+    "conceptId": "equal_to",
+    "name": "Equal To (=)",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at this statement: 5 + 5 = 10.",
+      "I am made of two parallel horizontal lines sitting balanced together!",
+      "I mean both sides have the EXACT same value.",
+      "Neither side is bigger or smaller—they are identical in quantity.",
+      "The mathematical symbol '=' indicating exact equality between two expressions."
+    ],
+    "hints": [
+      "Two parallel horizontal lines.",
+      "Both sides have the exact same value.",
+      "Perfect balance."
+    ],
+    "educationalInfo": {
+      "definition": "The equal sign (=) shows that two expressions have identical values.",
+      "examples": [
+        "3 + 4 = 7",
+        "1/2 = 0.5"
+      ],
+      "commonMistakes": "Thinking '=' means 'calculate the answer' rather than 'balanced equivalence'.",
+      "funFact": "The '=' symbol was invented in 1557 by Robert Recorde because no two things could be more equal than parallel lines!"
+    }
+  },
+  "ascending_order": {
+    "id": "ascending_order",
+    "conceptId": "ascending_order",
+    "name": "Ascending Order",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at this sequence: 2, 5, 8, 14, 21.",
+      "Imagine climbing UP a staircase from step 1 to step 10!",
+      "Numbers are arranged from SMALLEST to LARGEST.",
+      "The opposite of descending order.",
+      "Arrangement of numbers in increasing value from smallest to greatest."
+    ],
+    "hints": [
+      "From smallest to largest.",
+      "Climbing up a staircase.",
+      "Values increase step-by-step."
+    ],
+    "educationalInfo": {
+      "definition": "Ascending order arranges numbers starting from the smallest value up to the largest value.",
+      "examples": [
+        "1, 3, 7, 12, 20"
+      ],
+      "commonMistakes": "Mixing up ascending (increasing) and descending (decreasing).",
+      "funFact": "'Ascend' means to go up or climb!"
+    }
+  },
+  "proper_fraction": {
+    "id": "proper_fraction",
+    "conceptId": "proper_fraction",
+    "name": "Proper Fraction",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 3/4, 2/5, 1/8...",
+      "My top number (numerator) is strictly SMALLER than my bottom number (denominator)!",
+      "My total value is always LESS than 1 whole unit.",
+      "You can easily draw me inside 1 circle or 1 pizza pie.",
+      "A fraction where numerator < denominator."
+    ],
+    "hints": [
+      "Numerator is smaller than denominator.",
+      "Value is less than 1.",
+      "e.g., 3/4."
+    ],
+    "educationalInfo": {
+      "definition": "A proper fraction has a numerator that is smaller than its denominator, making its value less than 1.",
+      "examples": [
+        "1/2",
+        "3/4",
+        "5/8"
+      ],
+      "commonMistakes": "Thinking fractions are always proper.",
+      "funFact": "Proper fractions represent a true part of a single whole!"
+    }
+  },
+  "improper_fraction": {
+    "id": "improper_fraction",
+    "conceptId": "improper_fraction",
+    "name": "Improper Fraction",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 7/4, 5/2, 9/5...",
+      "My top number (numerator) is BIGGER than or equal to my bottom number (denominator)!",
+      "My total value is GREATER than or equal to 1 whole unit.",
+      "You need MORE than 1 pizza pie to draw me!",
+      "A fraction where numerator >= denominator."
+    ],
+    "hints": [
+      "Numerator is greater than or equal to denominator.",
+      "Value is 1 or greater.",
+      "e.g., 7/4."
+    ],
+    "educationalInfo": {
+      "definition": "An improper fraction has a numerator greater than or equal to its denominator.",
+      "examples": [
+        "7/4",
+        "5/2",
+        "3/3"
+      ],
+      "commonMistakes": "Thinking improper fractions are 'wrong' (they are completely valid!).",
+      "funFact": "Every improper fraction can be rewritten as a mixed fraction!"
+    }
+  },
+  "mixed_fraction": {
+    "id": "mixed_fraction",
+    "conceptId": "mixed_fraction",
+    "name": "Mixed Fraction",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 1 3/4, 2 1/2, 5 1/3...",
+      "I combine a whole number AND a proper fraction standing side by side!",
+      "For 1 3/4, it means 1 whole pizza plus 3/4 of another pizza.",
+      "I am another way to write an improper fraction.",
+      "A number consisting of an integer and a proper fraction."
+    ],
+    "hints": [
+      "Combines a whole number and a fraction.",
+      "e.g., 2 1/2.",
+      "Equal to an improper fraction."
+    ],
+    "educationalInfo": {
+      "definition": "A mixed fraction (or mixed number) combines a whole number and a proper fraction.",
+      "examples": [
+        "1 1/2",
+        "2 3/4"
+      ],
+      "commonMistakes": "Multiplying the whole number and fraction instead of adding them.",
+      "funFact": "2 1/2 is equal to the improper fraction 5/2!"
+    }
+  },
+  "equivalent_fraction": {
+    "id": "equivalent_fraction",
+    "conceptId": "equivalent_fraction",
+    "name": "Equivalent Fraction",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 1/2, 2/4, 3/6, 4/8...",
+      "Even though our numbers look different, we represent the EXACT SAME amount of cake!",
+      "You get me by multiplying or dividing top and bottom by the same non-zero number.",
+      "If you eat 2/4 of a pizza, you ate half the pizza!",
+      "Fractions that have equal value even though they use different numerators and denominators."
+    ],
+    "hints": [
+      "Different numbers, same value.",
+      "1/2 = 2/4 = 3/6.",
+      "Made by multiplying top & bottom by the same number."
+    ],
+    "educationalInfo": {
+      "definition": "Equivalent fractions represent equal values or proportions even if their numerators and denominators differ.",
+      "examples": [
+        "1/2 = 2/4 = 4/8"
+      ],
+      "commonMistakes": "Adding the same number to top and bottom (you must multiply or divide!).",
+      "funFact": "There are infinitely many equivalent fractions for any single fraction!"
+    }
+  },
+  "tenths": {
+    "id": "tenths",
+    "conceptId": "tenths",
+    "name": "Tenths",
+    "subject": "Arithmetic",
+    "clues": [
+      "In 0.4, I am the digit 4!",
+      "I sit at the VERY FIRST place to the right of the decimal point.",
+      "My value represents dividing 1 whole into 10 equal parts (1/10 = 0.1).",
+      "I am 10 times larger than hundredths.",
+      "The first decimal place value after the decimal point (1/10)."
+    ],
+    "hints": [
+      "First digit after the decimal point.",
+      "Represents 1/10.",
+      "e.g., .4 in 0.4."
+    ],
+    "educationalInfo": {
+      "definition": "The tenths place is the first position to the right of the decimal point, representing tenths (1/10 or 0.1).",
+      "examples": [
+        "In 0.7, 7 is in the tenths place"
+      ],
+      "commonMistakes": "Confusing tens (left of dot) with tenths (right of dot).",
+      "funFact": "10 tenths make 1 whole unit!"
+    }
+  },
+  "hundredths": {
+    "id": "hundredths",
+    "conceptId": "hundredths",
+    "name": "Hundredths",
+    "subject": "Arithmetic",
+    "clues": [
+      "In 0.45, I am the digit 5!",
+      "I sit at the SECOND place to the right of the decimal point.",
+      "My value represents dividing 1 whole into 100 equal parts (1/100 = 0.01).",
+      "In money, paise or cents sit in my position!",
+      "The second decimal place value after the decimal point (1/100)."
+    ],
+    "hints": [
+      "Second digit after the decimal point.",
+      "Represents 1/100.",
+      "Used for cents/paise."
+    ],
+    "educationalInfo": {
+      "definition": "The hundredths place is the second position to the right of the decimal point (1/100 or 0.01).",
+      "examples": [
+        "In 0.25, 5 is in the hundredths place"
+      ],
+      "commonMistakes": "Thinking 0.05 is bigger than 0.5.",
+      "funFact": "10 hundredths equal 1 tenth!"
+    }
+  },
+  "thousandths": {
+    "id": "thousandths",
+    "conceptId": "thousandths",
+    "name": "Thousandths",
+    "subject": "Arithmetic",
+    "clues": [
+      "In 0.458, I am the digit 8!",
+      "I sit at the THIRD place to the right of the decimal point.",
+      "My value represents dividing 1 whole into 1,000 equal parts (1/1000 = 0.001).",
+      "Used in precise scientific measurements like 0.005 grams.",
+      "The third decimal place value after the decimal point (1/1000)."
+    ],
+    "hints": [
+      "Third digit after the decimal point.",
+      "Represents 1/1,000.",
+      "Used in micro measurements."
+    ],
+    "educationalInfo": {
+      "definition": "The thousandths place is the third position to the right of the decimal point (1/1000 or 0.001).",
+      "examples": [
+        "In 0.123, 3 is in the thousandths place"
+      ],
+      "commonMistakes": "Miscounting decimal places.",
+      "funFact": "1,000 thousandths make 1 whole unit!"
+    }
+  },
+  "decimal_number_concept": {
+    "id": "decimal_number_concept",
+    "conceptId": "decimal_number_concept",
+    "name": "Decimal Number",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 3.14, 0.75, 12.5...",
+      "I use a dot point separator to show parts of a whole.",
+      "I combine whole numbers on the left and fractional place values on the right.",
+      "Every price tag in a grocery store uses me!",
+      "A number expressed in the scale of tens using a decimal point."
+    ],
+    "hints": [
+      "Uses a decimal point.",
+      "Combines whole and fractional parts.",
+      "Common in prices."
+    ],
+    "educationalInfo": {
+      "definition": "A decimal number is a number that uses a decimal point to represent whole numbers and fractions of ten.",
+      "examples": [
+        "2.5",
+        "0.01"
+      ],
+      "commonMistakes": "Ignoring the position of the decimal point.",
+      "funFact": "Decimals allow us to write any fraction using standard place value digits!"
+    }
+  },
+  "fraction_form": {
+    "id": "fraction_form",
+    "conceptId": "fraction_form",
+    "name": "Fraction",
+    "subject": "Arithmetic",
+    "clues": [
+      "I am written as 1/2 or 3/4.",
+      "I use a top number and bottom number separated by a horizontal line.",
+      "Top is numerator, bottom is denominator.",
+      "I represent equal parts of a whole.",
+      "The a/b representation of a part of a whole."
+    ],
+    "hints": [
+      "Written as a/b.",
+      "Has numerator and denominator.",
+      "Shows parts of a whole."
+    ],
+    "educationalInfo": {
+      "definition": "A fraction expresses a part of a whole as a numerator divided by a denominator.",
+      "examples": [
+        "1/2",
+        "3/5"
+      ],
+      "commonMistakes": "Thinking top and bottom can be added directly when adding fractions.",
+      "funFact": "Fraction lines were introduced by Indian mathematicians!"
+    }
+  },
+  "decimal_form": {
+    "id": "decimal_form",
+    "conceptId": "decimal_form",
+    "name": "Decimal",
+    "subject": "Arithmetic",
+    "clues": [
+      "I am written as 0.5 or 0.75.",
+      "I convert 1/2 into 0.5 using a dot point.",
+      "I extend place values into tenths, hundredths...",
+      "Used on modern digital calculators.",
+      "The dot-point representation of a number."
+    ],
+    "hints": [
+      "Uses a dot point.",
+      "0.5 = 1/2.",
+      "Digital calculator format."
+    ],
+    "educationalInfo": {
+      "definition": "A decimal represents fractional quantities using place values of base 10.",
+      "examples": [
+        "0.5",
+        "0.25"
+      ],
+      "commonMistakes": "Adding decimal trailing zeros incorrectly.",
+      "funFact": "Decimals make calculating with fractions much faster on computers!"
+    }
+  },
+  "percentage_form": {
+    "id": "percentage_form",
+    "conceptId": "percentage_form",
+    "name": "Percentage",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 50%, 75%, 100%...",
+      "I always compare amounts out of a total of 100!",
+      "I use the special symbol '%'!",
+      "50% means 50 out of 100, which is equal to 1/2 or 0.5.",
+      "A rate, number, or amount in each hundred."
+    ],
+    "hints": [
+      "Uses symbol %.",
+      "Based on out of 100.",
+      "50% = 1/2 = 0.5."
+    ],
+    "educationalInfo": {
+      "definition": "A percentage is a ratio that compares a number to 100, represented by %.",
+      "examples": [
+        "50%",
+        "100%"
+      ],
+      "commonMistakes": "Thinking percentages cannot be greater than 100% (they can!).",
+      "funFact": "The word 'percent' comes from Latin 'per centum', meaning 'by the hundred'!"
+    }
+  },
+  "ratio_form": {
+    "id": "ratio_form",
+    "conceptId": "ratio_form",
+    "name": "Ratio",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 1:2 or 3:5.",
+      "I compare two quantities using a colon symbol ':'!",
+      "If there are 2 boys and 3 girls, my relationship is 2:3.",
+      "I compare part-to-part or part-to-whole.",
+      "A quantitative relationship between two amounts showing the number of times one value contains another."
+    ],
+    "hints": [
+      "Uses colon symbol :.",
+      "Compares two quantities.",
+      "e.g., 2:3."
+    ],
+    "educationalInfo": {
+      "definition": "A ratio compares two quantities using a colon (a:b) to show their relative sizes.",
+      "examples": [
+        "1:2",
+        "3:4"
+      ],
+      "commonMistakes": "Reversing the order of quantities in a ratio.",
+      "funFact": "Ratios are used in baking recipes to scale ingredients perfectly!"
+    }
+  },
+  "arithmetic_pattern": {
+    "id": "arithmetic_pattern",
+    "conceptId": "arithmetic_pattern",
+    "name": "Arithmetic Pattern",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 3, 7, 11, 15, 19...",
+      "You get the next number by ADDING or SUBTRACTING the same fixed number each time (+4)!",
+      "The difference between adjacent terms is constant.",
+      "Like climbing steps of equal height.",
+      "A sequence of numbers with a constant common difference."
+    ],
+    "hints": [
+      "Adds or subtracts a constant number.",
+      "+4 each step.",
+      "Constant difference."
+    ],
+    "educationalInfo": {
+      "definition": "An arithmetic pattern (sequence) is a list of numbers where each term increases or decreases by a constant common difference.",
+      "examples": [
+        "2, 5, 8, 11 (+3)"
+      ],
+      "commonMistakes": "Multiplying instead of adding.",
+      "funFact": "House numbers on a street often follow an arithmetic pattern of +2!"
+    }
+  },
+  "geometric_pattern": {
+    "id": "geometric_pattern",
+    "conceptId": "geometric_pattern",
+    "name": "Geometric Pattern",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 2, 6, 18, 54, 162...",
+      "You get the next number by MULTIPLYING by the same fixed factor each time (×3)!",
+      "I grow super fast like a rocket!",
+      "The ratio between adjacent terms is constant.",
+      "A sequence of numbers where each term is found by multiplying the previous term by a constant factor."
+    ],
+    "hints": [
+      "Multiplies by a constant factor.",
+      "×3 each step.",
+      "Grows very rapidly."
+    ],
+    "educationalInfo": {
+      "definition": "A geometric pattern is a sequence where each term is multiplied by a constant ratio to get the next term.",
+      "examples": [
+        "1, 2, 4, 8, 16 (×2)"
+      ],
+      "commonMistakes": "Adding instead of multiplying.",
+      "funFact": "Cell division in biology follows a geometric pattern of ×2!"
+    }
+  },
+  "square_numbers": {
+    "id": "square_numbers",
+    "conceptId": "square_numbers",
+    "name": "Square Numbers",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 1, 4, 9, 16, 25, 36, 49...",
+      "I am produced when a whole number is multiplied by ITSELF (1×1, 2×2, 3×3, 4×4...)!",
+      "You can arrange my dots into a perfect square shape grid!",
+      "4 × 4 = 16 belongs to me.",
+      "The product of an integer multiplied by itself."
+    ],
+    "hints": [
+      "Multiplied by itself (n²).",
+      "1, 4, 9, 16, 25...",
+      "Forms a square grid."
+    ],
+    "educationalInfo": {
+      "definition": "A square number is the result of multiplying an integer by itself (n × n = n²).",
+      "examples": [
+        "1",
+        "4",
+        "9",
+        "16",
+        "25"
+      ],
+      "commonMistakes": "Confusing n × 2 with n × n (e.g. 5² is 25, not 10).",
+      "funFact": "The sum of odd numbers 1 + 3 + 5 + 7 = 16 (4²)!"
+    }
+  },
+  "cube_numbers": {
+    "id": "cube_numbers",
+    "conceptId": "cube_numbers",
+    "name": "Cube Numbers",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 1, 8, 27, 64, 125...",
+      "I am produced when a number is multiplied by itself THREE times (1×1×1, 2×2×2, 3×3×3...)!",
+      "You can arrange my 3D blocks into a solid Rubik's cube shape!",
+      "2 × 2 × 2 = 8 belongs to me.",
+      "The product of an integer multiplied by itself twice (n³)."
+    ],
+    "hints": [
+      "Multiplied by itself 3 times (n³).",
+      "1, 8, 27, 64...",
+      "3D solid cube volume."
+    ],
+    "educationalInfo": {
+      "definition": "A cube number is the result of multiplying an integer by itself twice (n × n × n = n³).",
+      "examples": [
+        "1",
+        "8",
+        "27",
+        "64",
+        "125"
+      ],
+      "commonMistakes": "Confusing n × 3 with n³.",
+      "funFact": "A Rubik's cube has 3×3×3 = 27 small cubelets!"
+    }
+  },
+  "addition_op": {
+    "id": "addition_op",
+    "conceptId": "addition_op",
+    "name": "Addition",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 5 + 3 = 8.",
+      "I combine two or more amounts together into one total sum!",
+      "My special symbol is '+'!",
+      "The result of my operation is called the sum.",
+      "The mathematical operation of combining values."
+    ],
+    "hints": [
+      "Symbol +.",
+      "Combines values.",
+      "Result is sum."
+    ],
+    "educationalInfo": {
+      "definition": "Addition is combining two or more numbers together to find their total sum.",
+      "examples": [
+        "4 + 5 = 9"
+      ],
+      "commonMistakes": "Forgetting to carry over in multi-digit addition.",
+      "funFact": "Addition is commutative: a + b = b + a!"
+    }
+  },
+  "subtraction_op": {
+    "id": "subtraction_op",
+    "conceptId": "subtraction_op",
+    "name": "Subtraction",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 9 - 4 = 5.",
+      "I take away an amount from a total to find the difference!",
+      "My special symbol is '-'!",
+      "The result of my operation is called the difference.",
+      "The mathematical operation of taking one number away from another."
+    ],
+    "hints": [
+      "Symbol -.",
+      "Takes away an amount.",
+      "Result is difference."
+    ],
+    "educationalInfo": {
+      "definition": "Subtraction is taking one number away from another to find the difference.",
+      "examples": [
+        "10 - 4 = 6"
+      ],
+      "commonMistakes": "Reversing the order of numbers.",
+      "funFact": "Subtraction is the inverse operation of addition!"
+    }
+  },
+  "multiplication_op": {
+    "id": "multiplication_op",
+    "conceptId": "multiplication_op",
+    "name": "Multiplication",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 4 × 3 = 12.",
+      "I am fast repeated addition of the same number!",
+      "My special symbol is '×' or '*'!",
+      "The result of my operation is called the product.",
+      "The operation of scaling one number by another."
+    ],
+    "hints": [
+      "Symbol ×.",
+      "Repeated addition.",
+      "Result is product."
+    ],
+    "educationalInfo": {
+      "definition": "Multiplication is repeated addition of a number a specified number of times.",
+      "examples": [
+        "3 × 4 = 12"
+      ],
+      "commonMistakes": "Confusing multiplication with addition.",
+      "funFact": "Multiplication is also commutative: a × b = b × a!"
+    }
+  },
+  "division_op": {
+    "id": "division_op",
+    "conceptId": "division_op",
+    "name": "Division",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 12 ÷ 3 = 4.",
+      "I split a total quantity into equal groups or shares!",
+      "My special symbol is '÷' or '/'!",
+      "The result of my operation is called the quotient.",
+      "The operation of determining how many times one number is contained within another."
+    ],
+    "hints": [
+      "Symbol ÷.",
+      "Splits into equal groups.",
+      "Result is quotient."
+    ],
+    "educationalInfo": {
+      "definition": "Division is splitting a number into equal parts or groups.",
+      "examples": [
+        "15 ÷ 3 = 5"
+      ],
+      "commonMistakes": "Dividing by zero (which is undefined!).",
+      "funFact": "Division is the inverse operation of multiplication!"
+    }
+  },
+  "round_to_nearest_10": {
+    "id": "round_to_nearest_10",
+    "conceptId": "round_to_nearest_10",
+    "name": "Round to Nearest 10",
+    "subject": "Arithmetic",
+    "clues": [
+      "43 becomes 40, while 47 becomes 50!",
+      "Check the ones digit—if it is 5 or more, round UP; if less than 5, round DOWN!",
+      "The final result always ends with 0 in the ones place.",
+      "Useful when quick mental math is needed for items costing around ₹48 (₹50).",
+      "Approximating a number to the nearest multiple of 10."
+    ],
+    "hints": [
+      "Check ones digit.",
+      "5 or more rounds UP.",
+      "Ends in 0."
+    ],
+    "educationalInfo": {
+      "definition": "Rounding to the nearest 10 replaces a number with the closest multiple of 10.",
+      "examples": [
+        "34 → 30",
+        "36 → 40"
+      ],
+      "commonMistakes": "Rounding down when ones digit is 5.",
+      "funFact": "Number 5 sits exactly in the middle, so standard rule is to round UP!"
+    }
+  },
+  "round_to_nearest_100": {
+    "id": "round_to_nearest_100",
+    "conceptId": "round_to_nearest_100",
+    "name": "Round to Nearest 100",
+    "subject": "Arithmetic",
+    "clues": [
+      "340 becomes 300, while 370 becomes 400!",
+      "Check the tens digit—if 50 or more, round UP to the next hundred!",
+      "The final result ends with two zeros (00).",
+      "Useful when estimating crowds or prices in hundreds.",
+      "Approximating a number to the nearest multiple of 100."
+    ],
+    "hints": [
+      "Check tens digit.",
+      "Ends in 00.",
+      "Nearest multiple of 100."
+    ],
+    "educationalInfo": {
+      "definition": "Rounding to the nearest 100 replaces a number with the closest multiple of 100.",
+      "examples": [
+        "240 → 200",
+        "280 → 300"
+      ],
+      "commonMistakes": "Checking the wrong digit position.",
+      "funFact": "Used in quick budgeting for large store purchases!"
+    }
+  },
+  "estimate_sum": {
+    "id": "estimate_sum",
+    "conceptId": "estimate_sum",
+    "name": "Estimate Sum",
+    "subject": "Arithmetic",
+    "clues": [
+      "Instead of 48 + 31 = 79, calculate 50 + 30 = 80!",
+      "Round each number first, then add them up in your head!",
+      "Gives a fast rough total without doing exact pencil-and-paper addition.",
+      "Super handy at supermarket checkout counters.",
+      "Approximating the total sum of addition."
+    ],
+    "hints": [
+      "Round numbers first, then add.",
+      "Gives quick approximate total.",
+      "Fast mental math."
+    ],
+    "educationalInfo": {
+      "definition": "Estimating a sum involves rounding the numbers first to quickly find an approximate sum.",
+      "examples": [
+        "49 + 22 ≈ 50 + 20 = 70"
+      ],
+      "commonMistakes": "Calculating the exact sum first then rounding.",
+      "funFact": "Estimating helps catch calculation errors on tests!"
+    }
+  },
+  "estimate_difference": {
+    "id": "estimate_difference",
+    "conceptId": "estimate_difference",
+    "name": "Estimate Difference",
+    "subject": "Arithmetic",
+    "clues": [
+      "Instead of 89 - 42 = 47, calculate 90 - 40 = 50!",
+      "Round each number first, then subtract them mentally!",
+      "Gives a fast rough remaining amount.",
+      "Useful when checking how much change you should receive.",
+      "Approximating the difference in subtraction."
+    ],
+    "hints": [
+      "Round numbers first, then subtract.",
+      "Gives quick approximate difference.",
+      "Fast mental math."
+    ],
+    "educationalInfo": {
+      "definition": "Estimating a difference involves rounding numbers first before subtracting to find a rough result.",
+      "examples": [
+        "91 - 38 ≈ 90 - 40 = 50"
+      ],
+      "commonMistakes": "Forgetting to round both numbers.",
+      "funFact": "Estimation is used daily in financial management!"
+    }
+  },
+  "square_power": {
+    "id": "square_power",
+    "conceptId": "square_power",
+    "name": "Square",
+    "subject": "Arithmetic",
+    "clues": [
+      "5² = 5 × 5 = 25.",
+      "Multiply a number by itself once.",
+      "Written with a small exponent 2 at the top right.",
+      "Represents the area of a square with side length n.",
+      "The result of multiplying a number by itself (n²)."
+    ],
+    "hints": [
+      "Exponent 2 (n²).",
+      "Side length × side length.",
+      "e.g. 5² = 25."
+    ],
+    "educationalInfo": {
+      "definition": "A square power (n²) is the product of multiplying a number by itself.",
+      "examples": [
+        "4² = 16",
+        "6² = 36"
+      ],
+      "commonMistakes": "Multiplying by 2 instead of by itself (5² is 25, not 10).",
+      "funFact": "The area of a square of side length s is s²!"
+    }
+  },
+  "cube_power": {
+    "id": "cube_power",
+    "conceptId": "cube_power",
+    "name": "Cube",
+    "subject": "Arithmetic",
+    "clues": [
+      "3³ = 3 × 3 × 3 = 27.",
+      "Multiply a number by itself twice.",
+      "Written with a small exponent 3 at the top right.",
+      "Represents the volume of a 3D cube with side length n.",
+      "The result of multiplying a number by itself twice (n³)."
+    ],
+    "hints": [
+      "Exponent 3 (n³).",
+      "3D Volume.",
+      "e.g. 2³ = 8."
+    ],
+    "educationalInfo": {
+      "definition": "A cube power (n³) is the result of multiplying a number by itself twice.",
+      "examples": [
+        "2³ = 8",
+        "3³ = 27"
+      ],
+      "commonMistakes": "Multiplying by 3 instead of cubing.",
+      "funFact": "The volume of a 3D cube of side length s is s³!"
+    }
+  },
+  "roman_numerals": {
+    "id": "roman_numerals",
+    "conceptId": "roman_numerals",
+    "name": "Roman Numerals",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at I, V, X, L, C, D, M...",
+      "I use letters from the ancient Roman alphabet to write numbers!",
+      "V = 5, X = 10, L = 50, C = 100, M = 1000.",
+      "Seen on antique clock faces and super bowl titles!",
+      "Numeral system originating in ancient Rome."
+    ],
+    "hints": [
+      "Uses letters like I, V, X, C, M.",
+      "Ancient Roman system.",
+      "Found on old clocks."
+    ],
+    "educationalInfo": {
+      "definition": "Roman numerals use combinations of letters from the Latin alphabet (I, V, X, L, C, D, M) to represent values.",
+      "examples": [
+        "IV = 4",
+        "IX = 9",
+        "XX = 20"
+      ],
+      "commonMistakes": "Writing IIII instead of IV for 4.",
+      "funFact": "Roman numerals do not have a symbol for zero!"
+    }
+  },
+  "hindu_arabic_numerals": {
+    "id": "hindu_arabic_numerals",
+    "conceptId": "hindu_arabic_numerals",
+    "name": "Hindu-Arabic Numerals",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.",
+      "I am the standard 10-digit system used all over the world today!",
+      "Invented in India and spread worldwide through Arab traders.",
+      "Uses place value and the revolutionary concept of Zero (0)!",
+      "The base-10 positional numeral system used globally today."
+    ],
+    "hints": [
+      "Uses 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.",
+      "Standard global number system.",
+      "Invented in ancient India."
+    ],
+    "educationalInfo": {
+      "definition": "The Hindu-Arabic numeral system is the base-10 positional decimal system using digits 0–9.",
+      "examples": [
+        "123",
+        "999"
+      ],
+      "commonMistakes": "Calling them Arabic-only numerals (they originated in India!).",
+      "funFact": "This system replaced Roman numerals because it made complex arithmetic much easier!"
+    }
+  },
+  "expanded_form": {
+    "id": "expanded_form",
+    "conceptId": "expanded_form",
+    "name": "Expanded Form",
+    "subject": "Arithmetic",
+    "clues": [
+      "354 = 300 + 50 + 4.",
+      "I stretch out a number to show the value of each digit clearly!",
+      "Uses plus signs (+) between hundreds, tens, and ones place values.",
+      "Shows the sum of place values.",
+      "A way to write numbers by showing the value of each individual digit."
+    ],
+    "hints": [
+      "Stretches out digits: 300 + 50 + 4.",
+      "Shows place value sums.",
+      "Uses + signs."
+    ],
+    "educationalInfo": {
+      "definition": "Expanded form represents a number as the sum of each digit multiplied by its place value.",
+      "examples": [
+        "528 = 500 + 20 + 8"
+      ],
+      "commonMistakes": "Omitting zeros when expanding numbers like 405 (400 + 5).",
+      "funFact": "Expanded form helps students master place value mental math!"
+    }
   }
 }

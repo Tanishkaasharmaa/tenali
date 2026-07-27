@@ -260,7 +260,7 @@ export default function MindReaderApp2({ onBack }) {
       const timer = setTimeout(() => {
         setAnimatingFrom(null);
         setAnimatingTo(null);
-      }, 2000); // matches the 1.8s animation duration plus buffer
+      }, 3400); // matches the 3.2s animation duration plus buffer
       return () => clearTimeout(timer);
     }
   }, [animatingFrom, animatingTo]);
@@ -528,7 +528,9 @@ export default function MindReaderApp2({ onBack }) {
         setHintText('');
         setGuessQuery('');
         setAvatarExpression('thinking');
-        setPhase('playing');
+        setTimeout(() => {
+          setPhase('playing');
+        }, 400);
       } else {
         const errData = await res.json();
         setErrorMsg(errData.error || 'Failed to start level.');
@@ -791,7 +793,7 @@ export default function MindReaderApp2({ onBack }) {
             style={{
               offsetPath: `path('M ${x1} ${y1} C ${x1} ${cpY1}, ${x2} ${cpY2}, ${x2} ${y2}')`,
               offsetRotate: 'auto',
-              animation: 'flyPlane 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards'
+              animation: 'flyPlane 3.2s cubic-bezier(0.25, 1, 0.5, 1) forwards'
             }}
           >
             {/* Beautiful paper plane SVG path */}
@@ -1223,26 +1225,25 @@ export default function MindReaderApp2({ onBack }) {
 
           {!isSummaryPhase ? (
             <>
-              {/* 5-Round Text Stepper (Out of box) */}
-              <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', alignItems: 'center', marginBottom: '16px', fontSize: '0.88rem', fontWeight: '700' }}>
+              {/* Top Stepper: R1 R2 R3 R4 R5 */}
+              <div style={{ display: 'flex', gap: '18px', justifyContent: 'center', alignItems: 'center', marginBottom: '16px', fontSize: '0.9rem', fontWeight: '700' }}>
                 {[0, 1, 2, 3, 4].map((rIdx) => {
                   const isActive = rIdx === localClueIndex;
-                  const isDone = rIdx < localClueIndex;
                   return (
                     <span
                       key={rIdx}
                       style={{
-                        color: isActive
-                          ? 'var(--clr-accent)'
-                          : isDone
-                          ? '#2ecc71'
-                          : 'var(--clr-text-soft)',
+                        color: isActive ? 'var(--clr-accent)' : 'var(--clr-text-soft)',
                         borderBottom: isActive ? '2px solid var(--clr-accent)' : 'none',
                         paddingBottom: '2px',
+                        cursor: 'pointer',
                         transition: 'all 0.2s ease'
                       }}
+                      onClick={() => {
+                        setLocalClueIndex(rIdx);
+                      }}
                     >
-                      {isDone ? '✓ R' + (rIdx + 1) : 'R' + (rIdx + 1)}
+                      {'R' + (rIdx + 1)}
                     </span>
                   );
                 })}
@@ -1293,8 +1294,8 @@ export default function MindReaderApp2({ onBack }) {
                         width: '100%',
                         boxSizing: 'border-box',
                         padding: '14px 14px',
-                        background: isChecked ? 'rgba(74, 144, 226, 0.2)' : 'rgba(255, 255, 255, 0.04)',
-                        border: isChecked ? '2px solid var(--clr-accent)' : '1px solid rgba(255, 255, 255, 0.09)',
+                        background: isChecked ? 'rgba(232, 134, 74, 0.18)' : 'rgba(255, 255, 255, 0.04)',
+                        border: isChecked ? '1px solid var(--clr-accent)' : '1px solid rgba(255, 255, 255, 0.09)',
                         borderRadius: '14px',
                         color: isChecked ? '#fff' : 'var(--clr-text)',
                         fontSize: '0.92rem',
@@ -1305,7 +1306,7 @@ export default function MindReaderApp2({ onBack }) {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         transition: 'all 0.2s ease',
-                        boxShadow: isChecked ? '0 4px 14px rgba(74, 144, 226, 0.25)' : 'none'
+                        boxShadow: isChecked ? '0 4px 14px rgba(232, 134, 74, 0.25)' : 'none'
                       }}
                       onClick={() => toggleCandidateOption(optName)}
                     >
@@ -1373,31 +1374,41 @@ export default function MindReaderApp2({ onBack }) {
                   }}
                   onClick={handleNextClue}
                 >
-                  {localClueIndex < 4 ? 'Next Round \u2192' : 'View Summary \u2192'}
+                  {localClueIndex < 4 ? 'Next Round \u2192' : 'Make Final Guess \u2192'}
                 </button>
               </div>
             </>
           ) : (
-            /* ─── END OF LEVEL 5-ROUND SUMMARY & FINAL GUESS PHASE ─── */
-            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <h2 style={{ fontFamily: 'var(--font-display)', color: 'var(--clr-text)', fontSize: '1.9rem', margin: '5px 0 2px 0', textAlign: 'center', fontWeight: 'bold' }}>
-                End of Level Summary
-              </h2>
-              <p style={{ fontSize: '0.88rem', color: 'var(--clr-text-soft)', margin: '0 0 18px 0', textAlign: 'center' }}>
-                Tap an option to make your <strong>ONE FINAL GUESS</strong>:
-              </p>
+            /* ─── MAKE FINAL GUESS STEP ─── */
+            <>
+              {/* Mind Speech Card Box */}
+              <div style={{
+                margin: '0 auto 28px auto',
+                width: '100%',
+                maxWidth: '420px',
+                textAlign: 'center',
+                background: 'var(--clr-card)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '16px',
+                padding: '18px 20px',
+                boxSizing: 'border-box',
+                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)'
+              }}>
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', margin: 0, color: 'var(--clr-text)', fontWeight: '700' }}>
+                  Make your final guess
+                </p>
+              </div>
 
-              {/* 4 Option Buttons displaying selection counts directly */}
+              {/* 4 Option Cards Grid with clue match score badge */}
               <div style={{
                 width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px',
-                marginBottom: '24px'
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '10px',
+                margin: '0 0 16px 0'
               }}>
                 {levelOptions.map((optName) => {
                   const selectCount = [0, 1, 2, 3, 4].filter(rIdx => (roundSelections[rIdx] || []).includes(optName)).length;
-                  const barBlocks = '█'.repeat(selectCount);
 
                   return (
                     <button
@@ -1405,49 +1416,61 @@ export default function MindReaderApp2({ onBack }) {
                       type="button"
                       style={{
                         width: '100%',
-                        padding: '16px 18px',
-                        background: 'var(--clr-card)',
-                        border: '1.5px solid var(--clr-accent)',
+                        boxSizing: 'border-box',
+                        padding: '14px 14px',
+                        background: 'rgba(255, 255, 255, 0.04)',
+                        border: '1px solid rgba(255, 255, 255, 0.12)',
                         borderRadius: '14px',
                         color: 'var(--clr-text)',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '6px',
+                        fontSize: '0.92rem',
+                        fontWeight: '700',
                         textAlign: 'left',
-                        boxSizing: 'border-box'
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        transition: 'all 0.2s ease'
                       }}
                       onClick={() => handleSubmitGuess(optName)}
                     >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                        <span style={{ fontSize: '1rem', fontWeight: '700' }}>{optName}</span>
-                        <span style={{ color: 'var(--clr-accent)', fontFamily: 'monospace', fontWeight: '700', fontSize: '1rem' }}>
-                          {barBlocks} {selectCount}
-                        </span>
-                      </div>
-                      <div style={{ width: '100%', height: '8px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '4px', overflow: 'hidden' }}>
-                        <div style={{
-                          width: `${(selectCount / 5) * 100}%`,
-                          height: '100%',
-                          background: 'linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%)',
-                          borderRadius: '4px',
-                          transition: 'width 0.4s ease'
-                        }} />
-                      </div>
+                      <span>{optName}</span>
+                      <span style={{
+                        fontSize: '0.76rem',
+                        fontWeight: 'bold',
+                        color: 'var(--clr-accent)',
+                        background: 'rgba(232, 134, 74, 0.15)',
+                        padding: '2px 8px',
+                        borderRadius: '8px',
+                        border: '1px solid rgba(232, 134, 74, 0.3)'
+                      }}>
+                        {selectCount}/5
+                      </span>
                     </button>
                   );
                 })}
               </div>
 
-              {/* Navigation Back to Clues */}
-              <button
-                style={outlineBtnStyle}
-                onClick={() => setIsSummaryPhase(false)}
-              >
-                &larr; Back to Round Clues
-              </button>
-            </div>
+              {/* Footer Navigation Row */}
+              <div className="gm-footer-nav" style={{ width: '100%', display: 'flex', gap: '12px', marginTop: '8px', paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <button
+                  style={{
+                    ...outlineBtnStyle,
+                    flex: 1,
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => {
+                    setIsSummaryPhase(false);
+                    setLocalClueIndex(4);
+                  }}
+                >
+                  &larr; Back to R5
+                </button>
+              </div>
+            </>
           )}
         </div>
       )}
