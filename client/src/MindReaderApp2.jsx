@@ -1140,12 +1140,12 @@ export default function MindReaderApp2({ onBack }) {
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: labelSide === 'left' ? 'flex-end' : 'flex-start',
-                          whiteSpace: 'nowrap',
+                          maxWidth: '170px',
                           pointerEvents: 'none'
                         }}
                       >
-                        <div className={`gm-node-label ${node.unlocked ? '' : 'locked'}`} style={{ margin: 0, fontSize: '0.88rem' }}>
-                          Level {node.relativeNum || node.levelNum}
+                        <div className={`gm-node-label ${node.unlocked ? '' : 'locked'}`} style={{ margin: 0, fontSize: '0.82rem', fontWeight: '700', lineHeight: '1.25' }}>
+                          Level {node.relativeNum || node.levelNum} &mdash; {node.levelName}
                         </div>
                         {node.unlocked && (
                           <div style={{ display: 'flex', gap: '2px', color: '#f1c40f', fontSize: '0.7rem', marginTop: '2px' }}>
