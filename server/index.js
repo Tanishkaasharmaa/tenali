@@ -9982,20 +9982,28 @@ app.post('/api/mindreader/start', express.json(), async (req, res) => {
       }
     }
 
-    // Get all concepts for this world
-    const worldLevels = levelsConfig.filter(l => l.worldId === targetWorldId);
-    const allConceptIds = [...new Set(worldLevels.map(l => l.conceptId))];
+    // Find level config for target world and levelNum
+    const levelObj = levelsConfig.find(l => l.levelNum === parseInt(levelNum, 10) && l.worldId === targetWorldId);
+    
+    let selectedConceptId;
+    let levelOptions = [];
+    let levelName = levelObj ? (levelObj.levelName || `Level ${levelNum}`) : `Level ${levelNum}`;
 
-    // Filter out already-completed concepts for this user
-    let availableConceptIds = allConceptIds;
-    // Use a world-scoped seed (not level-scoped) so all levels share the same consistent shuffled ordering.
-    // This prevents concept repetition: level 1 = shuffled[0], level 2 = shuffled[1], etc.
-    const shuffleSeed = (user ? user.username : 'guest') + '_' + targetWorldId;
-    availableConceptIds = seededShuffle(allConceptIds, shuffleSeed);
+    if (levelObj && levelObj.conceptPool && levelObj.conceptPool.length > 0) {
+      const shuffleSeed = (user ? user.username : 'guest') + '_' + targetWorldId + '_' + levelNum + '_' + Date.now();
+      const randomIndex = Math.floor(Math.random() * levelObj.conceptPool.length);
+      selectedConceptId = levelObj.conceptPool[randomIndex];
+      levelOptions = levelObj.options || [];
+    } else {
+      // Fallback for general world levels
+      const worldLevels = levelsConfig.filter(l => l.worldId === targetWorldId);
+      const allConceptIds = [...new Set(worldLevels.map(l => l.conceptId))];
+      const shuffleSeed = (user ? user.username : 'guest') + '_' + targetWorldId;
+      const availableConceptIds = seededShuffle(allConceptIds, shuffleSeed);
+      const levelIdx = (parseInt(levelNum, 10) - 1) % availableConceptIds.length;
+      selectedConceptId = availableConceptIds[levelIdx];
+    }
 
-    // Pick the concept for this level (index cycles through shuffled list)
-    const levelIdx = (parseInt(levelNum, 10) - 1) % availableConceptIds.length;
-    const selectedConceptId = availableConceptIds[levelIdx];
     const concept = conceptsConfig[selectedConceptId];
 
     if (!concept) {
@@ -10006,7 +10014,7 @@ app.post('/api/mindreader/start', express.json(), async (req, res) => {
     const session = new GuessMindSession(gameId, parseInt(levelNum, 10), concept);
     guessMindSessions.set(gameId, session);
 
-    console.log(`[GuessMind] Session ${gameId} started for level ${levelNum} (world: ${targetWorldId}) with concept "${concept.name}"`);
+    console.log(`[GuessMind] Session ${gameId} started for level ${levelNum} (${levelName}) with secret concept "${concept.name}"`);
 
     const cluesList = (concept.thoughts && concept.thoughts.length > 0)
       ? concept.thoughts
@@ -10017,6 +10025,8 @@ app.post('/api/mindreader/start', express.json(), async (req, res) => {
     res.json({
       gameId,
       levelNum: parseInt(levelNum, 10),
+      levelName,
+      options: levelOptions,
       worldId: targetWorldId,
       clue: firstClue,
       clueIndex: 0,

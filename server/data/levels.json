@@ -4,7 +4,15 @@
     "levelNum": 1,
     "levelNumber": 1,
     "worldId": "number_kingdom",
-    "conceptId": "addition",
+    "levelName": "Number Sets",
+    "conceptId": "whole_numbers",
+    "options": [
+      "Whole Numbers",
+      "Integers",
+      "Fractions",
+      "Decimal Numbers"
+    ],
+    "conceptPool": ["whole_numbers", "integers", "fractions", "decimal_numbers"],
     "isBoss": false
   },
   {

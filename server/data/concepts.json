@@ -1,4 +1,120 @@
 {
+  "whole_numbers": {
+    "id": "whole_numbers",
+    "conceptId": "whole_numbers",
+    "name": "Whole Numbers",
+    "subject": "Arithmetic",
+    "clues": [
+      "I like counting full items around me: 0 toys, 1 teddy bear, 2 chocolates, 3 balloons...",
+      "I am super friendly with zero and positive numbers. I NEVER use minus signs!",
+      "If you break a cookie into pieces, that broken piece CANNOT enter my club!",
+      "I count how many fingers you have on your hands (1, 2, 3, 4, 5, 6, 7, 8, 9, 10).",
+      "I am the family of simple counting numbers starting from 0 (0, 1, 2, 3...) with no minus signs and no broken parts!"
+    ],
+    "hints": [
+      "Simple positive counting numbers starting from 0.",
+      "No negative numbers allowed.",
+      "No broken or decimal parts."
+    ],
+    "educationalInfo": {
+      "definition": "Whole numbers are simple counting numbers starting from 0 (0, 1, 2, 3...) without fractional or decimal parts.",
+      "examples": ["0", "1", "2", "3", "42"],
+      "commonMistakes": "Thinking negative numbers or fractions can be whole numbers.",
+      "funFact": "Zero was added to counting numbers to form Whole Numbers!",
+      "relatedLesson": "Number Sets",
+      "practiceQuestions": [
+        "Is 0 a whole number?",
+        "Is -5 a whole number?"
+      ]
+    }
+  },
+  "integers": {
+    "id": "integers",
+    "conceptId": "integers",
+    "name": "Integers",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at the numbers on my ruler: ... -3, -2, -1, 0, 1, 2, 3 ...",
+      "I walk both ways from zero—forward into positive and backward into negative—but always taking full complete steps!",
+      "The negative number -4 plays happily in my house, but 2.5 and 1/2 are strictly stopped at the door!",
+      "I am used when the weather gets super freezing cold below 0°C, like -5°C!",
+      "I am the complete family of all positive full numbers, negative full numbers, and zero!"
+    ],
+    "hints": [
+      "Includes numbers going both left and right from zero.",
+      "Includes positive numbers, zero, and negative numbers.",
+      "No fractions or decimals allowed."
+    ],
+    "educationalInfo": {
+      "definition": "Integers are all positive full numbers, negative full numbers, and zero (..., -2, -1, 0, 1, 2, ...).",
+      "examples": ["-5", "-1", "0", "7"],
+      "commonMistakes": "Thinking integers can include decimals like -2.5.",
+      "funFact": "The word 'Integer' comes from Latin and means 'whole' or 'intact'!",
+      "relatedLesson": "Number Sets",
+      "practiceQuestions": [
+        "Is -10 an integer?",
+        "Is 3/4 an integer?"
+      ]
+    }
+  },
+  "fractions": {
+    "id": "fractions",
+    "conceptId": "fractions",
+    "name": "Fractions",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at my afternoon snack: 1/2 of an apple and 3/4 of a pizza slice!",
+      "I am made by sharing a whole thing into equal parts. I have one number on top and one number on the bottom!",
+      "I use a straight horizontal line between my two numbers, NOT a tiny dot!",
+      "When 4 friends share 1 birthday cake equally, each friend gets 1/4 of the cake!",
+      "I show parts of a whole unit written with a number on top (numerator) and a number on bottom (denominator)!"
+    ],
+    "hints": [
+      "Shows parts of a whole thing.",
+      "Has one number on top and one on the bottom.",
+      "Uses a slash or horizontal dividing line."
+    ],
+    "educationalInfo": {
+      "definition": "A fraction represents a part of a whole unit, written as a numerator over a denominator (a/b).",
+      "examples": ["1/2", "3/4", "2/5"],
+      "commonMistakes": "Confusing numerator (top) and denominator (bottom).",
+      "funFact": "The word 'fraction' comes from the Latin word 'fractio', which means 'to break'!",
+      "relatedLesson": "Number Sets",
+      "practiceQuestions": [
+        "What is the numerator in 3/4?",
+        "If you eat 2 slices of an 8-slice pizza, what fraction did you eat?"
+      ]
+    }
+  },
+  "decimal_numbers": {
+    "id": "decimal_numbers",
+    "conceptId": "decimal_numbers",
+    "name": "Decimal Numbers",
+    "subject": "Arithmetic",
+    "clues": [
+      "Look at these shop items: 0.5 kg of sugar, ₹12.50 for juice, and 2.5 meters of ribbon!",
+      "I always have a special tiny dot point that sits right between my numbers!",
+      "I write small parts using a dot like 0.5, but I NEVER use a slash line like 1/2!",
+      "You see me every time you buy an ice cream for ₹25.50 at the store!",
+      "I am a number that uses a dot (decimal point) to show parts smaller than 1!"
+    ],
+    "hints": [
+      "Shows amounts with a tiny dot.",
+      "Used on shop price tags.",
+      "Uses a decimal point to separate whole units from parts."
+    ],
+    "educationalInfo": {
+      "definition": "A decimal number uses a decimal point (dot) to separate whole units from fractional place values like tenths and hundredths.",
+      "examples": ["0.5", "12.50", "2.75"],
+      "commonMistakes": "Putting the decimal point in the wrong place when adding or subtracting.",
+      "funFact": "The word 'decimal' comes from the Latin 'decem', meaning 'ten'!",
+      "relatedLesson": "Number Sets",
+      "practiceQuestions": [
+        "What does the dot in 4.5 mean?",
+        "How do you write half a dollar ($0.50) as a decimal?"
+      ]
+    }
+  },
   "prime_number": {
     "id": "prime_number",
     "conceptId": "prime_number",
