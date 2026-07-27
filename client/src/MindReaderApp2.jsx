@@ -750,6 +750,16 @@ export default function MindReaderApp2({ onBack }) {
     }
   };
 
+  const handleJumpToRound = (rIdx) => {
+    if (rIdx < revealedClues.length) {
+      setLocalClueIndex(rIdx);
+      setClue(revealedClues[rIdx]);
+      setIsSummaryPhase(false);
+    } else if (rIdx === revealedClues.length && rIdx < 5) {
+      handleNextClue();
+    }
+  };
+
   const renderSvgPath = () => {
     const levels = getLevelsForActiveWorld();
     if (levels.length === 0) return null;
@@ -1267,31 +1277,35 @@ export default function MindReaderApp2({ onBack }) {
             </div>
           </div>
 
+          {/* Top Stepper: R1 R2 R3 R4 R5 */}
+          <div style={{ display: 'flex', gap: '18px', justifyContent: 'center', alignItems: 'center', marginBottom: '16px', fontSize: '0.9rem', fontWeight: '700' }}>
+            {[0, 1, 2, 3, 4].map((rIdx) => {
+              const isUnlocked = rIdx < revealedClues.length;
+              const isActive = !isSummaryPhase && rIdx === localClueIndex;
+              return (
+                <span
+                  key={rIdx}
+                  style={{
+                    color: isActive
+                      ? 'var(--clr-accent)'
+                      : isUnlocked
+                      ? 'var(--clr-text)'
+                      : 'rgba(255, 255, 255, 0.25)',
+                    borderBottom: isActive ? '2px solid var(--clr-accent)' : 'none',
+                    paddingBottom: '2px',
+                    cursor: isUnlocked ? 'pointer' : 'not-allowed',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onClick={() => handleJumpToRound(rIdx)}
+                >
+                  {'R' + (rIdx + 1)}
+                </span>
+              );
+            })}
+          </div>
+
           {!isSummaryPhase ? (
             <>
-              {/* Top Stepper: R1 R2 R3 R4 R5 */}
-              <div style={{ display: 'flex', gap: '18px', justifyContent: 'center', alignItems: 'center', marginBottom: '16px', fontSize: '0.9rem', fontWeight: '700' }}>
-                {[0, 1, 2, 3, 4].map((rIdx) => {
-                  const isActive = rIdx === localClueIndex;
-                  return (
-                    <span
-                      key={rIdx}
-                      style={{
-                        color: isActive ? 'var(--clr-accent)' : 'var(--clr-text-soft)',
-                        borderBottom: isActive ? '2px solid var(--clr-accent)' : 'none',
-                        paddingBottom: '2px',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease'
-                      }}
-                      onClick={() => {
-                        setLocalClueIndex(rIdx);
-                      }}
-                    >
-                      {'R' + (rIdx + 1)}
-                    </span>
-                  );
-                })}
-              </div>
 
               {/* Speech Cloud Clue Box */}
               <div style={{
