@@ -145,6 +145,8 @@ export default function MindReaderApp2({ onBack }) {
   const [educationalInfo, setEducationalInfo] = useState(null);
   const [xpBreakdown, setXpBreakdown] = useState(null);
   const [xpStep, setXpStep] = useState(0);
+  const [starTip, setStarTip] = useState('');
+  const [isHoveringNextLevel, setIsHoveringNextLevel] = useState(false);
 
   // Clues history navigation & review
   const [revealedClues, setRevealedClues] = useState([]);
@@ -632,13 +634,14 @@ export default function MindReaderApp2({ onBack }) {
       const res = await fetch(`${API}/api/mindreader/submit-guess`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ gameId, guess: guessToSubmit })
+        body: JSON.stringify({ gameId, guess: guessToSubmit, roundSelections })
       });
 
       if (res.ok) {
         const data = await res.json();
         setIsCorrectGuess(data.correct);
         setStarsEarned(data.starsEarned || 0);
+        setStarTip(data.starTip || '');
         setXpEarned(data.xpEarned || 0);
         setMrrChange(data.reward ? data.reward.mrrChange : 0);
         setXpBreakdown(data.reward ? data.reward.xpBreakdown : null);
@@ -1587,38 +1590,69 @@ export default function MindReaderApp2({ onBack }) {
                 cursor: 'pointer',
                 boxSizing: 'border-box'
               }}
-              onClick={() => setPhase('levels')}
+              onClick={() => {
+                handleStartLevel(levelNum);
+              }}
             >
-              🗺️ Map
+              🔄 Retry
             </button>
 
             {isCorrectGuess ? (
-              <button
-                style={{
-                  flex: 1,
-                  background: 'var(--clr-accent)',
-                  color: 'var(--clr-text)',
-                  borderRadius: '12px',
-                  border: 'none',
-                  padding: '12px 16px',
-                  fontSize: '0.92rem',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  boxSizing: 'border-box',
-                  boxShadow: '0 4px 14px rgba(232, 134, 74, 0.3)'
-                }}
-                onClick={() => {
-                  const completedLvl = levelNum;
-                  const nextLvl = levelNum + 1;
-                  setAnimatingFrom(completedLvl);
-                  setAnimatingTo(nextLvl);
-                  setLevelNum(nextLvl);
-                  setPhase('levels');
-                  playSound('plane');
-                }}
-              >
-                🚀 Next Level &rarr;
-              </button>
+              <div style={{ flex: 1, position: 'relative' }}>
+                {starsEarned < 3 && isHoveringNextLevel && (
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 'calc(100% + 8px)',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 'max-content',
+                    maxWidth: '260px',
+                    background: 'var(--clr-card)',
+                    border: '1px solid var(--clr-accent)',
+                    borderRadius: '10px',
+                    padding: '8px 12px',
+                    fontSize: '0.8rem',
+                    color: '#fff',
+                    textAlign: 'center',
+                    boxShadow: '0 4px 14px rgba(0,0,0,0.5)',
+                    zIndex: 20,
+                    pointerEvents: 'none',
+                    lineHeight: '1.35'
+                  }}>
+                    💡 <strong>How to get 3 stars:</strong><br />
+                    {starTip || "Select the secret concept in candidate choices across all 5 rounds!"}
+                  </div>
+                )}
+                <button
+                  style={{
+                    width: '100%',
+                    background: 'var(--clr-accent)',
+                    color: 'var(--clr-text)',
+                    borderRadius: '12px',
+                    border: 'none',
+                    padding: '12px 16px',
+                    fontSize: '0.92rem',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    boxSizing: 'border-box',
+                    boxShadow: '0 4px 14px rgba(232, 134, 74, 0.3)'
+                  }}
+                  title={starsEarned < 3 ? (starTip || "Select the secret concept in candidate choices across all 5 rounds to get 3 stars!") : ''}
+                  onMouseEnter={() => setIsHoveringNextLevel(true)}
+                  onMouseLeave={() => setIsHoveringNextLevel(false)}
+                  onClick={() => {
+                    const completedLvl = levelNum;
+                    const nextLvl = levelNum + 1;
+                    setAnimatingFrom(completedLvl);
+                    setAnimatingTo(nextLvl);
+                    setLevelNum(nextLvl);
+                    setPhase('levels');
+                    playSound('plane');
+                  }}
+                >
+                  🚀 Next Level &rarr;
+                </button>
+              </div>
             ) : (
               <button
                 style={{

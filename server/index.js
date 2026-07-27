@@ -10130,17 +10130,35 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
   }
 
   if (isCorrect) {
-    // Calculate stars: since final guess is made after all 5 rounds, stars are evaluated by hint usage & pure deduction
-    if (session.hintsUsed === 0) {
+    // Option 1 Star Evaluation: candidate selection consistency across all 5 rounds (R1-R5)
+    let targetCount = 0;
+    const { roundSelections } = req.body;
+    if (roundSelections && typeof roundSelections === 'object') {
+      for (let rIdx = 0; rIdx < 5; rIdx++) {
+        const picks = roundSelections[rIdx] || roundSelections[rIdx.toString()] || [];
+        if (Array.isArray(picks) && picks.includes(concept.name)) {
+          targetCount++;
+        }
+      }
+    } else {
+      targetCount = 5; // fallback
+    }
+
+    if (targetCount >= 5) {
       starsEarned = 3;
-    } else if (session.hintsUsed === 1) {
+    } else if (targetCount >= 3) {
       starsEarned = 2;
     } else {
       starsEarned = 1;
     }
 
+    let starTip = '';
+    if (starsEarned < 3) {
+      starTip = "To get 3 stars, select the secret concept in candidate choices across all 5 rounds!";
+    }
+
     // Calculate MRR
-    mrrChange = Math.max(5, 20 - (4 * session.hintsUsed));
+    mrrChange = Math.max(5, 10 + (2 * targetCount) - (3 * session.hintsUsed));
 
     // Calculate dynamic XP based on World/Kingdom Difficulty
     let baseXp = 100;
@@ -10268,6 +10286,7 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
     cluesRemaining,
     starsEarned,
     xpEarned,
+    starTip: isCorrect ? starTip : '',
     reward: {
       mrrChange,
       mrr: finalMrr,
