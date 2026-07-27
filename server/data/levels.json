@@ -67,7 +67,7 @@
     "levelNum": 4,
     "levelNumber": 4,
     "worldId": "number_kingdom",
-    "levelName": "The Divisibility Temple",
+    "levelName": "The Divisibility Temple (Divisibility Rules)",
     "conceptId": "divisible_by_2",
     "options": [
       "Divisible by 2",
@@ -88,7 +88,7 @@
     "levelNum": 5,
     "levelNumber": 5,
     "worldId": "number_kingdom",
-    "levelName": "The Place Value Palace",
+    "levelName": "The Place Value Palace (Place Values)",
     "conceptId": "ones_place",
     "options": [
       "Ones",
@@ -109,7 +109,7 @@
     "levelNum": 6,
     "levelNumber": 6,
     "worldId": "number_kingdom",
-    "levelName": "The Comparison Bridge",
+    "levelName": "The Comparison Bridge (Number Comparison)",
     "conceptId": "greater_than",
     "options": [
       "Greater Than (>)",
@@ -130,7 +130,7 @@
     "levelNum": 7,
     "levelNumber": 7,
     "worldId": "number_kingdom",
-    "levelName": "The Fraction Forest",
+    "levelName": "The Fraction Forest (Fraction Types)",
     "conceptId": "proper_fraction",
     "options": [
       "Proper Fraction",
@@ -151,7 +151,7 @@
     "levelNum": 8,
     "levelNumber": 8,
     "worldId": "number_kingdom",
-    "levelName": "The Decimal Dock",
+    "levelName": "The Decimal Dock (Decimal Places)",
     "conceptId": "tenths",
     "options": [
       "Tenths",
@@ -172,7 +172,7 @@
     "levelNum": 9,
     "levelNumber": 9,
     "worldId": "number_kingdom",
-    "levelName": "The Ratio Market",
+    "levelName": "The Ratio Market (Representations)",
     "conceptId": "fraction_form",
     "options": [
       "Fraction",
@@ -193,7 +193,7 @@
     "levelNum": 10,
     "levelNumber": 10,
     "worldId": "number_kingdom",
-    "levelName": "The Roman Ruins",
+    "levelName": "The Roman Ruins (Roman & Ancient Numerals)",
     "conceptId": "roman_numerals",
     "options": [
       "Roman Numerals",
@@ -214,7 +214,7 @@
     "levelNum": 11,
     "levelNumber": 11,
     "worldId": "number_kingdom",
-    "levelName": "The Pattern Peaks",
+    "levelName": "The Pattern Peaks (Sequences & Patterns)",
     "conceptId": "arithmetic_pattern",
     "options": [
       "Arithmetic Pattern",
@@ -235,7 +235,70 @@
     "levelNum": 12,
     "levelNumber": 12,
     "worldId": "number_kingdom",
-    "levelName": "The King's Trial",
+    "levelName": "The Operation Oasis (Arithmetic Operations)",
+    "conceptId": "addition_op",
+    "options": [
+      "Addition",
+      "Subtraction",
+      "Multiplication",
+      "Division"
+    ],
+    "conceptPool": [
+      "addition_op",
+      "subtraction_op",
+      "multiplication_op",
+      "division_op"
+    ],
+    "isBoss": false
+  },
+  {
+    "id": "lvl_1_13",
+    "levelNum": 13,
+    "levelNumber": 13,
+    "worldId": "number_kingdom",
+    "levelName": "The Estimation Enclave (Rounding & Estimation)",
+    "conceptId": "round_to_nearest_10",
+    "options": [
+      "Round to Nearest 10",
+      "Round to Nearest 100",
+      "Estimate Sum",
+      "Estimate Difference"
+    ],
+    "conceptPool": [
+      "round_to_nearest_10",
+      "round_to_nearest_100",
+      "estimate_sum",
+      "estimate_difference"
+    ],
+    "isBoss": false
+  },
+  {
+    "id": "lvl_1_14",
+    "levelNum": 14,
+    "levelNumber": 14,
+    "worldId": "number_kingdom",
+    "levelName": "The Power Peak (Powers & Roots)",
+    "conceptId": "square_power",
+    "options": [
+      "Square",
+      "Cube",
+      "Square Root",
+      "Cube Root"
+    ],
+    "conceptPool": [
+      "square_power",
+      "cube_power",
+      "square_root",
+      "cube_root"
+    ],
+    "isBoss": false
+  },
+  {
+    "id": "lvl_1_15",
+    "levelNum": 15,
+    "levelNumber": 15,
+    "worldId": "number_kingdom",
+    "levelName": "The King's Trial (Number Kingdom Boss)",
     "conceptId": "prime_numbers",
     "options": [
       "Prime Number",

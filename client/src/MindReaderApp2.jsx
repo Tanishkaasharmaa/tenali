@@ -316,13 +316,31 @@ export default function MindReaderApp2({ onBack }) {
 
   // Kingdom Level Boundaries Map (guarantees complete independence for every kingdom)
   const WORLD_LEVEL_RANGES = {
-    'number_kingdom': [1, 10],
+    'number_kingdom': [1, 15],
     'arithmetic_kingdom': [11, 20],
     'geometry_kingdom': [21, 30],
     'algebra_kingdom': [31, 40],
     'advanced_math_kingdom': [41, 50],
     'coordinate_calculus_kingdom': [51, 60],
     'data_logic_kingdom': [61, 66]
+  };
+
+  const LEVEL_NAMES_MAP = {
+    1: "The Number Village (Number Sets)",
+    2: "The Hall of Hidden Properties (Even, Odd, Prime, Composite)",
+    3: "The Factor Forge (Factors, Multiples, HCF, LCM)",
+    4: "The Divisibility Temple (Divisibility Rules)",
+    5: "The Place Value Palace (Place Values)",
+    6: "The Comparison Bridge (Number Comparison)",
+    7: "The Fraction Forest (Fraction Types)",
+    8: "The Decimal Dock (Decimal Places)",
+    9: "The Ratio Market (Representations)",
+    10: "The Roman Ruins (Roman & Ancient Numerals)",
+    11: "The Pattern Peaks (Sequences & Patterns)",
+    12: "The Operation Oasis (Arithmetic Operations)",
+    13: "The Estimation Enclave (Rounding & Estimation)",
+    14: "The Power Peak (Powers & Roots)",
+    15: "The King's Trial (Number Kingdom Boss)"
   };
 
   const getKingdomLevelNumbers = (w) => {
@@ -394,9 +412,14 @@ export default function MindReaderApp2({ onBack }) {
       const currentStars = getLevelStars(activeWorld.worldId, num, levelProgress);
       isPrevUnlockedAndCompleted = unlocked && currentStars > 0;
 
+      const levelName = (activeWorld.levels && activeWorld.levels[idx]?.levelName)
+        || LEVEL_NAMES_MAP[num]
+        || `Level ${idx + 1}`;
+
       list.push({
         levelNum: num,
         relativeNum: idx + 1,
+        levelName,
         stars: currentStars,
         unlocked
       });
@@ -689,19 +712,25 @@ export default function MindReaderApp2({ onBack }) {
           setPhase('gameover');
         } else {
           if (data.cluesRemaining) {
-            // Keep in playing phase and allow trying next clue / guessing again
             setWrongGuessFeedback("❌ Not quite! That's not the secret concept. Try reading another clue or guessing again!");
           } else {
-            // All clues exhausted -> End level & show revision card (without revealing answer name)
             setActualConcept('');
             setAvatarExpression('loss');
             setTenaliSpeech("All 5 clues are completed. Review the educational revision card below!");
             setPhase('gameover');
           }
         }
+      } else {
+        if (res.status === 404) {
+          // Auto-recover session if expired/restarted
+          handleStartLevel(levelNum);
+        } else {
+          setWrongGuessFeedback('Unable to submit guess. Please try again.');
+        }
       }
     } catch (err) {
-      console.error(err);
+      console.error('[GuessMind] Submit guess error:', err);
+      setWrongGuessFeedback('Connection error. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -731,14 +760,14 @@ export default function MindReaderApp2({ onBack }) {
     
     let pathD = "";
     levels.forEach((lvl, idx) => {
-      const offsetSign = idx % 4 === 1 ? 80 : idx % 4 === 3 ? -80 : 0;
+      const offsetSign = idx % 4 === 1 ? 38 : idx % 4 === 3 ? -38 : 0;
       const x = 200 + offsetSign;
       const y = 50 + idx * nodeHeight; // center of the 100px block
       
       if (idx === 0) {
         pathD += `M ${x} ${y}`;
       } else {
-        const prevOffsetSign = (idx - 1) % 4 === 1 ? 80 : (idx - 1) % 4 === 3 ? -80 : 0;
+        const prevOffsetSign = (idx - 1) % 4 === 1 ? 38 : (idx - 1) % 4 === 3 ? -38 : 0;
         const prevX = 200 + prevOffsetSign;
         const prevY = 50 + (idx - 1) * nodeHeight;
         
@@ -753,11 +782,11 @@ export default function MindReaderApp2({ onBack }) {
 
     let x1, y1, x2, y2, cpY1, cpY2;
     if (fromIdx !== -1 && toIdx !== -1) {
-      const fromOffsetSign = fromIdx % 4 === 1 ? 80 : fromIdx % 4 === 3 ? -80 : 0;
+      const fromOffsetSign = fromIdx % 4 === 1 ? 38 : fromIdx % 4 === 3 ? -38 : 0;
       x1 = 200 + fromOffsetSign;
       y1 = 50 + fromIdx * nodeHeight;
 
-      const toOffsetSign = toIdx % 4 === 1 ? 80 : toIdx % 4 === 3 ? -80 : 0;
+      const toOffsetSign = toIdx % 4 === 1 ? 38 : toIdx % 4 === 3 ? -38 : 0;
       x2 = 200 + toOffsetSign;
       y2 = 50 + toIdx * nodeHeight;
 
@@ -1032,7 +1061,7 @@ export default function MindReaderApp2({ onBack }) {
 
       {/* ─── PHASE 3: LEVEL SELECTION TRACK (CANDY CRUSH STYLE) ──────────────────── */}
       {phase === 'levels' && (
-        <div className="gm-container" style={{ minHeight: 'auto', gap: '15px', width: '100%', maxWidth: '420px', margin: '0 auto' }}>
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '15px', width: '100%', maxWidth: '400px', margin: '0 auto', overflow: 'visible' }}>
           <h4 style={{ margin: '5px 0 10px 0', color: 'var(--clr-text)', fontFamily: 'var(--font-display)', fontSize: '1.6rem', textAlign: 'center' }}>
             {worlds[activeWorldIndex]?.worldName}
           </h4>
@@ -1046,8 +1075,8 @@ export default function MindReaderApp2({ onBack }) {
                 {levelsList.map((node, index) => {
                   const activeWorld = worlds[activeWorldIndex];
 
-                  // Calculate horizontal offset for zigzag pattern (0, +80, 0, -80)
-                  const offsetSign = index % 4 === 1 ? '80px' : index % 4 === 3 ? '-80px' : '0px';
+                  // Gentle curve offset (+38px, -38px)
+                  const offsetSign = index % 4 === 1 ? '38px' : index % 4 === 3 ? '-38px' : '0px';
                   const isActive = node.levelNum === levelNum || node.isCurrent;
                   const isCompleted = node.stars > 0;
                   const isNodeOnRight = index % 4 === 1;
@@ -1126,7 +1155,7 @@ export default function MindReaderApp2({ onBack }) {
                           }
                         }}
                       >
-                        {isCompleted ? '✓' : node.unlocked ? (node.relativeNum || node.levelNum) : '🔒'}
+                        {node.unlocked ? (node.relativeNum || node.levelNum) : '🔒'}
                       </div>
 
                       {/* Side Level Label & Stars (Positioned Absolutely on the Side) */}
@@ -1135,24 +1164,37 @@ export default function MindReaderApp2({ onBack }) {
                           position: 'absolute',
                           top: '50%',
                           transform: 'translateY(-50%)',
-                          [labelSide]: '72px',
+                          [labelSide]: '68px',
                           textAlign: labelSide === 'left' ? 'right' : 'left',
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: labelSide === 'left' ? 'flex-end' : 'flex-start',
-                          maxWidth: '170px',
-                          pointerEvents: 'none'
+                          width: '150px',
+                          pointerEvents: 'none',
+                          zIndex: 10
                         }}
                       >
-                        <div className={`gm-node-label ${node.unlocked ? '' : 'locked'}`} style={{ margin: 0, fontSize: '0.82rem', fontWeight: '700', lineHeight: '1.25' }}>
-                          Level {node.relativeNum || node.levelNum} &mdash; {node.levelName}
+                        <div
+                          className={`gm-node-label ${node.unlocked ? '' : 'locked'}`}
+                          style={{
+                            margin: 0,
+                            fontSize: '0.86rem',
+                            fontWeight: '700',
+                            lineHeight: '1.3',
+                            color: node.unlocked ? '#ffffff' : 'rgba(255, 255, 255, 0.45)',
+                            whiteSpace: 'normal',
+                            wordBreak: 'break-word',
+                            textShadow: '0 2px 6px rgba(0, 0, 0, 0.9)'
+                          }}
+                        >
+                          {(node.levelName || `Level ${node.relativeNum || node.levelNum}`).replace(/\s*\([^)]*\)/g, '').trim()}
                         </div>
                         {node.unlocked && (
-                          <div style={{ display: 'flex', gap: '2px', color: '#f1c40f', fontSize: '0.7rem', marginTop: '2px' }}>
+                          <div style={{ display: 'flex', gap: '2px', color: '#f1c40f', fontSize: '0.75rem', marginTop: '3px' }}>
                             {node.stars > 0 ? (
                               Array.from({ length: node.stars }).map((_, i) => <span key={i}>★</span>)
                             ) : (
-                              <span style={{ color: 'rgba(255, 255, 255, 0.15)', fontSize: '0.65rem' }}>☆☆☆</span>
+                              <span style={{ color: 'rgba(255, 255, 255, 0.25)', fontSize: '0.7rem' }}>☆☆☆</span>
                             )}
                           </div>
                         )}

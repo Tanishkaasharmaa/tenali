@@ -10111,8 +10111,18 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
   }
 
   const concept = session.selectedConcept;
-  const normalizedGuess = guess.trim().toLowerCase().replace(/\s+/g, '');
-  const normalizedConceptName = concept.name.trim().toLowerCase().replace(/\s+/g, '');
+  
+  const flexNormalize = (str) => {
+    if (!str) return '';
+    return str
+      .toLowerCase()
+      .replace(/\([^)]*\)/g, '')
+      .replace(/[^a-z0-9]/g, '')
+      .replace(/s$/, '');
+  };
+
+  const normalizedGuess = flexNormalize(guess);
+  const normalizedConceptName = flexNormalize(concept.name);
 
   const isCorrect = normalizedGuess === normalizedConceptName;
   const cluesRemaining = session.clueIndex < 4;
@@ -10121,6 +10131,7 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
   let mrrChange = -5;
   let xpEarned = 0;
   let xpBreakdown = null;
+  let starTip = '';
   let user = null;
 
   try {
@@ -10136,7 +10147,7 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
     if (roundSelections && typeof roundSelections === 'object') {
       for (let rIdx = 0; rIdx < 5; rIdx++) {
         const picks = roundSelections[rIdx] || roundSelections[rIdx.toString()] || [];
-        if (Array.isArray(picks) && picks.includes(concept.name)) {
+        if (Array.isArray(picks) && picks.some(p => flexNormalize(p) === normalizedConceptName)) {
           targetCount++;
         }
       }
@@ -10152,7 +10163,6 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
       starsEarned = 1;
     }
 
-    let starTip = '';
     if (starsEarned < 3) {
       starTip = "To get 3 stars, select the secret concept in candidate choices across all 5 rounds!";
     }

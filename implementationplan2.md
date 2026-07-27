@@ -308,6 +308,7 @@ This analytics log allows teachers and game designers to identify which clues ca
 * **Phase 3**: Update frontend UI components in `client/src/App.jsx` to render:
   - 5-round step progression indicator.
   - Checkbox option multi-selector per round.
+  
   - End-of-level histogram summary card.
   - Single final guess confirmation screen.
 * **Phase 4**: Automated testing (`test_guess_mind.js`) for multi-round recording, selection persistence, and final scoring. [x]
