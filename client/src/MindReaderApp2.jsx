@@ -851,17 +851,17 @@ export default function MindReaderApp2({ onBack }) {
           <div style={{ display: 'flex', gap: '8px' }}>
             {phase === 'setup' && onBack && (
               <button style={outlineBtnStyle} onClick={onBack}>
-                🏠 Home
+                Home
               </button>
             )}
             {phase === 'worlds' && (
               <>
                 <button style={outlineBtnStyle} onClick={() => setPhase('setup')}>
-                  &larr; Setup
+                  Setup
                 </button>
                 {onBack && (
                   <button style={outlineBtnStyle} onClick={onBack}>
-                    🏠 Home
+                    Home
                   </button>
                 )}
               </>
@@ -869,11 +869,11 @@ export default function MindReaderApp2({ onBack }) {
             {phase === 'levels' && (
               <>
                 <button style={outlineBtnStyle} onClick={() => setPhase('worlds')}>
-                  &larr; Worlds
+                  Worlds
                 </button>
                 {onBack && (
                   <button style={outlineBtnStyle} onClick={onBack}>
-                    🏠 Home
+                    Home
                   </button>
                 )}
               </>
@@ -881,11 +881,11 @@ export default function MindReaderApp2({ onBack }) {
             {phase === 'gameover' && (
               <>
                 <button style={outlineBtnStyle} onClick={() => setPhase('levels')}>
-                  &larr; Map
+                  Map
                 </button>
                 {onBack && (
                   <button style={outlineBtnStyle} onClick={onBack}>
-                    🏠 Home
+                    Home
                   </button>
                 )}
               </>
@@ -931,7 +931,7 @@ export default function MindReaderApp2({ onBack }) {
             }}
             onClick={() => setPhase('worlds')}
           >
-            Enter the Kingdoms
+            Start Game
           </button>
 
 
@@ -1190,7 +1190,7 @@ export default function MindReaderApp2({ onBack }) {
                 }}
                 onClick={() => setPhase('levels')}
               >
-                🚪 Quit
+                Quit
               </button>
             </div>
 
@@ -1219,7 +1219,7 @@ export default function MindReaderApp2({ onBack }) {
                   onClick={handleUseHint}
                   disabled={hintsRemaining <= 0}
                 >
-                  💡 Hint ({hintsRemaining}/3)
+                  Hint ({hintsRemaining}/3)
                 </button>
               ) : <div />}
             </div>
@@ -1356,7 +1356,7 @@ export default function MindReaderApp2({ onBack }) {
                   disabled={localClueIndex === 0}
                   onClick={handlePrevLocalClue}
                 >
-                  &larr; Prev
+                  Prev
                 </button>
                 <button 
                   style={{
@@ -1376,7 +1376,7 @@ export default function MindReaderApp2({ onBack }) {
                   }}
                   onClick={handleNextClue}
                 >
-                  {localClueIndex < 4 ? 'Next Round \u2192' : 'Make Final Guess \u2192'}
+                  {localClueIndex < 4 ? 'Next Round' : 'Make Final Guess'}
                 </button>
               </div>
             </>
@@ -1469,7 +1469,7 @@ export default function MindReaderApp2({ onBack }) {
                     setLocalClueIndex(4);
                   }}
                 >
-                  &larr; Back to R5
+                  Back to R5
                 </button>
               </div>
             </>
@@ -1594,7 +1594,7 @@ export default function MindReaderApp2({ onBack }) {
                 handleStartLevel(levelNum);
               }}
             >
-              🔄 Retry
+              Retry
             </button>
 
             {isCorrectGuess ? (
@@ -1619,7 +1619,7 @@ export default function MindReaderApp2({ onBack }) {
                     pointerEvents: 'none',
                     lineHeight: '1.35'
                   }}>
-                    💡 <strong>How to get 3 stars:</strong><br />
+                    <strong>How to get 3 stars:</strong><br />
                     {starTip || "Select the secret concept in candidate choices across all 5 rounds!"}
                   </div>
                 )}
@@ -1650,7 +1650,7 @@ export default function MindReaderApp2({ onBack }) {
                     playSound('plane');
                   }}
                 >
-                  🚀 Next Level &rarr;
+                  Next Level
                 </button>
               </div>
             ) : (
@@ -1671,7 +1671,7 @@ export default function MindReaderApp2({ onBack }) {
                   handleStartLevel(levelNum);
                 }}
               >
-                🔄 Try Again
+                Try Again
               </button>
             )}
           </div>
