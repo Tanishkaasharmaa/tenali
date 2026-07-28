@@ -15,19 +15,17 @@ This document details the game design specification, educational deduction frame
 * **End-of-Level Reflection & Final Guess**: After Round 5, students view a summary histogram of how many times they selected each option across all 5 rounds, building confidence before submitting their **one final guess**.
 * **Zero-Inference Latency & Cost**: Uses declarative JSON question banks loaded into memory on server startup rather than real-time LLM calls.
 
----
+---## 2. 5-Round Clue Progression Framework
 
-## 2. 5-Round Clue Progression Framework
-
-Every level follows a standardized 5-round evidence progression designed to guide student reasoning without revealing the answer prematurely:
+Every level follows a standardized 5-round evidence progression designed to guide student reasoning using **progressive uncertainty reduction**. Initial clues start intrigue-first and broad so that students cannot guess the answer immediately on Round 1:
 
 | Round | Evidence Type | Objective & Clue Characteristics | Target Uncertainty State |
 | :--- | :--- | :--- | :--- |
-| **Round 1** | **Observation** | Visuals, examples, patterns, or real objects to observe. Tenali speaks in intriguing, simple terms. | **3–4 options** seem possible. |
-| **Round 2** | **Property** | Reveals a key characteristic or property without giving a full textbook definition. | **1 option** becomes unlikely (3 remain). |
-| **Round 3** | **Elimination** | Tests edge cases, rule exceptions, or negative constraints ("Which example breaks my rule?"). | **1 option eliminated** (2 remain). |
-| **Round 4** | **Real-Life Application** | Practical scenario (e.g., temperature, money, pizza slices, measurement, distance, sports). | **2 options** realistically remain under consideration. |
-| **Round 5** | **Final Defining Clue** | Key discriminator feature that uniquely identifies the secret concept. | **Only 1 option** fits perfectly. |
+| **Round 1** | **Broad Mystery & Observation** | Broad real-world context, pattern, or observation that applies to **3–4 candidate concepts** in the level family. **Strict Rule**: Never include explicit dead-giveaways (like negative signs `-3`, stacked bars `1/2`, or dots `0.5`). | **3–4 options** seem plausible. High intrigue & productive confusion. |
+| **Round 2** | **Subtle Property** | Introduces a characteristic that narrows the scope without giving a complete definition. | **1 option eliminated** (3 options remain plausible). |
+| **Round 3** | **Constraint & Elimination** | Reveals a negative constraint, edge case, or structural boundary ("My family rejects..."). | **1 more option eliminated** (2 options remain plausible). |
+| **Round 4** | **Real-Life Scenario** | Presents a concrete application scenario that strongly favors the target concept over the remaining distractor. | **1 primary option** emerges strongly (2 under consideration). |
+| **Round 5** | **Final Clincher** | Explicit defining property that uniquely pinpoints the secret concept with zero ambiguity. | **Only 1 option** fits perfectly. |
 
 ---
 
@@ -61,7 +59,7 @@ Every level follows a standardized 5-round evidence progression designed to guid
 ┌─────────────────────────────────────────────────────────┐
 │                 OUTCOME & WISDOM SCROLL                 │
 │ Victory/Defeat screen, Stars, XP, and Educational Card  │
-└─────────────────────────────────────────────────────────┘
+└──────────────────────────┬──────────────────────────────┘
 ```
 
 ### Round-by-Round Interaction Rules
@@ -126,32 +124,32 @@ The system uses three declarative configuration files in `server/data/`:
     "clues": [
       {
         "round": 1,
-        "evidenceType": "Observation",
-        "tenaliClue": "I love counting apples, sheep, and stars in the night sky using 0, 1, 2, 3...",
-        "whyItHelps": "Establishes a starting set of discrete positive counting values including zero, ruling out complex structures."
+        "evidenceType": "Broad Mystery & Observation",
+        "tenaliClue": "I am a way we talk about how much or how many items we have when we count, measure, or share!",
+        "whyItHelps": "Broad statement fitting Whole Numbers, Integers, Fractions, and Decimals. Leaves all 4 options open."
       },
       {
         "round": 2,
-        "evidenceType": "Property",
-        "tenaliClue": "I never allow negative numbers or pieces of numbers into my family.",
-        "whyItHelps": "Eliminates Integers (which allow negatives) and makes partial numbers unlikely."
+        "evidenceType": "Subtle Property",
+        "tenaliClue": "My family is super friendly with zero and positive counting values. We never go below zero!",
+        "whyItHelps": "Eliminates Integers (which allow negative values). Whole Numbers, Fractions, and Decimals remain."
       },
       {
         "round": 3,
-        "evidenceType": "Elimination",
-        "tenaliClue": "If you cut a birthday cake into 4 slices and take 1 slice, that slice CANNOT join my family.",
-        "whyItHelps": "Strictly eliminates Fractions and Decimals."
+        "evidenceType": "Constraint & Elimination",
+        "tenaliClue": "If you cut a cookie into pieces, a single broken piece alone CANNOT join my family as an exact single member!",
+        "whyItHelps": "Eliminates Fractions and Decimals."
       },
       {
         "round": 4,
-        "evidenceType": "Real-life",
-        "tenaliClue": "I count how many students are sitting in a classroom.",
-        "whyItHelps": "Reinforces discrete counting of whole units."
+        "evidenceType": "Real-Life Scenario",
+        "tenaliClue": "You use me to count how many students are sitting in a classroom.",
+        "whyItHelps": "Reinforces discrete counting of complete units."
       },
       {
         "round": 5,
-        "evidenceType": "Final Clue",
-        "tenaliClue": "I am the set of all non-negative counting numbers starting from 0 with no fractional parts.",
+        "evidenceType": "Final Clincher",
+        "tenaliClue": "I am the set of all non-negative full counting numbers starting from 0 (0, 1, 2, 3...) with no minus signs and no broken parts.",
         "whyItHelps": "Definitive property pointing uniquely to Whole Numbers."
       }
     ],
@@ -166,43 +164,43 @@ The system uses three declarative configuration files in `server/data/`:
 ```
 
 ### D. Sample Level Question Bank: Number Sets
-Below is a complete simplified question bank for all 4 concepts in **Level 1: Number Sets**:
+Below is the updated 5-round question bank for all 4 concepts in **Level 1: Number Sets**, designed with mystery-first progressive clues:
 
 #### 1. Target Concept: Whole Numbers
 | Round | Evidence Type | Tenali's Clue | Expected Student Reasoning |
 |:---:|:---:|:--- |:--- |
-| 1 | Observe | I like counting full items around me: 0 toys, 1 teddy bear, 2 chocolates, 3 balloons... | Simple positive counting numbers. Whole Numbers, Integers, Fractions, and Decimals are all possible. |
-| 2 | Property | I am super friendly with zero and positive numbers. I NEVER use minus signs! | Eliminates negative numbers. Integers become unlikely. Whole Numbers, Fractions, and Decimals remain plausible. |
-| 3 | Elimination | If you break a cookie into pieces, that broken piece CANNOT enter my club! | Eliminates broken or partial numbers. Fractions (1/2) and Decimals (0.5) are eliminated. Whole Numbers remains strong. |
-| 4 | Real-life | I count how many fingers you have on your hands (1, 2, 3, 4, 5, 6, 7, 8, 9, 10). | You count full fingers without negative numbers or broken parts. Whole Numbers is the best fit. |
-| 5 | Final Clue | I am the family of simple counting numbers starting from 0 (0, 1, 2, 3...) with no minus signs and no broken parts! | Clear definition of Whole Numbers. |
+| 1 | Broad Mystery | I am a way we talk about quantities whenever we count items, measure things, or share snacks! | Applies broadly to all 4 concepts: Whole Numbers, Integers, Fractions, Decimals. |
+| 2 | Subtle Property | My family starts at zero and counts upward. We never go backward into negative numbers! | Eliminates Integers (which include negative values). Whole Numbers, Fractions, and Decimals remain. |
+| 3 | Constraint | If you cut a birthday cake into slices, a single partial slice alone CANNOT enter my family as a single number! | Eliminates broken numbers (Fractions and Decimals). Whole Numbers is the primary contender. |
+| 4 | Real-life | You use me when counting how many chairs, desks, or laptops are in a room. | Confirms discrete, whole-unit counting. |
+| 5 | Final Clincher | I am the set of all non-negative full counting numbers starting from 0 (0, 1, 2, 3...) with no minus signs and no fractional parts! | Unambiguous definition of Whole Numbers. |
 
 #### 2. Target Concept: Integers
 | Round | Evidence Type | Tenali's Clue | Expected Student Reasoning |
 |:---:|:---:|:--- |:--- |
-| 1 | Observe | Look at the numbers on my ruler: ... -3, -2, -1, 0, 1, 2, 3 ... | Shows numbers going both left and right from zero. Integers, Decimals, and Fractions could all fit. |
-| 2 | Property | I walk both ways from zero—forward into positive and backward into negative—but always taking full complete steps! | Hints at positive and negative full numbers. Eliminates Whole Numbers (which cannot go negative). |
-| 3 | Elimination | The negative number -4 plays happily in my house, but 2.5 and 1/2 are strictly stopped at the door! | Includes negative whole numbers like -4, but excludes broken numbers. Eliminates Fractions and Decimal Numbers. |
-| 4 | Real-life | I am used when the weather gets super freezing cold below 0°C, like -5°C! | Real-life freezing temperature (-5°C). Integers is the clear choice. |
-| 5 | Final Clue | I am the complete family of all positive full numbers, negative full numbers, and zero! | Clear definition of Integers. |
+| 1 | Broad Mystery | I describe values on scale meters, temperature gauges, and scoreboards across the world! | Plausible for Integers, Decimals, Fractions, and Whole Numbers. |
+| 2 | Subtle Property | I walk in both directions from zero—moving forward into positive territory and backward into negative territory! | Eliminates Whole Numbers (which cannot go below zero). Integers, Decimals, and Fractions remain. |
+| 3 | Constraint | Even though I step below zero, every step I take is a complete, full stride—never a broken piece or slice! | Eliminates partial numbers (Fractions and Decimals). Only Integers fits all rules. |
+| 4 | Real-life | I am used when reporting freezing weather in winter, like 5 degrees below zero! | Real-life negative temperature scenario. |
+| 5 | Final Clincher | I am the complete family of all positive full numbers, zero, and negative full numbers (..., -2, -1, 0, 1, 2, ...)! | Unambiguous definition of Integers. |
 
 #### 3. Target Concept: Fractions
 | Round | Evidence Type | Tenali's Clue | Expected Student Reasoning |
 |:---:|:---:|:--- |:--- |
-| 1 | Observe | Look at my afternoon snack: 1/2 of an apple and 3/4 of a pizza slice! | Shows parts of food items. Fractions and Decimal Numbers both show parts of a whole. |
-| 2 | Property | I am made by sharing a whole thing into equal parts. I have one number on top and one number on the bottom! | Top and bottom number structure. Eliminates Whole Numbers and Integers. |
-| 3 | Elimination | I use a straight horizontal line between my two numbers, NOT a tiny dot! | Eliminates Decimal Numbers (which use a dot like 0.5). Only Fractions remains. |
-| 4 | Real-life | When 4 friends share 1 birthday cake equally, each friend gets 1/4 of the cake! | Real-life cake sharing scenario using top/bottom numbers. |
-| 5 | Final Clue | I show parts of a whole unit written with a number on top (numerator) and a number on bottom (denominator)! | Clear definition of Fractions. |
+| 1 | Broad Mystery | I appear whenever a single full unit isn't enough, or when something whole gets divided among people! | Plausible for Fractions, Decimals, and Whole Numbers. |
+| 2 | Subtle Property | I live in the spaces between whole counting numbers, expressing a relationship between a part and a whole! | Eliminates Whole Numbers and Integers (which represent full units). Fractions and Decimals remain. |
+| 3 | Constraint | I am written using two stacked numbers separated by a straight dividing bar line—never using a decimal dot! | Eliminates Decimal Numbers. Only Fractions remains. |
+| 4 | Real-life | When 4 friends share 1 birthday cake equally, I describe the exact portion each friend receives! | Real-life equal sharing scenario written with stacked numbers. |
+| 5 | Final Clincher | I show parts of a whole unit written with a top number (numerator) and a bottom number (denominator)! | Unambiguous definition of Fractions. |
 
 #### 4. Target Concept: Decimal Numbers
 | Round | Evidence Type | Tenali's Clue | Expected Student Reasoning |
 |:---:|:---:|:--- |:--- |
-| 1 | Observe | Look at these shop items: 0.5 kg of sugar, ₹12.50 for juice, and 2.5 meters of ribbon! | Shows measurements with a dot. Decimal Numbers and Fractions both show partial amounts. |
-| 2 | Property | I always have a special tiny dot point that sits right between my numbers! | Identifies the dot point separator. Eliminates Whole Numbers and Integers. |
-| 3 | Elimination | I write small parts using a dot like 0.5, but I NEVER use a slash line like 1/2! | Rejects slash line notation, eliminating Fractions. |
-| 4 | Real-life | You see me every time you buy an ice cream for ₹25.50 at the store! | Real-life money price tag with a dot point. |
-| 5 | Final Clue | I am a number that uses a dot (decimal point) to show parts smaller than 1! | Clear definition of Decimal Numbers. |
+| 1 | Broad Mystery | I show up on store price tags, measuring tapes, and stopwatch timers during races! | Plausible for Decimal Numbers, Fractions, Integers, and Whole Numbers. |
+| 2 | Subtle Property | I express quantities smaller than 1 or amounts lying between whole numbers using place value scale of tens and hundredths! | Eliminates Whole Numbers and Integers. Decimals and Fractions remain. |
+| 3 | Constraint | I separate whole units from tiny partial parts using a single dot point separator, never a stacked fraction bar! | Eliminates Fractions (which use stacked bars). Only Decimals remains. |
+| 4 | Real-life | You see me every single time you buy a juice bottle for 12.50 or measure a ribbon as 2.5 meters long! | Real-life price tag / measurement with a dot. |
+| 5 | Final Clincher | I am a number that uses a dot point (decimal point) to separate whole units from parts smaller than 1! | Unambiguous definition of Decimal Numbers. |
 
 ---
 

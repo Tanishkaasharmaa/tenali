@@ -5,11 +5,11 @@
     "name": "Whole Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "I like counting full items around me: 0 toys, 1 teddy bear, 2 chocolates, 3 balloons...",
-      "I am super friendly with zero and positive numbers. I NEVER use minus signs!",
-      "If you break a cookie into pieces, that broken piece CANNOT enter my club!",
-      "I count how many fingers you have on your hands (1, 2, 3, 4, 5, 6, 7, 8, 9, 10).",
-      "I am the family of simple counting numbers starting from 0 (0, 1, 2, 3...) with no minus signs and no broken parts!"
+      "I am a way we talk about how much or how many items we have when we count, measure, or share!",
+      "My family starts at zero and counts upward. We never go backward into negative numbers!",
+      "If you cut a birthday cake into slices, a single partial slice alone CANNOT enter my family as a single number!",
+      "You use me when counting how many chairs, desks, or laptops are in a room.",
+      "I am the set of all non-negative full counting numbers starting from 0 (0, 1, 2, 3...) with no minus signs and no fractional parts."
     ],
     "hints": [
       "Simple positive counting numbers starting from 0.",
@@ -35,11 +35,11 @@
     "name": "Integers",
     "subject": "Arithmetic",
     "clues": [
-      "Look at the numbers on my ruler: ... -3, -2, -1, 0, 1, 2, 3 ...",
-      "I walk both ways from zero—forward into positive and backward into negative—but always taking full complete steps!",
-      "The negative number -4 plays happily in my house, but 2.5 and 1/2 are strictly stopped at the door!",
-      "I am used when the weather gets super freezing cold below 0°C, like -5°C!",
-      "I am the complete family of all positive full numbers, negative full numbers, and zero!"
+      "I describe values on scale meters, temperature gauges, and scoreboards across the world!",
+      "I walk in both directions from zero—moving forward into positive territory and backward into negative territory!",
+      "Even though I step below zero, every step I take is a complete, full stride—never a broken piece or slice!",
+      "I am used when reporting freezing weather in winter, like 5 degrees below zero!",
+      "I am the complete family of all positive full numbers, zero, and negative full numbers (..., -2, -1, 0, 1, 2, ...)!"
     ],
     "hints": [
       "Includes numbers going both left and right from zero.",
@@ -64,11 +64,11 @@
     "name": "Fractions",
     "subject": "Arithmetic",
     "clues": [
-      "Look at my afternoon snack: 1/2 of an apple and 3/4 of a pizza slice!",
-      "I am made by sharing a whole thing into equal parts. I have one number on top and one number on the bottom!",
-      "I use a straight horizontal line between my two numbers, NOT a tiny dot!",
-      "When 4 friends share 1 birthday cake equally, each friend gets 1/4 of the cake!",
-      "I show parts of a whole unit written with a number on top (numerator) and a number on bottom (denominator)!"
+      "I appear whenever a single full unit isn't enough, or when something whole gets divided among people!",
+      "I live in the spaces between whole counting numbers, expressing a relationship between a part and a whole!",
+      "I am written using two stacked numbers separated by a straight dividing bar line—never using a decimal dot!",
+      "When 4 friends share 1 birthday cake equally, I describe the exact portion each friend receives!",
+      "I show parts of a whole unit written with a top number (numerator) and a bottom number (denominator)!"
     ],
     "hints": [
       "Shows parts of a whole thing.",
@@ -92,11 +92,11 @@
     "name": "Decimal Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "Look at these shop items: 0.5 kg of sugar, ₹12.50 for juice, and 2.5 meters of ribbon!",
-      "I always have a special tiny dot point that sits right between my numbers!",
-      "I write small parts using a dot like 0.5, but I NEVER use a slash line like 1/2!",
-      "You see me every time you buy an ice cream for ₹25.50 at the store!",
-      "I am a number that uses a dot (decimal point) to show parts smaller than 1!"
+      "I show up on store price tags, measuring tapes, and stopwatch timers during races!",
+      "I express quantities smaller than 1 or amounts lying between whole numbers using place value scale of tens and hundredths!",
+      "I separate whole units from tiny partial parts using a single dot point separator, never a stacked fraction bar!",
+      "You see me every single time you buy a juice bottle for 12.50 or measure a ribbon as 2.5 meters long!",
+      "I am a number that uses a dot point (decimal point) to separate whole units from parts smaller than 1!"
     ],
     "hints": [
       "Shows amounts with a tiny dot.",
@@ -120,11 +120,11 @@
     "name": "Prime Number",
     "subject": "Arithmetic",
     "clues": [
-      "I belong to the world of numbers.",
-      "I always have exactly two positive divisors.",
-      "Cryptography depends heavily on me.",
-      "The smallest member of my family is 2.",
-      "My opposite is Composite Number."
+      "I describe special numbers that have strict rules about how they can be broken down or built.",
+      "I am greater than 1, but I CANNOT be formed by multiplying two smaller whole numbers together!",
+      "I have EXACTLY two positive factors: 1 and myself. Numbers like 9 or 15 cannot join me because they have extra factors!",
+      "I am used in cybersecurity and data encryption to keep passwords and bank codes ultra safe!",
+      "I am a whole number greater than 1 with exactly two positive factors: 1 and itself (2, 3, 5, 7, 11...)."
     ],
     "hints": [
       "Arithmetic category topic.",
@@ -156,11 +156,11 @@
     "name": "Composite Number",
     "subject": "Arithmetic",
     "clues": [
-      "I am a natural number, but not prime.",
-      "I have more than two positive divisors.",
-      "I can always be broken down into smaller prime factors.",
-      "Every whole number greater than 1 is either me or a prime number.",
-      "The smallest example of me is 4."
+      "I am a building block category of positive whole numbers greater than 1.",
+      "I can always be formed by multiplying smaller whole numbers together!",
+      "I have MORE than two positive factors. Number 1 cannot join me, and prime numbers are excluded!",
+      "You see me when organizing array grids of tiles or egg boxes like a 2x3 or 3x4 carton.",
+      "I am any positive whole number greater than 1 that has more than two positive factors (4, 6, 8, 9, 10...)."
     ],
     "hints": [
       "Arithmetic category topic.",
@@ -189,11 +189,11 @@
     "name": "Factors",
     "subject": "Arithmetic",
     "clues": [
-      "I am a relationship between two numbers.",
-      "I divide a given number exactly without leaving any remainder.",
-      "The number 1 is a universal member of my group.",
-      "My count for any number is always finite.",
-      "For 12, my members are 1, 2, 3, 4, 6, and 12."
+      "I am a mathematical term used when looking at how two numbers interact during multiplication and division!",
+      "I am a smaller or equal number that divides into a target number cleanly with no remainder!",
+      "For any given number, my total count is limited and finite (for 12, there are only 6 of us).",
+      "If you have 12 cupcakes, I tell you all the different ways you can arrange them into equal rows.",
+      "I am a whole number that divides another number exactly without leaving a remainder."
     ],
     "hints": [
       "Arithmetic category topic.",
@@ -221,11 +221,11 @@
     "name": "Multiples",
     "subject": "Arithmetic",
     "clues": [
-      "I represent numbers that grow outward.",
-      "I am generated by multiplying a number by integers.",
-      "Unlike factors, my count for any number is infinite.",
-      "I am always greater than or equal to the original number.",
-      "For 5, my sequence starts with 5, 10, 15, 20..."
+      "I describe how numbers grow and repeat along number lines and multiplication tables!",
+      "I am generated by taking a starting number and multiplying it by 1, 2, 3, 4...",
+      "Unlike factors which are limited, my list goes on forever and ever infinitely!",
+      "If a clock chimes every 15 minutes, the times 15, 30, 45, 60 minutes belong to my family.",
+      "I am the product of a given number and any integer (e.g. multiples of 5 are 5, 10, 15, 20...)."
     ],
     "hints": [
       "Arithmetic category topic.",
@@ -253,11 +253,11 @@
     "name": "LCM",
     "subject": "Arithmetic",
     "clues": [
-      "For numbers 4 and 6, multiples are 4, 8, 12... and 6, 12, 18... I am 12!",
-      "I find the SMALLEST multiple shared by two or more numbers.",
-      "I am essential when adding or subtracting fractions with different denominators!",
-      "I stand for Least Common Multiple.",
-      "I am the smallest positive integer that is divisible by all given numbers."
+      "I am used to find a common meeting point between different repeating timing cycles!",
+      "I look for shared multiples between numbers and pick the SMALLEST one!",
+      "My answer is always greater than or equal to the largest starting number.",
+      "If bus A arrives every 6 minutes and bus B every 8 minutes, I tell you the first minute they will both arrive together (24 minutes)!",
+      "I am the Lowest Common Multiple—the smallest positive multiple shared by two or more numbers."
     ],
     "hints": [
       "Least common multiple.",
@@ -279,11 +279,11 @@
     "name": "HCF (GCD)",
     "subject": "Arithmetic",
     "clues": [
-      "For numbers 12 and 18, the shared factors are 1, 2, 3, 6. I am 6!",
-      "I find the LARGEST factor shared by two or more numbers.",
-      "I am super useful when simplifying fractions to their lowest terms!",
-      "Also known as the Greatest Common Divisor (GCD).",
-      "I am the highest common factor that divides two or more numbers exactly."
+      "I am a special bridge value calculated between two or more numbers.",
+      "I look for shared factors between numbers and pick the LARGEST one!",
+      "My answer is always smaller than or equal to the smallest number in the set.",
+      "If you have 12 red flowers and 18 yellow flowers, I help you find the largest number of identical bouquets you can make.",
+      "I am the Highest Common Factor (Greatest Common Divisor)—the largest factor shared by two or more numbers."
     ],
     "hints": [
       "Highest common factor.",
@@ -1604,11 +1604,11 @@
     "name": "Square Root",
     "subject": "Arithmetic",
     "clues": [
-      "√25 = 5.",
-      "I ask: 'Which number multiplied by itself gives 25?' Answer: 5!",
-      "Written using the special radical symbol '√'!",
-      "The inverse operation of squaring a number.",
-      "A value that, when multiplied by itself, gives the target number."
+      "I am an inverse mathematical operation.",
+      "I ask: 'What number multiplied by itself equals the given value?'",
+      "I am written with a radical symbol √. The square root of 25 is 5.",
+      "Finding the side length of a square room if you know its area is 25 sq meters.",
+      "The square root (√) of a number is a value that, when multiplied by itself, gives the original number."
     ],
     "hints": [
       "Radical symbol √.",
@@ -1631,11 +1631,11 @@
     "name": "Cube Root",
     "subject": "Arithmetic",
     "clues": [
-      "∛27 = 3.",
-      "I ask: 'Which number multiplied by itself three times gives 27?' Answer: 3!",
-      "Written using a radical symbol with a tiny 3: '∛'!",
-      "The inverse operation of cubing a number.",
-      "A value that, when multiplied by itself twice, yields the target number."
+      "I am an inverse operation used in 3D geometry.",
+      "I ask: 'What number multiplied by itself three times equals the given value?'",
+      "I am written with a radical symbol with a small 3 (∛). The cube root of 8 is 2.",
+      "Finding the side length of a cube box if you know its volume is 8 cubic meters.",
+      "The cube root (∛) of a number is a value that, when multiplied by itself three times, gives the original number."
     ],
     "hints": [
       "Symbol ∛.",
@@ -2227,11 +2227,11 @@
     "name": "Standard Form",
     "subject": "Arithmetic",
     "clues": [
-      "300 + 50 + 4 becomes 354!",
-      "I write numbers in the compact everyday format using digits side by side.",
-      "The normal way you see numbers written in textbooks.",
-      "Opposite of expanded form.",
-      "Writing a number using digits in standard base-10 format."
+      "I am the way we write numbers in everyday communication.",
+      "I combine all place value digits into a single, compact number side-by-side!",
+      "Instead of writing 300 + 50 + 4, I write the compact result 354.",
+      "Writing your age as 12 or price as 354.",
+      "Standard form is writing a number using digits in their standard place value positions."
     ],
     "hints": [
       "Everyday compact format: 354.",
@@ -3419,11 +3419,11 @@
     "name": "Even Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "Look at these items: 2 shoes, 4 wheels on a car, 6 legs on an insect...",
-      "I can always be split into 2 equal pairs with zero leftover!",
-      "Numbers like 1, 3, 5 get left out, but 0, 2, 4, 6, 8 love joining my group!",
-      "Any large number ending in 0, 2, 4, 6, or 8 belongs to me!",
-      "I am any integer that is perfectly divisible by 2 with no remainder."
+      "I am a property of whole counting numbers when you try to split a collection into two equal pairs with no one left out!",
+      "My numbers always end with 0, 2, 4, 6, or 8 in the ones place.",
+      "I can be divided by 2 with zero remainder. Except for 2, every other member of my family has more than two factors.",
+      "You use me when putting shoes or socks into pairs so no single shoe is left standing alone.",
+      "I am any integer that is an exact multiple of 2 (ends in 0, 2, 4, 6, 8)."
     ],
     "hints": [
       "Divisible by 2.",
@@ -3448,11 +3448,11 @@
     "name": "Odd Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "Look at these items: 1 nose, 3 tricycle wheels, 5 fingers on a hand...",
-      "When you try to split me into 2 equal teams, 1 member is always left out!",
-      "Numbers like 2, 4, 6 stay away, but 1, 3, 5, 7, 9 are my best friends!",
-      "If a number ends in 1, 3, 5, 7, or 9, it belongs to me!",
-      "I am any integer that leaves a remainder of 1 when divided by 2."
+      "I am a property of counting numbers when you try to share items equally between two friends!",
+      "Whenever you divide any member of my family by 2, there is ALWAYS 1 left over!",
+      "My numbers end with 1, 3, 5, 7, or 9. Some of my family members (like 9 or 15) have multiple factors!",
+      "If 5 friends try to form teams of 2 for a game, 1 friend will be left waiting on the sideline.",
+      "I am any integer that leaves a remainder of 1 when divided by 2 (ends in 1, 3, 5, 7, 9)."
     ],
     "hints": [
       "Leaves a remainder of 1 when divided by 2.",
@@ -3477,11 +3477,11 @@
     "name": "Prime Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "Look at these special numbers: 2, 3, 5, 7, 11, 13...",
-      "I am very picky—I have EXACTLY two factors: 1 and myself!",
-      "Number 4 (2×2) and 6 (2×3) cannot join me because they have extra factors!",
-      "The number 2 is the ONLY even member in my entire infinite family!",
-      "I am a whole number greater than 1 that cannot be formed by multiplying two smaller whole numbers."
+      "I describe special numbers that have strict rules about how they can be broken down or built.",
+      "I am greater than 1, but I CANNOT be formed by multiplying two smaller whole numbers together!",
+      "I have EXACTLY two positive factors: 1 and myself. Numbers like 9 or 15 cannot join me because they have extra factors!",
+      "I am used in cybersecurity and data encryption to keep passwords and bank codes ultra safe!",
+      "I am a whole number greater than 1 with exactly two positive factors: 1 and itself (2, 3, 5, 7, 11...)."
     ],
     "hints": [
       "Has exactly 2 factors: 1 and itself.",
@@ -3507,11 +3507,11 @@
     "name": "Composite Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "Look at these numbers: 4, 6, 8, 9, 10, 12...",
-      "I am made by multiplying smaller whole numbers together!",
-      "Unlike prime numbers, I have MORE than 2 factors!",
-      "Number 4 is the smallest member of my family (1, 2, 4).",
-      "I am any positive integer greater than 1 that is NOT prime."
+      "I am a building block category of positive whole numbers greater than 1.",
+      "I can always be formed by multiplying smaller whole numbers together!",
+      "I have MORE than two positive factors. Number 1 cannot join me, and prime numbers are excluded!",
+      "You see me when organizing array grids of tiles or egg boxes like a 2x3 or 3x4 carton.",
+      "I am any positive whole number greater than 1 that has more than two positive factors (4, 6, 8, 9, 10...)."
     ],
     "hints": [
       "Has more than 2 factors.",
@@ -3537,11 +3537,11 @@
     "name": "Factor",
     "subject": "Arithmetic",
     "clues": [
-      "For the number 12, my members are 1, 2, 3, 4, 6, and 12.",
-      "I am a number that divides another number completely with zero remainder!",
-      "I am always smaller than or equal to the target number.",
-      "Every number has at least 1 and itself as members of my family.",
-      "I am a whole number that multiplies with another number to produce a given product."
+      "I am a mathematical term used when looking at how two numbers interact during multiplication and division!",
+      "I am a smaller or equal number that divides into a target number cleanly with no remainder!",
+      "For any given number, my total count is limited and finite (for 12, there are only 6 of us).",
+      "If you have 12 cupcakes, I tell you all the different ways you can arrange them into equal rows.",
+      "I am a whole number that divides another number exactly without leaving a remainder."
     ],
     "hints": [
       "Divides a number evenly.",
@@ -3563,11 +3563,11 @@
     "name": "Multiple",
     "subject": "Arithmetic",
     "clues": [
-      "For the number 5, my members are 5, 10, 15, 20, 25, 30...",
-      "I am what you get when you multiply a number by 1, 2, 3, 4, 5...",
-      "Unlike factors, my family grows bigger and bigger infinitely!",
-      "When you chant your multiplication tables, you are reciting my numbers!",
-      "I am the product of a given number and any positive integer."
+      "I describe how numbers grow and repeat along number lines and multiplication tables!",
+      "I am generated by taking a starting number and multiplying it by 1, 2, 3, 4...",
+      "Unlike factors which are limited, my list goes on forever and ever infinitely!",
+      "If a clock chimes every 15 minutes, the times 15, 30, 45, 60 minutes belong to my family.",
+      "I am the product of a given number and any integer (e.g. multiples of 5 are 5, 10, 15, 20...)."
     ],
     "hints": [
       "Result of multiplying by 1, 2, 3...",
@@ -3589,11 +3589,11 @@
     "name": "Divisible by 2",
     "subject": "Arithmetic",
     "clues": [
-      "Look at numbers: 14, 28, 50, 102, 346...",
-      "Check my last digit—if it is 0, 2, 4, 6, or 8, I pass with flying colors!",
-      "Every even number in the universe satisfies my test.",
-      "I divide any even number into 2 equal parts with 0 remainder.",
-      "A number is divisible by 2 if its last digit is even."
+      "I am a rule used to check if a large number can be split cleanly into equal parts without doing full long division!",
+      "You only need to look at the VERY LAST digit of the number to know if I am happy!",
+      "The last digit must be an even digit (0, 2, 4, 6, 8). Ending in 5 or 3 is rejected!",
+      "Quickly checking if a class of 134 students can pair up for a museum trip.",
+      "A number is divisible by 2 if its last digit is even (0, 2, 4, 6, 8)."
     ],
     "hints": [
       "Ends in 0, 2, 4, 6, 8.",
@@ -3617,11 +3617,11 @@
     "name": "Divisible by 3",
     "subject": "Arithmetic",
     "clues": [
-      "Look at number 123: 1 + 2 + 3 = 6. 6 is divisible by 3!",
-      "Do NOT just look at the last digit! Add ALL the digits together first!",
-      "If the sum of all digits is a multiple of 3, the whole number is divisible by 3.",
-      "Number 456 (4+5+6 = 15) passes my test easily!",
-      "A number is divisible by 3 if the sum of its digits is divisible by 3."
+      "I am a secret shortcut rule that tests if a number splits into equal trios!",
+      "To test me, you must ADD UP all the individual digits of the number together!",
+      "If the digit sum is 3, 6, 9, 12, 15..., the number belongs to me. A sum of 10 or 14 fails!",
+      "Checking if 123 candies can be shared equally among 3 children without any left over.",
+      "A number is divisible by 3 if the sum of its digits is a multiple of 3."
     ],
     "hints": [
       "Add all digits together.",
@@ -3644,11 +3644,11 @@
     "name": "Divisible by 5",
     "subject": "Arithmetic",
     "clues": [
-      "Look at numbers: 5, 10, 15, 20, 25, 30, 35...",
-      "Look ONLY at the very last digit of the number!",
-      "If the last digit is 0 or 5, it belongs to me!",
-      "Number 1,005 and 2,490 both pass my test immediately.",
-      "A number is divisible by 5 if its unit digit is 0 or 5."
+      "I am a quick visual check rule used in counting coins, clocks, and scoreboards!",
+      "You only need to inspect the final single digit at the far right of the number.",
+      "The last digit MUST be either 0 or 5—no other last digit is allowed!",
+      "Counting money in 5-rupee coins or reading 5-minute increments on a clock.",
+      "A number is divisible by 5 if its last digit is 0 or 5."
     ],
     "hints": [
       "Ends in 0 or 5.",
@@ -3672,11 +3672,11 @@
     "name": "Divisible by 9",
     "subject": "Arithmetic",
     "clues": [
-      "Look at number 729: 7 + 2 + 9 = 18. 18 is in the 9 times table!",
-      "Just like the 3 test, add ALL the digits of the number together!",
-      "If the sum of digits is divisible by 9, the number is divisible by 9.",
-      "Number 999 (9+9+9 = 27) passes my test easily!",
-      "A number is divisible by 9 if the sum of its digits is divisible by 9."
+      "I am a powerful digit-sum rule in arithmetic.",
+      "Like my cousin 3, you must add up all the digits of the number to test me!",
+      "The digit sum MUST be a multiple of 9 (9, 18, 27...). A digit sum of 6 or 12 passes for 3, but fails for me!",
+      "Checking if 819 pages can be divided into 9 equal chapter booklets.",
+      "A number is divisible by 9 if the sum of its digits is a multiple of 9."
     ],
     "hints": [
       "Add all digits together.",
@@ -3699,11 +3699,11 @@
     "name": "Ones",
     "subject": "Arithmetic",
     "clues": [
-      "In the number 3,457, I am the digit 7 sitting at the far right!",
-      "I represent single individual units from 0 to 9.",
-      "I am the first position to the left of the decimal point.",
-      "I multiply the digit by 1.",
-      "The position representing single units in the place value system."
+      "I describe a position inside a whole number that determines how much a digit is worth!",
+      "I sit at the far right end of any whole number.",
+      "My multiplier is 1 (10^0). Each step to my left increases value by a factor of 10!",
+      "In ₹345, my position holds the ₹5 single coins.",
+      "The ones place is the rightmost position in a whole number, representing single units (1s)."
     ],
     "hints": [
       "Far right position in whole numbers.",
@@ -3725,11 +3725,11 @@
     "name": "Tens",
     "subject": "Arithmetic",
     "clues": [
-      "In the number 3,457, I am the digit 5!",
-      "I sit one step to the left of the ones place.",
-      "Each unit in my place is worth 10 single ones.",
-      "I multiply the digit by 10.",
-      "The position representing groups of ten (10^1)."
+      "I am a place value position in our base-10 number system.",
+      "I sit exactly one step to the left of the ones place.",
+      "Each digit in my position is multiplied by 10 (10^1).",
+      "In ₹345, my position holds the 4 ten-rupee notes (worth ₹40).",
+      "The tens place is the second position from the right in a whole number, representing groups of 10."
     ],
     "hints": [
       "Second position from the right.",
@@ -3751,11 +3751,11 @@
     "name": "Hundreds",
     "subject": "Arithmetic",
     "clues": [
-      "In the number 3,457, I am the digit 4!",
-      "I sit two positions to the left of the ones place.",
-      "Each unit in my place is worth 100 single ones.",
-      "I multiply the digit by 100.",
-      "The position representing groups of hundred (10^2)."
+      "I am a place value position used when numbers grow into 3-digit territory!",
+      "I sit three positions from the right, just to the left of the tens place.",
+      "Each digit in my position is multiplied by 100 (10^2).",
+      "In ₹345, my position holds the 3 hundred-rupee notes (worth ₹300).",
+      "The hundreds place is the third position from the right in a whole number, representing groups of 100."
     ],
     "hints": [
       "Third position from the right.",
@@ -3777,11 +3777,11 @@
     "name": "Thousands",
     "subject": "Arithmetic",
     "clues": [
-      "In the number 3,457, I am the digit 3!",
-      "I sit three positions to the left of the ones place.",
-      "Each unit in my place is worth 1,000 single ones.",
-      "In Indian/International system, a comma often comes right after me!",
-      "The position representing groups of thousand (10^3)."
+      "I am a place value position present in 4-digit numbers and larger!",
+      "I sit four positions from the right end of a whole number.",
+      "Each digit in my position is multiplied by 1,000 (10^3).",
+      "In a salary of ₹4,500, my position tells you how many thousand-rupee notes you have.",
+      "The thousands place is the fourth position from the right in a whole number, representing groups of 1,000."
     ],
     "hints": [
       "Fourth position from the right.",
@@ -3803,11 +3803,11 @@
     "name": "Greater Than (>)",
     "subject": "Arithmetic",
     "clues": [
-      "Look at this statement: 8 > 5.",
-      "My hungry alligator mouth ALWAYS opens towards the BIGGER number!",
-      "My pointed tail points to the smaller number.",
-      "Used when comparing two values where the left number is larger.",
-      "The mathematical symbol '>' indicating that the left quantity is strictly larger than the right."
+      "I am a mathematical comparison concept used when looking at two values!",
+      "I state that the first number is LARGER in value than the second number.",
+      "My symbol '>' opens its wide hungry mouth toward the left number!",
+      "Comparing 10 points to 4 points on a leaderboard.",
+      "The 'Greater Than' symbol (>) indicates that the value on the left is strictly larger than the value on the right."
     ],
     "hints": [
       "Symbol > opens to the left.",
@@ -3830,11 +3830,11 @@
     "name": "Less Than (<)",
     "subject": "Arithmetic",
     "clues": [
-      "Look at this statement: 4 < 9.",
-      "My symbol looks like a tilted letter 'L' for 'Less'!",
-      "My small closed point points towards the left smaller number.",
-      "Used when the left quantity is smaller than the right quantity.",
-      "The mathematical symbol '<' indicating that the left quantity is strictly smaller than the right."
+      "I am a mathematical comparison concept used between numbers.",
+      "I state that the first number is SMALLER in value than the second number.",
+      "My symbol '<' points its narrow sharp tip toward the left number!",
+      "Comparing ₹50 in your pocket to a toy that costs ₹100.",
+      "The 'Less Than' symbol (<) indicates that the value on the left is strictly smaller than the value on the right."
     ],
     "hints": [
       "Symbol < looks like an 'L'.",
@@ -3857,11 +3857,11 @@
     "name": "Equal To (=)",
     "subject": "Arithmetic",
     "clues": [
-      "Look at this statement: 5 + 5 = 10.",
-      "I am made of two parallel horizontal lines sitting balanced together!",
-      "I mean both sides have the EXACT same value.",
-      "Neither side is bigger or smaller—they are identical in quantity.",
-      "The mathematical symbol '=' indicating exact equality between two expressions."
+      "I am a symbol of perfect balance between two amounts or expressions.",
+      "I state that both sides have EXACTLY the same value!",
+      "I am written with two parallel horizontal lines '='.",
+      "When 2 + 3 has the exact same total as 5 on a balance scale.",
+      "The 'Equal To' symbol (=) indicates that two expressions have identical values."
     ],
     "hints": [
       "Two parallel horizontal lines.",
@@ -3884,11 +3884,11 @@
     "name": "Ascending Order",
     "subject": "Arithmetic",
     "clues": [
-      "Look at this sequence: 2, 5, 8, 14, 21.",
-      "Imagine climbing UP a staircase from step 1 to step 10!",
-      "Numbers are arranged from SMALLEST to LARGEST.",
-      "The opposite of descending order.",
-      "Arrangement of numbers in increasing value from smallest to greatest."
+      "I am a method of arranging a list of multiple numbers!",
+      "I arrange a sequence starting from the smallest number and stepping up to the largest!",
+      "Unlike descending order, my numbers get bigger as you read from left to right!",
+      "Line up students in a class by height from shortest to tallest.",
+      "Ascending order means arranging numbers in order from smallest to largest."
     ],
     "hints": [
       "From smallest to largest.",
@@ -3910,11 +3910,11 @@
     "name": "Proper Fraction",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 3/4, 2/5, 1/8...",
-      "My top number (numerator) is strictly SMALLER than my bottom number (denominator)!",
-      "My total value is always LESS than 1 whole unit.",
-      "You can easily draw me inside 1 circle or 1 pizza pie.",
-      "A fraction where numerator < denominator."
+      "I describe a fractional amount when comparing parts to a whole unit.",
+      "My total value is strictly LESS than 1 whole unit!",
+      "My top number (numerator) is strictly smaller than my bottom number (denominator).",
+      "Eating 3 slices out of an 8-slice pizza (3/8).",
+      "A proper fraction is a fraction where the numerator is smaller than the denominator (e.g. 3/4)."
     ],
     "hints": [
       "Numerator is smaller than denominator.",
@@ -3938,11 +3938,11 @@
     "name": "Improper Fraction",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 7/4, 5/2, 9/5...",
-      "My top number (numerator) is BIGGER than or equal to my bottom number (denominator)!",
-      "My total value is GREATER than or equal to 1 whole unit.",
-      "You need MORE than 1 pizza pie to draw me!",
-      "A fraction where numerator >= denominator."
+      "I am a fraction format used in math calculations.",
+      "My total value is GREATER than or EQUAL to 1 whole unit!",
+      "My top number (numerator) is greater than or equal to my bottom number (denominator), written as a single fraction without a whole number beside it.",
+      "Expressing 7 quarter slices of pizza as 7/4.",
+      "An improper fraction is a fraction where the numerator is greater than or equal to the denominator (e.g. 7/4)."
     ],
     "hints": [
       "Numerator is greater than or equal to denominator.",
@@ -3966,11 +3966,11 @@
     "name": "Mixed Fraction",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 1 3/4, 2 1/2, 5 1/3...",
-      "I combine a whole number AND a proper fraction standing side by side!",
-      "For 1 3/4, it means 1 whole pizza plus 3/4 of another pizza.",
-      "I am another way to write an improper fraction.",
-      "A number consisting of an integer and a proper fraction."
+      "I am a way of writing fractional quantities greater than 1.",
+      "I combine a whole number and a proper fraction side-by-side!",
+      "I am written with a big whole number on the left followed by a smaller fraction (e.g. 1 3/4).",
+      "Saying a recipe needs 2 and a half cups of flour (2 1/2).",
+      "A mixed fraction (or mixed number) consists of a whole number combined with a proper fraction (e.g. 1 3/4)."
     ],
     "hints": [
       "Combines a whole number and a fraction.",
@@ -3993,11 +3993,11 @@
     "name": "Equivalent Fraction",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 1/2, 2/4, 3/6, 4/8...",
-      "Even though our numbers look different, we represent the EXACT SAME amount of cake!",
-      "You get me by multiplying or dividing top and bottom by the same non-zero number.",
-      "If you eat 2/4 of a pizza, you ate half the pizza!",
-      "Fractions that have equal value even though they use different numerators and denominators."
+      "I am a relationship between two different-looking fractions!",
+      "Even though my numbers on top and bottom look different, my overall value is EXACTLY the same!",
+      "You get me by multiplying or dividing the top and bottom of a fraction by the same number (e.g. 1/2 = 2/4 = 4/8).",
+      "1 out of 2 slices of a large pizza is the same amount of food as 2 out of 4 slices of a small pizza.",
+      "Equivalent fractions are fractions that have different numerators and denominators but represent the exact same value (e.g. 1/2 and 2/4)."
     ],
     "hints": [
       "Different numbers, same value.",
@@ -4019,11 +4019,11 @@
     "name": "Tenths",
     "subject": "Arithmetic",
     "clues": [
-      "In 0.4, I am the digit 4!",
-      "I sit at the VERY FIRST place to the right of the decimal point.",
+      "I am a decimal place value position to the right of the decimal point!",
+      "I sit at the VERY FIRST position immediately after the decimal dot!",
       "My value represents dividing 1 whole into 10 equal parts (1/10 = 0.1).",
-      "I am 10 times larger than hundredths.",
-      "The first decimal place value after the decimal point (1/10)."
+      "In 0.45 meters, my position holds the 4 (0.4 m).",
+      "The tenths place is the first position to the right of the decimal point, representing 1/10th units."
     ],
     "hints": [
       "First digit after the decimal point.",
@@ -4045,11 +4045,11 @@
     "name": "Hundredths",
     "subject": "Arithmetic",
     "clues": [
-      "In 0.45, I am the digit 5!",
-      "I sit at the SECOND place to the right of the decimal point.",
+      "I am a decimal place value position used when measuring smaller precision.",
+      "I sit at the SECOND position to the right of the decimal point.",
       "My value represents dividing 1 whole into 100 equal parts (1/100 = 0.01).",
-      "In money, paise or cents sit in my position!",
-      "The second decimal place value after the decimal point (1/100)."
+      "In money prices like ₹12.75, my position holds the 5 paise.",
+      "The hundredths place is the second position to the right of the decimal point, representing 1/100th units."
     ],
     "hints": [
       "Second digit after the decimal point.",
@@ -4071,11 +4071,11 @@
     "name": "Thousandths",
     "subject": "Arithmetic",
     "clues": [
-      "In 0.458, I am the digit 8!",
-      "I sit at the THIRD place to the right of the decimal point.",
+      "I am a decimal place value position used for ultra-high precision.",
+      "I sit at the THIRD position to the right of the decimal point.",
       "My value represents dividing 1 whole into 1,000 equal parts (1/1000 = 0.001).",
-      "Used in precise scientific measurements like 0.005 grams.",
-      "The third decimal place value after the decimal point (1/1000)."
+      "Used in scientific laboratories to measure 0.005 grams of chemical.",
+      "The thousandths place is the third position to the right of the decimal point, representing 1/1000th units."
     ],
     "hints": [
       "Third digit after the decimal point.",
@@ -4097,11 +4097,11 @@
     "name": "Decimal Number",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 3.14, 0.75, 12.5...",
-      "I use a dot point separator to show parts of a whole.",
-      "I combine whole numbers on the left and fractional place values on the right.",
-      "Every price tag in a grocery store uses me!",
-      "A number expressed in the scale of tens using a decimal point."
+      "I am a full numerical format used to show precise quantities.",
+      "Unlike individual place value names, I am the ENTIRE number format that uses a dot separator!",
+      "I combine whole numbers on the left of a dot with fractional place values on the right.",
+      "You see me on digital thermometers showing 98.6°F.",
+      "A decimal number is a number expressed in base-10 system using a decimal point to separate whole and fractional parts."
     ],
     "hints": [
       "Uses a decimal point.",
@@ -4124,11 +4124,11 @@
     "name": "Fraction",
     "subject": "Arithmetic",
     "clues": [
-      "I am written as 1/2 or 3/4.",
-      "I use a top number and bottom number separated by a horizontal line.",
-      "Top is numerator, bottom is denominator.",
-      "I represent equal parts of a whole.",
-      "The a/b representation of a part of a whole."
+      "I am a way of representing proportional parts of a whole.",
+      "I use a top number (numerator) stacked over a bottom number (denominator) separated by a bar.",
+      "I am written like a/b, without using a dot, '%' sign, or ':' colon.",
+      "Recipes calling for 3/4 cup of sugar.",
+      "A fraction represents a numerical part of a whole expressed as numerator over denominator (a/b)."
     ],
     "hints": [
       "Written as a/b.",
@@ -4151,11 +4151,11 @@
     "name": "Decimal",
     "subject": "Arithmetic",
     "clues": [
-      "I am written as 0.5 or 0.75.",
-      "I convert 1/2 into 0.5 using a dot point.",
-      "I extend place values into tenths, hundredths...",
-      "Used on modern digital calculators.",
-      "The dot-point representation of a number."
+      "I am a numerical format used to show non-whole values.",
+      "I express fractional values using a single dot point separator!",
+      "I convert parts of 10, 100, 1000 using place value, without using a slash bar or '%' symbol.",
+      "Digital calculators displaying 0.75.",
+      "A decimal is a number in the base-10 system using a decimal point."
     ],
     "hints": [
       "Uses a dot point.",
@@ -4178,11 +4178,11 @@
     "name": "Percentage",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 50%, 75%, 100%...",
-      "I always compare amounts out of a total of 100!",
-      "I use the special symbol '%'!",
-      "50% means 50 out of 100, which is equal to 1/2 or 0.5.",
-      "A rate, number, or amount in each hundred."
+      "I am a popular mathematical format used to compare proportions and rates!",
+      "I ALWAYS express a ratio or part out of a fixed base of 100!",
+      "I use the special percent symbol '%' right after the number.",
+      "Store discounts offering 50% off or exam scores of 85%.",
+      "A percentage is a number or ratio expressed as a fraction of 100, using the '%' symbol."
     ],
     "hints": [
       "Uses symbol %.",
@@ -4205,11 +4205,11 @@
     "name": "Ratio",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 1:2 or 3:5.",
-      "I compare two quantities using a colon symbol ':'!",
-      "If there are 2 boys and 3 girls, my relationship is 2:3.",
-      "I compare part-to-part or part-to-whole.",
-      "A quantitative relationship between two amounts showing the number of times one value contains another."
+      "I am a mathematical comparison between two quantities!",
+      "I compare two numbers directly to show how many times one value contains another.",
+      "I am written with a colon symbol ':' separating the two quantities (e.g. 2:3).",
+      "Mixing paint using 2 buckets of blue paint to 3 buckets of yellow paint (2:3).",
+      "A ratio is a quantitative comparison showing the relative sizes of two or more values (a:b)."
     ],
     "hints": [
       "Uses colon symbol :.",
@@ -4232,11 +4232,11 @@
     "name": "Arithmetic Pattern",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 3, 7, 11, 15, 19...",
-      "You get the next number by ADDING or SUBTRACTING the same fixed number each time (+4)!",
-      "The difference between adjacent terms is constant.",
-      "Like climbing steps of equal height.",
-      "A sequence of numbers with a constant common difference."
+      "I am a sequence of numbers following a predictable rule!",
+      "You get the next number by ADDING or SUBTRACTING the same constant number each step!",
+      "The difference between any two adjacent terms is always identical (common difference).",
+      "Climbing a staircase where every step increases your height by 20 cm.",
+      "An arithmetic pattern is a sequence of numbers with a constant common difference added or subtracted each term."
     ],
     "hints": [
       "Adds or subtracts a constant number.",
@@ -4258,11 +4258,11 @@
     "name": "Geometric Pattern",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 2, 6, 18, 54, 162...",
-      "You get the next number by MULTIPLYING by the same fixed factor each time (×3)!",
-      "I grow super fast like a rocket!",
-      "The ratio between adjacent terms is constant.",
-      "A sequence of numbers where each term is found by multiplying the previous term by a constant factor."
+      "I am a number sequence that grows or shrinks according to a rule.",
+      "You get the next number by MULTIPLYING or DIVIDING by the same constant factor each step!",
+      "My numbers grow very rapidly (exponentially) because each term multiplies the previous one.",
+      "Bacteria doubling in population every hour (1, 2, 4, 8, 16...).",
+      "A geometric pattern is a sequence of numbers where each term is found by multiplying the previous term by a constant factor."
     ],
     "hints": [
       "Multiplies by a constant factor.",
@@ -4284,11 +4284,11 @@
     "name": "Square Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 1, 4, 9, 16, 25, 36, 49...",
-      "I am produced when a whole number is multiplied by ITSELF (1×1, 2×2, 3×3, 4×4...)!",
-      "You can arrange my dots into a perfect square shape grid!",
-      "4 × 4 = 16 belongs to me.",
-      "The product of an integer multiplied by itself."
+      "I am a special sequence of numbers with geometric shape properties!",
+      "My numbers are formed when a whole number is multiplied by ITSELF!",
+      "You can arrange my items into a perfect flat 2D square grid (1, 4, 9, 16, 25...).",
+      "Laying square floor tiles in a 4x4 room to get 16 tiles.",
+      "Square numbers are the product of an integer multiplied by itself (n^2: 1, 4, 9, 16, 25...)."
     ],
     "hints": [
       "Multiplied by itself (n²).",
@@ -4314,11 +4314,11 @@
     "name": "Cube Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 1, 8, 27, 64, 125...",
-      "I am produced when a number is multiplied by itself THREE times (1×1×1, 2×2×2, 3×3×3...)!",
-      "You can arrange my 3D blocks into a solid Rubik's cube shape!",
-      "2 × 2 × 2 = 8 belongs to me.",
-      "The product of an integer multiplied by itself twice (n³)."
+      "I am a special sequence of 3D numbers.",
+      "My numbers are formed when a whole number is multiplied by itself THREE times!",
+      "You can arrange my blocks into a solid 3D cube shape (1, 8, 27, 64...).",
+      "A Rubik's cube made of 3x3x3 = 27 small cubelets.",
+      "Cube numbers are the product of an integer multiplied by itself twice (n^3: 1, 8, 27, 64...)."
     ],
     "hints": [
       "Multiplied by itself 3 times (n³).",
@@ -4344,11 +4344,11 @@
     "name": "Addition",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 5 + 3 = 8.",
-      "I combine two or more amounts together into one total sum!",
-      "My special symbol is '+'!",
-      "The result of my operation is called the sum.",
-      "The mathematical operation of combining values."
+      "I am one of the fundamental mathematical operations used every day!",
+      "I combine two or more separate quantities together into one single combined total!",
+      "My result is called the 'sum'. My operator symbol is '+'.",
+      "Putting 5 apples and 3 oranges together in a basket to count total fruits.",
+      "Addition is the operation of combining two or more numbers together to find their total sum (+)."
     ],
     "hints": [
       "Symbol +.",
@@ -4370,11 +4370,11 @@
     "name": "Subtraction",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 9 - 4 = 5.",
-      "I take away an amount from a total to find the difference!",
-      "My special symbol is '-'!",
-      "The result of my operation is called the difference.",
-      "The mathematical operation of taking one number away from another."
+      "I am a fundamental mathematical operation.",
+      "I take away a quantity from a starting amount to find how much is left!",
+      "My result is called the 'difference'. My operator symbol is '-'.",
+      "Spending ₹40 from your ₹100 pocket money to see how much cash remains.",
+      "Subtraction is the operation of taking one number away from another to find the difference (-)."
     ],
     "hints": [
       "Symbol -.",
@@ -4396,11 +4396,11 @@
     "name": "Multiplication",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 4 × 3 = 12.",
-      "I am fast repeated addition of the same number!",
-      "My special symbol is '×' or '*'!",
-      "The result of my operation is called the product.",
-      "The operation of scaling one number by another."
+      "I am a fundamental operation used to calculate scaled quantities quickly.",
+      "I perform fast repeated addition of the same group size!",
+      "My result is called the 'product'. My operator symbol is 'x' or '*'.",
+      "Buying 4 boxes of chocolates with 6 chocolates in each box.",
+      "Multiplication is the operation of repeated addition, scaling one number by another to find the product (x)."
     ],
     "hints": [
       "Symbol ×.",
@@ -4422,11 +4422,11 @@
     "name": "Division",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 12 ÷ 3 = 4.",
-      "I split a total quantity into equal groups or shares!",
-      "My special symbol is '÷' or '/'!",
-      "The result of my operation is called the quotient.",
-      "The operation of determining how many times one number is contained within another."
+      "I am a fundamental mathematical operation.",
+      "I split a total amount into equal shares or groups!",
+      "My result is called the 'quotient'. My operator symbol is '÷' or '/'.",
+      "Sharing 12 cookies equally among 3 friends.",
+      "Division is the operation of splitting a number into equal groups or parts to find the quotient (÷)."
     ],
     "hints": [
       "Symbol ÷.",
@@ -4448,11 +4448,11 @@
     "name": "Round to Nearest 10",
     "subject": "Arithmetic",
     "clues": [
-      "43 becomes 40, while 47 becomes 50!",
-      "Check the ones digit—if it is 5 or more, round UP; if less than 5, round DOWN!",
-      "The final result always ends with 0 in the ones place.",
-      "Useful when quick mental math is needed for items costing around ₹48 (₹50).",
-      "Approximating a number to the nearest multiple of 10."
+      "I am an estimation strategy used to simplify numbers!",
+      "I look at the ones digit of a number to replace it with the closest multiple of 10!",
+      "If the ones digit is 5 or more, round up; if less than 5, round down. My answer ends with 1 zero.",
+      "Approximating 47 items as about 50 items.",
+      "Rounding to the nearest 10 adjusts a number to its closest multiple of 10 based on the ones digit."
     ],
     "hints": [
       "Check ones digit.",
@@ -4475,11 +4475,11 @@
     "name": "Round to Nearest 100",
     "subject": "Arithmetic",
     "clues": [
-      "340 becomes 300, while 370 becomes 400!",
-      "Check the tens digit—if 50 or more, round UP to the next hundred!",
-      "The final result ends with two zeros (00).",
-      "Useful when estimating crowds or prices in hundreds.",
-      "Approximating a number to the nearest multiple of 100."
+      "I am an estimation technique for larger numbers.",
+      "I look at the tens digit of a number to replace it with the closest multiple of 100!",
+      "If the tens digit is 5 or more, round up; if less, round down. My answer ends with 2 zeros.",
+      "Approximating a price of ₹430 as about ₹400.",
+      "Rounding to the nearest 100 adjusts a number to its closest multiple of 100 based on the tens digit."
     ],
     "hints": [
       "Check tens digit.",
@@ -4502,11 +4502,11 @@
     "name": "Estimate Sum",
     "subject": "Arithmetic",
     "clues": [
-      "Instead of 48 + 31 = 79, calculate 50 + 30 = 80!",
-      "Round each number first, then add them up in your head!",
-      "Gives a fast rough total without doing exact pencil-and-paper addition.",
-      "Super handy at supermarket checkout counters.",
-      "Approximating the total sum of addition."
+      "I am a mental math strategy for combining numbers quickly.",
+      "I round numbers first and then ADD them to find an approximate total!",
+      "I give a quick approximate total sum without performing exact column addition.",
+      "Checking if ₹48 + ₹93 will cost roughly ₹140 at a store counter.",
+      "Estimating a sum means rounding the numbers before adding them to find a quick approximate total."
     ],
     "hints": [
       "Round numbers first, then add.",
@@ -4528,11 +4528,11 @@
     "name": "Estimate Difference",
     "subject": "Arithmetic",
     "clues": [
-      "Instead of 89 - 42 = 47, calculate 90 - 40 = 50!",
-      "Round each number first, then subtract them mentally!",
-      "Gives a fast rough remaining amount.",
-      "Useful when checking how much change you should receive.",
-      "Approximating the difference in subtraction."
+      "I am a mental math strategy for comparing numbers quickly.",
+      "I round numbers first and then SUBTRACT them to find an approximate gap!",
+      "I give a quick approximate difference without performing exact column subtraction.",
+      "Estimating how much more ₹88 costs than ₹29 (roughly ₹90 - ₹30 = ₹60).",
+      "Estimating a difference means rounding the numbers before subtracting them to find a quick approximate gap."
     ],
     "hints": [
       "Round numbers first, then subtract.",
@@ -4554,11 +4554,11 @@
     "name": "Square",
     "subject": "Arithmetic",
     "clues": [
-      "5² = 5 × 5 = 25.",
-      "Multiply a number by itself once.",
-      "Written with a small exponent 2 at the top right.",
-      "Represents the area of a square with side length n.",
-      "The result of multiplying a number by itself (n²)."
+      "I am an exponent concept in mathematics!",
+      "I multiply a base number by ITSELF once (exponent of 2)!",
+      "My notation uses a small superscript 2 (e.g. n^2). 5 squared is 25.",
+      "Calculating the area of a square room with side length 5 meters.",
+      "A square is a number raised to the power of 2 (multiplying a number by itself)."
     ],
     "hints": [
       "Exponent 2 (n²).",
@@ -4581,11 +4581,11 @@
     "name": "Cube",
     "subject": "Arithmetic",
     "clues": [
-      "3³ = 3 × 3 × 3 = 27.",
-      "Multiply a number by itself twice.",
-      "Written with a small exponent 3 at the top right.",
-      "Represents the volume of a 3D cube with side length n.",
-      "The result of multiplying a number by itself twice (n³)."
+      "I am an exponent concept used in 3D geometry and algebra.",
+      "I multiply a base number by itself twice (exponent of 3)!",
+      "My notation uses a small superscript 3 (e.g. n^3). 2 cubed is 8.",
+      "Calculating the volume of a cube box with side length 2 meters.",
+      "A cube is a number raised to the power of 3 (multiplying a number by itself three times)."
     ],
     "hints": [
       "Exponent 3 (n³).",
@@ -4608,11 +4608,11 @@
     "name": "Roman Numerals",
     "subject": "Arithmetic",
     "clues": [
-      "Look at I, V, X, L, C, D, M...",
-      "I use letters from the ancient Roman alphabet to write numbers!",
-      "V = 5, X = 10, L = 50, C = 100, M = 1000.",
-      "Seen on antique clock faces and super bowl titles!",
-      "Numeral system originating in ancient Rome."
+      "I am a system used to write numbers.",
+      "I use letters from an ancient alphabet instead of digits!",
+      "My building blocks are I, V, X, L, C, D, M. I do not have a symbol for zero!",
+      "Seen on antique clock faces, movie copyright years, and Super Bowl titles.",
+      "Roman Numerals is an ancient numeral system using Latin letters (I, V, X, L, C, D, M) to represent numbers."
     ],
     "hints": [
       "Uses letters like I, V, X, C, M.",
@@ -4636,11 +4636,11 @@
     "name": "Hindu-Arabic Numerals",
     "subject": "Arithmetic",
     "clues": [
-      "Look at 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.",
-      "I am the standard 10-digit system used all over the world today!",
-      "Invented in India and spread worldwide through Arab traders.",
-      "Uses place value and the revolutionary concept of Zero (0)!",
-      "The base-10 positional numeral system used globally today."
+      "I am a numeral system used to write numbers around the world.",
+      "I am the standard 10-digit base-10 system used everywhere today!",
+      "I use ten symbols (0, 1, 2, 3, 4, 5, 6, 7, 8, 9) and include the revolutionary concept of Zero.",
+      "Used on modern phone keypads, computer keyboards, and textbooks.",
+      "Hindu-Arabic Numerals is the global positional base-10 system using digits 0–9."
     ],
     "hints": [
       "Uses 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.",
@@ -4663,11 +4663,11 @@
     "name": "Expanded Form",
     "subject": "Arithmetic",
     "clues": [
-      "354 = 300 + 50 + 4.",
-      "I stretch out a number to show the value of each digit clearly!",
-      "Uses plus signs (+) between hundreds, tens, and ones place values.",
-      "Shows the sum of place values.",
-      "A way to write numbers by showing the value of each individual digit."
+      "I am a method of writing out a whole number.",
+      "I stretch out a number to show the exact value of every individual digit added together!",
+      "I use plus signs (+) between hundreds, tens, and ones (e.g. 300 + 50 + 4).",
+      "Breaking down ₹354 into ₹300 + ₹50 + ₹4 to show place values.",
+      "Expanded form is writing a number as the sum of the values of each of its digits."
     ],
     "hints": [
       "Stretches out digits: 300 + 50 + 4.",
