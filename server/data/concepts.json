@@ -5,11 +5,11 @@
     "name": "Whole Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "I am a way we talk about how much or how many items we have when we count, measure, or share!",
-      "My family starts at zero and counts upward. We never go backward into negative numbers!",
-      "If you cut a birthday cake into slices, a single partial slice alone CANNOT enter my family as a single number!",
-      "You use me when counting how many chairs, desks, or laptops are in a room.",
-      "I am the set of all non-negative full counting numbers starting from 0 (0, 1, 2, 3...) with no minus signs and no fractional parts."
+      "I help you count your toys or apples: 0, 1, 2, 3!",
+      "I start at zero and count upward. I never go below 0!",
+      "If you cut a cookie in half, a half piece cannot join me!",
+      "I count full things you can touch, like 4 cars or 5 books.",
+      "I am any full counting number starting from 0 (0, 1, 2, 3...) with no cuts or dots!"
     ],
     "hints": [
       "Simple positive counting numbers starting from 0.",
@@ -35,11 +35,11 @@
     "name": "Integers",
     "subject": "Arithmetic",
     "clues": [
-      "I describe values on scale meters, temperature gauges, and scoreboards across the world!",
-      "I walk in both directions from zero—moving forward into positive territory and backward into negative territory!",
-      "Even though I step below zero, every step I take is a complete, full stride—never a broken piece or slice!",
-      "I am used when reporting freezing weather in winter, like 5 degrees below zero!",
-      "I am the complete family of all positive full numbers, zero, and negative full numbers (..., -2, -1, 0, 1, 2, ...)!"
+      "I describe scoreboards, bank money, and weather temperature!",
+      "I step both forward into positive numbers and backward into negative numbers!",
+      "Even when I go below zero, every step is a full step—no half pieces or dots allowed!",
+      "I show freezing cold winter days like 5 degrees below zero (-5)!",
+      "I am all positive full numbers, zero, and negative full numbers (..., -2, -1, 0, 1, 2,...)!"
     ],
     "hints": [
       "Includes numbers going both left and right from zero.",
@@ -64,11 +64,11 @@
     "name": "Fractions",
     "subject": "Arithmetic",
     "clues": [
-      "I appear whenever a single full unit isn't enough, or when something whole gets divided among people!",
-      "I live in the spaces between whole counting numbers, expressing a relationship between a part and a whole!",
-      "I am written using two stacked numbers separated by a straight dividing bar line—never using a decimal dot!",
-      "When 4 friends share 1 birthday cake equally, I describe the exact portion each friend receives!",
-      "I show parts of a whole unit written with a top number (numerator) and a bottom number (denominator)!"
+      "I appear whenever you share a pizza or slice a birthday cake!",
+      "I show parts of a whole thing, sitting between full counting numbers.",
+      "I am written with two stacked numbers separated by a flat bar line (like 1/2)—never a decimal dot!",
+      "When 4 friends share 1 pizza equally, I show each friend gets 1/4 of the pizza!",
+      "I show parts of a whole written with a top number (numerator) and a bottom number (denominator)!"
     ],
     "hints": [
       "Shows parts of a whole thing.",
@@ -92,11 +92,11 @@
     "name": "Decimal Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "I show up on store price tags, measuring tapes, and stopwatch timers during races!",
-      "I express quantities smaller than 1 or amounts lying between whole numbers using place value scale of tens and hundredths!",
-      "I separate whole units from tiny partial parts using a single dot point separator, never a stacked fraction bar!",
-      "You see me every single time you buy a juice bottle for 12.50 or measure a ribbon as 2.5 meters long!",
-      "I am a number that uses a dot point (decimal point) to separate whole units from parts smaller than 1!"
+      "I show up on price tags at the store, stopwatch timers, and height rulers!",
+      "I show tiny amounts smaller than 1, like cents in money!",
+      "I separate whole numbers from tiny parts using a little dot point separator!",
+      "You see me every time you buy a juice box for $1.50 or run a race in 10.5 seconds!",
+      "I am a number that uses a dot point (decimal point) to show parts smaller than 1!"
     ],
     "hints": [
       "Shows amounts with a tiny dot.",
@@ -120,11 +120,11 @@
     "name": "Prime Number",
     "subject": "Arithmetic",
     "clues": [
-      "I describe special numbers that have strict rules about how they can be broken down or built.",
-      "I am greater than 1, but I CANNOT be formed by multiplying two smaller whole numbers together!",
-      "I have EXACTLY two positive factors: 1 and myself. Numbers like 9 or 15 cannot join me because they have extra factors!",
-      "I am used in cybersecurity and data encryption to keep passwords and bank codes ultra safe!",
-      "I am a whole number greater than 1 with exactly two positive factors: 1 and itself (2, 3, 5, 7, 11...)."
+      "I am a special number that cannot be made by multiplying smaller whole numbers together!",
+      "I have EXACTLY two factors: 1 and myself!",
+      "Numbers like 4, 6, 8, 9 cannot join me because they have extra multiplication partners.",
+      "Numbers 2, 3, 5, 7, and 11 are my best friends!",
+      "I am a whole number greater than 1 with exactly two factors: 1 and itself!"
     ],
     "hints": [
       "Arithmetic category topic.",
@@ -156,11 +156,11 @@
     "name": "Composite Number",
     "subject": "Arithmetic",
     "clues": [
-      "I am a building block category of positive whole numbers greater than 1.",
-      "I can always be formed by multiplying smaller whole numbers together!",
-      "I have MORE than two positive factors. Number 1 cannot join me, and prime numbers are excluded!",
-      "You see me when organizing array grids of tiles or egg boxes like a 2x3 or 3x4 carton.",
-      "I am any positive whole number greater than 1 that has more than two positive factors (4, 6, 8, 9, 10...)."
+      "I am a team number built by multiplying smaller whole numbers together!",
+      "I have MORE than two factors (multiplication partners)!",
+      "You can arrange my count into equal rows or box grids, like a 2x3 egg box.",
+      "Numbers like 4, 6, 8, 9, 10 belong to my team!",
+      "I am any positive whole number greater than 1 that has more than two factors!"
     ],
     "hints": [
       "Arithmetic category topic.",
@@ -189,10 +189,10 @@
     "name": "Factors",
     "subject": "Arithmetic",
     "clues": [
-      "I am a mathematical term used when looking at how two numbers interact during multiplication and division!",
-      "I am a smaller or equal number that divides into a target number cleanly with no remainder!",
-      "For any given number, my total count is limited and finite (for 12, there are only 6 of us).",
-      "If you have 12 cupcakes, I tell you all the different ways you can arrange them into equal rows.",
+      "I am a smaller number that fits inside a bigger number perfectly!",
+      "I divide into a target number cleanly with no remainder left over!",
+      "For 12, my family members are 1, 2, 3, 4, 6, and 12!",
+      "I tell you how many equal rows you can make with a set of tiles.",
       "I am a whole number that divides another number exactly without leaving a remainder."
     ],
     "hints": [
@@ -221,11 +221,11 @@
     "name": "Multiples",
     "subject": "Arithmetic",
     "clues": [
-      "I describe how numbers grow and repeat along number lines and multiplication tables!",
-      "I am generated by taking a starting number and multiplying it by 1, 2, 3, 4...",
-      "Unlike factors which are limited, my list goes on forever and ever infinitely!",
-      "If a clock chimes every 15 minutes, the times 15, 30, 45, 60 minutes belong to my family.",
-      "I am the product of a given number and any integer (e.g. multiples of 5 are 5, 10, 15, 20...)."
+      "I am what you get when you skip-count by a number!",
+      "I grow bigger and bigger forever as you multiply by 1, 2, 3, 4...",
+      "Skip-counting by 5 gives my family: 5, 10, 15, 20, 25...",
+      "I tell you when a clock chime or bus arrives on a regular repeating schedule!",
+      "I am the result of multiplying a whole number by any counting number!"
     ],
     "hints": [
       "Arithmetic category topic.",
@@ -253,11 +253,11 @@
     "name": "LCM",
     "subject": "Arithmetic",
     "clues": [
-      "I am used to find a common meeting point between different repeating timing cycles!",
-      "I look for shared multiples between numbers and pick the SMALLEST one!",
-      "My answer is always greater than or equal to the largest starting number.",
-      "If bus A arrives every 6 minutes and bus B every 8 minutes, I tell you the first minute they will both arrive together (24 minutes)!",
-      "I am the Lowest Common Multiple—the smallest positive multiple shared by two or more numbers."
+      "I look at two numbers and find the SMALLEST skip-count match they both share!",
+      "I help you add fractions with different bottom numbers by finding a shared denominator!",
+      "For 4 and 6, skip-counting gives 4, 8, 12... and 6, 12... so 12 is our first meeting point!",
+      "I tell you when two blinking lights or flashing signals will flash together again at the exact same moment!",
+      "I am the Least Common Multiple—the smallest positive number that is a multiple of two or more numbers!"
     ],
     "hints": [
       "Least common multiple.",
@@ -279,11 +279,11 @@
     "name": "HCF (GCD)",
     "subject": "Arithmetic",
     "clues": [
-      "I am a special bridge value calculated between two or more numbers.",
-      "I look for shared factors between numbers and pick the LARGEST one!",
-      "My answer is always smaller than or equal to the smallest number in the set.",
-      "If you have 12 red flowers and 18 yellow flowers, I help you find the largest number of identical bouquets you can make.",
-      "I am the Highest Common Factor (Greatest Common Divisor)—the largest factor shared by two or more numbers."
+      "I look at two numbers and find the LARGEST common helper that divides both!",
+      "I help you simplify big fractions to their simplest form!",
+      "For numbers 12 and 18, the numbers that divide both are 1, 2, 3, and 6—and I am the biggest one (6)!",
+      "You use me to cut two pieces of wood into the largest equal lengths with zero waste!",
+      "I am the Highest Common Factor (or GCD)—the largest number that divides two or more numbers exactly!"
     ],
     "hints": [
       "Highest common factor.",
@@ -3419,11 +3419,11 @@
     "name": "Even Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "I am a property of whole counting numbers when you try to split a collection into two equal pairs with no one left out!",
-      "My numbers always end with 0, 2, 4, 6, or 8 in the ones place.",
-      "I can be divided by 2 with zero remainder. Except for 2, every other member of my family has more than two factors.",
-      "You use me when putting shoes or socks into pairs so no single shoe is left standing alone.",
-      "I am any integer that is an exact multiple of 2 (ends in 0, 2, 4, 6, 8)."
+      "I love making pairs of socks, shoes, and dance partners!",
+      "When you share me between 2 friends, everyone gets the exact same amount with 0 left over!",
+      "My last digit is always 0, 2, 4, 6, or 8!",
+      "Numbers like 2, 4, 6, 8, 10 belong to my family.",
+      "I am any whole number that can be divided by 2 with no remainder!"
     ],
     "hints": [
       "Divisible by 2.",
@@ -3448,11 +3448,11 @@
     "name": "Odd Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "I am a property of counting numbers when you try to share items equally between two friends!",
-      "Whenever you divide any member of my family by 2, there is ALWAYS 1 left over!",
-      "My numbers end with 1, 3, 5, 7, or 9. Some of my family members (like 9 or 15) have multiple factors!",
-      "If 5 friends try to form teams of 2 for a game, 1 friend will be left waiting on the sideline.",
-      "I am any integer that leaves a remainder of 1 when divided by 2 (ends in 1, 3, 5, 7, 9)."
+      "When you pair us up, there is always 1 lonely item left over!",
+      "When you try to split me equally between 2 friends, 1 item is always left out!",
+      "My last digit is always 1, 3, 5, 7, or 9!",
+      "Numbers like 1, 3, 5, 7, 9 belong to my family.",
+      "I am any whole number that leaves a remainder of 1 when divided by 2!"
     ],
     "hints": [
       "Leaves a remainder of 1 when divided by 2.",
@@ -3477,11 +3477,11 @@
     "name": "Prime Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "I describe special numbers that have strict rules about how they can be broken down or built.",
-      "I am greater than 1, but I CANNOT be formed by multiplying two smaller whole numbers together!",
-      "I have EXACTLY two positive factors: 1 and myself. Numbers like 9 or 15 cannot join me because they have extra factors!",
-      "I am used in cybersecurity and data encryption to keep passwords and bank codes ultra safe!",
-      "I am a whole number greater than 1 with exactly two positive factors: 1 and itself (2, 3, 5, 7, 11...)."
+      "I am a special number that cannot be made by multiplying smaller whole numbers together!",
+      "I have EXACTLY two factors: 1 and myself!",
+      "Numbers like 4, 6, 8, 9 cannot join me because they have extra multiplication partners.",
+      "Numbers 2, 3, 5, 7, and 11 are my best friends!",
+      "I am a whole number greater than 1 with exactly two factors: 1 and itself!"
     ],
     "hints": [
       "Has exactly 2 factors: 1 and itself.",
@@ -3507,11 +3507,11 @@
     "name": "Composite Numbers",
     "subject": "Arithmetic",
     "clues": [
-      "I am a building block category of positive whole numbers greater than 1.",
-      "I can always be formed by multiplying smaller whole numbers together!",
-      "I have MORE than two positive factors. Number 1 cannot join me, and prime numbers are excluded!",
-      "You see me when organizing array grids of tiles or egg boxes like a 2x3 or 3x4 carton.",
-      "I am any positive whole number greater than 1 that has more than two positive factors (4, 6, 8, 9, 10...)."
+      "I am a team number built by multiplying smaller whole numbers together!",
+      "I have MORE than two factors (multiplication partners)!",
+      "You can arrange my count into equal rows or box grids, like a 2x3 egg box.",
+      "Numbers like 4, 6, 8, 9, 10 belong to my team!",
+      "I am any positive whole number greater than 1 that has more than two factors!"
     ],
     "hints": [
       "Has more than 2 factors.",
@@ -3537,10 +3537,10 @@
     "name": "Factor",
     "subject": "Arithmetic",
     "clues": [
-      "I am a mathematical term used when looking at how two numbers interact during multiplication and division!",
-      "I am a smaller or equal number that divides into a target number cleanly with no remainder!",
-      "For any given number, my total count is limited and finite (for 12, there are only 6 of us).",
-      "If you have 12 cupcakes, I tell you all the different ways you can arrange them into equal rows.",
+      "I am a smaller number that fits inside a bigger number perfectly!",
+      "I divide into a target number cleanly with no remainder left over!",
+      "For 12, my family members are 1, 2, 3, 4, 6, and 12!",
+      "I tell you how many equal rows you can make with a set of tiles.",
       "I am a whole number that divides another number exactly without leaving a remainder."
     ],
     "hints": [
@@ -3563,11 +3563,11 @@
     "name": "Multiple",
     "subject": "Arithmetic",
     "clues": [
-      "I describe how numbers grow and repeat along number lines and multiplication tables!",
-      "I am generated by taking a starting number and multiplying it by 1, 2, 3, 4...",
-      "Unlike factors which are limited, my list goes on forever and ever infinitely!",
-      "If a clock chimes every 15 minutes, the times 15, 30, 45, 60 minutes belong to my family.",
-      "I am the product of a given number and any integer (e.g. multiples of 5 are 5, 10, 15, 20...)."
+      "I am what you get when you skip-count by a number!",
+      "I grow bigger and bigger forever as you multiply by 1, 2, 3, 4...",
+      "Skip-counting by 5 gives my family: 5, 10, 15, 20, 25...",
+      "I tell you when a clock chime or bus arrives on a regular repeating schedule!",
+      "I am the result of multiplying a whole number by any counting number!"
     ],
     "hints": [
       "Result of multiplying by 1, 2, 3...",
@@ -3589,11 +3589,11 @@
     "name": "Divisible by 2",
     "subject": "Arithmetic",
     "clues": [
-      "I am a rule used to check if a large number can be split cleanly into equal parts without doing full long division!",
-      "You only need to look at the VERY LAST digit of the number to know if I am happy!",
-      "The last digit must be an even digit (0, 2, 4, 6, 8). Ending in 5 or 3 is rejected!",
-      "Quickly checking if a class of 134 students can pair up for a museum trip.",
-      "A number is divisible by 2 if its last digit is even (0, 2, 4, 6, 8)."
+      "I am a divisibility rule for sharing things evenly between 2 friends!",
+      "You only need to look at my very last digit to check me!",
+      "If a number ends in 0, 2, 4, 6, or 8, it passes my test!",
+      "Numbers like 14, 28, and 100 pass my rule effortlessly.",
+      "I am the rule where any number ending in an even digit (0, 2, 4, 6, 8) can be divided by 2!"
     ],
     "hints": [
       "Ends in 0, 2, 4, 6, 8.",
@@ -3617,11 +3617,11 @@
     "name": "Divisible by 3",
     "subject": "Arithmetic",
     "clues": [
-      "I am a secret shortcut rule that tests if a number splits into equal trios!",
-      "To test me, you must ADD UP all the individual digits of the number together!",
-      "If the digit sum is 3, 6, 9, 12, 15..., the number belongs to me. A sum of 10 or 14 fails!",
-      "Checking if 123 candies can be shared equally among 3 children without any left over.",
-      "A number is divisible by 3 if the sum of its digits is a multiple of 3."
+      "I am a magic rule where you ADD UP all the digits of a number!",
+      "If the sum of all digits can be divided by 3, the whole big number passes!",
+      "For 123, 1+2+3 = 6, and 6 is in the 3 times table, so 123 passes!",
+      "You don't need long division—just add the digits together!",
+      "I am the rule where a number is divisible by 3 if the sum of its digits is a multiple of 3!"
     ],
     "hints": [
       "Add all digits together.",
@@ -3644,11 +3644,11 @@
     "name": "Divisible by 5",
     "subject": "Arithmetic",
     "clues": [
-      "I am a quick visual check rule used in counting coins, clocks, and scoreboards!",
-      "You only need to inspect the final single digit at the far right of the number.",
-      "The last digit MUST be either 0 or 5—no other last digit is allowed!",
-      "Counting money in 5-rupee coins or reading 5-minute increments on a clock.",
-      "A number is divisible by 5 if its last digit is 0 or 5."
+      "I am a super easy rule that you use when counting nickel coins or 5-point stars!",
+      "You only need to glance at the very last digit at the end of the number!",
+      "If the last digit is 0 or 5, the number passes my test instantly!",
+      "Numbers like 15, 40, 85, and 500 pass my rule!",
+      "I am the rule where any number ending in 0 or 5 is divisible by 5!"
     ],
     "hints": [
       "Ends in 0 or 5.",
@@ -3672,11 +3672,11 @@
     "name": "Divisible by 9",
     "subject": "Arithmetic",
     "clues": [
-      "I am a powerful digit-sum rule in arithmetic.",
-      "Like my cousin 3, you must add up all the digits of the number to test me!",
-      "The digit sum MUST be a multiple of 9 (9, 18, 27...). A digit sum of 6 or 12 passes for 3, but fails for me!",
-      "Checking if 819 pages can be divided into 9 equal chapter booklets.",
-      "A number is divisible by 9 if the sum of its digits is a multiple of 9."
+      "I am a digit-sum magic rule just like the rule for 3, but for a bigger number!",
+      "Add all the digits together—if the total sum is in the 9 times table, it passes!",
+      "For 729, 7+2+9 = 18, and 18 can be divided by 9, so 729 passes!",
+      "It works for huge numbers like 9,999 or 1,800 without doing long division!",
+      "I am the rule where a number is divisible by 9 if the sum of its digits is a multiple of 9!"
     ],
     "hints": [
       "Add all digits together.",
@@ -3699,11 +3699,11 @@
     "name": "Ones",
     "subject": "Arithmetic",
     "clues": [
-      "I describe a position inside a whole number that determines how much a digit is worth!",
-      "I sit at the far right end of any whole number.",
-      "My multiplier is 1 (10^0). Each step to my left increases value by a factor of 10!",
-      "In ₹345, my position holds the ₹5 single coins.",
-      "The ones place is the rightmost position in a whole number, representing single units (1s)."
+      "I am the rightmost spot in a number where single digits live!",
+      "I count single individual items from 0 to 9.",
+      "In the number 345, the digit 5 sits in my spot!",
+      "Before you add tens or hundreds, you always start adding from my spot!",
+      "I am the place value representing single units (1s) at the far right of a whole number!"
     ],
     "hints": [
       "Far right position in whole numbers.",
@@ -3725,11 +3725,11 @@
     "name": "Tens",
     "subject": "Arithmetic",
     "clues": [
-      "I am a place value position in our base-10 number system.",
-      "I sit exactly one step to the left of the ones place.",
-      "Each digit in my position is multiplied by 10 (10^1).",
-      "In ₹345, my position holds the 4 ten-rupee notes (worth ₹40).",
-      "The tens place is the second position from the right in a whole number, representing groups of 10."
+      "I am the spot just to the left of the ones place!",
+      "Each digit in my spot is worth groups of 10 items (like 10, 20, 30...).",
+      "In the number 345, the digit 4 sits in my spot and is worth 40!",
+      "When you collect 10 single ones, they combine into 1 in my spot!",
+      "I am the place value representing groups of ten (10s) in a number!"
     ],
     "hints": [
       "Second position from the right.",
@@ -3751,11 +3751,11 @@
     "name": "Hundreds",
     "subject": "Arithmetic",
     "clues": [
-      "I am a place value position used when numbers grow into 3-digit territory!",
-      "I sit three positions from the right, just to the left of the tens place.",
-      "Each digit in my position is multiplied by 100 (10^2).",
-      "In ₹345, my position holds the 3 hundred-rupee notes (worth ₹300).",
-      "The hundreds place is the third position from the right in a whole number, representing groups of 100."
+      "I am the spot three places from the right in a 3-digit number!",
+      "Each digit in my spot is worth bundles of 100 items!",
+      "In the number 345, the digit 3 sits in my spot and is worth 300!",
+      "10 tens grouped together make 1 in my spot!",
+      "I am the place value representing groups of hundred (100s) in a number!"
     ],
     "hints": [
       "Third position from the right.",
@@ -3777,11 +3777,11 @@
     "name": "Thousands",
     "subject": "Arithmetic",
     "clues": [
-      "I am a place value position present in 4-digit numbers and larger!",
-      "I sit four positions from the right end of a whole number.",
-      "Each digit in my position is multiplied by 1,000 (10^3).",
-      "In a salary of ₹4,500, my position tells you how many thousand-rupee notes you have.",
-      "The thousands place is the fourth position from the right in a whole number, representing groups of 1,000."
+      "I am the spot sitting just to the left of a comma in 4-digit numbers!",
+      "Each digit in my spot is worth giant bundles of 1,000 items!",
+      "In the number 2,345, the digit 2 sits in my spot and is worth 2,000!",
+      "10 hundreds grouped together make 1 in my spot!",
+      "I am the place value representing groups of thousand (1,000s) in a number!"
     ],
     "hints": [
       "Fourth position from the right.",

@@ -121,6 +121,7 @@ export default function MindReaderApp2({ onBack }) {
   const [clueIndex, setClueIndex] = useState(0);
   const [hintsRemaining, setHintsRemaining] = useState(3);
   const [cluesExhausted, setCluesExhausted] = useState(false);
+  const [difficultyTier, setDifficultyTier] = useState('super_easy');
   const [avatarExpression, setAvatarExpression] = useState('thinking');
   const [tenaliSpeech, setTenaliSpeech] = useState('');
 
@@ -530,6 +531,7 @@ export default function MindReaderApp2({ onBack }) {
         const data = await res.json();
         setGameId(data.gameId);
         setLevelNum(data.levelNum);
+        setDifficultyTier(data.difficultyTier || 'easy');
         if (data.worldId) {
           setActiveWorldId(data.worldId);
           const idx = worlds.findIndex(w => w.worldId === data.worldId);
@@ -1277,32 +1279,34 @@ export default function MindReaderApp2({ onBack }) {
             </div>
           </div>
 
-          {/* Top Stepper: R1 R2 R3 R4 R5 */}
-          <div style={{ display: 'flex', gap: '18px', justifyContent: 'center', alignItems: 'center', marginBottom: '16px', fontSize: '0.9rem', fontWeight: '700' }}>
-            {[0, 1, 2, 3, 4].map((rIdx) => {
-              const isUnlocked = rIdx < revealedClues.length;
-              const isActive = !isSummaryPhase && rIdx === localClueIndex;
-              return (
-                <span
-                  key={rIdx}
-                  style={{
-                    color: isActive
-                      ? 'var(--clr-accent)'
-                      : isUnlocked
-                      ? 'var(--clr-text)'
-                      : 'rgba(255, 255, 255, 0.25)',
-                    borderBottom: isActive ? '2px solid var(--clr-accent)' : 'none',
-                    paddingBottom: '2px',
-                    cursor: isUnlocked ? 'pointer' : 'not-allowed',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onClick={() => handleJumpToRound(rIdx)}
-                >
-                  {'R' + (rIdx + 1)}
-                </span>
-              );
-            })}
-          </div>
+          {/* Top Stepper: R1 R2 R3 R4 R5 (Only shown during clues phase, hidden on final guess) */}
+          {!isSummaryPhase && (
+            <div style={{ display: 'flex', gap: '18px', justifyContent: 'center', alignItems: 'center', marginBottom: '16px', fontSize: '0.9rem', fontWeight: '700' }}>
+              {[0, 1, 2, 3, 4].map((rIdx) => {
+                const isUnlocked = rIdx < revealedClues.length;
+                const isActive = rIdx === localClueIndex;
+                return (
+                  <span
+                    key={rIdx}
+                    style={{
+                      color: isActive
+                        ? 'var(--clr-accent)'
+                        : isUnlocked
+                        ? 'var(--clr-text)'
+                        : 'rgba(255, 255, 255, 0.25)',
+                      borderBottom: isActive ? '2px solid var(--clr-accent)' : 'none',
+                      paddingBottom: '2px',
+                      cursor: isUnlocked ? 'pointer' : 'not-allowed',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onClick={() => handleJumpToRound(rIdx)}
+                  >
+                    {'R' + (rIdx + 1)}
+                  </span>
+                );
+              })}
+            </div>
+          )}
 
           {!isSummaryPhase ? (
             <>

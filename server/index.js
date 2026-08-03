@@ -10143,7 +10143,8 @@ app.get('/api/mindreader/worlds', async (req, res) => {
         return {
           levelNum: lvl.levelNum,
           conceptId: lvl.conceptId,
-          conceptName: concept ? concept.name : lvl.conceptId
+          conceptName: concept ? concept.name : lvl.conceptId,
+          difficultyTier: lvl.difficultyTier || 'easy'
         };
       });
 
@@ -10275,7 +10276,8 @@ app.post('/api/mindreader/start', express.json(), async (req, res) => {
       worldId: targetWorldId,
       clue: firstClue,
       clueIndex: 0,
-      hintsRemaining: session.hintsRemaining
+      hintsRemaining: session.hintsRemaining,
+      difficultyTier: levelObj ? (levelObj.difficultyTier || 'easy') : 'easy'
     });
   } catch (err) {
     console.error('[GuessMind] Error in start API:', err);
