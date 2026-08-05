@@ -27,8 +27,8 @@ export default function StudentAvatar({ expression = 'attentive', styleVariant =
         xmlns="http://www.w3.org/2000/svg"
         style={{ filter: 'drop-shadow(0 6px 16px rgba(0, 0, 0, 0.4))' }}
       >
-        {/* Outer Glow Halo */}
-        <circle cx="60" cy="60" r="54" fill="#241a13" stroke="#ea580c" strokeWidth="3" />
+        {/* Background fill */}
+        <circle cx="60" cy="60" r="54" fill="#241a13" />
 
         {/* Shoulders & Detective Coat */}
         <path d="M 28 102 C 28 85, 42 75, 60 75 C 78 75, 92 85, 92 102 Z" fill="#38271c" stroke="#ea580c" strokeWidth="2" />

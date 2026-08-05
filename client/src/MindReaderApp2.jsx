@@ -1364,8 +1364,8 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                     text={clue}
                     roundIndex={localClueIndex}
                   />
-                  <div style={{ paddingLeft: '20px' }}>
-                    <TenaliAvatar expression={avatarExpression} skin="classic" size={110} />
+                  <div className="arena-avatar-frame">
+                    <TenaliAvatar expression={avatarExpression} skin="classic" size={100} />
                   </div>
                 </div>
 
@@ -1377,11 +1377,12 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                     getCardState={getCardState}
                     onCardClick={handleCandidateCardClick}
                   />
-                  <div style={{ paddingRight: '20px' }}>
-                    <StudentAvatar expression={studentExpression} size={110} />
+                  <div className="arena-avatar-frame">
+                    <StudentAvatar expression={studentExpression} size={100} />
                   </div>
                 </div>
               </div>
+
 
               {/* Clue Hint details popup if requested */}
               {showHintOverlay && (

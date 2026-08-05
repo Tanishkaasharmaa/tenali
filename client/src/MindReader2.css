@@ -1605,8 +1605,8 @@
 /* ─── DUAL AVATAR ARENA LAYOUT ────────────────────────────────────────────── */
 .royal-arena-dual-avatars {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  align-items: flex-start;
+  justify-content: center;
   gap: 16px;
   width: 100%;
   padding: 10px;
@@ -1616,21 +1616,35 @@
 .avatar-slot-left {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
   position: relative;
-  flex: 1;
-  max-width: 440px;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .avatar-slot-right {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   gap: 8px;
   position: relative;
-  flex: 1;
-  max-width: 440px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Shared circular avatar frame — same on both sides */
+.arena-avatar-frame {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 3px solid #ea580c;
+  background: #241a13;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 0 18px rgba(234, 88, 12, 0.35);
 }
 
 /* ─── MIND CLOUD SPEECH BUBBLES ───────────────────────────────────────────── */
@@ -1736,10 +1750,11 @@
 
 .mind-cloud-text {
   margin: 0;
-  font-size: 1rem;
-  line-height: 1.45;
+  font-size: 0.95rem;
+  line-height: 1.5;
   color: #ffffff;
   font-weight: 600;
+  text-align: center;
 }
 
 .mind-cloud-voice-btn {
