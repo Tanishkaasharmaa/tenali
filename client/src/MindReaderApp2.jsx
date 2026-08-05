@@ -6,7 +6,10 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { TenaliAvatar } from './App';
+import { TenaliAvatar } from './TenaliAvatar';
+import StudentAvatar from './StudentAvatar';
+import CandidateCard from './CandidateCard';
+import SpeechBubble from './SpeechBubble';
 import { playSound } from './audioContext';
 import confetti from 'canvas-confetti';
 import './MindReader2.css';
@@ -90,7 +93,7 @@ function playConfettiSound() {
   } catch (e) {}
 }
 
-export default function MindReaderApp2({ onBack }) {
+export default function MindReaderApp2({ onBack, onSwitchMode }) {
   // Game Phase: 'setup' | 'worlds' | 'levels' | 'playing' | 'gameover'
   const [phase, setPhase] = useState('setup');
   const [loading, setLoading] = useState(false);
@@ -105,25 +108,14 @@ export default function MindReaderApp2({ onBack }) {
   const [roundSelections, setRoundSelections] = useState({ 0: [], 1: [], 2: [], 3: [], 4: [] });
   const [isSummaryPhase, setIsSummaryPhase] = useState(false);
 
+  // Character Expressions Matrix States
+  const [studentExpression, setStudentExpression] = useState('attentive');
+  const [avatarExpression, setAvatarExpression] = useState('talking');
+  const [tenaliSpeech, setTenaliSpeech] = useState('');
+
   // Animation states for flying plane
   const [animatingFrom, setAnimatingFrom] = useState(null);
   const [animatingTo, setAnimatingTo] = useState(null);
-
-  // Active game navigation states
-  const [worlds, setWorlds] = useState([]);
-  const [activeWorldIndex, setActiveWorldIndex] = useState(0);
-  const [activeWorldId, setActiveWorldId] = useState('number_kingdom');
-  const [levelNum, setLevelNum] = useState(1);
-
-  // Active game session playing states
-  const [gameId, setGameId] = useState('');
-  const [clue, setClue] = useState('');
-  const [clueIndex, setClueIndex] = useState(0);
-  const [hintsRemaining, setHintsRemaining] = useState(3);
-  const [cluesExhausted, setCluesExhausted] = useState(false);
-  const [difficultyTier, setDifficultyTier] = useState('super_easy');
-  const [avatarExpression, setAvatarExpression] = useState('thinking');
-  const [tenaliSpeech, setTenaliSpeech] = useState('');
 
   // Searchable Concept Selector
   const [guessSearchQuery, setGuessSearchQuery] = useState('');
@@ -153,6 +145,21 @@ export default function MindReaderApp2({ onBack }) {
   const [revealedClues, setRevealedClues] = useState([]);
   const [localClueIndex, setLocalClueIndex] = useState(0);
   const [showReviewedClues, setShowReviewedClues] = useState(false);
+
+  // World / Level navigation state
+  const [worlds, setWorlds] = useState([]);
+  const [levelNum, setLevelNum] = useState(1);
+  const [activeWorldId, setActiveWorldId] = useState('number_kingdom');
+  const [activeWorldIndex, setActiveWorldIndex] = useState(0);
+
+  // Game session state
+  const [gameId, setGameId] = useState(null);
+  const [clue, setClue] = useState('');
+  const [clueIndex, setClueIndex] = useState(0);
+  const [cluesExhausted, setCluesExhausted] = useState(false);
+  const [hintsRemaining, setHintsRemaining] = useState(3);
+  const [difficultyTier, setDifficultyTier] = useState('easy');
+  const [thoughtGuesses, setThoughtGuesses] = useState(['', '', '', '', '']);
 
   const syncGlobalXp = (newXp) => {
     try {
@@ -247,7 +254,7 @@ export default function MindReaderApp2({ onBack }) {
 
   useEffect(() => {
     loadWorldsAndProgress();
-  }, [phase]);
+  }, []);
 
   // Set Tenali greeting message on lobby setup
   useEffect(() => {
@@ -569,17 +576,31 @@ export default function MindReaderApp2({ onBack }) {
     }
   };
 
-  // Toggle option selection for current round
-  const toggleCandidateOption = (optName) => {
+  // Handle Candidate Card Click & Update Character Expressions
+  const handleCandidateCardClick = (optName) => {
     const currentList = roundSelections[localClueIndex] || [];
-    const exists = currentList.includes(optName);
-    const updatedList = exists
-      ? currentList.filter(o => o !== optName)
-      : [...currentList, optName];
+    const isSelected = currentList.includes(optName);
+
+    let updatedList;
+    if (isSelected) {
+      updatedList = currentList.filter(o => o !== optName);
+      setStudentExpression('pondering');
+      setAvatarExpression('recalculating');
+    } else {
+      updatedList = [...currentList, optName];
+      setStudentExpression('confident');
+      setAvatarExpression('impressed');
+    }
+
     setRoundSelections({
       ...roundSelections,
       [localClueIndex]: updatedList
     });
+  };
+
+  const getCardState = (optName) => {
+    const currentList = roundSelections[localClueIndex] || [];
+    return currentList.includes(optName) ? 'selected' : 'possible';
   };
 
   // Next Clue API
@@ -588,6 +609,8 @@ export default function MindReaderApp2({ onBack }) {
     if (localClueIndex < revealedClues.length - 1) {
       setLocalClueIndex(localClueIndex + 1);
       setClue(revealedClues[localClueIndex + 1]);
+      setAvatarExpression('talking');
+      setStudentExpression('attentive');
       return;
     }
 
@@ -611,7 +634,8 @@ export default function MindReaderApp2({ onBack }) {
         setRevealedClues([...revealedClues, data.clue]);
         setLocalClueIndex(localClueIndex + 1);
         setCluesExhausted(data.cluesExhausted);
-        setAvatarExpression('happy');
+        setAvatarExpression('talking');
+        setStudentExpression('attentive');
       }
     } catch (err) {
       console.error(err);
@@ -636,7 +660,8 @@ export default function MindReaderApp2({ onBack }) {
         setHintText(data.hint);
         setHintsRemaining(data.hintsRemaining);
         setShowHintOverlay(true);
-        setAvatarExpression('smirk');
+        setAvatarExpression('hinting');
+        setStudentExpression('curious');
       }
     } catch (err) {
       console.error(err);
@@ -674,6 +699,8 @@ export default function MindReaderApp2({ onBack }) {
         setShowGuess(false);
 
         if (data.correct) {
+          setAvatarExpression('celebrating');
+          setStudentExpression('triumphant');
           // Unlock level locally
           const updatedStars = Math.max(levelProgress[levelNum] || 0, data.starsEarned || 1);
           const nextProgress = {
@@ -702,7 +729,6 @@ export default function MindReaderApp2({ onBack }) {
             localStorage.setItem('tenali-guess-mind-last-level', levelNum + 1);
           } catch (e) {}
           setActualConcept(data.actualConcept || guessToSubmit);
-          setAvatarExpression('victory');
           setTenaliSpeech(`Outstanding! You correctly guessed "${data.actualConcept || guessToSubmit}"!`);
           if (typeof confetti === 'function') {
             confetti({
@@ -713,11 +739,12 @@ export default function MindReaderApp2({ onBack }) {
           }
           setPhase('gameover');
         } else {
+          setAvatarExpression('encouraging');
+          setStudentExpression('puzzled');
           if (data.cluesRemaining) {
             setWrongGuessFeedback("❌ Not quite! That's not the secret concept. Try reading another clue or guessing again!");
           } else {
             setActualConcept('');
-            setAvatarExpression('loss');
             setTenaliSpeech("All 5 clues are completed. Review the educational revision card below!");
             setPhase('gameover');
           }
@@ -876,7 +903,7 @@ export default function MindReaderApp2({ onBack }) {
     margin: 0
   };
   return (
-    <div className="mr2-container" style={{ background: 'transparent', padding: '10px 15px', minHeight: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className="royal-mystery-arena" style={{ background: '#1a130e', color: '#ffffff', padding: '20px 15px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', boxSizing: 'border-box' }}>
       {/* Global Navigation Header at the top */}
       {phase !== 'playing' && (
         <div style={{
@@ -974,6 +1001,25 @@ export default function MindReaderApp2({ onBack }) {
           >
             Start Game
           </button>
+
+          {onSwitchMode && (
+            <button
+              style={{
+                background: 'rgba(255, 255, 255, 0.06)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                color: 'var(--clr-text)',
+                borderRadius: '12px',
+                padding: '10px 18px',
+                fontSize: '0.85rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                marginTop: '4px'
+              }}
+              onClick={onSwitchMode}
+            >
+              🧙 Switch Mode: Let Tenali Read Your Mind
+            </button>
+          )}
 
 
         </div>
@@ -1310,87 +1356,31 @@ export default function MindReaderApp2({ onBack }) {
 
           {!isSummaryPhase ? (
             <>
+              {/* Dual Avatar Arena with Mind Clouds directly over avatars */}
+              <div className="royal-arena-dual-avatars" style={{ width: '100%', marginBottom: '16px' }}>
+                {/* Left Slot: Tenali Mind Cloud + Tenali Avatar */}
+                <div className="avatar-slot-left">
+                  <SpeechBubble
+                    text={clue}
+                    roundIndex={localClueIndex}
+                  />
+                  <div style={{ paddingLeft: '20px' }}>
+                    <TenaliAvatar expression={avatarExpression} skin="classic" size={110} />
+                  </div>
+                </div>
 
-              {/* Speech Cloud Clue Box */}
-              <div style={{
-                margin: '0 auto 16px auto',
-                width: '100%',
-                maxWidth: '420px',
-                textAlign: 'center',
-                background: 'var(--clr-card)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderLeft: '4px solid var(--clr-accent)',
-                borderRight: '4px solid var(--clr-accent)',
-                borderRadius: '16px',
-                padding: '18px 20px',
-                boxSizing: 'border-box',
-                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)'
-              }}>
-                <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '1.15rem', lineHeight: '1.45', color: 'var(--clr-text)', margin: 0 }}>
-                  "{clue || 'I am thinking of a mathematical concept...'}"
-                </p>
-              </div>
-
-              {/* Options Subheader */}
-              <div style={{ width: '100%', marginBottom: '10px', textAlign: 'center' }}>
-                <span style={{ fontSize: '0.84rem', color: 'var(--clr-text-soft)', fontWeight: '600', letterSpacing: '0.2px' }}>
-                  Select options that match this clue:
-                </span>
-              </div>
-
-              {/* 4 Candidate Option Cards Grid */}
-              <div style={{
-                width: '100%',
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '10px',
-                margin: '0 0 16px 0'
-              }}>
-                {levelOptions.map((optName) => {
-                  const isChecked = (roundSelections[localClueIndex] || []).includes(optName);
-                  return (
-                    <button
-                      key={optName}
-                      type="button"
-                      style={{
-                        width: '100%',
-                        boxSizing: 'border-box',
-                        padding: '14px 14px',
-                        background: isChecked ? 'rgba(232, 134, 74, 0.18)' : 'rgba(255, 255, 255, 0.04)',
-                        border: isChecked ? '1px solid var(--clr-accent)' : '1px solid rgba(255, 255, 255, 0.09)',
-                        borderRadius: '14px',
-                        color: isChecked ? '#fff' : 'var(--clr-text)',
-                        fontSize: '0.92rem',
-                        fontWeight: '700',
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        transition: 'all 0.2s ease',
-                        boxShadow: isChecked ? '0 4px 14px rgba(232, 134, 74, 0.25)' : 'none'
-                      }}
-                      onClick={() => toggleCandidateOption(optName)}
-                    >
-                      <span>{optName}</span>
-                      <span style={{
-                        width: '22px',
-                        height: '22px',
-                        borderRadius: '7px',
-                        border: isChecked ? 'none' : '1.5px solid rgba(255, 255, 255, 0.2)',
-                        background: isChecked ? 'var(--clr-accent)' : 'transparent',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#fff',
-                        fontSize: '0.85rem',
-                        fontWeight: 'bold'
-                      }}>
-                        {isChecked ? '✓' : ''}
-                      </span>
-                    </button>
-                  );
-                })}
+                {/* Right Slot: Interactive Student Mind Cloud + Student Avatar */}
+                <div className="avatar-slot-right">
+                  <SpeechBubble
+                    isDetective={true}
+                    options={levelOptions}
+                    getCardState={getCardState}
+                    onCardClick={handleCandidateCardClick}
+                  />
+                  <div style={{ paddingRight: '20px' }}>
+                    <StudentAvatar expression={studentExpression} size={110} />
+                  </div>
+                </div>
               </div>
 
               {/* Clue Hint details popup if requested */}
