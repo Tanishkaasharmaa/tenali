@@ -1606,18 +1606,18 @@
 .royal-arena-dual-avatars {
   display: flex;
   align-items: flex-start;
-  justify-content: center;
-  gap: 16px;
+  justify-content: space-between;
+  gap: 12px;
   width: 100%;
-  padding: 10px;
+  padding: 10px 4px;
   box-sizing: border-box;
 }
 
 .avatar-slot-left {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
+  align-items: flex-start;
+  gap: 10px;
   position: relative;
   flex: 1 1 0;
   min-width: 0;
@@ -1626,8 +1626,8 @@
 .avatar-slot-right {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
+  align-items: flex-end;
+  gap: 10px;
   position: relative;
   flex: 1 1 0;
   min-width: 0;
@@ -1645,6 +1645,7 @@
   justify-content: center;
   overflow: hidden;
   box-shadow: 0 0 18px rgba(234, 88, 12, 0.35);
+  flex-shrink: 0;
 }
 
 /* ─── MIND CLOUD SPEECH BUBBLES ───────────────────────────────────────────── */
@@ -1658,13 +1659,17 @@
   background: #241a13;
   border: 2px solid #ea580c;
   border-radius: 24px;
-  padding: 14px 18px;
+  padding: 16px 18px;
   width: 100%;
+  min-height: 160px;
   box-sizing: border-box;
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
   position: relative;
   margin-bottom: 10px;
   animation: mindCloudFloat 4s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .tenali-mind-cloud.detective-mind-cloud {
@@ -1672,23 +1677,13 @@
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(249, 115, 22, 0.2);
 }
 
-.tenali-mind-cloud.detective-mind-cloud .mind-cloud-tail-large {
-  left: auto;
-  right: 32px;
-  border-color: #ea580c;
-}
 
-.tenali-mind-cloud.detective-mind-cloud .mind-cloud-tail-small {
-  left: auto;
-  right: 22px;
-  border-color: #f97316;
-}
 
-/* Double Circular Bubble Tail Pointing Down to Avatar Head */
+/* Tenali's left cloud — tail points down-left toward left avatar */
 .mind-cloud-tail-large {
   position: absolute;
   bottom: -10px;
-  left: 32px;
+  left: 24px;
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -1699,12 +1694,23 @@
 .mind-cloud-tail-small {
   position: absolute;
   bottom: -18px;
-  left: 22px;
+  left: 14px;
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background: #241a13;
   border: 1.5px solid #f97316;
+}
+
+/* Detective (right) cloud — tail points down-right toward right avatar */
+.tenali-mind-cloud.detective-mind-cloud .mind-cloud-tail-large {
+  left: auto;
+  right: 24px;
+}
+
+.tenali-mind-cloud.detective-mind-cloud .mind-cloud-tail-small {
+  left: auto;
+  right: 14px;
 }
 
 .mind-cloud-header {
