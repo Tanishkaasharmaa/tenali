@@ -1604,12 +1604,12 @@
 
 /* ─── 3-COLUMN SYMMETRICAL ARENA LAYOUT ───────────────────────────────────── */
 .royal-arena-3col-layout {
-  display: flex;
+  display: grid;
+  grid-template-columns: 210px 1fr 210px;
   align-items: flex-end;
-  justify-content: space-between;
   gap: 20px;
   width: 100%;
-  max-width: 960px;
+  max-width: 980px;
   margin: 0 auto 16px auto;
   box-sizing: border-box;
 }
@@ -1620,17 +1620,17 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  width: 200px;
-  flex-shrink: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .arena-col-center {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 24px;
+  box-sizing: border-box;
 }
 
 .arena-quiz-card {
@@ -1675,14 +1675,14 @@
   flex-shrink: 0;
 }
 
-/* ─── SCALLOPED CLOUD SPEECH BUBBLES ───────────────────────────────────────── */
+/* ─── CLOUD SPEECH BUBBLES ─────────────────────────────────────────────────── */
 @keyframes mindCloudFloat {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-5px); }
   100% { transform: translateY(0px); }
 }
 
-.scalloped-cloud-container {
+.tenali-speech-cloud-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1692,68 +1692,47 @@
   animation: mindCloudFloat 4s ease-in-out infinite;
 }
 
-.cloud-bubble-box {
-  position: relative;
+.speech-cloud-box {
+  background: #251d16;
+  border: 2px solid #443527;
+  border-radius: 28px;
+  padding: 16px 14px;
   width: 100%;
-  height: 125px;
+  min-height: 120px;
+  box-sizing: border-box;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 18px;
-  box-sizing: border-box;
-}
-
-.cloud-svg-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.5));
-}
-
-.cloud-text-overlay {
-  position: relative;
-  z-index: 2;
   text-align: center;
-  width: 100%;
-  padding: 0 10px;
-  box-sizing: border-box;
+  position: relative;
 }
 
-.cloud-text-p {
+.speech-cloud-text {
   margin: 0;
-  font-size: 0.86rem;
+  font-size: 0.88rem;
   line-height: 1.45;
   color: #ffffff;
   font-weight: 600;
-}
-
-.thought-circle-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  margin-top: -6px;
-  position: relative;
-  z-index: 3;
+  text-align: center;
 }
 
 .thought-circle-top {
-  width: 13px;
-  height: 13px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: #282018;
+  background: #251d16;
   border: 1.5px solid #443527;
+  margin-top: 4px;
 }
 
 .thought-circle-bottom {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #282018;
+  background: #251d16;
   border: 1.5px solid #443527;
+  margin-top: 3px;
 }
 
 .mind-cloud-header {
