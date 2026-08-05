@@ -2,8 +2,7 @@ import React from 'react';
 
 /**
  * CandidateCard Component
- * Displays candidate concept cards in Student's Mind Cloud or Final Choice screen
- * State: 'selected' | 'possible' | 'rejected'
+ * Candidate concept button card used inside the center quiz box
  */
 export default function CandidateCard({
   conceptName,
@@ -18,57 +17,57 @@ export default function CandidateCard({
   return (
     <button
       type="button"
-      className={`candidate-card card-state-${state} ${isSingleChoice ? 'single-choice-mode' : ''}`}
+      className={`candidate-quiz-card card-state-${state}`}
       onClick={onClick}
       style={{
-        background: isSelected ? '#34251b' : isRejected ? '#19120d' : '#241a13',
-        border: `2px solid ${isSelected ? '#f97316' : isRejected ? '#7f1d1d' : '#3d281a'}`,
+        background: isSelected ? '#36281e' : isRejected ? '#1d1712' : '#292018',
+        border: `1.5px solid ${isSelected ? '#d97d38' : isRejected ? '#6b2121' : '#3d3024'}`,
         color: '#ffffff',
-        borderRadius: '12px',
-        padding: isSingleChoice ? '14px 18px' : '10px 12px',
+        borderRadius: '14px',
+        padding: '14px 16px',
         display: 'flex',
         alignItems: 'center',
-        gap: '10px',
+        gap: '12px',
         cursor: 'pointer',
         width: '100%',
         boxSizing: 'border-box',
-        transition: 'all 0.2s ease',
-        boxShadow: isSelected ? '0 4px 14px rgba(249, 115, 22, 0.4)' : 'none'
+        transition: 'all 0.18s ease',
+        boxShadow: isSelected ? '0 4px 14px rgba(217, 125, 56, 0.35)' : 'none'
       }}
     >
       <div
-        className="candidate-card-badge"
+        className="card-badge-circle"
         style={{
-          width: '26px',
-          height: '26px',
+          width: '28px',
+          height: '28px',
           borderRadius: '50%',
-          background: isSelected ? '#f97316' : '#34251b',
-          color: isSelected ? '#ffffff' : '#f97316',
-          border: `1.5px solid ${isSelected ? '#ea580c' : '#3d281a'}`,
+          background: isSelected ? '#d97d38' : isRejected ? '#2a1a1a' : '#35291f',
+          color: isSelected ? '#ffffff' : isRejected ? '#f87171' : '#e5a93c',
+          border: `1px solid ${isSelected ? '#e08a46' : isRejected ? '#4a2020' : '#4d3b2c'}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           fontWeight: '800',
-          fontSize: '0.85rem',
+          fontSize: '0.88rem',
           flexShrink: 0
         }}
       >
         {isSelected ? '✓' : isRejected ? '✕' : '?'}
       </div>
       <div
-        className="candidate-card-title"
         style={{
-          fontSize: isSingleChoice ? '1rem' : '0.88rem',
+          fontSize: '0.92rem',
           fontWeight: '700',
           textAlign: 'left',
           flexGrow: 1,
-          color: isSelected ? '#f97316' : isRejected ? '#9ca3af' : '#ffffff'
+          lineHeight: '1.3',
+          color: isSelected ? '#ffffff' : isRejected ? '#8c827a' : '#ffffff'
         }}
       >
         {conceptName}
       </div>
       {selectionCount > 0 && !isSingleChoice && (
-        <span style={{ fontSize: '0.72rem', color: '#f97316', fontWeight: '800' }}>
+        <span style={{ fontSize: '0.72rem', color: '#d97d38', fontWeight: '800' }}>
           ({selectionCount})
         </span>
       )}

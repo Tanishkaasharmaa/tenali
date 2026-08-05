@@ -1607,9 +1607,9 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
   width: 100%;
-  max-width: 980px;
+  max-width: 960px;
   margin: 0 auto 16px auto;
   box-sizing: border-box;
 }
@@ -1619,8 +1619,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  width: 180px;
+  gap: 4px;
+  width: 200px;
   flex-shrink: 0;
 }
 
@@ -1634,99 +1634,126 @@
 }
 
 .arena-quiz-card {
-  background: #241a13;
+  background: #231b14;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  padding: 20px;
+  border-radius: 22px;
+  padding: 24px 20px;
   width: 100%;
   box-sizing: border-box;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
 }
 
 .arena-quiz-divider {
   height: 1px;
-  background: rgba(255, 255, 255, 0.08);
-  margin: 16px 0;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 22px 0 16px 0;
   width: 100%;
 }
 
 .arena-avatar-name {
   font-size: 0.88rem;
   font-weight: 800;
-  color: #ea580c;
-  letter-spacing: 1.5px;
+  color: #d99843;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  margin-top: 4px;
+  margin-top: 6px;
   text-align: center;
 }
 
 /* Shared circular avatar frame — same on both sides */
 .arena-avatar-frame {
-  width: 110px;
-  height: 110px;
+  width: 135px;
+  height: 135px;
   border-radius: 50%;
-  border: 3px solid #ea580c;
-  background: #241a13;
+  border: 2px solid #735934;
+  background: #1a130e;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  box-shadow: 0 0 18px rgba(234, 88, 12, 0.35);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   flex-shrink: 0;
 }
 
-/* ─── MIND CLOUD SPEECH BUBBLES ───────────────────────────────────────────── */
+/* ─── SCALLOPED CLOUD SPEECH BUBBLES ───────────────────────────────────────── */
 @keyframes mindCloudFloat {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-5px); }
   100% { transform: translateY(0px); }
 }
 
-.tenali-mind-cloud {
-  background: #241a13;
-  border: 2px solid #ea580c;
-  border-radius: 30px;
-  padding: 16px 14px;
-  width: 100%;
-  min-height: 130px;
-  box-sizing: border-box;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
-  position: relative;
-  margin-bottom: 12px;
-  animation: mindCloudFloat 4s ease-in-out infinite;
+.scalloped-cloud-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  margin-bottom: 6px;
+  animation: mindCloudFloat 4s ease-in-out infinite;
+}
+
+.cloud-bubble-box {
+  position: relative;
+  width: 100%;
+  height: 125px;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  padding: 14px 18px;
+  box-sizing: border-box;
 }
 
-.tenali-mind-cloud.detective-mind-cloud {
-  border-color: #ea580c;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(249, 115, 22, 0.2);
-}
-
-/* Double Circular Bubble Tail Pointing Down to Avatar Head */
-.mind-cloud-tail-large {
+.cloud-svg-bg {
   position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #241a13;
-  border: 2px solid #ea580c;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.5));
 }
 
-.mind-cloud-tail-small {
-  position: absolute;
-  bottom: -18px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 10px;
-  height: 10px;
+.cloud-text-overlay {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.cloud-text-p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.thought-circle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin-top: -6px;
+  position: relative;
+  z-index: 3;
+}
+
+.thought-circle-top {
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
-  background: #241a13;
-  border: 1.5px solid #f97316;
+  background: #282018;
+  border: 1.5px solid #443527;
+}
+
+.thought-circle-bottom {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #282018;
+  border: 1.5px solid #443527;
 }
 
 .mind-cloud-header {

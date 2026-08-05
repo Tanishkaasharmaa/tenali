@@ -1365,7 +1365,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                     roundIndex={localClueIndex}
                   />
                   <div className="arena-avatar-frame">
-                    <TenaliAvatar expression={avatarExpression} skin="classic" size={100} />
+                    <TenaliAvatar expression={avatarExpression} skin="scholar" size={115} />
                   </div>
                   <div className="arena-avatar-name">TENALI</div>
                 </div>
@@ -1443,7 +1443,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                     roundIndex={localClueIndex}
                   />
                   <div className="arena-avatar-frame">
-                    <StudentAvatar expression={studentExpression} size={100} />
+                    <StudentAvatar expression={studentExpression} size={115} />
                   </div>
                   <div className="arena-avatar-name">YOU</div>
                 </div>
