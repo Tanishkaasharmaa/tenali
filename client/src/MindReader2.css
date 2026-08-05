@@ -1602,35 +1602,62 @@
   animation: xpPillBounce 0.45s ease-out;
 }
 
-/* ─── DUAL AVATAR ARENA LAYOUT ────────────────────────────────────────────── */
-.royal-arena-dual-avatars {
+/* ─── 3-COLUMN SYMMETRICAL ARENA LAYOUT ───────────────────────────────────── */
+.royal-arena-3col-layout {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
   width: 100%;
-  padding: 10px 4px;
+  max-width: 980px;
+  margin: 0 auto 16px auto;
   box-sizing: border-box;
 }
 
-.avatar-slot-left {
+.arena-col-left,
+.arena-col-right {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  position: relative;
-  flex: 1 1 0;
-  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  width: 180px;
+  flex-shrink: 0;
 }
 
-.avatar-slot-right {
+.arena-col-center {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
-  position: relative;
-  flex: 1 1 0;
-  min-width: 0;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.arena-quiz-card {
+  background: #241a13;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.arena-quiz-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 16px 0;
+  width: 100%;
+}
+
+.arena-avatar-name {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #ea580c;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+  text-align: center;
 }
 
 /* Shared circular avatar frame — same on both sides */
@@ -1658,19 +1685,18 @@
 .tenali-mind-cloud {
   background: #241a13;
   border: 2px solid #ea580c;
-  border-radius: 24px;
-  padding: 14px;
+  border-radius: 30px;
+  padding: 16px 14px;
   width: 100%;
-  min-height: 160px;
+  min-height: 130px;
   box-sizing: border-box;
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
   position: relative;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   animation: mindCloudFloat 4s ease-in-out infinite;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;
 }
 
 .tenali-mind-cloud.detective-mind-cloud {
@@ -1678,15 +1704,14 @@
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(249, 115, 22, 0.2);
 }
 
-
-
-/* Tenali's left cloud — tail points down-left toward left avatar */
+/* Double Circular Bubble Tail Pointing Down to Avatar Head */
 .mind-cloud-tail-large {
   position: absolute;
   bottom: -10px;
-  left: 24px;
-  width: 18px;
-  height: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: #241a13;
   border: 2px solid #ea580c;
@@ -1695,23 +1720,13 @@
 .mind-cloud-tail-small {
   position: absolute;
   bottom: -18px;
-  left: 14px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background: #241a13;
   border: 1.5px solid #f97316;
-}
-
-/* Detective (right) cloud — tail points down-right toward right avatar */
-.tenali-mind-cloud.detective-mind-cloud .mind-cloud-tail-large {
-  left: auto;
-  right: 24px;
-}
-
-.tenali-mind-cloud.detective-mind-cloud .mind-cloud-tail-small {
-  left: auto;
-  right: 14px;
 }
 
 .mind-cloud-header {

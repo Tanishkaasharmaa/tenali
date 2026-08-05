@@ -1356,10 +1356,10 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
           {!isSummaryPhase ? (
             <>
-              {/* Dual Avatar Arena with Mind Clouds directly over avatars */}
-              <div className="royal-arena-dual-avatars" style={{ width: '100%', marginBottom: '16px' }}>
-                {/* Left Slot: Tenali Mind Cloud + Tenali Avatar */}
-                <div className="avatar-slot-left">
+              {/* 3-Column Symmetrical Quiz Arena */}
+              <div className="royal-arena-3col-layout">
+                {/* Left Column: Tenali Speech Cloud + Avatar + TENALI label */}
+                <div className="arena-col-left">
                   <SpeechBubble
                     text={clue}
                     roundIndex={localClueIndex}
@@ -1367,68 +1367,86 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                   <div className="arena-avatar-frame">
                     <TenaliAvatar expression={avatarExpression} skin="classic" size={100} />
                   </div>
+                  <div className="arena-avatar-name">TENALI</div>
                 </div>
 
-                {/* Right Slot: Interactive Student Mind Cloud + Student Avatar */}
-                <div className="avatar-slot-right">
+                {/* Middle Column: Quiz Candidates Card Box + Prev / Next buttons */}
+                <div className="arena-col-center">
+                  <div className="arena-quiz-card">
+                    <div className="detective-card-grid">
+                      {levelOptions.slice(0, 4).map((optName, idx) => (
+                        <CandidateCard
+                          key={optName || idx}
+                          conceptName={optName}
+                          state={getCardState(optName)}
+                          selectionCount={[0, 1, 2, 3, 4].filter(rIdx => (roundSelections[rIdx] || []).includes(optName)).length}
+                          onClick={() => handleCandidateCardClick(optName)}
+                        />
+                      ))}
+                    </div>
+
+                    {showHintOverlay && (
+                      <div className="feedback correct" style={{ width: '100%', padding: '8px 12px', marginTop: '12px', textAlign: 'center', fontSize: '0.85rem', borderRadius: '10px' }}>
+                        💡 Hint: <strong>{hintText}</strong>
+                      </div>
+                    )}
+
+                    <div className="arena-quiz-divider" />
+
+                    {/* Footer Navigation Buttons inside Center Quiz Box */}
+                    <div className="gm-footer-nav" style={{ width: '100%', display: 'flex', gap: '12px' }}>
+                      <button
+                        style={{
+                          ...outlineBtnStyle,
+                          flex: 1,
+                          padding: '12px 16px',
+                          borderRadius: '12px',
+                          textAlign: 'center',
+                          justifyContent: 'center',
+                          opacity: localClueIndex === 0 ? 0.35 : 1,
+                          cursor: localClueIndex === 0 ? 'not-allowed' : 'pointer'
+                        }}
+                        disabled={localClueIndex === 0}
+                        onClick={handlePrevLocalClue}
+                      >
+                        Prev
+                      </button>
+                      <button 
+                        style={{
+                          flex: 1,
+                          padding: '12px 16px',
+                          background: 'var(--clr-accent)',
+                          border: 'none',
+                          borderRadius: '12px',
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: '0.95rem',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onClick={handleNextClue}
+                      >
+                        {localClueIndex < 4 ? 'Next Round' : 'Make Final Guess'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column: You Speech Cloud + Avatar + YOU label */}
+                <div className="arena-col-right">
                   <SpeechBubble
+                    text={clue}
                     isDetective={true}
-                    options={levelOptions}
-                    getCardState={getCardState}
-                    onCardClick={handleCandidateCardClick}
+                    roundIndex={localClueIndex}
                   />
                   <div className="arena-avatar-frame">
                     <StudentAvatar expression={studentExpression} size={100} />
                   </div>
+                  <div className="arena-avatar-name">YOU</div>
                 </div>
-              </div>
-
-
-              {/* Clue Hint details popup if requested */}
-              {showHintOverlay && (
-                <div className="feedback correct" style={{ width: '100%', padding: '8px 12px', margin: '6px 0', textAlign: 'center', fontSize: '0.85rem', borderRadius: '10px' }}>
-                  💡 Hint: <strong>{hintText}</strong>
-                </div>
-              )}
-
-              {/* Footer Navigation Row: Same size equal buttons */}
-              <div className="gm-footer-nav" style={{ width: '100%', display: 'flex', gap: '12px', marginTop: '8px', paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                <button
-                  style={{
-                    ...outlineBtnStyle,
-                    flex: 1,
-                    padding: '12px 16px',
-                    borderRadius: '12px',
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                    opacity: localClueIndex === 0 ? 0.35 : 1,
-                    cursor: localClueIndex === 0 ? 'not-allowed' : 'pointer'
-                  }}
-                  disabled={localClueIndex === 0}
-                  onClick={handlePrevLocalClue}
-                >
-                  Prev
-                </button>
-                <button 
-                  style={{
-                    flex: 1,
-                    padding: '12px 16px',
-                    background: 'var(--clr-accent)',
-                    border: 'none',
-                    borderRadius: '12px',
-                    color: '#fff',
-                    fontWeight: '700',
-                    fontSize: '0.95rem',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onClick={handleNextClue}
-                >
-                  {localClueIndex < 4 ? 'Next Round' : 'Make Final Guess'}
-                </button>
               </div>
             </>
           ) : (
