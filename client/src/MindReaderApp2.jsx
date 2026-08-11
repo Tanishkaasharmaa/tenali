@@ -1401,18 +1401,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
               <span className="tmr-level-rule" aria-hidden="true" />
             </div>
 
-            <div className="tmr-top-right">
-              {!isSummaryPhase && (
-                <button
-                  className="tmr-pill tmr-pill-hint"
-                  onClick={handleUseHint}
-                  disabled={hintsRemaining <= 0}
-                >
-                  <BulbIcon />
-                  Hint ({hintsRemaining}/3)
-                </button>
-              )}
-            </div>
+            <div className="tmr-top-right" />
           </div>
 
           {/* Round stepper — click a revealed round to re-read its clue */}
