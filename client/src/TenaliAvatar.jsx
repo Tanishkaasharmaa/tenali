@@ -123,6 +123,29 @@ export function TenaliAvatar({ expression, skin, size }) {
         <path d="M 78 72 L 72 84 L 70 86 L 73 84 Z" fill="#d35400" stroke="#2c3e50" strokeWidth="1" />
       </g>
     );
+  } else if (expression === 'hinting') {
+    // Conspiratorial wink + a lit bulb, echoing the Hint button's icon
+    eyeLeft = <path d="M 34 52 Q 40 45 46 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
+    eyeRight = <circle cx="60" cy="50" r="5" fill="#2c3e50" />;
+    eyebrows = (
+      <g stroke="#2c3e50" strokeWidth="2.5" strokeLinecap="round" fill="none">
+        <path d="M 33 39 Q 40 35 47 40" />
+        <path d="M 53 43 Q 60 41 67 43" />
+      </g>
+    );
+    mouth = <path d="M 42 67 Q 50 73 59 65" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
+    accessory = (
+      <g className="tenali-hint-bulb">
+        <g stroke="#f1c40f" strokeWidth="2" strokeLinecap="round">
+          <path d="M 86 16 L 86 11" />
+          <path d="M 95 22 L 99 19" />
+          <path d="M 77 22 L 73 19" />
+        </g>
+        <circle cx="86" cy="30" r="7.5" fill="#f1c40f" stroke="#2c3e50" strokeWidth="1.5" />
+        <path d="M 83 30 Q 86 26 89 30" stroke="#2c3e50" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+        <rect x="83" y="37" width="6" height="4.5" rx="1.5" fill="#2c3e50" />
+      </g>
+    );
   } else if (expression === 'smirk' || expression === 'recalculating' || expression === 'talking') {
     eyeLeft = <circle cx="40" cy="50" r="5" fill="#2c3e50" />;
     eyeRight = <path d="M 54 52 Q 60 46 66 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;

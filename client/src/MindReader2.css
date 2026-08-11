@@ -805,7 +805,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 100%;
+  max-width: 650px;
   margin: 0 auto;
   min-height: 520px;
   animation: gm-fade-in 0.3s ease-out;
@@ -1669,7 +1669,7 @@
   height: 135px;
   border-radius: 50%;
   border: 2px solid #735934;
-  background: #302723;
+  background: #1a130e;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1696,7 +1696,7 @@
 }
 
 .speech-cloud-box {
-  background: #302723;
+  background: #251d16;
   border: 2px solid #443527;
   border-radius: 28px;
   padding: 16px 14px;
@@ -1833,7 +1833,7 @@
 
 /* ─── ROYAL MYSTERY ARENA SOLID COLOR THEME (NO GRADIENTS) ─────────────────────────── */
 .royal-mystery-arena {
-  background-color: #302723 !important;
+  background-color: #0e0e11 !important;
   color: #ffffff !important;
   min-height: 100vh;
   width: 100%;
@@ -1914,269 +1914,676 @@
   color: #8c7b6f !important;
 }
 
-/* ─── MIRRORED 2-ROW TENALI MIND READER ROUND SCREEN ──────────────────────── */
+/* ─── TENALI MIND READER — ROUND SCREEN ────────────────────────────────────
+   Two mirrored rows: Tenali speaks on the left, the student answers on the
+   right. Every box is fluid — bubbles flex, text wraps, and the tails are
+   anchored at 50% height so they stay on target as content grows. */
+
+/* The app shell wraps every mode in a global `.card` capped at 900px with 40px
+   of side padding, which squeezed the board and cropped the bubbles. Widen the
+   shell for this screen only. */
+.card:has(> .royal-mystery-arena) {
+  max-width: 1340px;
+  padding: 28px 24px;
+}
+
+.royal-mystery-arena {
+  --tmr-panel: #0e0e11;
+  --tmr-bubble-bg: #131317;
+  --tmr-surface: #17171c;
+  --tmr-line: #2c2c33;
+  --tmr-line-soft: #26262c;
+  --tmr-text: #ffffff;
+  --tmr-dim: #8b8b94;
+  --tmr-accent: #f5921e;
+}
+
+/* Matches .tmr-round-container so the top bar, stepper and board share one
+   left/right edge. The top padding keeps Quit clear of the app's floating
+   coin badge, which overlaps the panel's top-left on narrow desktops. */
+.gm-container-playing {
+  max-width: 1060px;
+  padding: 26px 16px 0 16px;
+}
+
+/* ── Top bar ────────────────────────────────────────────────────────────── */
+.tmr-top-bar {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.tmr-top-left {
+  display: flex;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.tmr-top-right {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.tmr-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.tmr-pill-quit {
+  border: 1.5px solid var(--tmr-line);
+  color: var(--tmr-text);
+  padding-left: 16px;
+}
+
+.tmr-pill-quit:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #3d3d45;
+}
+
+.tmr-pill-hint {
+  border: 1.5px solid var(--tmr-accent);
+  color: var(--tmr-accent);
+}
+
+.tmr-pill-hint:hover:not(:disabled) {
+  background: rgba(245, 146, 30, 0.12);
+}
+
+.tmr-pill-hint:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.tmr-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.tmr-level-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.tmr-level-title {
+  color: var(--tmr-text);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.tmr-level-rule {
+  display: block;
+  width: 76px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--tmr-accent);
+}
+
+/* ── Round stepper ──────────────────────────────────────────────────────── */
+.tmr-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 34px;
+}
+
+.tmr-step-line {
+  width: 34px;
+  height: 1.5px;
+  background: var(--tmr-line);
+  flex: 0 0 auto;
+}
+
+.tmr-step {
+  position: relative;
+  /* flex-basis + zeroed padding keep these perfect circles; the app's global
+     button rules would otherwise stretch them into ovals */
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border-radius: 50%;
+  background: transparent;
+  border: 1.5px solid var(--tmr-line);
+  color: var(--tmr-dim);
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tmr-step:hover:not(:disabled) {
+  border-color: #45454e;
+  color: var(--tmr-text);
+}
+
+/* A round already read */
+.tmr-step.is-done {
+  color: var(--tmr-text);
+  border-color: #3a3a43;
+}
+
+/* The round on screen */
+.tmr-step.is-active {
+  background: var(--tmr-accent);
+  border-color: var(--tmr-accent);
+  color: #17120a;
+  box-shadow: 0 0 0 5px rgba(245, 146, 30, 0.14), 0 6px 18px rgba(245, 146, 30, 0.35);
+}
+
+.tmr-step.is-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Marks a round where the student committed at least one pick */
+.tmr-step-dot {
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--tmr-accent);
+}
+
+/* ── Board ──────────────────────────────────────────────────────────────── */
 .tmr-round-container {
   width: 100%;
-  max-width: 100%;
+  max-width: 1060px;
   margin: 0 auto 16px auto;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 34px;
   box-sizing: border-box;
   padding: 0 16px;
 }
 
-/* Question Row: Avatar Left, Cloud Right */
-.tmr-question-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-}
-
-/* Options Row: Cloud Left, Avatar Right */
+.tmr-question-row,
 .tmr-options-row {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
   width: 100%;
 }
 
-/* Avatar Column (Fixed Width 72-76px) */
+/* Avatar column — fixed, so the bubble absorbs every width change.
+   The column's box is just the circle: the label is taken out of flow so the
+   row's centre line runs through the avatar itself, which is what the bubble
+   tails point at. In flow, the label would drag the centre ~13px low. */
 .tmr-avatar-col {
-  width: 76px;
-  flex-shrink: 0;
+  position: relative;
+  flex: 0 0 auto;
+  width: 112px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
 }
 
 .tmr-avatar-circle {
-  width: 74px;
-  height: 74px;
+  width: 106px;
+  height: 106px;
   border-radius: 50%;
-  border: 1.5px solid #d97d38;
-  background: #302723;
+  border: 2px solid var(--tmr-accent);
+  background: #121216;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   overflow: hidden;
   box-sizing: border-box;
 }
 
 .tmr-avatar-label {
-  color: #d97d38;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 9px;
+  color: var(--tmr-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-align: center;
+  white-space: nowrap;
 }
 
-/* Thought Cloud Wrapper */
-.tmr-thought-cloud-wrapper {
-  flex: 1;
+/* ── Speech bubbles ─────────────────────────────────────────────────────── */
+.tmr-bubble {
   position: relative;
-  display: flex;
-  align-items: center;
-}
-
-/* Thought Cloud Container - Real Cartoon Scalloped Cloud Bubble */
-.tmr-thought-cloud {
-  width: 100%;
-  background: #302723;
-  border: 2px solid #544438;
-  border-radius: 32px;
-  padding: 22px 28px;
-  min-height: 92px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  /* flex-basis 0 + min-width 0 lets the bubble shrink below its content's
+     intrinsic width instead of overflowing the row */
+  flex: 1 1 0;
+  min-width: 0;
+  background: var(--tmr-bubble-bg);
+  border: 1.5px solid var(--tmr-line);
+  border-radius: 24px;
+  padding: 34px 40px;
   box-sizing: border-box;
-  position: relative;
-  animation: tmrCloudFloat 5s ease-in-out infinite;
 }
 
-@keyframes tmrCloudFloat {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-4px); }
-}
-
-/* Cloud Scallop Bumps (Overlapping rounded arcs along top & bottom) */
-.tmr-cloud-scallops {
+/* Tails are two stacked triangles — the outer one paints the border colour,
+   the inner one covers all but a hairline of it. Pinned to 50% so they keep
+   pointing at the avatar however tall the bubble grows. */
+.tmr-bubble::before,
+.tmr-bubble::after {
+  content: '';
   position: absolute;
-  left: 24px;
-  right: 24px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+
+.tmr-bubble::after {
+  border-top-width: 12px;
+  border-bottom-width: 12px;
+}
+
+.tmr-bubble-clue {
+  border-color: var(--tmr-accent);
+}
+
+.tmr-bubble-clue::before {
+  left: -15px;
+  border-right: 15px solid var(--tmr-accent);
+}
+
+.tmr-bubble-clue::after {
+  left: -12.5px;
+  border-right: 12px solid var(--tmr-bubble-bg);
+}
+
+.tmr-bubble-options::before {
+  right: -15px;
+  border-left: 15px solid var(--tmr-line);
+}
+
+.tmr-bubble-options::after {
+  right: -12.5px;
+  border-left: 12px solid var(--tmr-bubble-bg);
+}
+
+/* Decorative stars off the clue bubble's top-right corner */
+.tmr-sparkles {
+  position: absolute;
+  top: -22px;
+  right: -6px;
+  width: 48px;
+  height: 40px;
+  color: var(--tmr-accent);
   pointer-events: none;
-  z-index: 1;
 }
 
-.tmr-scallops-top {
-  top: -14px;
-}
-
-.tmr-scallops-bottom {
-  bottom: -14px;
-}
-
-.tmr-scallop {
-  background: #302723;
-  border: 2px solid #544438;
-  border-radius: 50%;
-}
-
-.tmr-scallops-top .tmr-scallop {
-  border-bottom-color: transparent;
-}
-
-.tmr-scallops-bottom .tmr-scallop {
-  border-top-color: transparent;
-}
-
-.tmr-scallop.s-small {
-  width: 24px;
-  height: 22px;
-}
-
-.tmr-scallop.s-medium {
-  width: 34px;
-  height: 28px;
-}
-
-.tmr-scallop.s-large {
-  width: 44px;
-  height: 34px;
-}
-
-.tmr-question-cloud {
-  min-height: 92px;
-}
-
-.tmr-options-cloud {
-  padding: 20px 28px;
-  min-height: 92px;
-}
-
-/* Question Text */
 .tmr-clue-text {
-  color: #ffffff;
-  font-size: 1.02rem;
+  color: var(--tmr-text);
+  font-size: 1.3rem;
   font-weight: 600;
-  line-height: 1.45;
-  text-align: left;
+  line-height: 1.5;
+  text-align: center;
   margin: 0;
-  position: relative;
-  z-index: 2;
+  /* wrap long clues rather than stretching the bubble */
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
-/* Connector Dots for Thought Bubble Trail Effect */
-.tmr-dots {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.tmr-dots-left {
-  top: -14px;
-  left: -24px;
-}
-
-.tmr-dots-right {
-  bottom: -14px;
-  right: -24px;
-}
-
-.tmr-dot {
-  border-radius: 50%;
-  background: #302723;
-  border: 1.5px solid #d97d38;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
-
-.tmr-dot.dot-1 {
-  width: 7px;
-  height: 7px;
-}
-
-.tmr-dot.dot-2 {
-  width: 11px;
-  height: 11px;
-}
-
-.tmr-dot.dot-3 {
-  width: 16px;
-  height: 16px;
-}
-
-/* 2x2 Options Grid */
+/* ── Options ────────────────────────────────────────────────────────────── */
+/* minmax(0, 1fr) — without the 0 floor, a long concept name would force the
+   column wider than the bubble */
 .tmr-options-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
   width: 100%;
 }
 
-/* Bottom Navigation Row */
+/* Option card. min-width:0 + wrapping label keep long concept names inside
+   the card instead of pushing the grid column wider. */
+.candidate-quiz-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-width: 0;
+  min-height: 84px;
+  padding: 18px 22px;
+  box-sizing: border-box;
+  text-align: left;
+  background: var(--tmr-surface);
+  border: 1.5px solid var(--tmr-line);
+  border-radius: 14px;
+  color: #e9e9ee;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.candidate-quiz-card:hover {
+  border-color: #45454e;
+  background: #1c1c22;
+}
+
+.candidate-badge {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--tmr-accent);
+  background: transparent;
+  color: var(--tmr-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.candidate-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.candidate-count {
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--tmr-accent);
+  background: rgba(245, 146, 30, 0.14);
+  border: 1px solid rgba(245, 146, 30, 0.3);
+  border-radius: 999px;
+  padding: 3px 9px;
+  line-height: 1;
+}
+
+.candidate-quiz-card.card-state-selected {
+  border-color: var(--tmr-accent);
+  background: rgba(245, 146, 30, 0.1);
+  color: #ffffff;
+}
+
+.candidate-quiz-card.card-state-selected .candidate-badge {
+  background: var(--tmr-accent);
+  color: #17120a;
+}
+
+.candidate-quiz-card.card-state-rejected {
+  opacity: 0.55;
+}
+
+.candidate-quiz-card.card-state-rejected .candidate-badge {
+  border-color: #6b2121;
+  color: #f87171;
+}
+
+.tmr-hint-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(245, 146, 30, 0.35);
+  background: rgba(245, 146, 30, 0.1);
+  color: #f3d3ad;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.tmr-hint-note .tmr-icon {
+  color: var(--tmr-accent);
+  margin-top: 1px;
+}
+
+/* Bulb on Tenali's 'hinting' face — pulses while the hint is on screen */
+.tenali-hint-bulb {
+  transform-origin: 86px 30px;
+  animation: tmrHintBulbGlow 1.4s ease-in-out infinite;
+}
+
+@keyframes tmrHintBulbGlow {
+  0%, 100% { opacity: 0.75; transform: scale(0.94); }
+  50%      { opacity: 1;    transform: scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tenali-hint-bulb {
+    animation: none;
+  }
+}
+
+/* ── Final guess step ───────────────────────────────────────────────────── */
+.tmr-final-heading {
+  width: 100%;
+  max-width: 620px;
+  margin: 4px auto 26px auto;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--tmr-text);
+}
+
+.tmr-final-grid {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto 26px auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.tmr-final-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding: 18px 22px;
+  box-sizing: border-box;
+  text-align: left;
+  background: var(--tmr-surface);
+  border: 1.5px solid var(--tmr-line);
+  border-radius: 14px;
+  color: #e9e9ee;
+  font-size: 1.02rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.tmr-final-card:hover {
+  border-color: var(--tmr-accent);
+  background: rgba(245, 146, 30, 0.08);
+  color: #ffffff;
+}
+
+.tmr-final-label {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.tmr-final-count {
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--tmr-accent);
+  background: rgba(245, 146, 30, 0.14);
+  border: 1px solid rgba(245, 146, 30, 0.3);
+  border-radius: 999px;
+  padding: 4px 10px;
+  line-height: 1;
+}
+
+/* ── Bottom controls ────────────────────────────────────────────────────── */
 .tmr-bottom-controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  gap: 18px;
   width: 100%;
-  margin-top: 6px;
+  margin-top: 8px;
+}
+
+.tmr-btn-prev,
+.tmr-btn-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 34px;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .tmr-btn-prev {
   background: transparent;
-  border: 1px solid #4a3a2d;
-  color: #a89a8e;
-  padding: 11px 32px;
-  border-radius: 12px;
-  font-size: 0.92rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  border: 1.5px solid var(--tmr-line);
+  color: #c4c4cc;
 }
 
 .tmr-btn-prev:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-  border-color: #6e5643;
+  color: var(--tmr-text);
+  border-color: #45454e;
 }
 
 .tmr-btn-prev:disabled {
-  opacity: 0.35;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .tmr-btn-next {
-  background: #d97d38;
-  border: none;
-  color: #1a120b;
-  padding: 11px 32px;
-  border-radius: 12px;
-  font-size: 0.95rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(217, 125, 56, 0.3);
+  background: var(--tmr-accent);
+  border: 1.5px solid var(--tmr-accent);
+  color: #17120a;
+  box-shadow: 0 6px 20px rgba(245, 146, 30, 0.3);
 }
 
 .tmr-btn-next:hover {
-  background: #e58a45;
+  background: #ffa338;
+  border-color: #ffa338;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(217, 125, 56, 0.4);
+  box-shadow: 0 8px 24px rgba(245, 146, 30, 0.42);
 }
 
+/* ── Narrow screens ─────────────────────────────────────────────────────── */
+/* Desktop-first for now; mobile gets a proper pass separately. This block
+   only keeps the board from breaking outright on small viewports. */
+@media (max-width: 860px) {
+  .card:has(> .royal-mystery-arena) {
+    padding: 14px 12px;
+  }
+
+  .royal-mystery-arena {
+    padding: 12px 8px !important;
+  }
+
+  .gm-container-playing {
+    padding: 44px 0 0 0;
+  }
+
+  .tmr-round-container {
+    padding: 0 4px;
+    gap: 16px;
+  }
+
+  /* Gap must clear the 15px tail overhang and leave room for the
+     out-of-flow avatar label below each circle */
+  .tmr-question-row,
+  .tmr-options-row {
+    gap: 20px;
+  }
+
+  .tmr-avatar-col {
+    width: 62px;
+  }
+
+  .tmr-avatar-circle {
+    width: 62px;
+    height: 62px;
+  }
+
+  .tmr-avatar-label {
+    font-size: 0.66rem;
+  }
+
+  .tmr-bubble {
+    padding: 18px 20px;
+    border-radius: 18px;
+  }
+
+  .tmr-clue-text {
+    font-size: 1rem;
+  }
+
+  .tmr-level-title {
+    font-size: 1.5rem;
+  }
+
+  .tmr-step {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+
+  .tmr-step-line {
+    width: 14px;
+  }
+
+  .tmr-options-grid,
+  .tmr-final-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .tmr-btn-prev,
+  .tmr-btn-next {
+    padding: 12px 22px;
+    font-size: 0.92rem;
+  }
+
+  .tmr-sparkles {
+    display: none;
+  }
+}
 /* Pen Writing Animation */
 .tmr-writing-pen {
   display: inline-block;
@@ -2193,4 +2600,4 @@
 
 
 
-
+

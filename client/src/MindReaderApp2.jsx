@@ -10,7 +10,8 @@ import { TenaliAvatar } from './TenaliAvatar';
 import StudentAvatar from './StudentAvatar';
 import CandidateCard from './CandidateCard';
 import SpeechBubble from './SpeechBubble';
-import { playSound, setPenScratchSoundVariant, setClickSoundVariant } from './audioContext';
+// Pen-scratch and click variants keep audioContext's defaults (pencil / crystal).
+import { playSound } from './audioContext';
 import confetti from 'canvas-confetti';
 import './MindReader2.css';
 
@@ -93,6 +94,75 @@ function playConfettiSound() {
   } catch (e) {}
 }
 
+/* ─── Inline icons (kept local so the board has no icon-font dependency) ─── */
+
+function ChevronLeftIcon() {
+  return (
+    <svg className="tmr-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M15 5l-7 7 7 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ChevronRightIcon() {
+  return (
+    <svg className="tmr-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function BulbIcon() {
+  return (
+    <svg className="tmr-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.5.4.8 1 .8 1.6v.5h5.4v-.5c0-.6.3-1.2.8-1.6A6 6 0 0 0 12 3z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Decorative four-point stars floating off the clue bubble's top-right. */
+function SparkleCluster() {
+  return (
+    <svg className="tmr-sparkles" viewBox="0 0 48 40" fill="none" aria-hidden="true">
+      <path d="M16 2c1.2 4.6 2.2 5.6 6.8 6.8-4.6 1.2-5.6 2.2-6.8 6.8-1.2-4.6-2.2-5.6-6.8-6.8C13.8 7.6 14.8 6.6 16 2z" fill="currentColor" />
+      <path d="M33 13c.8 3 1.4 3.6 4.4 4.4-3 .8-3.6 1.4-4.4 4.4-.8-3-1.4-3.6-4.4-4.4 3-.8 3.6-1.4 4.4-4.4z" fill="currentColor" opacity="0.75" />
+      <path d="M25 26c.5 1.9.9 2.3 2.8 2.8-1.9.5-2.3.9-2.8 2.8-.5-1.9-.9-2.3-2.8-2.8 1.9-.5 2.3-.9 2.8-2.8z" fill="currentColor" opacity="0.5" />
+    </svg>
+  );
+}
+
+/**
+ * Tenali leads, the student reacts. One map keeps the pair in sync so a new
+ * Tenali state can never silently leave the student on a stale face — the
+ * failure mode that hid the missing 'hinting' expression for so long.
+ */
+const STUDENT_REACTION = {
+  thinking:      'attentive',    // Tenali picks a secret — student waits, alert
+  talking:       'attentive',    // a clue arrives — student listens
+  smirk:         'attentive',
+  writing:       'noting',       // Tenali pens a clue — student takes notes
+  hinting:       'curious',      // a hint is offered — student leans in
+  recalculating: 'pondering',    // a pick is withdrawn — student reconsiders
+  impressed:     'confident',    // Tenali approves — student commits
+  proud:         'delighted',    // high praise — student beams
+  encouraging:   'puzzled',      // wrong guess — student is stumped
+  confused:      'puzzled',
+  celebrating:   'triumphant',   // student cracked it
+  victory:       'dejected',     // Tenali's secret survived
+  loss:          'triumphant',   // Tenali lost, so the student won
+  gamble:        'nervous',      // stakes rise
+  shocked:       'amazed',
+  cheated:       'suspicious',
+  'closed-eyes': 'blinking',
+  confident:     'determined'
+};
+
 export default function MindReaderApp2({ onBack, onSwitchMode }) {
   // Game Phase: 'setup' | 'worlds' | 'levels' | 'playing' | 'gameover'
   const [phase, setPhase] = useState('setup');
@@ -111,6 +181,16 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
   // Character Expressions Matrix States
   const [studentExpression, setStudentExpression] = useState('attentive');
   const [avatarExpression, setAvatarExpression] = useState('talking');
+
+  /**
+   * Set the scene: drive Tenali's face and let the student react through
+   * STUDENT_REACTION. Pass `studentOverride` when the student's reaction
+   * shouldn't follow from Tenali's state.
+   */
+  const setScene = (tenaliExpression, studentOverride) => {
+    setAvatarExpression(tenaliExpression);
+    setStudentExpression(studentOverride || STUDENT_REACTION[tenaliExpression] || 'attentive');
+  };
   const [tenaliSpeech, setTenaliSpeech] = useState('');
 
   // Typewriter & Pen Scratching Effect for Clue Question
@@ -165,22 +245,6 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
   const [difficultyTier, setDifficultyTier] = useState('easy');
   const [thoughtGuesses, setThoughtGuesses] = useState(['', '', '', '', '']);
 
-  // Sound Profile Option States
-  const [penSoundStyle, setPenSoundStyle] = useState('pencil');
-  const [clickSoundStyle, setClickSoundStyle] = useState('crystal');
-
-  const handlePenSoundChange = (variant) => {
-    setPenSoundStyle(variant);
-    setPenScratchSoundVariant(variant);
-    playSound('pen_scratch');
-  };
-
-  const handleClickSoundChange = (variant) => {
-    setClickSoundStyle(variant);
-    setClickSoundVariant(variant);
-    playSound('click');
-  };
-
   useEffect(() => {
     if (!clue) {
       setDisplayedClue('');
@@ -189,6 +253,8 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
     }
     setDisplayedClue('');
     setIsWriting(true);
+    // Tenali is mid-sentence while the clue types out; the student takes notes
+    setScene('writing');
     // Play sound when clue first appears in Round 1 or subsequent rounds
     playSound('clue_appear');
 
@@ -202,6 +268,8 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
       if (index >= clue.length) {
         clearInterval(interval);
         setIsWriting(false);
+        // clue delivered — back to listening
+        setScene('talking');
       }
     }, 32);
 
@@ -306,7 +374,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
   // Set Tenali greeting message on lobby setup
   useEffect(() => {
     if (phase === 'setup') {
-      setAvatarExpression('thinking');
+      setScene('thinking');
       setTenaliSpeech("I have hidden a mathematical concept inside my mind. Can you guess it in 5 clues?");
     }
   }, [phase]);
@@ -607,7 +675,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
         setShowHintOverlay(false);
         setHintText('');
         setGuessQuery('');
-        setAvatarExpression('thinking');
+        setScene('thinking');
         setTimeout(() => {
           setPhase('playing');
         }, 400);
@@ -632,12 +700,10 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
     let updatedList;
     if (isSelected) {
       updatedList = currentList.filter(o => o !== optName);
-      setStudentExpression('pondering');
-      setAvatarExpression('recalculating');
+      setScene('recalculating');
     } else {
       updatedList = [...currentList, optName];
-      setStudentExpression('confident');
-      setAvatarExpression('impressed');
+      setScene('impressed');
     }
 
     setRoundSelections({
@@ -658,12 +724,13 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
     if (localClueIndex < revealedClues.length - 1) {
       setLocalClueIndex(localClueIndex + 1);
       setClue(revealedClues[localClueIndex + 1]);
-      setAvatarExpression('talking');
-      setStudentExpression('attentive');
+      setScene('talking');
       return;
     }
 
     if (localClueIndex === 4 || cluesExhausted) {
+      // Clues are spent — everything rides on the guess now
+      setScene('gamble');
       setIsSummaryPhase(true);
       return;
     }
@@ -683,8 +750,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
         setRevealedClues([...revealedClues, data.clue]);
         setLocalClueIndex(localClueIndex + 1);
         setCluesExhausted(data.cluesExhausted);
-        setAvatarExpression('talking');
-        setStudentExpression('attentive');
+        setScene('talking');
       }
     } catch (err) {
       console.error(err);
@@ -709,8 +775,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
         setHintText(data.hint);
         setHintsRemaining(data.hintsRemaining);
         setShowHintOverlay(true);
-        setAvatarExpression('hinting');
-        setStudentExpression('curious');
+        setScene('hinting');
       }
     } catch (err) {
       console.error(err);
@@ -748,8 +813,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
         setShowGuess(false);
 
         if (data.correct) {
-          setAvatarExpression('celebrating');
-          setStudentExpression('triumphant');
+          setScene('celebrating');
           // Unlock level locally
           const updatedStars = Math.max(levelProgress[levelNum] || 0, data.starsEarned || 1);
           const nextProgress = {
@@ -788,8 +852,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
           }
           setPhase('gameover');
         } else {
-          setAvatarExpression('encouraging');
-          setStudentExpression('puzzled');
+          setScene('encouraging');
           if (data.cluesRemaining) {
             setWrongGuessFeedback("❌ Not quite! That's not the secret concept. Try reading another clue or guessing again!");
           } else {
@@ -953,8 +1016,11 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
     boxShadow: 'none',
     margin: 0
   };
+
+  // Arena height is content-driven: a hard 100vh left a tall empty panel below
+  // the short screens (setup, round board).
   return (
-    <div className="royal-mystery-arena" style={{ background: '#302723', color: '#ffffff', padding: '20px 15px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', boxSizing: 'border-box' }}>
+    <div className="royal-mystery-arena" style={{ background: '#0e0e11', color: '#ffffff', padding: '20px 15px', minHeight: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', boxSizing: 'border-box' }}>
       {/* Global Navigation Header at the top */}
       {phase !== 'playing' && (
         <div style={{
@@ -1319,87 +1385,63 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
       {/* ─── PHASE 4: GAMEPLAY BOARD ────────────────── */}
       {phase === 'playing' && (
-        <div className="gm-container" style={{ minHeight: 'auto', gap: '4px', width: '100%', maxWidth: '100%' }}>
-          {/* Top Control Header Bar */}
-          <div className="gm-top-bar" style={{
-            width: '100%',
-            display: 'grid',
-            gridTemplateColumns: '1fr auto 1fr',
-            alignItems: 'center',
-            marginBottom: '16px',
-            gap: '10px'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <button
-                style={{
-                  ...outlineBtnStyle,
-                  padding: '6px 14px',
-                  fontSize: '0.85rem',
-                  borderRadius: '20px',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.12)'
-                }}
-                onClick={() => setPhase('levels')}
-              >
+        <div className="gm-container gm-container-playing" style={{ minHeight: 'auto', gap: '4px', width: '100%' }}>
+          {/* Top bar: Quit / Level title / Hint */}
+          <div className="tmr-top-bar">
+            <div className="tmr-top-left">
+              <button className="tmr-pill tmr-pill-quit" onClick={() => setPhase('levels')}>
+                <ChevronLeftIcon />
                 Quit
               </button>
             </div>
 
-            <div style={{
-              fontFamily: 'var(--font-display)',
-              color: 'var(--clr-text)',
-              fontSize: '1.3rem',
-              fontWeight: '700',
-              textAlign: 'center'
-            }}>
-              Level {levelNum}
+            <div className="tmr-level-block">
+              <div className="tmr-level-title">Level {levelNum}</div>
+              <span className="tmr-level-rule" aria-hidden="true" />
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              {!isSummaryPhase ? (
+            <div className="tmr-top-right">
+              {!isSummaryPhase && (
                 <button
-                  style={{
-                    ...outlineBtnStyle,
-                    padding: '6px 14px',
-                    fontSize: '0.85rem',
-                    borderRadius: '20px',
-                    background: 'rgba(232, 134, 74, 0.12)',
-                    border: '1px solid rgba(232, 134, 74, 0.3)',
-                    color: 'var(--clr-accent)'
-                  }}
+                  className="tmr-pill tmr-pill-hint"
                   onClick={handleUseHint}
                   disabled={hintsRemaining <= 0}
                 >
+                  <BulbIcon />
                   Hint ({hintsRemaining}/3)
                 </button>
-              ) : <div />}
+              )}
             </div>
           </div>
 
-          {/* Top Stepper: R1 R2 R3 R4 R5 (Only shown during clues phase, hidden on final guess) */}
+          {/* Round stepper — click a revealed round to re-read its clue */}
           {!isSummaryPhase && (
-            <div style={{ display: 'flex', gap: '18px', justifyContent: 'center', alignItems: 'center', marginBottom: '16px', fontSize: '0.9rem', fontWeight: '700' }}>
+            <div className="tmr-stepper" role="tablist" aria-label="Clue rounds">
               {[0, 1, 2, 3, 4].map((rIdx) => {
-                const isUnlocked = rIdx < revealedClues.length;
+                const isRevealed = rIdx < revealedClues.length;
                 const isActive = rIdx === localClueIndex;
+                const picked = (roundSelections[rIdx] || []).length;
                 return (
-                  <span
-                    key={rIdx}
-                    style={{
-                      color: isActive
-                        ? 'var(--clr-accent)'
-                        : isUnlocked
-                        ? 'var(--clr-text)'
-                        : 'rgba(255, 255, 255, 0.25)',
-                      borderBottom: isActive ? '2px solid var(--clr-accent)' : 'none',
-                      paddingBottom: '2px',
-                      cursor: isUnlocked ? 'pointer' : 'not-allowed',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onClick={() => handleJumpToRound(rIdx)}
-                  >
-                    {'R' + (rIdx + 1)}
-                  </span>
+                  <React.Fragment key={rIdx}>
+                    {rIdx > 0 && <span className="tmr-step-line" aria-hidden="true" />}
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      aria-label={`Round ${rIdx + 1}${isRevealed ? '' : ' (locked)'}`}
+                      className={
+                        'tmr-step'
+                        + (isActive ? ' is-active' : '')
+                        + (isRevealed && !isActive ? ' is-done' : '')
+                        + (isRevealed ? '' : ' is-locked')
+                      }
+                      disabled={!isRevealed}
+                      onClick={() => handleJumpToRound(rIdx)}
+                    >
+                      {rIdx + 1}
+                      {picked > 0 && <span className="tmr-step-dot" aria-hidden="true" />}
+                    </button>
+                  </React.Fragment>
                 );
               })}
             </div>
@@ -1407,126 +1449,54 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
           {!isSummaryPhase ? (
             <div className="tmr-round-container">
-              {/* Question Row: Tenali Avatar on left, Question thought-cloud on right */}
+              {/* Clue row: Tenali on the left, speech bubble tailing back to him */}
               <div className="tmr-question-row">
                 <div className="tmr-avatar-col">
                   <div className="tmr-avatar-circle">
-                    <TenaliAvatar expression={avatarExpression} skin="scholar" size={54} />
+                    <TenaliAvatar expression={avatarExpression} skin="scholar" size={76} />
                   </div>
                   <div className="tmr-avatar-label">TENALI</div>
                 </div>
 
-                <div className="tmr-thought-cloud-wrapper tmr-thought-cloud-left-trail">
-                  {/* Thought bubble trail dots leading to Tenali */}
-                  <div className="tmr-dots tmr-dots-left">
-                    <span className="tmr-dot dot-1" />
-                    <span className="tmr-dot dot-2" />
-                    <span className="tmr-dot dot-3" />
-                  </div>
-
-                  <div className="tmr-thought-cloud tmr-question-cloud">
-                    <div className="tmr-cloud-scallops tmr-scallops-top">
-                      <div className="tmr-scallop s-small" />
-                      <div className="tmr-scallop s-medium" />
-                      <div className="tmr-scallop s-large" />
-                      <div className="tmr-scallop s-medium" />
-                      <div className="tmr-scallop s-small" />
-                    </div>
-
-                    <div className="tmr-cloud-scallops tmr-scallops-left">
-                      <div className="tmr-scallop s-side-small" />
-                      <div className="tmr-scallop s-side-medium" />
-                      <div className="tmr-scallop s-side-small" />
-                    </div>
-
-                    <p className="tmr-clue-text">
-                      {displayedClue}
-                      {isWriting && (
-                        <span className="tmr-writing-pen" title="Tenali writing clue...">
-                          ✏️
-                        </span>
-                      )}
-                    </p>
-
-                    <div className="tmr-cloud-scallops tmr-scallops-right">
-                      <div className="tmr-scallop s-side-small" />
-                      <div className="tmr-scallop s-side-medium" />
-                      <div className="tmr-scallop s-side-small" />
-                    </div>
-
-                    <div className="tmr-cloud-scallops tmr-scallops-bottom">
-                      <div className="tmr-scallop s-small" />
-                      <div className="tmr-scallop s-medium" />
-                      <div className="tmr-scallop s-large" />
-                      <div className="tmr-scallop s-medium" />
-                      <div className="tmr-scallop s-small" />
-                    </div>
-                  </div>
+                <div className="tmr-bubble tmr-bubble-clue">
+                  <SparkleCluster />
+                  <p className="tmr-clue-text">
+                    {displayedClue}
+                    {isWriting && (
+                      <span className="tmr-writing-pen" title="Tenali writing clue...">
+                        ✏️
+                      </span>
+                    )}
+                  </p>
                 </div>
               </div>
 
-              {/* Options Row: Options thought-cloud on left, Student Avatar on right */}
+              {/* Options row: mirrored — bubble tails right, toward the student */}
               <div className="tmr-options-row">
-                <div className="tmr-thought-cloud-wrapper tmr-thought-cloud-right-trail">
-                  <div className="tmr-thought-cloud tmr-options-cloud">
-                    <div className="tmr-cloud-scallops tmr-scallops-top">
-                      <div className="tmr-scallop s-small" />
-                      <div className="tmr-scallop s-medium" />
-                      <div className="tmr-scallop s-large" />
-                      <div className="tmr-scallop s-medium" />
-                      <div className="tmr-scallop s-small" />
-                    </div>
-
-                    <div className="tmr-cloud-scallops tmr-scallops-left">
-                      <div className="tmr-scallop s-side-small" />
-                      <div className="tmr-scallop s-side-medium" />
-                      <div className="tmr-scallop s-side-small" />
-                    </div>
-
-                    <div className="tmr-options-grid">
-                      {levelOptions.slice(0, 4).map((optName, idx) => (
-                        <CandidateCard
-                          key={optName || idx}
-                          conceptName={optName}
-                          state={getCardState(optName)}
-                          selectionCount={[0, 1, 2, 3, 4].filter(rIdx => (roundSelections[rIdx] || []).includes(optName)).length}
-                          onClick={() => handleCandidateCardClick(optName)}
-                        />
-                      ))}
-                    </div>
-
-                    {showHintOverlay && (
-                      <div className="feedback correct" style={{ width: '100%', padding: '8px 12px', marginTop: '12px', textAlign: 'center', fontSize: '0.85rem', borderRadius: '10px' }}>
-                        💡 Hint: <strong>{hintText}</strong>
-                      </div>
-                    )}
-
-                    <div className="tmr-cloud-scallops tmr-scallops-right">
-                      <div className="tmr-scallop s-side-small" />
-                      <div className="tmr-scallop s-side-medium" />
-                      <div className="tmr-scallop s-side-small" />
-                    </div>
-
-                    <div className="tmr-cloud-scallops tmr-scallops-bottom">
-                      <div className="tmr-scallop s-small" />
-                      <div className="tmr-scallop s-medium" />
-                      <div className="tmr-scallop s-large" />
-                      <div className="tmr-scallop s-medium" />
-                      <div className="tmr-scallop s-small" />
-                    </div>
+                <div className="tmr-bubble tmr-bubble-options">
+                  <div className="tmr-options-grid">
+                    {levelOptions.slice(0, 4).map((optName, idx) => (
+                      <CandidateCard
+                        key={optName || idx}
+                        conceptName={optName}
+                        state={getCardState(optName)}
+                        selectionCount={[0, 1, 2, 3, 4].filter(rIdx => (roundSelections[rIdx] || []).includes(optName)).length}
+                        onClick={() => handleCandidateCardClick(optName)}
+                      />
+                    ))}
                   </div>
 
-                  {/* Thought bubble trail dots leading to Student */}
-                  <div className="tmr-dots tmr-dots-right">
-                    <span className="tmr-dot dot-3" />
-                    <span className="tmr-dot dot-2" />
-                    <span className="tmr-dot dot-1" />
-                  </div>
+                  {showHintOverlay && (
+                    <div className="tmr-hint-note">
+                      <BulbIcon />
+                      <span><strong>Hint:</strong> {hintText}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="tmr-avatar-col">
                   <div className="tmr-avatar-circle">
-                    <StudentAvatar expression={studentExpression} size={54} />
+                    <StudentAvatar expression={studentExpression} size={76} />
                   </div>
                   <div className="tmr-avatar-label">STUDENT</div>
                 </div>
@@ -1539,6 +1509,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                   disabled={localClueIndex === 0}
                   onClick={handlePrevLocalClue}
                 >
+                  <ChevronLeftIcon />
                   Prev
                 </button>
                 <button
@@ -1546,38 +1517,17 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                   onClick={handleNextClue}
                 >
                   {localClueIndex < 4 ? 'Next round' : 'Make Final Guess'}
+                  <ChevronRightIcon />
                 </button>
               </div>
             </div>
           ) : (
             /* ─── MAKE FINAL GUESS STEP ─── */
             <>
-              {/* Mind Speech Card Box */}
-              <div style={{
-                margin: '0 auto 28px auto',
-                width: '100%',
-                maxWidth: '420px',
-                textAlign: 'center',
-                background: 'var(--clr-card)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '16px',
-                padding: '18px 20px',
-                boxSizing: 'border-box',
-                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)'
-              }}>
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', margin: 0, color: 'var(--clr-text)', fontWeight: '700' }}>
-                  Make your final guess
-                </p>
-              </div>
+              <div className="tmr-final-heading">Make your final guess</div>
 
-              {/* 4 Option Cards Grid with clue match score badge */}
-              <div style={{
-                width: '100%',
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '10px',
-                margin: '0 0 16px 0'
-              }}>
+              {/* One card per option, badged with how many rounds it survived */}
+              <div className="tmr-final-grid">
                 {levelOptions.map((optName) => {
                   const selectCount = [0, 1, 2, 3, 4].filter(rIdx => (roundSelections[rIdx] || []).includes(optName)).length;
 
@@ -1585,59 +1535,25 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                     <button
                       key={optName}
                       type="button"
-                      style={{
-                        width: '100%',
-                        boxSizing: 'border-box',
-                        padding: '14px 14px',
-                        background: 'rgba(255, 255, 255, 0.04)',
-                        border: '1px solid rgba(255, 255, 255, 0.12)',
-                        borderRadius: '14px',
-                        color: 'var(--clr-text)',
-                        fontSize: '0.92rem',
-                        fontWeight: '700',
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        transition: 'all 0.2s ease'
-                      }}
+                      className="tmr-final-card"
                       onClick={() => handleSubmitGuess(optName)}
                     >
-                      <span>{optName}</span>
-                      <span style={{
-                        fontSize: '0.76rem',
-                        fontWeight: 'bold',
-                        color: 'var(--clr-accent)',
-                        background: 'rgba(232, 134, 74, 0.15)',
-                        padding: '2px 8px',
-                        borderRadius: '8px',
-                        border: '1px solid rgba(232, 134, 74, 0.3)'
-                      }}>
-                        {selectCount}/5
-                      </span>
+                      <span className="tmr-final-label">{optName}</span>
+                      <span className="tmr-final-count">{selectCount}/5</span>
                     </button>
                   );
                 })}
               </div>
 
-              {/* Footer Navigation Row */}
-              <div className="gm-footer-nav" style={{ width: '100%', display: 'flex', gap: '12px', marginTop: '8px', paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+              <div className="tmr-bottom-controls">
                 <button
-                  style={{
-                    ...outlineBtnStyle,
-                    flex: 1,
-                    padding: '12px 16px',
-                    borderRadius: '12px',
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer'
-                  }}
+                  className="tmr-btn-prev"
                   onClick={() => {
                     setIsSummaryPhase(false);
                     setLocalClueIndex(4);
                   }}
                 >
+                  <ChevronLeftIcon />
                   Back to R5
                 </button>
               </div>

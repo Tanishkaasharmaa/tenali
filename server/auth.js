@@ -144,7 +144,7 @@ UserSchema.pre('save', function (next) {
     this.xp = val;
     this.coinBalance = val;
   }
-  next();
+  if (typeof next === 'function') next();
 });
 
 const ProgressSchema = new mongoose.Schema({
