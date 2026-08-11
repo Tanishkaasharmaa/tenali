@@ -13,6 +13,7 @@ import SpeechBubble from './SpeechBubble';
 // Pen-scratch and click variants keep audioContext's defaults (pencil / crystal).
 import { playSound } from './audioContext';
 import confetti from 'canvas-confetti';
+import ScratchCardModal from './ScratchCardModal';
 import './MindReader2.css';
 
 const API = import.meta.env.VITE_API_BASE_URL || '';
@@ -1502,7 +1503,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                 </div>
               </div>
 
-              {/* Bottom Row: Prev and Next round controls */}
+              {/* Bottom Row: Prev, Next round, and Circular Hint controls */}
               <div className="tmr-bottom-controls">
                 <button
                   className="tmr-btn-prev"
@@ -1519,6 +1520,21 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                   {localClueIndex < 4 ? 'Next round' : 'Make Final Guess'}
                   <ChevronRightIcon />
                 </button>
+
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px' }}>
+                  <button
+                    type="button"
+                    className="tmr-circular-hint-btn"
+                    onClick={handleUseHint}
+                    disabled={hintsRemaining <= 0 || showHintOverlay}
+                    title={hintsRemaining <= 0 ? 'No hints remaining' : 'Use a hint'}
+                  >
+                    <span style={{ fontSize: '1.35rem' }}>💡</span>
+                  </button>
+                  <span style={{ color: hintsRemaining > 0 ? '#d97d38' : '#7a7067', fontSize: '0.78rem', fontWeight: '700' }}>
+                    Hint
+                  </span>
+                </div>
               </div>
             </div>
           ) : (
@@ -1762,6 +1778,13 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
           </div>
         </div>
       )}
+
+      {/* Interactive Scratch-Card Hint Modal Overlay */}
+      <ScratchCardModal
+        isOpen={showHintOverlay}
+        hintText={hintText}
+        onClose={() => setShowHintOverlay(false)}
+      />
     </div>
   );
 }
