@@ -1604,28 +1604,31 @@
 
 /* ─── 3-COLUMN SYMMETRICAL ARENA LAYOUT ───────────────────────────────────── */
 .royal-arena-3col-layout {
-  display: grid;
-  grid-template-columns: 210px 1fr 210px;
+  display: flex;
   align-items: flex-end;
-  gap: 20px;
+  justify-content: center;
+  gap: 16px;
   width: 100%;
-  max-width: 980px;
+  max-width: 880px;
   margin: 0 auto 16px auto;
   box-sizing: border-box;
 }
 
 .arena-col-left,
 .arena-col-right {
+  flex: 0 0 170px;
+  width: 170px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  width: 100%;
   box-sizing: border-box;
 }
 
 .arena-col-center {
-  width: 100%;
+  flex: 1 1 380px;
+  min-width: 320px;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
   align-items: center;

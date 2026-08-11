@@ -23,23 +23,24 @@ export default function CandidateCard({
         background: isSelected ? '#36281e' : isRejected ? '#1d1712' : '#292018',
         border: `1.5px solid ${isSelected ? '#d97d38' : isRejected ? '#6b2121' : '#3d3024'}`,
         color: '#ffffff',
-        borderRadius: '14px',
-        padding: '14px 16px',
+        borderRadius: '12px',
+        padding: '10px 12px',
         display: 'flex',
         alignItems: 'center',
-        gap: '12px',
+        gap: '8px',
         cursor: 'pointer',
         width: '100%',
         boxSizing: 'border-box',
         transition: 'all 0.18s ease',
-        boxShadow: isSelected ? '0 4px 14px rgba(217, 125, 56, 0.35)' : 'none'
+        boxShadow: isSelected ? '0 4px 14px rgba(217, 125, 56, 0.35)' : 'none',
+        minWidth: 0
       }}
     >
       <div
         className="card-badge-circle"
         style={{
-          width: '28px',
-          height: '28px',
+          width: '24px',
+          height: '24px',
           borderRadius: '50%',
           background: isSelected ? '#d97d38' : isRejected ? '#2a1a1a' : '#35291f',
           color: isSelected ? '#ffffff' : isRejected ? '#f87171' : '#e5a93c',
@@ -48,7 +49,7 @@ export default function CandidateCard({
           alignItems: 'center',
           justifyContent: 'center',
           fontWeight: '800',
-          fontSize: '0.88rem',
+          fontSize: '0.82rem',
           flexShrink: 0
         }}
       >
@@ -56,18 +57,20 @@ export default function CandidateCard({
       </div>
       <div
         style={{
-          fontSize: '0.92rem',
+          fontSize: '0.85rem',
           fontWeight: '700',
           textAlign: 'left',
           flexGrow: 1,
-          lineHeight: '1.3',
+          lineHeight: '1.25',
+          overflowWrap: 'anywhere',
+          wordBreak: 'break-word',
           color: isSelected ? '#ffffff' : isRejected ? '#8c827a' : '#ffffff'
         }}
       >
         {conceptName}
       </div>
       {selectionCount > 0 && !isSingleChoice && (
-        <span style={{ fontSize: '0.72rem', color: '#d97d38', fontWeight: '800' }}>
+        <span style={{ fontSize: '0.72rem', color: '#d97d38', fontWeight: '800', flexShrink: 0 }}>
           ({selectionCount})
         </span>
       )}
