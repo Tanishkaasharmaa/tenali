@@ -1319,7 +1319,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
       {/* ─── PHASE 4: GAMEPLAY BOARD ────────────────── */}
       {phase === 'playing' && (
-        <div className="gm-container" style={{ minHeight: 'auto', gap: '4px', width: '100%', maxWidth: '440px' }}>
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '4px', width: '100%', maxWidth: '100%' }}>
           {/* Top Control Header Bar */}
           <div className="gm-top-bar" style={{
             width: '100%',

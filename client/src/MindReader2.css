@@ -805,7 +805,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 650px;
+  max-width: 100%;
   margin: 0 auto;
   min-height: 520px;
   animation: gm-fade-in 0.3s ease-out;
@@ -1917,7 +1917,7 @@
 /* ─── MIRRORED 2-ROW TENALI MIND READER ROUND SCREEN ──────────────────────── */
 .tmr-round-container {
   width: 100%;
-  max-width: 1080px;
+  max-width: 100%;
   margin: 0 auto 16px auto;
   display: flex;
   flex-direction: column;
