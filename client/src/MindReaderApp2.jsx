@@ -10,7 +10,7 @@ import { TenaliAvatar } from './TenaliAvatar';
 import StudentAvatar from './StudentAvatar';
 import CandidateCard from './CandidateCard';
 import SpeechBubble from './SpeechBubble';
-import { playSound } from './audioContext';
+import { playSound, setPenScratchSoundVariant, setClickSoundVariant } from './audioContext';
 import confetti from 'canvas-confetti';
 import './MindReader2.css';
 
@@ -165,6 +165,22 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
   const [difficultyTier, setDifficultyTier] = useState('easy');
   const [thoughtGuesses, setThoughtGuesses] = useState(['', '', '', '', '']);
 
+  // Sound Profile Option States
+  const [penSoundStyle, setPenSoundStyle] = useState('pencil');
+  const [clickSoundStyle, setClickSoundStyle] = useState('pop');
+
+  const handlePenSoundChange = (variant) => {
+    setPenSoundStyle(variant);
+    setPenScratchSoundVariant(variant);
+    playSound('pen_scratch');
+  };
+
+  const handleClickSoundChange = (variant) => {
+    setClickSoundStyle(variant);
+    setClickSoundVariant(variant);
+    playSound('click');
+  };
+
   useEffect(() => {
     if (!clue) {
       setDisplayedClue('');
@@ -173,6 +189,9 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
     }
     setDisplayedClue('');
     setIsWriting(true);
+    // Play sound when clue first appears in Round 1 or subsequent rounds
+    playSound('clue_appear');
+
     let index = 0;
     const interval = setInterval(() => {
       index++;
@@ -1359,30 +1378,85 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
           {/* Top Stepper: R1 R2 R3 R4 R5 (Only shown during clues phase, hidden on final guess) */}
           {!isSummaryPhase && (
-            <div style={{ display: 'flex', gap: '18px', justifyContent: 'center', alignItems: 'center', marginBottom: '16px', fontSize: '0.9rem', fontWeight: '700' }}>
-              {[0, 1, 2, 3, 4].map((rIdx) => {
-                const isUnlocked = rIdx < revealedClues.length;
-                const isActive = rIdx === localClueIndex;
-                return (
-                  <span
-                    key={rIdx}
-                    style={{
-                      color: isActive
-                        ? 'var(--clr-accent)'
-                        : isUnlocked
-                        ? 'var(--clr-text)'
-                        : 'rgba(255, 255, 255, 0.25)',
-                      borderBottom: isActive ? '2px solid var(--clr-accent)' : 'none',
-                      paddingBottom: '2px',
-                      cursor: isUnlocked ? 'pointer' : 'not-allowed',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onClick={() => handleJumpToRound(rIdx)}
-                  >
-                    {'R' + (rIdx + 1)}
-                  </span>
-                );
-              })}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', gap: '18px', justifyContent: 'center', alignItems: 'center', fontSize: '0.9rem', fontWeight: '700' }}>
+                {[0, 1, 2, 3, 4].map((rIdx) => {
+                  const isUnlocked = rIdx < revealedClues.length;
+                  const isActive = rIdx === localClueIndex;
+                  return (
+                    <span
+                      key={rIdx}
+                      style={{
+                        color: isActive
+                          ? 'var(--clr-accent)'
+                          : isUnlocked
+                          ? 'var(--clr-text)'
+                          : 'rgba(255, 255, 255, 0.25)',
+                        borderBottom: isActive ? '2px solid var(--clr-accent)' : 'none',
+                        paddingBottom: '2px',
+                        cursor: isUnlocked ? 'pointer' : 'not-allowed',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => handleJumpToRound(rIdx)}
+                    >
+                      {'R' + (rIdx + 1)}
+                    </span>
+                  );
+                })}
+              </div>
+
+              {/* Sound Options Selector Pill Bar */}
+              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', fontSize: '0.76rem', opacity: 0.9, marginTop: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <span style={{ color: '#a89a8e', fontWeight: '700' }}>✏️ Pen Sound:</span>
+                  {['pencil', 'quill', 'magic'].map((v) => (
+                    <button
+                      key={v}
+                      type="button"
+                      style={{
+                        background: penSoundStyle === v ? '#d97d38' : 'rgba(255,255,255,0.06)',
+                        color: penSoundStyle === v ? '#1a120b' : '#a89a8e',
+                        border: '1px solid ' + (penSoundStyle === v ? '#d97d38' : 'rgba(255,255,255,0.15)'),
+                        borderRadius: '8px',
+                        padding: '2px 7px',
+                        fontSize: '0.72rem',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        textTransform: 'capitalize',
+                        transition: 'all 0.15s ease'
+                      }}
+                      onClick={() => handlePenSoundChange(v)}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <span style={{ color: '#a89a8e', fontWeight: '700' }}>🔔 Choice Sound:</span>
+                  {['pop', 'woodblock', 'crystal'].map((v) => (
+                    <button
+                      key={v}
+                      type="button"
+                      style={{
+                        background: clickSoundStyle === v ? '#d97d38' : 'rgba(255,255,255,0.06)',
+                        color: clickSoundStyle === v ? '#1a120b' : '#a89a8e',
+                        border: '1px solid ' + (clickSoundStyle === v ? '#d97d38' : 'rgba(255,255,255,0.15)'),
+                        borderRadius: '8px',
+                        padding: '2px 7px',
+                        fontSize: '0.72rem',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        textTransform: 'capitalize',
+                        transition: 'all 0.15s ease'
+                      }}
+                      onClick={() => handleClickSoundChange(v)}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 
