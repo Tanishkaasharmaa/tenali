@@ -2177,5 +2177,20 @@
   box-shadow: 0 6px 16px rgba(217, 125, 56, 0.4);
 }
 
+/* Pen Writing Animation */
+.tmr-writing-pen {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 1.15rem;
+  animation: penWritingScratch 0.16s ease-in-out infinite alternate;
+  vertical-align: middle;
+}
+
+@keyframes penWritingScratch {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-3px) rotate(-14deg); }
+}
+
+
 
 

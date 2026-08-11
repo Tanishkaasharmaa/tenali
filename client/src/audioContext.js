@@ -116,6 +116,36 @@ export function playSound(type, enabled = true) {
       noise.stop(now + 1.5);
       osc.start(now);
       osc.stop(now);
+    } else if (type === 'click') {
+      const now = ctx.currentTime;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(580, now);
+      osc.frequency.exponentialRampToValueAtTime(180, now + 0.04);
+      gain.gain.setValueAtTime(0.09, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      osc.start(now);
+      osc.stop(now + 0.04);
+    } else if (type === 'pen_scratch') {
+      const now = ctx.currentTime;
+      const bufferSize = Math.floor(ctx.sampleRate * 0.035);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * 0.4;
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.setValueAtTime(1600 + Math.random() * 500, now);
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+      noise.start(now);
+      noise.stop(now + 0.035);
+      osc.start(now);
+      osc.stop(now);
     }
   } catch (e) {
     console.warn('AudioContext playback failed:', e);

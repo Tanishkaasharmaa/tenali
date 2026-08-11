@@ -113,6 +113,10 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
   const [avatarExpression, setAvatarExpression] = useState('talking');
   const [tenaliSpeech, setTenaliSpeech] = useState('');
 
+  // Typewriter & Pen Scratching Effect for Clue Question
+  const [displayedClue, setDisplayedClue] = useState('');
+  const [isWriting, setIsWriting] = useState(false);
+
   // Animation states for flying plane
   const [animatingFrom, setAnimatingFrom] = useState(null);
   const [animatingTo, setAnimatingTo] = useState(null);
@@ -160,6 +164,30 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
   const [hintsRemaining, setHintsRemaining] = useState(3);
   const [difficultyTier, setDifficultyTier] = useState('easy');
   const [thoughtGuesses, setThoughtGuesses] = useState(['', '', '', '', '']);
+
+  useEffect(() => {
+    if (!clue) {
+      setDisplayedClue('');
+      setIsWriting(false);
+      return;
+    }
+    setDisplayedClue('');
+    setIsWriting(true);
+    let index = 0;
+    const interval = setInterval(() => {
+      index++;
+      setDisplayedClue(clue.slice(0, index));
+      if (clue[index - 1] && clue[index - 1] !== ' ') {
+        playSound('pen_scratch');
+      }
+      if (index >= clue.length) {
+        clearInterval(interval);
+        setIsWriting(false);
+      }
+    }, 32);
+
+    return () => clearInterval(interval);
+  }, [clue]);
 
   const syncGlobalXp = (newXp) => {
     try {
@@ -578,6 +606,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
   // Handle Candidate Card Click & Update Character Expressions
   const handleCandidateCardClick = (optName) => {
+    playSound('click');
     const currentList = roundSelections[localClueIndex] || [];
     const isSelected = currentList.includes(optName);
 
@@ -605,6 +634,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
   // Next Clue API
   const handleNextClue = async () => {
+    playSound('click');
     setWrongGuessFeedback('');
     if (localClueIndex < revealedClues.length - 1) {
       setLocalClueIndex(localClueIndex + 1);
@@ -773,6 +803,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
   };
 
   const handlePrevLocalClue = () => {
+    playSound('click');
     if (localClueIndex > 0) {
       setLocalClueIndex(localClueIndex - 1);
       setClue(revealedClues[localClueIndex - 1]);
@@ -780,6 +811,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
   };
 
   const handleJumpToRound = (rIdx) => {
+    playSound('click');
     if (rIdx < revealedClues.length) {
       setLocalClueIndex(rIdx);
       setClue(revealedClues[rIdx]);
@@ -1388,7 +1420,14 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                       <div className="tmr-scallop s-side-small" />
                     </div>
 
-                    <p className="tmr-clue-text">{clue}</p>
+                    <p className="tmr-clue-text">
+                      {displayedClue}
+                      {isWriting && (
+                        <span className="tmr-writing-pen" title="Tenali writing clue...">
+                          ✏️
+                        </span>
+                      )}
+                    </p>
 
                     <div className="tmr-cloud-scallops tmr-scallops-right">
                       <div className="tmr-scallop s-side-small" />
