@@ -954,7 +954,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
     margin: 0
   };
   return (
-    <div className="royal-mystery-arena" style={{ background: '#1a130e', color: '#ffffff', padding: '20px 15px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', boxSizing: 'border-box' }}>
+    <div className="royal-mystery-arena" style={{ background: '#28211b', color: '#ffffff', padding: '20px 15px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', boxSizing: 'border-box' }}>
       {/* Global Navigation Header at the top */}
       {phase !== 'playing' && (
         <div style={{

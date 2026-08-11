@@ -1669,7 +1669,7 @@
   height: 135px;
   border-radius: 50%;
   border: 2px solid #735934;
-  background: #1a130e;
+  background: #28211b;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1833,7 +1833,7 @@
 
 /* ─── ROYAL MYSTERY ARENA SOLID COLOR THEME (NO GRADIENTS) ─────────────────────────── */
 .royal-mystery-arena {
-  background-color: #1a130e !important;
+  background-color: #28211b !important;
   color: #ffffff !important;
   min-height: 100vh;
   width: 100%;
