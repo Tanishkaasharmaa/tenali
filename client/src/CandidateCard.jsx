@@ -20,8 +20,8 @@ export default function CandidateCard({
       className={`candidate-quiz-card card-state-${state}`}
       onClick={onClick}
       style={{
-        background: isSelected ? '#36281e' : isRejected ? '#1d1712' : '#292018',
-        border: `1.5px solid ${isSelected ? '#d97d38' : isRejected ? '#6b2121' : '#3d3024'}`,
+        background: isSelected ? '#42342c' : isRejected ? '#2c1e19' : '#382d27',
+        border: `1.5px solid ${isSelected ? '#d97d38' : isRejected ? '#6b2121' : '#524237'}`,
         color: '#ffffff',
         borderRadius: '12px',
         padding: '10px 12px',
