@@ -16,7 +16,7 @@ if (typeof window !== 'undefined') {
 }
 
 export let penScratchSoundVariant = 'pencil'; // 'pencil' | 'quill' | 'magic'
-export let clickSoundVariant = 'pop'; // 'pop' | 'woodblock' | 'crystal'
+export let clickSoundVariant = 'crystal'; // 'crystal' | 'pop' | 'woodblock'
 
 export function setPenScratchSoundVariant(variant) {
   penScratchSoundVariant = variant;

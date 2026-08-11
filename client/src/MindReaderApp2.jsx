@@ -167,7 +167,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
   // Sound Profile Option States
   const [penSoundStyle, setPenSoundStyle] = useState('pencil');
-  const [clickSoundStyle, setClickSoundStyle] = useState('pop');
+  const [clickSoundStyle, setClickSoundStyle] = useState('crystal');
 
   const handlePenSoundChange = (variant) => {
     setPenSoundStyle(variant);
