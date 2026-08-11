@@ -253,6 +253,7 @@ Compares the guess with the secret concept, logs telemetry, updates user databas
                    +150 XP  |  +30 Rating
             
             📜 Tenali's Wisdom Scroll:
+        
             Definition: A whole number greater than 1...
             Examples: 2, 3, 5, 7, 11
             Common Pitfalls: 1 is not a prime number.

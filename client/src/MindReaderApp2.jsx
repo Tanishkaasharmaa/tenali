@@ -1355,25 +1355,77 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
           )}
 
           {!isSummaryPhase ? (
-            <>
-              {/* 3-Column Symmetrical Quiz Arena */}
-              <div className="royal-arena-3col-layout">
-                {/* Left Column: Tenali Speech Cloud + Avatar + TENALI label */}
-                <div className="arena-col-left">
-                  <SpeechBubble
-                    text={clue}
-                    roundIndex={localClueIndex}
-                  />
-                  <div className="arena-avatar-frame">
-                    <TenaliAvatar expression={avatarExpression} skin="scholar" size={115} />
+            <div className="tmr-round-container">
+              {/* Question Row: Tenali Avatar on left, Question thought-cloud on right */}
+              <div className="tmr-question-row">
+                <div className="tmr-avatar-col">
+                  <div className="tmr-avatar-circle">
+                    <TenaliAvatar expression={avatarExpression} skin="scholar" size={54} />
                   </div>
-                  <div className="arena-avatar-name">TENALI</div>
+                  <div className="tmr-avatar-label">TENALI</div>
                 </div>
 
-                {/* Middle Column: Quiz Candidates Card Box + Prev / Next buttons */}
-                <div className="arena-col-center">
-                  <div className="arena-quiz-card">
-                    <div className="detective-card-grid">
+                <div className="tmr-thought-cloud-wrapper tmr-thought-cloud-left-trail">
+                  {/* Thought bubble trail dots leading to Tenali */}
+                  <div className="tmr-dots tmr-dots-left">
+                    <span className="tmr-dot dot-1" />
+                    <span className="tmr-dot dot-2" />
+                    <span className="tmr-dot dot-3" />
+                  </div>
+
+                  <div className="tmr-thought-cloud tmr-question-cloud">
+                    <div className="tmr-cloud-scallops tmr-scallops-top">
+                      <div className="tmr-scallop s-small" />
+                      <div className="tmr-scallop s-medium" />
+                      <div className="tmr-scallop s-large" />
+                      <div className="tmr-scallop s-medium" />
+                      <div className="tmr-scallop s-small" />
+                    </div>
+
+                    <div className="tmr-cloud-scallops tmr-scallops-left">
+                      <div className="tmr-scallop s-side-small" />
+                      <div className="tmr-scallop s-side-medium" />
+                      <div className="tmr-scallop s-side-small" />
+                    </div>
+
+                    <p className="tmr-clue-text">{clue}</p>
+
+                    <div className="tmr-cloud-scallops tmr-scallops-right">
+                      <div className="tmr-scallop s-side-small" />
+                      <div className="tmr-scallop s-side-medium" />
+                      <div className="tmr-scallop s-side-small" />
+                    </div>
+
+                    <div className="tmr-cloud-scallops tmr-scallops-bottom">
+                      <div className="tmr-scallop s-small" />
+                      <div className="tmr-scallop s-medium" />
+                      <div className="tmr-scallop s-large" />
+                      <div className="tmr-scallop s-medium" />
+                      <div className="tmr-scallop s-small" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Options Row: Options thought-cloud on left, Student Avatar on right */}
+              <div className="tmr-options-row">
+                <div className="tmr-thought-cloud-wrapper tmr-thought-cloud-right-trail">
+                  <div className="tmr-thought-cloud tmr-options-cloud">
+                    <div className="tmr-cloud-scallops tmr-scallops-top">
+                      <div className="tmr-scallop s-small" />
+                      <div className="tmr-scallop s-medium" />
+                      <div className="tmr-scallop s-large" />
+                      <div className="tmr-scallop s-medium" />
+                      <div className="tmr-scallop s-small" />
+                    </div>
+
+                    <div className="tmr-cloud-scallops tmr-scallops-left">
+                      <div className="tmr-scallop s-side-small" />
+                      <div className="tmr-scallop s-side-medium" />
+                      <div className="tmr-scallop s-side-small" />
+                    </div>
+
+                    <div className="tmr-options-grid">
                       {levelOptions.slice(0, 4).map((optName, idx) => (
                         <CandidateCard
                           key={optName || idx}
@@ -1391,64 +1443,54 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                       </div>
                     )}
 
-                    <div className="arena-quiz-divider" />
+                    <div className="tmr-cloud-scallops tmr-scallops-right">
+                      <div className="tmr-scallop s-side-small" />
+                      <div className="tmr-scallop s-side-medium" />
+                      <div className="tmr-scallop s-side-small" />
+                    </div>
 
-                    {/* Footer Navigation Buttons inside Center Quiz Box */}
-                    <div className="gm-footer-nav" style={{ width: '100%', display: 'flex', gap: '12px' }}>
-                      <button
-                        style={{
-                          ...outlineBtnStyle,
-                          flex: 1,
-                          padding: '12px 16px',
-                          borderRadius: '12px',
-                          textAlign: 'center',
-                          justifyContent: 'center',
-                          opacity: localClueIndex === 0 ? 0.35 : 1,
-                          cursor: localClueIndex === 0 ? 'not-allowed' : 'pointer'
-                        }}
-                        disabled={localClueIndex === 0}
-                        onClick={handlePrevLocalClue}
-                      >
-                        Prev
-                      </button>
-                      <button 
-                        style={{
-                          flex: 1,
-                          padding: '12px 16px',
-                          background: 'var(--clr-accent)',
-                          border: 'none',
-                          borderRadius: '12px',
-                          color: '#fff',
-                          fontWeight: '700',
-                          fontSize: '0.95rem',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          transition: 'all 0.2s ease'
-                        }}
-                        onClick={handleNextClue}
-                      >
-                        {localClueIndex < 4 ? 'Next Round' : 'Make Final Guess'}
-                      </button>
+                    <div className="tmr-cloud-scallops tmr-scallops-bottom">
+                      <div className="tmr-scallop s-small" />
+                      <div className="tmr-scallop s-medium" />
+                      <div className="tmr-scallop s-large" />
+                      <div className="tmr-scallop s-medium" />
+                      <div className="tmr-scallop s-small" />
                     </div>
                   </div>
+
+                  {/* Thought bubble trail dots leading to Student */}
+                  <div className="tmr-dots tmr-dots-right">
+                    <span className="tmr-dot dot-3" />
+                    <span className="tmr-dot dot-2" />
+                    <span className="tmr-dot dot-1" />
+                  </div>
                 </div>
 
-                {/* Right Column: You Speech Cloud + Avatar + YOU label */}
-                <div className="arena-col-right">
-                  <SpeechBubble
-                    text={clue}
-                    isDetective={true}
-                    roundIndex={localClueIndex}
-                  />
-                  <div className="arena-avatar-frame">
-                    <StudentAvatar expression={studentExpression} size={115} />
+                <div className="tmr-avatar-col">
+                  <div className="tmr-avatar-circle">
+                    <StudentAvatar expression={studentExpression} size={54} />
                   </div>
-                  <div className="arena-avatar-name">YOU</div>
+                  <div className="tmr-avatar-label">STUDENT</div>
                 </div>
               </div>
-            </>
+
+              {/* Bottom Row: Prev and Next round controls */}
+              <div className="tmr-bottom-controls">
+                <button
+                  className="tmr-btn-prev"
+                  disabled={localClueIndex === 0}
+                  onClick={handlePrevLocalClue}
+                >
+                  Prev
+                </button>
+                <button
+                  className="tmr-btn-next"
+                  onClick={handleNextClue}
+                >
+                  {localClueIndex < 4 ? 'Next round' : 'Make Final Guess'}
+                </button>
+              </div>
+            </div>
           ) : (
             /* ─── MAKE FINAL GUESS STEP ─── */
             <>

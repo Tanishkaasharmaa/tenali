@@ -1913,4 +1913,269 @@
   font-style: italic;
   color: #8c7b6f !important;
 }
+
+/* ─── MIRRORED 2-ROW TENALI MIND READER ROUND SCREEN ──────────────────────── */
+.tmr-round-container {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto 16px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-sizing: border-box;
+  padding: 0 16px;
+}
+
+/* Question Row: Avatar Left, Cloud Right */
+.tmr-question-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Options Row: Cloud Left, Avatar Right */
+.tmr-options-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Avatar Column (Fixed Width 72-76px) */
+.tmr-avatar-col {
+  width: 76px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tmr-avatar-circle {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 1.5px solid #d97d38;
+  background: #1e1711;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.tmr-avatar-label {
+  color: #d97d38;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Thought Cloud Wrapper */
+.tmr-thought-cloud-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Thought Cloud Container - Real Cartoon Scalloped Cloud Bubble */
+.tmr-thought-cloud {
+  width: 100%;
+  background: #1f1812;
+  border: 2px solid #4a3826;
+  border-radius: 32px;
+  padding: 22px 28px;
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-sizing: border-box;
+  position: relative;
+  animation: tmrCloudFloat 5s ease-in-out infinite;
+}
+
+@keyframes tmrCloudFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Cloud Scallop Bumps (Overlapping rounded arcs along top & bottom) */
+.tmr-cloud-scallops {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tmr-scallops-top {
+  top: -14px;
+}
+
+.tmr-scallops-bottom {
+  bottom: -14px;
+}
+
+.tmr-scallop {
+  background: #1f1812;
+  border: 2px solid #4a3826;
+  border-radius: 50%;
+}
+
+.tmr-scallops-top .tmr-scallop {
+  border-bottom-color: transparent;
+}
+
+.tmr-scallops-bottom .tmr-scallop {
+  border-top-color: transparent;
+}
+
+.tmr-scallop.s-small {
+  width: 24px;
+  height: 22px;
+}
+
+.tmr-scallop.s-medium {
+  width: 34px;
+  height: 28px;
+}
+
+.tmr-scallop.s-large {
+  width: 44px;
+  height: 34px;
+}
+
+.tmr-question-cloud {
+  min-height: 92px;
+}
+
+.tmr-options-cloud {
+  padding: 20px 28px;
+  min-height: 92px;
+}
+
+/* Question Text */
+.tmr-clue-text {
+  color: #ffffff;
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.45;
+  text-align: left;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+}
+
+/* Connector Dots for Thought Bubble Trail Effect */
+.tmr-dots {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tmr-dots-left {
+  top: -14px;
+  left: -24px;
+}
+
+.tmr-dots-right {
+  bottom: -14px;
+  right: -24px;
+}
+
+.tmr-dot {
+  border-radius: 50%;
+  background: #1f1812;
+  border: 1.5px solid #d97d38;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.tmr-dot.dot-1 {
+  width: 7px;
+  height: 7px;
+}
+
+.tmr-dot.dot-2 {
+  width: 11px;
+  height: 11px;
+}
+
+.tmr-dot.dot-3 {
+  width: 16px;
+  height: 16px;
+}
+
+/* 2x2 Options Grid */
+.tmr-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  width: 100%;
+}
+
+/* Bottom Navigation Row */
+.tmr-bottom-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.tmr-btn-prev {
+  background: transparent;
+  border: 1px solid #4a3a2d;
+  color: #a89a8e;
+  padding: 11px 32px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tmr-btn-prev:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border-color: #6e5643;
+}
+
+.tmr-btn-prev:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.tmr-btn-next {
+  background: #d97d38;
+  border: none;
+  color: #1a120b;
+  padding: 11px 32px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(217, 125, 56, 0.3);
+}
+
+.tmr-btn-next:hover {
+  background: #e58a45;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(217, 125, 56, 0.4);
+}
+
+
 
