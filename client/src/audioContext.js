@@ -1,3 +1,20 @@
+let sharedAudioContext = null;
+
+if (typeof window !== 'undefined') {
+  const unlockAudio = () => {
+    if (sharedAudioContext && sharedAudioContext.state === 'suspended') {
+      sharedAudioContext.resume();
+    } else if (!sharedAudioContext) {
+      try {
+        sharedAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {}
+    }
+  };
+  window.addEventListener('pointerdown', unlockAudio, { once: true });
+  window.addEventListener('click', unlockAudio, { once: true });
+  window.addEventListener('keydown', unlockAudio, { once: true });
+}
+
 export let penScratchSoundVariant = 'pencil'; // 'pencil' | 'quill' | 'magic'
 export let clickSoundVariant = 'pop'; // 'pop' | 'woodblock' | 'crystal'
 
@@ -11,10 +28,14 @@ export function setClickSoundVariant(variant) {
 
 export function getAudioContext() {
   if (!sharedAudioContext) {
-    sharedAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+    try {
+      sharedAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) {
+      return null;
+    }
   }
-  if (sharedAudioContext.state === 'suspended') {
-    sharedAudioContext.resume();
+  if (sharedAudioContext && sharedAudioContext.state === 'suspended') {
+    sharedAudioContext.resume().catch(() => {});
   }
   return sharedAudioContext;
 }
