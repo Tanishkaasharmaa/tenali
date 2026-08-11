@@ -23,6 +23,8 @@
 
 
 
+import { HintModal } from './components/HintSystem/HintModal.jsx';
+import { useQuizHintsAndXp } from './components/HintSystem/useHints.jsx';
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import VoiceAssistant from './components/VoiceAssistant';
 import { motion } from 'framer-motion';
@@ -46,7 +48,7 @@ import LinearAlgebraApp from './LinearAlgebraApp'
 function useProgressSubmit(revealed, isCorrect, topic, questionId) {
   useEffect(() => {
     if (!revealed) return;
-    const token = localStorage.getItem('tenali-token');
+    const token = localStorage.getItem('tenali-auth-token');
     if (!token || !topic) return;
 
     const API = import.meta.env.VITE_API_BASE_URL || '';
@@ -88,6 +90,7 @@ import VisualMathLabRedux, {
 } from './VisualMathLabRedux';
 import CoordinateGrid from './components/CoordinateGrid';
 import LanguageDashboard from './language/LanguageDashboard'
+import ContrastChallengeApp, { QuizLayoutExtension } from './ContrastChallengeApp'
 import { VOCAB_CORPUS } from './vocabCorpus'
 import PercentExplanationApp from './PercentExplanationApp'
 import { playSound } from './audioContext'
@@ -109,7 +112,7 @@ import BattleApp from './BattleApp';
 import SudokuApp from './SudokuApp';
 
 // API base URL from environment variables (Vite)
-const API = import.meta.env.VITE_API_BASE_URL || '';
+export const API = import.meta.env.VITE_API_BASE_URL || '';
 
 // Base path the app is mounted at (e.g. '/summership' in production, '' at root).
 // Derived from Vite's build-time base so path routing + internal navigation work
@@ -1735,6 +1738,13 @@ function ScaffoldedTablesApp({ studentName, defaultTable = 2 }) {
   const [appPhase, setAppPhase] = useState('choosing')
   const [currentTable, setCurrentTable] = useState(null)
 
+  // Stable celebration emoji — picked once when the "MASTERED" screen
+  // mounts so the emoji doesn't flicker between 🎉 / 🏆 / ⭐ / 🌟 / 🎊 on
+  // every unrelated re-render (timer ticks, level transitions, etc.).
+  const [masteryEmoji] = useState(
+    () => ['🎉', '🏆', '⭐', '🌟', '🎊'][Math.floor(Math.random() * 5)]
+  )
+
   // ── Level:
   // 1 = show answer (13×2=26, student types 26)
   // 2 = partial table (5 rows, left or right column only)
@@ -2207,7 +2217,7 @@ function ScaffoldedTablesApp({ studentName, defaultTable = 2 }) {
           </h1>
           <div className="welcome-box">
             <p style={{ fontSize: '3rem', margin: '0.5rem 0' }}>
-              {['🎉', '🏆', '⭐', '🌟', '🎊'][Math.floor(Math.random() * 5)]}
+              {masteryEmoji}
             </p>
             <p className="welcome-text" style={{ fontSize: '1.3rem', color: 'var(--clr-accent)' }}>
               Fantastic work! You nailed {MASTERY_STREAK} in a row!
@@ -41609,7 +41619,7 @@ function CoordGeomInteractiveApp({ onBack }) {
 
   const loadQuestion = async () => {
     try {
-      const r = await fetch(`/coordgeom-api/question?difficulty=${difficulty}`);
+      const r = await fetch(`${API}/coordgeom-api/question?difficulty=${difficulty}`);
       if (!r.ok) throw new Error('Server error');
       const data = await r.json();
       setCurrentQ(data);
@@ -41651,7 +41661,7 @@ function CoordGeomInteractiveApp({ onBack }) {
         ...currentQ,
         userAnswer: currentQ.type === 'coord' ? `(${dartPos.x}, ${dartPos.y})` : textAnswer
       };
-      const r = await fetch('/coordgeom-api/check', {
+      const r = await fetch(`${API}/coordgeom-api/check`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -41874,7 +41884,7 @@ function DartBoardApp({ onBack }) {
 
   const loadQuestion = async () => {
     try {
-      const r = await fetch(`/darts-api/question?level=${currentLevel}`);
+      const r = await fetch(`${API}/darts-api/question?level=${currentLevel}`);
       if (!r.ok) throw new Error('Server error');
       const data = await r.json();
       setCurrentQ(data);
@@ -41937,7 +41947,7 @@ function DartBoardApp({ onBack }) {
         userX: dartPos.x,
         userY: dartPos.y,
       };
-      const r = await fetch('/darts-api/check', {
+      const r = await fetch(`${API}/darts-api/check`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -42420,11 +42430,11 @@ function App() {
       const currentMode = params.get('mode');
       if (mode) {
         if (currentMode !== mode) {
-          window.history.replaceState({}, '', `/?mode=${mode}`);
+          window.history.replaceState({}, '', `${BASE}/?mode=${mode}`);
         }
       } else {
         if (currentMode) {
-          window.history.replaceState({}, '', '/');
+          window.history.replaceState({}, '', `${BASE}/`);
         }
       }
     } catch (e) {
@@ -42451,6 +42461,23 @@ function App() {
   const [celebrationQueue, setCelebrationQueue] = useState([])
   const [transferTopic, setTransferTopic] = useState(null)
   const syncTimeoutRef = useRef(null)
+
+  // Generate confetti particles once per active celebration card so they
+  // don't teleport to new positions on every parent re-render (timer
+  // ticks, theme toggle, etc.). Keyed on the active celebration's identity
+  // so dismissing + re-enqueuing the same card produces a fresh burst.
+  const confettiParticles = React.useMemo(() => {
+    const colors = ['#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6', '#ef4444'];
+    return Array.from({ length: 40 }).map((_, idx) => ({
+      id: idx,
+      left: Math.random() * 100,
+      delay: Math.random() * 2,
+      duration: Math.random() * 2 + 1.5,
+      size: Math.random() * 10 + 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+    }));
+  }, [celebrationQueue[0]?.title, celebrationQueue[0]?.message]);
 
   // Journey & Goal states from upstream
   const [isGoalMode, setIsGoalMode] = useState(false)
@@ -42528,7 +42555,7 @@ function App() {
     const fetchJourneyProgress = async () => {
       const API = import.meta.env.VITE_API_BASE_URL || '';
       try {
-        const token = localStorage.getItem('tenali-token');
+        const token = localStorage.getItem('tenali-auth-token');
         if (token) {
           const res = await fetch(`${API}/api/progress`, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -42759,6 +42786,22 @@ function App() {
   }, [completedTopics, goldMastery, coins, totalSolved, mode]);
 
 
+  // Sync current mode to window global for QuizLayoutExtension
+  useEffect(() => {
+    window.currentTenaliMode = mode;
+  }, [mode])
+
+  // Custom event listener to change modes
+  useEffect(() => {
+    const handleModeChange = (e) => {
+      if (e.detail) {
+        setMode(e.detail);
+      }
+    };
+    window.addEventListener('tenali-change-mode', handleModeChange);
+    return () => window.removeEventListener('tenali-change-mode', handleModeChange);
+  }, []);
+
   // Listen for navigation events from AuthMenu
   useEffect(() => {
     const onNav = (e) => { setMode(e.detail.mode) }
@@ -42794,36 +42837,23 @@ function App() {
       setCelebrationQueue(prev => prev.slice(1));
     };
 
-    // Confetti particles generator (40 random floating pieces)
-    const renderConfetti = () => {
-      return Array.from({ length: 40 }).map((_, idx) => {
-        const left = Math.random() * 100;
-        const delay = Math.random() * 2;
-        const duration = Math.random() * 2 + 1.5;
-        const size = Math.random() * 10 + 6;
-        const colors = ['#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6', '#ef4444'];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        return (
-          <div
-            key={idx}
-            className="confetti-piece"
-            style={{
-              left: `${left}%`,
-              animationDelay: `${delay}s`,
-              animationDuration: `${duration}s`,
-              backgroundColor: color,
-              width: `${size}px`,
-              height: `${size}px`,
-              transform: `rotate(${Math.random() * 360}deg)`
-            }}
-          />
-        );
-      });
-    };
-
     return (
       <div className="celebration-overlay" onClick={dismissCelebration}>
-        {renderConfetti()}
+        {confettiParticles.map(p => (
+          <div
+            key={p.id}
+            className="confetti-piece"
+            style={{
+              left: `${p.left}%`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`,
+              backgroundColor: p.color,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              transform: `rotate(${p.rotation}deg)`
+            }}
+          />
+        ))}
         <div className="celebration-card" onClick={e => e.stopPropagation()}>
           <h2 className="celebration-title">{active.title}</h2>
           <div className="celebration-badge-container">
@@ -42947,7 +42977,7 @@ function App() {
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
         <div className="app-shell"><div className="card">
-          <RiddleApp onBack={() => { window.location.href = '/' }} />
+          <RiddleApp onBack={() => { window.location.href = withBase('/') }} />
         </div></div>
       </>
     )
@@ -43408,13 +43438,13 @@ function App() {
         <div className="app-shell"><div className="card">
           <ProctoredQuiz
             quizType="linear-algebra"
-            onBack={() => { window.location.href = '/' }}
+            onBack={() => { window.location.href = withBase('/') }}
             autoStartConsent={true}
           >
-            <LinearAlgebraApp onBack={() => { window.location.href = '/' }} />
+            <LinearAlgebraApp onBack={() => { window.location.href = withBase('/') }} />
           </ProctoredQuiz>
         </div></div>
-        <a href="/proctor" className="proctor-dashboard-fab" title="Instructor Dashboard — view all proctor sessions">
+        <a href={withBase('/proctor')} className="proctor-dashboard-fab" title="Instructor Dashboard — view all proctor sessions">
           📊 Dashboard
         </a>
       </>
@@ -43430,7 +43460,7 @@ function App() {
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
         <div className="app-shell"><div className="card">
-          <ProctorDash onBack={() => { window.location.href = '/' }} />
+          <ProctorDash onBack={() => { window.location.href = withBase('/') }} />
         </div></div>
       </>
     )
@@ -43443,7 +43473,7 @@ function App() {
         <button className="theme-toggle" onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
-        <PlaygroundApp onBack={() => { window.location.href = '/' }} />
+        <PlaygroundApp onBack={() => { window.location.href = withBase('/') }} />
       </>
     )
   }
@@ -43455,7 +43485,7 @@ function App() {
         <button className="theme-toggle" onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
-        <BattleApp onBack={() => { window.location.href = '/' }} />
+        <BattleApp onBack={() => { window.location.href = withBase('/') }} />
       </>
     )
   }
@@ -43467,7 +43497,7 @@ function App() {
         <button className="theme-toggle" onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
-        <SudokuApp onBack={() => { window.location.href = '/' }} />
+        <SudokuApp onBack={() => { window.location.href = withBase('/') }} />
       </>
     )
   }
@@ -43480,7 +43510,7 @@ function App() {
         <button className="theme-toggle" onClick={toggleTheme} title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
           {theme === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19'}
         </button>
-        <LocalCompilerApp onBack={() => { window.location.href = '/' }} />
+        <LocalCompilerApp onBack={() => { window.location.href = withBase('/') }} />
       </>
     )
   }
@@ -44232,7 +44262,7 @@ function App() {
       try {
         const typeParam = type ? `&type=${encodeURIComponent(type)}` : ''
         const usedParam = usedIdsRef.current.length ? `&used=${encodeURIComponent(JSON.stringify(usedIdsRef.current))}` : ''
-        const r = await fetch(`/riddle-api/question?difficulty=${difficulty}${typeParam}${usedParam}`)
+        const r = await fetch(`${API}/riddle-api/question?difficulty=${difficulty}${typeParam}${usedParam}`)
         const data = await r.json()
         if (data.id != null) usedIdsRef.current = [...usedIdsRef.current, data.id]
         setQuestion(data)
@@ -44270,7 +44300,7 @@ function App() {
     const selectType = async (type) => {
       setSelectedType(type)
       try {
-        const r = await fetch(`/riddle-api/count?type=${encodeURIComponent(type)}`)
+        const r = await fetch(`${API}/riddle-api/count?type=${encodeURIComponent(type)}`)
         const data = await r.json()
         const max = data.count || 44
         setMaxForType(max)
@@ -44294,7 +44324,7 @@ function App() {
       submittedRef.current = true
 
       try {
-        const r = await fetch('/riddle-api/check', {
+        const r = await fetch(`${API}/riddle-api/check`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: question.id, answer: userAnswer })
@@ -44315,7 +44345,7 @@ function App() {
     const fetchSolution = async () => {
       if (!question) return
       try {
-        const r = await fetch('/riddle-api/solution', {
+        const r = await fetch(`${API}/riddle-api/solution`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: question.id })
@@ -44702,7 +44732,8 @@ function App() {
     integ: IntegApp,               // Integration
     stdform: StdFormApp,           // Standard Form
     bounds: BoundsApp,             // Bounds
-    sdt: SDTApp,                   // Speed, Distance, Time
+    sdt: SDTApp,
+    contrastlist: ContrastChallengeApp,   // Contrast Challenge
     variation: VariationApp,       // Variation
     hcflcm: InteractiveLcmHcfApp,  // HCF & LCM
     idlivada: IdliVadaSambharApp,  // Idli–Vada–Sambhar (Multiples, Common Multiples & LCM)
@@ -44906,7 +44937,7 @@ function App() {
         {mode === 'vachana' ? (
           <Vachana onBack={() => setMode(null)} initialAdaptScore={diagnosticState[mode] || 0} />
         ) : (
-          <div className="card">
+          <div className={`card ${mode === 'contrastlist' ? 'is-wide' : ''}`}>
             {renderContent()}
           </div>
         )}
@@ -44933,6 +44964,7 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
     { key: 'randommix', name: 'Random Mix', subtitle: 'Adaptive cross-topic quiz', color: 'featured' },
     { key: 'custom', name: 'Custom Lesson', subtitle: 'Build your own mixed quiz', color: 'featured' },
     { key: 'gym', name: 'Gym', subtitle: 'Adaptive workout across all 7 gym puzzles', color: 'featured' },
+    { key: 'contrastlist', name: 'Contrast Challenge', subtitle: 'Distinguish similar concepts', color: 'featured' },
     { key: 'vachana', name: 'Vachana', subtitle: 'Mathematical Literacy Lab', color: 'featured' },
     { key: 'mindreader', name: 'Mind Reader', subtitle: "Read Tenali's mind!", color: 'featured' },
     { key: 'adventure', name: '👑 Adventure', subtitle: 'Knowledge Crystals — story-driven learning', color: 'featured', isRedirect: true, path: '/adventure' },
@@ -45148,7 +45180,7 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
               <button key={app.key} onClick={() => {
                 setMenuOpen(false);
                 if (app.isRedirect) {
-                  window.location.href = app.path;
+                  window.location.href = withBase(app.path);
                 } else {
                   onSelect(app.key);
                 }
@@ -45210,7 +45242,7 @@ function Home({ onSelect, completedTopics = [], goldMastery = [], coins = 0, isG
 
             <div style={{ height: '1px', background: 'var(--clr-border)', margin: '4px 0' }} />
 
-            <button onClick={() => { setMenuOpen(false); window.location.href = '/playground'; }} style={{
+            <button onClick={() => { setMenuOpen(false); window.location.href = withBase('/playground'); }} style={{
               display: 'block', width: '100%', textAlign: 'left', padding: '10px 16px',
               background: 'none', border: 'none', cursor: 'pointer', color: 'var(--clr-text)',
               fontFamily: 'var(--font-body)', fontSize: '0.95rem', transition: 'background var(--transition)'
@@ -45488,7 +45520,7 @@ function AchievementCollections({ completedTopics = [], onSelectTopic }) {
       {selectedBook && (
         <div className="book-modal-overlay" onClick={() => setSelectedBook(null)}>
           <div className="book-modal-content" onClick={e => e.stopPropagation()}>
-            <button className="book-modal-close" onClick={() => setSelectedBook(null)}>✕</button>
+            <button className="book-modal-close" onClick={() => setSelectedBook(null)} aria-label="Close">✕</button>
             <h2 className="book-modal-title">{selectedBook.name}</h2>
             <p className="book-modal-desc">{selectedBook.description}</p>
 
@@ -45947,7 +45979,7 @@ function ProfileShowcase({ completedTopics = [], onSelectTopic }) {
       {activeBadgeDetail && (
         <div className="badge-detail-overlay" onClick={() => setActiveBadgeDetail(null)}>
           <div className="badge-detail-modal" onClick={e => e.stopPropagation()}>
-            <button className="badge-detail-close" onClick={() => setActiveBadgeDetail(null)}>✕</button>
+            <button className="badge-detail-close" onClick={() => setActiveBadgeDetail(null)} aria-label="Close">✕</button>
 
             <div className="badge-detail-hero">
               <div className={`badge-detail-aura level-${activeBadgeDetail.level}`} style={{ background: activeBadgeDetail.isLocked ? '#e11d48' : '' }} />
@@ -47398,8 +47430,15 @@ function GKApp({ onBack, markTopicCompleted, isGoalMode = false }) {
   }, [isGoalMode]);
   // Timer for tracking response time per question
   const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp('gk', finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
   // Guard ref: prevents double-fetch from React StrictMode concurrent effect invocations
   const fetchingRef = useRef(false)
+  // Tracks the in-flight question fetch so unmounting can cancel it — the
+  // fetchingRef guard above already stops a second overlapping call from
+  // starting, but nothing previously stopped a pending fetch's setState
+  // calls from firing after the component unmounts.
+  const questionAbortRef = useRef(null)
+  useEffect(() => () => questionAbortRef.current?.abort(), [])
 
   /**
    * loadQuestion(excludeIds?): Fetch next GK question from API
@@ -47426,19 +47465,27 @@ function GKApp({ onBack, markTopicCompleted, isGoalMode = false }) {
     setFeedback('')
     setIsCorrect(null)
     setRevealed(false)
-    const ids = excludeIds || seenIds
-    const excludeParam = ids.length ? `?exclude=${ids.join(',')}` : ''
-    const res = await fetch(`${API}/gk-api/question${excludeParam}`)
-    const data = await res.json()
-    setQuestion(data)
-    // Track this question ID so we don't ask it again (persist to localStorage)
-    const newSeen = [...ids, data.id]
-    setSeenIds(newSeen)
-    saveGKSeen(newSeen)
-    setQuestionNumber((n) => n + 1)
-    setLoading(false)
-    fetchingRef.current = false
-    timer.start()
+    const controller = new AbortController()
+    questionAbortRef.current = controller
+    try {
+      const ids = excludeIds || seenIds
+      const excludeParam = ids.length ? `?exclude=${ids.join(',')}` : ''
+      const res = await fetch(`${API}/gk-api/question${excludeParam}`, { signal: controller.signal })
+      const data = await res.json()
+      setQuestion(data)
+      // Track this question ID so we don't ask it again (persist to localStorage)
+      const newSeen = [...ids, data.id]
+      setSeenIds(newSeen)
+      saveGKSeen(newSeen)
+      setQuestionNumber((n) => n + 1)
+      timer.start()
+    } catch (e) {
+      if (e.name === 'AbortError') return
+      console.error('Failed to load GK question:', e)
+    } finally {
+      setLoading(false)
+      fetchingRef.current = false
+    }
   }
 
   /**
@@ -47648,7 +47695,8 @@ function GKApp({ onBack, markTopicCompleted, isGoalMode = false }) {
         <ResultsTable results={results} />
         <button onClick={() => { setStarted(false); setFinished(false) }}>Play Again</button>
       </div>}
-    </QuizLayout>
+    <HintModal concept={'gk'} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
   )
 }
 
@@ -47681,6 +47729,11 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
   const answerRefs = useRef([])
   const carryRefs = useRef([])
   const advanceTimerRef = useRef(null)
+  // Tracks the in-flight question fetch so a newer fetchQuestion() call (or
+  // unmount) can cancel a still-pending older one — see makeQuizApp's
+  // loadQuestion() for the same pattern and the race it prevents.
+  const questionAbortRef = useRef(null)
+  useEffect(() => () => questionAbortRef.current?.abort(), [])
 
   useEffect(() => { if (!isGoalMode) setSessionGoal('standard') }, [isGoalMode])
 
@@ -47694,16 +47747,23 @@ function ColumnAdditionApp({ onBack, initialDifficulty, initialNumQuestions, ini
   }
 
   const fetchQuestion = async (diff) => {
+    questionAbortRef.current?.abort()
+    const controller = new AbortController()
+    questionAbortRef.current = controller
+
     setLoading(true)
     try {
-      const r = await fetch(`${API}/column-addition-api/question?difficulty=${diff || difficulty}`)
+      const r = await fetch(`${API}/column-addition-api/question?difficulty=${diff || difficulty}`, { signal: controller.signal })
       const data = await r.json()
       setQuestion(data)
       setAnswerInputs(new Array(data.answerDigits.length).fill(''))
       setCarryInputs(new Array(data.carries.length).fill(''))
       setCorrectAnswerDigits(null); setCorrectCarryDigits(null)
       setTimeout(() => { if (answerRefs.current[data.answerDigits.length - 1]) answerRefs.current[data.answerDigits.length - 1].focus() }, 100)
-    } catch (e) { console.error('Fetch column addition question failed:', e) }
+    } catch (e) {
+      if (e.name === 'AbortError') return
+      console.error('Fetch column addition question failed:', e)
+    }
     setLoading(false)
   }
 
@@ -48016,6 +48076,11 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
   const answerRefs = useRef([])
   const carryRefs = useRef([])
   const advanceTimerRef = useRef(null)
+  // Tracks the in-flight question fetch so a newer fetchQuestion() call (or
+  // unmount) can cancel a still-pending older one — see makeQuizApp's
+  // loadQuestion() for the same pattern and the race it prevents.
+  const questionAbortRef = useRef(null)
+  useEffect(() => () => questionAbortRef.current?.abort(), [])
 
   const [isMulti, setIsMulti] = useState(false)
   const [currentPP, setCurrentPP] = useState(0)
@@ -48044,9 +48109,13 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
   }
 
   const fetchQuestion = async (diff) => {
+    questionAbortRef.current?.abort()
+    const controller = new AbortController()
+    questionAbortRef.current = controller
+
     setLoading(true)
     try {
-      const r = await fetch(`${API}/column-multiplication-api/question?difficulty=${diff || difficulty}`)
+      const r = await fetch(`${API}/column-multiplication-api/question?difficulty=${diff || difficulty}`, { signal: controller.signal })
       const data = await r.json()
       setQuestion(data)
       const multi = !!data.multiDigitMultiplier
@@ -48074,7 +48143,10 @@ function ColumnMultiplicationApp({ onBack, initialDifficulty, initialNumQuestion
           if (answerRefs.current[lastIdx]) answerRefs.current[lastIdx].focus()
         }, 100)
       }
-    } catch (e) { console.error('Fetch column multiplication question failed:', e) }
+    } catch (e) {
+      if (e.name === 'AbortError') return
+      console.error('Fetch column multiplication question failed:', e)
+    }
     setLoading(false)
   }
 
@@ -48884,6 +48956,11 @@ function ColumnDivisionApp({ onBack, initialDifficulty, initialNumQuestions, ini
   const remainderRefs = useRef([])
   const borrowRefs = useRef({})
   const advanceTimerRef = useRef(null)
+  // Tracks the in-flight question fetch so a newer fetchQuestion() call (or
+  // unmount) can cancel a still-pending older one — see makeQuizApp's
+  // loadQuestion() for the same pattern and the race it prevents.
+  const questionAbortRef = useRef(null)
+  useEffect(() => () => questionAbortRef.current?.abort(), [])
 
   const COL = 40
   const BRACKET = 80
@@ -48899,9 +48976,13 @@ function ColumnDivisionApp({ onBack, initialDifficulty, initialNumQuestions, ini
   }
 
   const fetchQuestion = async (diff) => {
+    questionAbortRef.current?.abort()
+    const controller = new AbortController()
+    questionAbortRef.current = controller
+
     setLoading(true)
     try {
-      const r = await fetch(`${API}/column-division-api/question?difficulty=${diff || difficulty}`)
+      const r = await fetch(`${API}/column-division-api/question?difficulty=${diff || difficulty}`, { signal: controller.signal })
       const data = await r.json()
       setQuestion(data)
       setQuotientInputs(new Array(data.quotientDigits.length).fill(''))
@@ -48910,7 +48991,10 @@ function ColumnDivisionApp({ onBack, initialDifficulty, initialNumQuestions, ini
       setBorrowInputs({})
       setActiveBorrows(new Set())
       setTimeout(() => { if (quotientRefs.current[0]) quotientRefs.current[0].focus() }, 100)
-    } catch (e) { console.error('Fetch column division question failed:', e) }
+    } catch (e) {
+      if (e.name === 'AbortError') return
+      console.error('Fetch column division question failed:', e)
+    }
     setLoading(false)
   }
 
@@ -49523,6 +49607,11 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
   const answerRefs = useRef([])
   const borrowRefs = useRef([])
   const advanceTimerRef = useRef(null)
+  // Tracks the in-flight question fetch so a newer fetchQuestion() call (or
+  // unmount) can cancel a still-pending older one — see makeQuizApp's
+  // loadQuestion() for the same pattern and the race it prevents.
+  const questionAbortRef = useRef(null)
+  useEffect(() => () => questionAbortRef.current?.abort(), [])
 
   useEffect(() => { if (!isGoalMode) setSessionGoal('standard') }, [isGoalMode])
 
@@ -49536,9 +49625,13 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
   }
 
   const fetchQuestion = async (diff) => {
+    questionAbortRef.current?.abort()
+    const controller = new AbortController()
+    questionAbortRef.current = controller
+
     setLoading(true)
     try {
-      const r = await fetch(`${API}/column-subtraction-api/question?difficulty=${diff || difficulty}`)
+      const r = await fetch(`${API}/column-subtraction-api/question?difficulty=${diff || difficulty}`, { signal: controller.signal })
       const data = await r.json()
       setQuestion(data)
       setAnswerInputs(new Array(data.answerDigits.length).fill(''))
@@ -49548,7 +49641,10 @@ function ColumnSubtractionApp({ onBack, initialDifficulty, initialNumQuestions, 
         const lastIdx = data.answerDigits.length - 1
         if (answerRefs.current[lastIdx]) answerRefs.current[lastIdx].focus()
       }, 100)
-    } catch (e) { console.error('Fetch column subtraction question failed:', e) }
+    } catch (e) {
+      if (e.name === 'AbortError') return
+      console.error('Fetch column subtraction question failed:', e)
+    }
     setLoading(false)
   }
 
@@ -49979,6 +50075,11 @@ function AdditionApp({ onBack, completedTopics = [], goldMastery = [], markTopic
   // Timer for response timing
   const timer = useTimer()
   const advanceFnRef = useRef(null)
+  // Tracks the in-flight question fetch so a newer fetchQuestion() call (or
+  // unmount) can cancel a still-pending older one — see makeQuizApp's
+  // loadQuestion() for the same pattern and the race it prevents.
+  const questionAbortRef = useRef(null)
+  useEffect(() => () => questionAbortRef.current?.abort(), [])
 
   useEffect(() => {
     if (finished) {
@@ -50034,6 +50135,10 @@ function AdditionApp({ onBack, completedTopics = [], goldMastery = [], markTopic
   }
 
 const fetchQuestion = async (selectedDifficulty = difficulty) => {
+    questionAbortRef.current?.abort()
+    const controller = new AbortController()
+    questionAbortRef.current = controller
+
     setLoading(true)
     setFeedback('')
     setAnswer('')
@@ -50047,43 +50152,48 @@ const fetchQuestion = async (selectedDifficulty = difficulty) => {
     const sumMax = additionMode === 'counting' ? sumMaxMap[diffLevel] : null
     const sumMaxParam = sumMax ? `&sumMax=${sumMax}` : ''
 
-    const res = await fetch(`${API}/addition-api/question?digits=${digits}${sumMaxParam}`)
-    const data = await res.json()
-    setQuestion(data)
+    try {
+      const res = await fetch(`${API}/addition-api/question?digits=${digits}${sumMaxParam}`, { signal: controller.signal })
+      const data = await res.json()
+      setQuestion(data)
 
-    const targetTotal = Number(data.a) + Number(data.b)
+      const targetTotal = Number(data.a) + Number(data.b)
 
-    if (additionMode === 'counting') {
-      // Initialize apples for Visual Counting mode
-      const totalApples = Math.max(15, targetTotal + 5)
-      const initialItems = Array.from({ length: totalApples }, (_, i) => ({ id: `apple-${i}`, icon: '🍎' }))
-      setSourceItems(initialItems)
-      setTargetItems([])
-    } else if (additionMode === 'scale') {
-      // Initialize weights for Balance Scale mode
-      let initBank = []
-      if (diffLevel === 'easy') {
-        if (targetTotal >= 10) {
-          const numTens = Math.floor(targetTotal / 10) + 2;
-          const numOnes = Math.max(12, (targetTotal % 10) + 5);
-          for (let i = 0; i < numTens; i++) {
-            initBank.push({ id: `bank-10-${i}-${Math.random()}`, val: 10 });
-          }
-          for (let i = 0; i < numOnes; i++) {
-            initBank.push({ id: `bank-1-${i}-${Math.random()}`, val: 1 });
+      if (additionMode === 'counting') {
+        // Initialize apples for Visual Counting mode
+        const totalApples = Math.max(15, targetTotal + 5)
+        const initialItems = Array.from({ length: totalApples }, (_, i) => ({ id: `apple-${i}`, icon: '🍎' }))
+        setSourceItems(initialItems)
+        setTargetItems([])
+      } else if (additionMode === 'scale') {
+        // Initialize weights for Balance Scale mode
+        let initBank = []
+        if (diffLevel === 'easy') {
+          if (targetTotal >= 10) {
+            const numTens = Math.floor(targetTotal / 10) + 2;
+            const numOnes = Math.max(12, (targetTotal % 10) + 5);
+            for (let i = 0; i < numTens; i++) {
+              initBank.push({ id: `bank-10-${i}-${Math.random()}`, val: 10 });
+            }
+            for (let i = 0; i < numOnes; i++) {
+              initBank.push({ id: `bank-1-${i}-${Math.random()}`, val: 1 });
+            }
+          } else {
+            initBank = Array.from({ length: Math.max(15, targetTotal + 2) }, (_, i) => ({ id: `bank-1-${i}-${Math.random()}`, val: 1 }));
           }
         } else {
-          initBank = Array.from({ length: Math.max(15, targetTotal + 2) }, (_, i) => ({ id: `bank-1-${i}-${Math.random()}`, val: 1 }));
+          initBank = createDynamicWeightBank(targetTotal)
         }
-      } else {
-        initBank = createDynamicWeightBank(targetTotal)
+        setBankBlocks(initBank)
+        setRightBlocks([])
       }
-      setBankBlocks(initBank)
-      setRightBlocks([])
-    }
 
+      timer.start(sessionGoal, handleTimeout, getSpeedRunLimit(difficulty ?? 'easy', isAdaptive ?? false))
+    } catch (e) {
+      if (e.name === 'AbortError') return
+      console.error('Failed to fetch addition question:', e)
+    }
     setLoading(false)
-    timer.start(sessionGoal, handleTimeout, getSpeedRunLimit(difficulty ?? 'easy', isAdaptive ?? false))
   }
 
   /**
@@ -51568,6 +51678,11 @@ function BasicArithApp({ onBack, completedTopics = [], goldMastery = [], markTop
   // Timer
   const timer = useTimer()
   const advanceFnRef = useRef(null)
+  // Tracks the in-flight question fetch so a newer fetchQuestion() call (or
+  // unmount) can cancel a still-pending older one — see makeQuizApp's
+  // loadQuestion() for the same pattern and the race it prevents.
+  const questionAbortRef = useRef(null)
+  useEffect(() => () => questionAbortRef.current?.abort(), [])
 
   useEffect(() => {
     if (finished) {
@@ -51605,13 +51720,22 @@ function BasicArithApp({ onBack, completedTopics = [], goldMastery = [], markTop
   }
 
 const fetchQuestion = async () => {
+    questionAbortRef.current?.abort()
+    const controller = new AbortController()
+    questionAbortRef.current = controller
+
     setLoading(true)
     setFeedback(''); setAnswer(''); setRevealed(false); setIsCorrect(null)
-    const res = await fetch(`${API}/basicarith-api/question?difficulty=${effectiveDiff()}&goal=${sessionGoal}`, { headers: { 'Authorization': authGetToken() ? `Bearer ${authGetToken()}` : '' } })
-    const data = await res.json()
-    setQuestion(data)
+    try {
+      const res = await fetch(`${API}/basicarith-api/question?difficulty=${effectiveDiff()}&goal=${sessionGoal}`, { headers: { 'Authorization': authGetToken() ? `Bearer ${authGetToken()}` : '' }, signal: controller.signal })
+      const data = await res.json()
+      setQuestion(data)
+      timer.start(sessionGoal, handleTimeout, getSpeedRunLimit(difficulty ?? 'easy', isAdaptive ?? false))
+    } catch (e) {
+      if (e.name === 'AbortError') return
+      console.error('Failed to fetch basic arithmetic question:', e)
+    }
     setLoading(false)
-    timer.start(sessionGoal, handleTimeout, getSpeedRunLimit(difficulty ?? 'easy', isAdaptive ?? false))
   }
 
   /**
@@ -52386,7 +52510,7 @@ function VisualMathApp({ onBack }) {
     setLoading(true); resetInteractive()
     const mode = pickMode()
     try {
-      const r = await fetch(`/visual-math-api/question?type=${operation}&mode=${mode}&difficulty=${difficulty}`)
+      const r = await fetch(`${API}/visual-math-api/question?type=${operation}&mode=${mode}&difficulty=${difficulty}`)
       const q = await r.json()
       setQuestion(q)
     } catch (e) { console.error(e) }
@@ -53872,6 +53996,7 @@ function makeMCQuizApp({ title, subtitle, apiPath, diffLabels, tip, adaptiveOnly
     const [correctOption, setCorrectOption] = useState('')
     const [questionSummary, setQuestionSummary] = useState({ easy: 0, medium: 0, hard: 0, extrahard: 0 })
     const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp(apiPath.split('-')[0], finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
     const advanceFnRef = useRef(null)
     const adaptScoreRef = useRef(0)
     const submittedRef = useRef(false)
@@ -54183,7 +54308,8 @@ function makeMCQuizApp({ title, subtitle, apiPath, diffLabels, tip, adaptiveOnly
           <ResultsTable results={results} />
           <button onClick={() => { setStarted(false); setFinished(false) }}>Play Again</button>
         </div>}
-      </QuizLayout>
+      <HintModal concept={apiPath.split('-')[0]} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
     )
   }
 }
@@ -54561,12 +54687,19 @@ function makeQuizApp({ title, subtitle, apiPath, diffLabels, placeholders, tip, 
   }, [isGoalMode]);
     const [results, setResults] = useState([])
     const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp(apiPath.split('-')[0], finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
     const advanceFnRef = useRef(null)
     // Keep a ref for adaptive score so loadQuestion always sees latest
     const adaptScoreRef = useRef(0)
     // Guards against double-submit and double-advance race conditions
     const submittedRef = useRef(false)
     const advancedRef = useRef(false)
+    // Tracks the in-flight question fetch so a newer loadQuestion() call (or
+    // unmount) can cancel a still-pending older one — otherwise an
+    // out-of-order response can land after a newer question and silently
+    // overwrite it, or a leftover fetch can setState after unmount.
+    const questionAbortRef = useRef(null)
+    useEffect(() => () => questionAbortRef.current?.abort(), [])
 
     useEffect(() => {
       if (finished) {
@@ -54588,11 +54721,18 @@ function makeQuizApp({ title, subtitle, apiPath, diffLabels, placeholders, tip, 
     }
 
     const loadQuestion = async () => {
+      // Cancel any still-pending question fetch before starting a new one,
+      // so an out-of-order response from the old request can never land
+      // after (and overwrite) this newer one.
+      questionAbortRef.current?.abort()
+      const controller = new AbortController()
+      questionAbortRef.current = controller
+
       setLoading(true)
       setLoadError('')
       try {
         const diff = effectiveDifficulty()
-        const r = await fetch(`${API}/${apiPath}/question?difficulty=${diff}&goal=${sessionGoal}`, { headers: { 'Authorization': authGetToken() ? `Bearer ${authGetToken()}` : '' } })
+        const r = await fetch(`${API}/${apiPath}/question?difficulty=${diff}&goal=${sessionGoal}`, { headers: { 'Authorization': authGetToken() ? `Bearer ${authGetToken()}` : '' }, signal: controller.signal })
         if (!r.ok) throw new Error(`Server returned ${r.status}`)
         const data = await r.json()
         // Defensive: a question must have a non-empty prompt to be displayable.
@@ -54610,6 +54750,10 @@ function makeQuizApp({ title, subtitle, apiPath, diffLabels, placeholders, tip, 
         advancedRef.current = false
         timer.start(sessionGoal, handleTimeout, getSpeedRunLimit(effectiveDifficulty ? effectiveDifficulty() : (difficulty || 'easy'), isAdaptive))
       } catch (e) {
+        // A cancelled-on-purpose fetch (superseded by a newer loadQuestion()
+        // call, or the component unmounted) isn't a real failure — don't
+        // show an error for it.
+        if (e.name === 'AbortError') return
         console.error(`Failed to load ${title} question:`, e)
         setQuestion(null)
         setLoadError(`Couldn't load a ${title} question (${e.message || 'unknown error'}). Tap Retry to try again.`)
@@ -54882,7 +55026,8 @@ function makeQuizApp({ title, subtitle, apiPath, diffLabels, placeholders, tip, 
           <ResultsTable results={results} />
           <button onClick={() => { setStarted(false); setFinished(false) }}>Play Again</button>
         </div>}
-      </QuizLayout>
+      <HintModal concept={apiPath.split('-')[0]} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
     )
   }
 }
@@ -55850,6 +55995,7 @@ function GymApp({ onBack }) {
   const [loading, setLoading] = useState(false)
   const [loadError, setLoadError] = useState('')
   const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp('gym', finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
   const sessionGoal = 'standard'
   const isAdaptive = true
   const handleTimeout = async () => {
@@ -57525,6 +57671,7 @@ function RandomMixApp({ onBack, isGoalMode = false }) {
     }
   }, [isGoalMode]);
   const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp('mix', finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
   const advanceFnRef = useRef(null)
   const submittedRef = useRef(false)
   const advancedRef = useRef(false)
@@ -57854,7 +58001,8 @@ function RandomMixApp({ onBack, isGoalMode = false }) {
             <button onClick={startQuiz}>Start Random Mix</button>
           </div>
         </div>
-      </QuizLayout>
+      <HintModal concept={'mix'} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
     )
   }
 
@@ -58026,6 +58174,7 @@ function SetsApp({ onBack, isGoalMode = false }) {
     }
   }, [isGoalMode]);
   const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp('sets', finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
   const advanceFnRef = useRef(null)
   const advancedRef = useRef(false)
   const submittedRef = useRef(false)
@@ -58231,7 +58380,8 @@ const loadQuestion = async () => {
         <ResultsTable results={results} />
         <button onClick={() => { setStarted(false); setFinished(false) }}>Play Again</button>
       </div>}
-    </QuizLayout>
+    <HintModal concept={'sets'} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
   )
 }
 
@@ -58261,6 +58411,7 @@ function SequencesApp({ onBack, isGoalMode = false }) {
     }
   }, [isGoalMode]);
   const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp('sequences', finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
   const advanceFnRef = useRef(null)
   const advancedRef = useRef(false)
   const submittedRef = useRef(false)
@@ -58458,7 +58609,8 @@ const loadQuestion = async () => {
         <ResultsTable results={results} />
         <button onClick={() => { setStarted(false); setFinished(false) }}>Play Again</button>
       </div>}
-    </QuizLayout>
+    <HintModal concept={'sequences'} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
   )
 }
 
@@ -58498,6 +58650,7 @@ function RatioApp({ onBack, completedTopics = [], goldMastery = [], markTopicCom
     }
   }, [isGoalMode]);
   const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp('ratio', finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
   const advanceFnRef = useRef(null)
   const advancedRef = useRef(false)
   const submittedRef = useRef(false)
@@ -58736,7 +58889,8 @@ const loadQuestion = async () => {
         <ResultsTable results={results} />
         <button onClick={() => { setStarted(false); setFinished(false) }}>Play Again</button>
       </div>}
-    </QuizLayout>
+    <HintModal concept={'ratio'} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
   )
 }
 
@@ -59780,6 +59934,7 @@ function IndicesApp({ onBack, isGoalMode = false }) {
     }
   }, [isGoalMode]);
   const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp('indices', finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
   const advanceFnRef = useRef(null)
 
   const effectiveDiff = () => (isAdaptive) ? adaptiveLevel(adaptScoreRef.current) : difficulty
@@ -60028,7 +60183,8 @@ const loadQuestion = async () => {
           <button onClick={() => { setStarted(false); setFinished(false) }}>Play Again</button>
         </div>
       )}
-    </QuizLayout>
+    <HintModal concept={'indices'} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
   )
 }
 
@@ -60070,6 +60226,7 @@ function SurdsApp({ onBack, isGoalMode = false }) {
     }
   }, [isGoalMode]);
   const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp('surds', finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
   const advanceFnRef = useRef(null)
 
   const effectiveDiff = () => (isAdaptive) ? adaptiveLevel(adaptScoreRef.current) : difficulty
@@ -60351,7 +60508,8 @@ const loadQuestion = async () => {
           <button onClick={() => { setStarted(false); setFinished(false) }}>Play Again</button>
         </div>
       )}
-    </QuizLayout>
+    <HintModal concept={'surds'} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
   )
 }
 
@@ -60403,6 +60561,7 @@ function FractionAddApp({ onBack, completedTopics = [], goldMastery = [], markTo
   }, [isGoalMode]);
   // Timer for per-question timing
   const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp('fractionadd', finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
 
   // ── Refs for auto-advance ────────────────────────────────────────────
   const advanceFnRef = useRef(null)
@@ -60798,7 +60957,8 @@ const loadQuestion = async () => {
           <button onClick={() => { setStarted(false); setFinished(false) }}>Play Again</button>
         </div>
       )}
-    </QuizLayout>
+    <HintModal concept={'fractionadd'} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
   )
 }
 
@@ -61215,6 +61375,7 @@ function SqrtApp({ onBack, isGoalMode = false }) {
   }, [isGoalMode]);
   // Timer instance for tracking time per question
   const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp('sqrt', finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
   const advanceFnRef = useRef(null)
 
   const effectiveDiff = () => (isAdaptive) ? adaptiveLevel(adaptScoreRef.current) : difficulty
@@ -61458,7 +61619,8 @@ const fetchQuestion = async (step) => {
         <ResultsTable results={results} />
         <button onClick={() => { setStarted(false); setFinished(false) }}>Play Again</button>
       </div>}
-    </QuizLayout>
+    <HintModal concept={'sqrt'} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
   )
 }
 
@@ -63132,6 +63294,7 @@ function FuncEvalApp({ onBack, isGoalMode = false }) {
   }, [isGoalMode]);
   // Timer instance for tracking elapsed time per question
   const timer = useTimer()
+  const { hintsUsedCount, xpBreakdown, bonusLoading } = useQuizHintsAndXp('funceval', finished, score, totalQ, typeof isCorrect !== 'undefined' ? (isCorrect || false) : false, results);
   const advanceFnRef = useRef(null)
 
   const effectiveDiff = () => (isAdaptive) ? adaptiveLevel(adaptScoreRef.current) : difficulty
@@ -63360,7 +63523,8 @@ const loadQuestion = async () => {
         <ResultsTable results={results} />
         <button onClick={() => { setStarted(false); setFinished(false) }}>Play Again</button>
       </div>}
-    </QuizLayout>
+    <HintModal concept={'funceval'} questionId={question?.id || 'unknown'} questionData={question} revealed={revealed} hintsUsedCount={hintsUsedCount} xpBreakdown={xpBreakdown} bonusLoading={bonusLoading} />
+</QuizLayout>
   )
 }
 
@@ -65292,7 +65456,7 @@ function IntervalSchedulingApp() {
                   >
                     <span className="is-interval-label">{intv.start}–{intv.end}</span>
                     {step < 0 && (
-                      <button className="is-interval-remove" onClick={(e) => { e.stopPropagation(); removeInterval(intv.id) }}>×</button>
+                      <button className="is-interval-remove" onClick={(e) => { e.stopPropagation(); removeInterval(intv.id) }} aria-label="Remove interval">×</button>
                     )}
                   </div>
                 )
@@ -69698,7 +69862,9 @@ export function QuizLayout({ title, subtitle, onBack, children, timer, sessionGo
         </div>
       </div>
       <h1 style={{ fontSize: 'clamp(1.8rem, 3.8vw, 2.4rem)' }}>{title}</h1>
+      {subtitle && <p className="subtitle">{subtitle}</p>}
       {processedChildren}
+      <QuizLayoutExtension children={children} />
     </>
   )
 }
@@ -70552,9 +70718,9 @@ function ProgressTrackerApp({ onBack }) {
                 {paginated.map(r => {
                   const spd = r.timeTakenSeconds > 0 ? parseFloat(((r.correctAnswers * 60) / r.timeTakenSeconds).toFixed(1)) : 0
                   return (
-                    <tr key={r.id} style={{ borderBottom: '1px solid var(--clr-border)' }}
+                    <tr key={r.id}
                       onClick={() => setSelectedPoint({ record: r, session: sortedRecords.indexOf(r) + 1 })}
-                      style={{ cursor: 'pointer' }}>
+                      style={{ borderBottom: '1px solid var(--clr-border)', cursor: 'pointer' }}>
                       <td style={{ padding: '8px 10px' }}>{formatDate(r.date)}</td>
                       <td style={{ padding: '8px 10px', textAlign: 'center' }}>{r.questionSummary?.easy || 0}</td>
                       <td style={{ padding: '8px 10px', textAlign: 'center' }}>{r.questionSummary?.medium || 0}</td>
@@ -71288,6 +71454,27 @@ function MensurationLabApp({ onBack, initialDifficulty, initialNumQuestions, ini
   };
 
   return <GenericLabApp title="Mensuration" subtitle="Geometry & Shape Puzzles" endpoint="/api/mensuration-lab" onBack={onBack} renderQuestionCustom={renderCustom} initialDifficulty={initialDifficulty} initialNumQuestions={initialNumQuestions} initialStarted={initialStarted} />;
+}
+
+
+export function getLocalXp() {
+  try {
+    const val = localStorage.getItem('tenali_xp');
+    return val ? parseInt(val, 10) : 0;
+  } catch { return 0; }
+}
+
+export function setLocalXp(val) {
+  try { localStorage.setItem('tenali_xp', val.toString()); } catch {}
+  // dispatch event to sync UI if needed
+  window.dispatchEvent(new CustomEvent('tenali_xp_update', { detail: { xp: val } }));
+}
+
+export function changeXp(delta) {
+  const current = getLocalXp();
+  const next = Math.max(0, current + delta);
+  setLocalXp(next);
+  return next;
 }
 
 export default App
