@@ -1,10 +1,31 @@
 import React from 'react';
+import { resolveTenaliFace, getTenaliImage } from './assets/avatarAssets';
 
 /**
- * TenaliAvatar SVG Component
- * Renders dynamically based on expression and equipped skin
+ * TenaliAvatar Component
+ * Renders the illustrated portrait when one exists for this face, and falls
+ * back to the built-in SVG otherwise. See avatarAssets.js for how art is found.
+ *
+ * Expression names are funnelled through resolveTenaliFace first, so a caller
+ * passing an unknown word lands on the neutral face by an explicit route rather
+ * than by falling off the end of the if/else chain.
  */
 export function TenaliAvatar({ expression, skin, size }) {
+  const face = resolveTenaliFace(expression);
+  const artwork = getTenaliImage(face, skin);
+
+  if (artwork) {
+    const box = size ? `${size}px` : '120px';
+    return (
+      <div
+        className={`tenali-avatar-wrapper tenali-avatar-photo ${face}-state`}
+        style={{ width: box, height: box }}
+      >
+        <img src={artwork} alt="" aria-hidden="true" draggable="false" />
+      </div>
+    );
+  }
+
   let turbanColor = '#e67e22'; // Orange default
   let turbanAccent = '#d35400';
   let robeColor = '#c0392b';
@@ -34,7 +55,7 @@ export function TenaliAvatar({ expression, skin, size }) {
   let sweatDrop = null;
   let accessory = null;
 
-  if (expression === 'thinking') {
+  if (face === 'thinking') {
     eyeLeft = <ellipse cx="40" cy="50" rx="6" ry="3.5" fill="#2c3e50" />;
     eyeRight = <ellipse cx="60" cy="50" rx="6" ry="3.5" fill="#2c3e50" />;
     eyebrows = (
@@ -44,7 +65,7 @@ export function TenaliAvatar({ expression, skin, size }) {
       </g>
     );
     mouth = <line x1="45" y1="67" x2="55" y2="67" stroke="#2c3e50" strokeWidth="3" strokeLinecap="round" />;
-  } else if (expression === 'confident') {
+  } else if (face === 'confident') {
     eyeLeft = <circle cx="40" cy="50" r="5.5" fill="#2c3e50" />;
     eyeRight = <path d="M 55 50 Q 60 46 65 50" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
     eyebrows = (
@@ -54,7 +75,7 @@ export function TenaliAvatar({ expression, skin, size }) {
       </g>
     );
     mouth = <path d="M 44 65 Q 52 70 59 62" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
-  } else if (expression === 'gamble') {
+  } else if (face === 'gamble') {
     eyeLeft = (
       <g>
         <circle cx="40" cy="50" r="6" fill="#2c3e50" />
@@ -68,7 +89,7 @@ export function TenaliAvatar({ expression, skin, size }) {
       </g>
     );
     mouth = <path d="M 40 64 Q 50 78 60 64" fill="#c0392b" stroke="#2c3e50" strokeWidth="3" strokeLinecap="round" />;
-  } else if (expression === 'victory' || expression === 'celebrating') {
+  } else if (face === 'victory') {
     eyeLeft = <circle cx="40" cy="50" r="7" fill="#2c3e50" />;
     eyeRight = <circle cx="60" cy="50" r="7" fill="#2c3e50" />;
     eyebrows = (
@@ -79,11 +100,11 @@ export function TenaliAvatar({ expression, skin, size }) {
     );
     mouth = <ellipse cx="50" cy="69" rx="5" ry="7" fill="#2c3e50" />;
     sweatDrop = <path d="M 72 45 C 72 45 76 52 72 55 C 69 57 67 53 72 45" fill="#3498db" className="sweat-drip-anim" />;
-  } else if (expression === 'loss') {
+  } else if (face === 'loss') {
     eyeLeft = <path d="M 34 52 Q 40 45 46 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
     eyeRight = <path d="M 54 52 Q 60 45 66 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
     mouth = <path d="M 38 62 Q 50 82 62 62 Z" fill="#2c3e50" />;
-  } else if (expression === 'cheated') {
+  } else if (face === 'cheated') {
     eyeLeft = <ellipse cx="38" cy="50" rx="4" ry="5" fill="#2c3e50" />;
     eyeRight = <ellipse cx="58" cy="50" rx="4" ry="5" fill="#2c3e50" />;
     eyebrows = (
@@ -93,7 +114,7 @@ export function TenaliAvatar({ expression, skin, size }) {
       </g>
     );
     mouth = <path d="M 42 66 Q 50 62 58 66" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
-  } else if (expression === 'closed-eyes') {
+  } else if (face === 'closed-eyes') {
     eyeLeft = <path d="M 34 50 Q 40 54 46 50" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
     eyeRight = <path d="M 54 50 Q 60 54 66 50" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
     eyebrows = (
@@ -103,7 +124,7 @@ export function TenaliAvatar({ expression, skin, size }) {
       </g>
     );
     mouth = <path d="M 43 68 Q 50 71 57 68" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
-  } else if (expression === 'writing') {
+  } else if (face === 'writing') {
     eyeLeft = <path d="M 35 52 L 45 52" stroke="#2c3e50" strokeWidth="3.5" strokeLinecap="round" />;
     eyeRight = <path d="M 55 52 L 65 52" stroke="#2c3e50" strokeWidth="3.5" strokeLinecap="round" />;
     eyebrows = (
@@ -123,7 +144,7 @@ export function TenaliAvatar({ expression, skin, size }) {
         <path d="M 78 72 L 72 84 L 70 86 L 73 84 Z" fill="#d35400" stroke="#2c3e50" strokeWidth="1" />
       </g>
     );
-  } else if (expression === 'hinting') {
+  } else if (face === 'hinting') {
     // Conspiratorial wink + a lit bulb, echoing the Hint button's icon
     eyeLeft = <path d="M 34 52 Q 40 45 46 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
     eyeRight = <circle cx="60" cy="50" r="5" fill="#2c3e50" />;
@@ -146,7 +167,7 @@ export function TenaliAvatar({ expression, skin, size }) {
         <rect x="83" y="37" width="6" height="4.5" rx="1.5" fill="#2c3e50" />
       </g>
     );
-  } else if (expression === 'smirk' || expression === 'recalculating' || expression === 'talking') {
+  } else if (face === 'smirk') {
     eyeLeft = <circle cx="40" cy="50" r="5" fill="#2c3e50" />;
     eyeRight = <path d="M 54 52 Q 60 46 66 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
     eyebrows = (
@@ -156,7 +177,7 @@ export function TenaliAvatar({ expression, skin, size }) {
       </g>
     );
     mouth = <path d="M 43 68 Q 52 72 61 60" stroke="#2c3e50" strokeWidth="3" fill="none" strokeLinecap="round" />;
-  } else if (expression === 'confused' || expression === 'encouraging') {
+  } else if (face === 'confused') {
     eyeLeft = <circle cx="40" cy="48" r="4.5" fill="#2c3e50" />;
     eyeRight = <circle cx="60" cy="52" r="4.5" fill="#2c3e50" />;
     eyebrows = (
@@ -166,7 +187,7 @@ export function TenaliAvatar({ expression, skin, size }) {
       </g>
     );
     mouth = <path d="M 42 70 Q 50 64 58 70" stroke="#2c3e50" strokeWidth="2.5" fill="none" strokeLinecap="round" />;
-  } else if (expression === 'shocked') {
+  } else if (face === 'shocked') {
     eyeLeft = <circle cx="40" cy="50" r="7.5" fill="#2c3e50" />;
     eyeRight = <circle cx="60" cy="50" r="7.5" fill="#2c3e50" />;
     eyebrows = (
@@ -177,7 +198,7 @@ export function TenaliAvatar({ expression, skin, size }) {
     );
     mouth = <circle cx="50" cy="70" r="8" fill="none" stroke="#2c3e50" strokeWidth="3" />;
     sweatDrop = <path d="M 72 45 C 72 45 76 52 72 55 C 69 57 67 53 72 45" fill="#3498db" className="sweat-drip-anim" />;
-  } else if (expression === 'proud' || expression === 'impressed') {
+  } else if (face === 'proud') {
     eyeLeft = <path d="M 34 52 Q 40 44 46 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
     eyeRight = <path d="M 54 52 Q 60 44 66 52" stroke="#2c3e50" strokeWidth="3.5" fill="none" strokeLinecap="round" />;
     eyebrows = (
@@ -193,7 +214,7 @@ export function TenaliAvatar({ expression, skin, size }) {
   const heightStyle = size ? `${Math.round(size * 1.2)}px` : '144px';
 
   return (
-    <div className={`tenali-avatar-wrapper ${expression}-state`} style={{ width: widthStyle, height: heightStyle, transition: 'transform 0.3s ease' }}>
+    <div className={`tenali-avatar-wrapper ${face}-state`} style={{ width: widthStyle, height: heightStyle, transition: 'transform 0.3s ease' }}>
       <svg
         viewBox="0 0 100 120"
         className="tenali-avatar-svg"

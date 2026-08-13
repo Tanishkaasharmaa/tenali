@@ -1,4 +1,5 @@
 import React from 'react';
+import { getStudentImage } from './assets/avatarAssets';
 
 /**
  * StudentAvatar Component
@@ -70,6 +71,20 @@ const ORANGE = '#ea580c';
 
 export default function StudentAvatar({ expression = 'attentive', size = 110 }) {
   const expr = resolveStudentExpression(expression);
+
+  // An illustrated portrait wins when one exists for this face; the SVG below
+  // covers every face that has not been drawn yet. See avatarAssets.js.
+  const artwork = getStudentImage(expr);
+  if (artwork) {
+    return (
+      <div
+        className={`student-avatar-wrapper student-avatar-photo ${expr}-state`}
+        style={{ width: `${size}px`, height: `${size}px` }}
+      >
+        <img src={artwork} alt="" aria-hidden="true" draggable="false" />
+      </div>
+    );
+  }
 
   // Defaults — the 'attentive' face; each branch overrides what it changes.
   let eyes = (
