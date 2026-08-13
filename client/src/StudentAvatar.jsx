@@ -76,12 +76,36 @@ export default function StudentAvatar({ expression = 'attentive', size = 110 }) 
   // covers every face that has not been drawn yet. See avatarAssets.js.
   const artwork = getStudentImage(expr);
   if (artwork) {
+    const box = size ? `${size}px` : '110px';
     return (
       <div
         className={`student-avatar-wrapper student-avatar-photo ${expr}-state`}
-        style={{ width: `${size}px`, height: `${size}px` }}
+        style={{
+          width: box,
+          height: box,
+          maxWidth: '100%',
+          maxHeight: '100%',
+          borderRadius: '50%',
+          overflow: 'hidden',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0
+        }}
       >
-        <img src={artwork} alt="" aria-hidden="true" draggable="false" />
+        <img
+          src={artwork}
+          alt=""
+          aria-hidden="true"
+          draggable="false"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            borderRadius: '50%',
+            display: 'block'
+          }}
+        />
       </div>
     );
   }

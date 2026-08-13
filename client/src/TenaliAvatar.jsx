@@ -19,9 +19,32 @@ export function TenaliAvatar({ expression, skin, size }) {
     return (
       <div
         className={`tenali-avatar-wrapper tenali-avatar-photo ${face}-state`}
-        style={{ width: box, height: box }}
+        style={{
+          width: box,
+          height: box,
+          maxWidth: '100%',
+          maxHeight: '100%',
+          borderRadius: '50%',
+          overflow: 'hidden',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0
+        }}
       >
-        <img src={artwork} alt="" aria-hidden="true" draggable="false" />
+        <img
+          src={artwork}
+          alt=""
+          aria-hidden="true"
+          draggable="false"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            borderRadius: '50%',
+            display: 'block'
+          }}
+        />
       </div>
     );
   }
