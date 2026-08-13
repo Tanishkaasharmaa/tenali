@@ -1833,9 +1833,9 @@
 
 /* ─── ROYAL MYSTERY ARENA SOLID COLOR THEME (NO GRADIENTS) ─────────────────────────── */
 .royal-mystery-arena {
-  background-color: #0e0e11 !important;
-  color: #ffffff !important;
-  min-height: 100vh;
+  background-color: var(--clr-bg, #302723) !important;
+  color: var(--clr-text, #ede8e3) !important;
+  min-height: auto;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -1925,6 +1925,7 @@
 .card:has(> .royal-mystery-arena) {
   max-width: 1340px;
   padding: 28px 24px;
+  background-color: #302723 !important;
 }
 
 .royal-mystery-arena {
