@@ -112,7 +112,6 @@ export default function ScratchCardModal({ isOpen, hintText, onClose }) {
     ctx.arc(x, y, 26, 0, Math.PI * 2, false);
     ctx.fill();
 
-    playSound('pen_scratch');
     checkScratchPercentage();
   };
 

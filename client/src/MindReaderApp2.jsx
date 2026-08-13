@@ -1495,12 +1495,31 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                     className="tmr-circular-hint-btn"
                     onClick={handleUseHint}
                     disabled={hintsRemaining <= 0 || showHintOverlay}
-                    title={hintsRemaining <= 0 ? 'No hints remaining' : 'Use a hint'}
+                    title={hintsRemaining <= 0 ? 'No hints remaining' : `Use a hint (${hintsRemaining} left)`}
+                    style={{ position: 'relative' }}
                   >
-                    <span style={{ fontSize: '1.35rem' }}>💡</span>
+                    <span style={{ fontSize: '1.25rem' }}>💡</span>
+                    <span style={{
+                      position: 'absolute',
+                      top: '-4px',
+                      right: '-4px',
+                      background: hintsRemaining > 0 ? 'var(--clr-accent, #e8864a)' : '#555555',
+                      color: '#ffffff',
+                      fontSize: '0.72rem',
+                      fontWeight: '800',
+                      width: '18px',
+                      height: '18px',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1.5px solid #2c2622'
+                    }}>
+                      {hintsRemaining}
+                    </span>
                   </button>
                   <span style={{ color: hintsRemaining > 0 ? '#d97d38' : '#7a7067', fontSize: '0.78rem', fontWeight: '700' }}>
-                    Hint
+                    Hint ({hintsRemaining})
                   </span>
                 </div>
               </div>
