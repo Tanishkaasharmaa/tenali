@@ -998,7 +998,7 @@
 
   /* PRIMARY BACKGROUND COLORS - Dark theme palette */
   --clr-bg: #302723;           /* Main page background (lighter warm brown) */
-  --clr-card: #2c2622;          /* Card/modal background (dark brown, slightly lighter) */
+  --clr-card: #302723;          /* Card/modal background (dark brown, matching main bg) */
   --clr-surface: #362f2a;       /* Surface containers, panels (medium dark brown) */
   --clr-input: #3e3631;         /* Input field background (darker brown with slight warmth) */
 
