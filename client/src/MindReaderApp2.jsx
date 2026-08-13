@@ -1119,27 +1119,6 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
           >
             Start Game
           </button>
-
-          {onSwitchMode && (
-            <button
-              style={{
-                background: 'rgba(255, 255, 255, 0.06)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                color: 'var(--clr-text)',
-                borderRadius: '12px',
-                padding: '10px 18px',
-                fontSize: '0.85rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                marginTop: '4px'
-              }}
-              onClick={onSwitchMode}
-            >
-              🧙 Switch Mode: Let Tenali Read Your Mind
-            </button>
-          )}
-
-
         </div>
       )}
 
