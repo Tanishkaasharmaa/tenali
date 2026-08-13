@@ -18,10 +18,10 @@
 
 /* Glassmorphism Card Style */
 .mr2-card {
-  background: rgba(30, 39, 46, 0.4);
+  background: #2c2622;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 245, 230, 0.18);
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
@@ -87,7 +87,7 @@
 /* Dialogue Speech Bubble */
 .mr2-speech-bubble {
   position: relative;
-  background: rgba(30, 39, 46, 0.85);
+  background: #2c2622;
   border: 2px solid var(--clr-accent);
   border-radius: 24px;
   padding: 18px 24px;
@@ -1928,14 +1928,14 @@
 }
 
 .royal-mystery-arena {
-  --tmr-panel: #0e0e11;
-  --tmr-bubble-bg: #131317;
-  --tmr-surface: #17171c;
-  --tmr-line: #2c2c33;
-  --tmr-line-soft: #26262c;
-  --tmr-text: #ffffff;
-  --tmr-dim: #8b8b94;
-  --tmr-accent: #f5921e;
+  --tmr-panel: #302723;
+  --tmr-bubble-bg: #2c2622;
+  --tmr-surface: #362f2a;
+  --tmr-line: rgba(255, 245, 230, 0.18);
+  --tmr-line-soft: rgba(255, 245, 230, 0.12);
+  --tmr-text: #ede8e3;
+  --tmr-dim: #a89e94;
+  --tmr-accent: #e8864a;
 }
 
 /* Matches .tmr-round-container so the top bar, stepper and board share one
@@ -2153,7 +2153,7 @@
   height: 106px;
   border-radius: 50%;
   border: 2px solid var(--tmr-accent);
-  background: #121216;
+  background: #2c2622;
   display: flex;
   align-items: center;
   justify-content: center;

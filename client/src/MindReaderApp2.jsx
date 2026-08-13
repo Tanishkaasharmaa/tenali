@@ -1021,7 +1021,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
   // Arena height is content-driven: a hard 100vh left a tall empty panel below
   // the short screens (setup, round board).
   return (
-    <div className="royal-mystery-arena" style={{ background: '#0e0e11', color: '#ffffff', padding: '20px 15px', minHeight: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', boxSizing: 'border-box' }}>
+    <div className="royal-mystery-arena" style={{ background: 'var(--clr-bg, #302723)', color: 'var(--clr-text, #ede8e3)', padding: '20px 15px', minHeight: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', boxSizing: 'border-box' }}>
       {/* Global Navigation Header at the top */}
       {phase !== 'playing' && (
         <div style={{
