@@ -1443,7 +1443,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
               <div className="tmr-question-row">
                 <div className="tmr-avatar-col">
                   <div className="tmr-avatar-circle">
-                    <TenaliAvatar expression={avatarExpression} skin="scholar" size={76} />
+                    <TenaliAvatar expression={avatarExpression} skin="scholar" size={102} />
                   </div>
                   <div className="tmr-avatar-label">TENALI</div>
                 </div>
@@ -1486,7 +1486,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
                 <div className="tmr-avatar-col">
                   <div className="tmr-avatar-circle">
-                    <StudentAvatar expression={studentExpression} size={76} />
+                    <StudentAvatar expression={studentExpression} size={102} />
                   </div>
                   <div className="tmr-avatar-label">STUDENT</div>
                 </div>

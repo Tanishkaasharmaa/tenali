@@ -102,6 +102,7 @@ export default function StudentAvatar({ expression = 'attentive', size = 110 }) 
             width: '100%',
             height: '100%',
             objectFit: 'cover',
+            transform: 'scale(1.22)',
             borderRadius: '50%',
             display: 'block'
           }}
