@@ -27,7 +27,8 @@
       ],
       "commonMistakes": "Thinking negative numbers or fractions can be whole numbers.",
       "funFact": "Zero was added to counting numbers to form Whole Numbers!"
-    }
+    },
+    "hint": "Focus on non-negative counting numbers starting from 0 (0, 1, 2, 3...) with no fractions or decimals."
   },
   "integers": {
     "id": "integers",
@@ -37,7 +38,7 @@
     "clues": [
       "I describe scoreboards, bank money, and weather temperature!",
       "I step both forward into positive numbers and backward into negative numbers!",
-      "Even when I go below zero, every step is a full step—no half pieces or dots allowed!",
+      "Even when I go below zero, every step is a full step\u2014no half pieces or dots allowed!",
       "I show freezing cold winter days like 5 degrees below zero (-5)!",
       "I am all positive full numbers, zero, and negative full numbers (..., -2, -1, 0, 1, 2,...)!"
     ],
@@ -56,7 +57,8 @@
       ],
       "commonMistakes": "Thinking integers can include decimals like -2.5.",
       "funFact": "The word 'Integer' comes from Latin and means 'whole' or 'intact'!"
-    }
+    },
+    "hint": "Think of positive and negative whole numbers including zero (..., -2, -1, 0, 1, 2, ...)."
   },
   "fractions": {
     "id": "fractions",
@@ -66,7 +68,7 @@
     "clues": [
       "I appear whenever you share a pizza or slice a birthday cake!",
       "I show parts of a whole thing, sitting between full counting numbers.",
-      "I am written with two stacked numbers separated by a flat bar line (like 1/2)—never a decimal dot!",
+      "I am written with two stacked numbers separated by a flat bar line (like 1/2)\u2014never a decimal dot!",
       "When 4 friends share 1 pizza equally, I show each friend gets 1/4 of the pizza!",
       "I show parts of a whole written with a top number (numerator) and a bottom number (denominator)!"
     ],
@@ -84,7 +86,8 @@
       ],
       "commonMistakes": "Confusing numerator (top) and denominator (bottom).",
       "funFact": "The word 'fraction' comes from the Latin word 'fractio', which means 'to break'!"
-    }
+    },
+    "hint": "Recall that a fraction represents a part of a whole unit, written as numerator over denominator."
   },
   "decimal_numbers": {
     "id": "decimal_numbers",
@@ -112,7 +115,8 @@
       ],
       "commonMistakes": "Putting the decimal point in the wrong place.",
       "funFact": "The word 'decimal' comes from the Latin 'decem', meaning 'ten'!"
-    }
+    },
+    "hint": "Think about numbers that use a decimal point to represent values less than one (tenths, hundredths)."
   },
   "prime_number": {
     "id": "prime_number",
@@ -148,7 +152,8 @@
         "Is 29 a prime number?",
         "What is the next prime number after 19?"
       ]
-    }
+    },
+    "hint": "Focus on numbers greater than 1 that have exactly two factors: 1 and themselves (e.g. 2, 3, 5, 7, 11)."
   },
   "composite_number": {
     "id": "composite_number",
@@ -174,14 +179,15 @@
         "6 (divisors: 1,2,3,6)",
         "9 (divisors: 1,3,9)"
       ],
-      "commonMistakes": "Thinking 1 is composite — it is neither prime nor composite.",
+      "commonMistakes": "Thinking 1 is composite \u2014 it is neither prime nor composite.",
       "funFact": "Every composite number can be uniquely expressed as a product of prime numbers, known as its prime factorisation.",
       "relatedLesson": "Prime and Composite Numbers",
       "practiceQuestions": [
         "List all composite numbers below 20.",
         "Why is 1 neither prime nor composite?"
       ]
-    }
+    },
+    "hint": "Think of positive integers greater than 1 that have more than two positive factors (e.g. 4, 6, 8, 9)."
   },
   "factors": {
     "id": "factors",
@@ -213,7 +219,8 @@
         "Find all the factors of 18.",
         "What is the greatest factor of 48?"
       ]
-    }
+    },
+    "hint": "Think about numbers that multiply together to give a specific product."
   },
   "multiples": {
     "id": "multiples",
@@ -245,7 +252,8 @@
         "What is the 5th multiple of 9?",
         "Is 45 a multiple of 6?"
       ]
-    }
+    },
+    "hint": "Focus on numbers obtained by multiplying a given integer by 1, 2, 3, 4, etc."
   },
   "lcm": {
     "id": "lcm",
@@ -257,7 +265,7 @@
       "I help you add fractions with different bottom numbers by finding a shared denominator!",
       "For 4 and 6, skip-counting gives 4, 8, 12... and 6, 12... so 12 is our first meeting point!",
       "I tell you when two blinking lights or flashing signals will flash together again at the exact same moment!",
-      "I am the Least Common Multiple—the smallest positive number that is a multiple of two or more numbers!"
+      "I am the Least Common Multiple\u2014the smallest positive number that is a multiple of two or more numbers!"
     ],
     "hints": [
       "Least common multiple.",
@@ -270,8 +278,9 @@
         "LCM of 4 and 6 is 12"
       ],
       "commonMistakes": "Confusing LCM with HCF.",
-      "funFact": "For any two numbers a and b: HCF(a,b) × LCM(a,b) = a × b!"
-    }
+      "funFact": "For any two numbers a and b: HCF(a,b) \u00d7 LCM(a,b) = a \u00d7 b!"
+    },
+    "hint": "Recall the Least Common Multiple \u2014 the smallest positive integer divisible by all numbers in a set."
   },
   "hcf": {
     "id": "hcf",
@@ -281,9 +290,9 @@
     "clues": [
       "I look at two numbers and find the LARGEST common helper that divides both!",
       "I help you simplify big fractions to their simplest form!",
-      "For numbers 12 and 18, the numbers that divide both are 1, 2, 3, and 6—and I am the biggest one (6)!",
+      "For numbers 12 and 18, the numbers that divide both are 1, 2, 3, and 6\u2014and I am the biggest one (6)!",
       "You use me to cut two pieces of wood into the largest equal lengths with zero waste!",
-      "I am the Highest Common Factor (or GCD)—the largest number that divides two or more numbers exactly!"
+      "I am the Highest Common Factor (or GCD)\u2014the largest number that divides two or more numbers exactly!"
     ],
     "hints": [
       "Highest common factor.",
@@ -297,7 +306,8 @@
       ],
       "commonMistakes": "Confusing HCF (largest factor) with LCM (smallest multiple).",
       "funFact": "If the HCF of two numbers is 1, they are called co-prime numbers!"
-    }
+    },
+    "hint": "Recall the Highest Common Factor (GCD) \u2014 the largest number that divides into all given numbers."
   },
   "fraction": {
     "id": "fraction",
@@ -323,7 +333,7 @@
         "3/4 (three quarters)",
         "5/3 (improper fraction)"
       ],
-      "commonMistakes": "Adding fractions by adding numerators and denominators separately (e.g. 1/2 + 1/3 ≠ 2/5).",
+      "commonMistakes": "Adding fractions by adding numerators and denominators separately (e.g. 1/2 + 1/3 \u2260 2/5).",
       "funFact": "Ancient Egyptians only used fractions with numerator 1 (unit fractions). They would write 3/4 as 1/2 + 1/4.",
       "relatedLesson": "Fractions",
       "practiceQuestions": [
@@ -350,7 +360,7 @@
       "I use a point to separate whole parts from fractional parts.",
       "Our counting system is Base 10, which is also my name.",
       "The digit immediately to my right of the point represents tenths.",
-      "The number 3.14 is a famous example — it approximates pi."
+      "The number 3.14 is a famous example \u2014 it approximates pi."
     ],
     "hints": [
       "Arithmetic category topic.",
@@ -362,7 +372,7 @@
       "examples": [
         "0.5 = 1/2",
         "0.25 = 1/4",
-        "3.14 ≈ π"
+        "3.14 \u2248 \u03c0"
       ],
       "commonMistakes": "Misaligning decimal points when adding or subtracting. Thinking 0.10 and 0.1 are different numbers.",
       "funFact": "The decimal system was popularised in Europe by Simon Stevin in 1585, though India used it centuries earlier.",
@@ -410,7 +420,8 @@
         "20% discount on $50 = $10 off"
       ],
       "commonMistakes": "Forgetting to divide by 100 when converting percentage to a decimal."
-    }
+    },
+    "hint": "Recall that Percentages refers to: A rate, number, or amount in each hundred; a fraction expressed as a portion of 100."
   },
   "integer": {
     "id": "integer",
@@ -418,7 +429,7 @@
     "name": "Integer",
     "subject": "Arithmetic",
     "clues": [
-      "I am a complete number — no fractions, no decimals.",
+      "I am a complete number \u2014 no fractions, no decimals.",
       "I include both positive and negative whole numbers.",
       "I also include zero.",
       "The set of me extends infinitely in both directions on a number line.",
@@ -430,7 +441,7 @@
       "Starts with 'I'."
     ],
     "educationalInfo": {
-      "definition": "Any whole number (positive, negative, or zero) — not a fraction or decimal.",
+      "definition": "Any whole number (positive, negative, or zero) \u2014 not a fraction or decimal.",
       "examples": [
         "-5, -1, 0, 3, 100 are all integers.",
         "1.5 is NOT an integer."
@@ -442,7 +453,8 @@
         "Is -7 an integer?",
         "List three negative integers greater than -5."
       ]
-    }
+    },
+    "hint": "Recall that Integer refers to: Any whole number (positive, negative, or zero) \u2014 not a fraction or decimal."
   },
   "right_triangle": {
     "id": "right_triangle",
@@ -474,7 +486,8 @@
         "Can a triangle have two right angles?",
         "If a right triangle has an angle of 40 degrees, what is the third angle?"
       ]
-    }
+    },
+    "hint": "Recall that Right Triangle refers to: A triangle in which one angle is a right angle (90 degrees)."
   },
   "pythagoras_theorem": {
     "id": "pythagoras_theorem",
@@ -494,7 +507,7 @@
       "Starts with 'P'."
     ],
     "educationalInfo": {
-      "definition": "A fundamental relation in Euclidean geometry: a² + b² = c², where c is the hypotenuse of a right triangle.",
+      "definition": "A fundamental relation in Euclidean geometry: a\u00b2 + b\u00b2 = c\u00b2, where c is the hypotenuse of a right triangle.",
       "examples": [
         "3^2 + 4^2 = 5^2 (9 + 16 = 25).",
         "5^2 + 12^2 = 13^2 (25 + 144 = 169)."
@@ -506,7 +519,8 @@
         "If the legs of a right triangle are 6 and 8, find the hypotenuse.",
         "Is a triangle with side lengths 7, 24, and 25 a right triangle?"
       ]
-    }
+    },
+    "hint": "Recall that Pythagoras' Theorem refers to: A fundamental relation in Euclidean geometry: a\u00b2 + b\u00b2 = c\u00b2, where c is the hypotenuse of a right triangle."
   },
   "perimeter": {
     "id": "perimeter",
@@ -528,7 +542,7 @@
     "educationalInfo": {
       "definition": "The continuous line forming the boundary of a closed two-dimensional shape.",
       "examples": [
-        "Perimeter of rectangle 5cm×3cm = 2(5+3) = 16cm.",
+        "Perimeter of rectangle 5cm\u00d73cm = 2(5+3) = 16cm.",
         "Perimeter of square side 4cm = 16cm."
       ],
       "commonMistakes": "Confusing perimeter with area (perimeter is linear length, not square units).",
@@ -538,7 +552,8 @@
         "Calculate the perimeter of a regular hexagon with side length 5cm.",
         "What is the perimeter of a rectangle with length 10m and width 4m?"
       ]
-    }
+    },
+    "hint": "Recall that Perimeter refers to: The continuous line forming the boundary of a closed two-dimensional shape."
   },
   "area": {
     "id": "area",
@@ -560,8 +575,8 @@
     "educationalInfo": {
       "definition": "The quantity that expresses the extent of a two-dimensional figure in the plane.",
       "examples": [
-        "Area of a square with side 5cm = 25 cm².",
-        "Area of triangle = 0.5 × base × height."
+        "Area of a square with side 5cm = 25 cm\u00b2.",
+        "Area of triangle = 0.5 \u00d7 base \u00d7 height."
       ],
       "commonMistakes": "Measuring area in linear units instead of square units. Confusing perimeter and area formulas.",
       "funFact": "A standard A4 sheet of paper has an area of exactly 1/16th of a square meter.",
@@ -570,7 +585,8 @@
         "Find the area of a triangle with base 8cm and height 5cm.",
         "If a square has a perimeter of 24cm, what is its area?"
       ]
-    }
+    },
+    "hint": "Recall that Area refers to: The quantity that expresses the extent of a two-dimensional figure in the plane."
   },
   "volume": {
     "id": "volume",
@@ -580,9 +596,9 @@
     "clues": [
       "I measure three-dimensional capacity.",
       "I count the amount of cubic space occupied by a solid object.",
-      "For a cuboid, my calculation is length × width × height.",
-      "For a cylinder, my formula is pi × r² × h.",
-      "My units are written with a superscript 3, such as cm³ or cubic meters."
+      "For a cuboid, my calculation is length \u00d7 width \u00d7 height.",
+      "For a cylinder, my formula is pi \u00d7 r\u00b2 \u00d7 h.",
+      "My units are written with a superscript 3, such as cm\u00b3 or cubic meters."
     ],
     "hints": [
       "Geometry category topic.",
@@ -592,17 +608,18 @@
     "educationalInfo": {
       "definition": "The amount of three-dimensional space enclosed by a closed surface.",
       "examples": [
-        "Volume of a cube with side 3cm = 27 cm³.",
-        "A cylinder with radius 2cm and height 5cm has volume ≈ 62.8 cm³."
+        "Volume of a cube with side 3cm = 27 cm\u00b3.",
+        "A cylinder with radius 2cm and height 5cm has volume \u2248 62.8 cm\u00b3."
       ],
       "commonMistakes": "Using area formulas instead of multiplying by height. Measuring volume in square units.",
-      "funFact": "One litre is defined as the volume of a cube that measures 10cm on each side (1000 cm³).",
+      "funFact": "One litre is defined as the volume of a cube that measures 10cm on each side (1000 cm\u00b3).",
       "relatedLesson": "Perimeter, Area, and Volume",
       "practiceQuestions": [
-        "Calculate the volume of a box measuring 5cm × 4cm × 3cm.",
+        "Calculate the volume of a box measuring 5cm \u00d7 4cm \u00d7 3cm.",
         "What is the volume of a sphere of radius 3 units (in terms of pi)?"
       ]
-    }
+    },
+    "hint": "Recall that Volume refers to: The amount of three-dimensional space enclosed by a closed surface."
   },
   "circle": {
     "id": "circle",
@@ -613,8 +630,8 @@
       "I am a perfectly round shape.",
       "Every point on my boundary is exactly the same distance from my centre.",
       "That fixed distance is called my radius.",
-      "My boundary length is called my circumference, equal to 2πr.",
-      "The constant π (pi) is the ratio of my circumference to my diameter."
+      "My boundary length is called my circumference, equal to 2\u03c0r.",
+      "The constant \u03c0 (pi) is the ratio of my circumference to my diameter."
     ],
     "hints": [
       "Geometry category topic.",
@@ -625,16 +642,17 @@
       "definition": "A round plane figure whose boundary consists of points equidistant from a fixed centre point.",
       "examples": [
         "A coin is a circular shape.",
-        "The face of a clock is a circle with radius ≈ 10cm."
+        "The face of a clock is a circle with radius \u2248 10cm."
       ],
-      "commonMistakes": "Confusing radius with diameter (diameter = 2 × radius).",
-      "funFact": "A circle has the largest area of any 2D shape with a given perimeter — this is why bubbles are spherical.",
+      "commonMistakes": "Confusing radius with diameter (diameter = 2 \u00d7 radius).",
+      "funFact": "A circle has the largest area of any 2D shape with a given perimeter \u2014 this is why bubbles are spherical.",
       "relatedLesson": "Circles",
       "practiceQuestions": [
         "Find the circumference of a circle with radius 7cm.",
         "What is the area of a circle with diameter 10cm?"
       ]
-    }
+    },
+    "hint": "Recall that Circle refers to: A round plane figure whose boundary consists of points equidistant from a fixed centre point."
   },
   "polygon": {
     "id": "polygon",
@@ -646,7 +664,7 @@
       "My name comes from Greek meaning 'many angles'.",
       "Triangles, squares, and hexagons are all examples of me.",
       "A regular version of me has all sides and angles equal.",
-      "The sum of my interior angles is (n-2) × 180 degrees, where n is my number of sides."
+      "The sum of my interior angles is (n-2) \u00d7 180 degrees, where n is my number of sides."
     ],
     "hints": [
       "Geometry category topic.",
@@ -667,7 +685,8 @@
         "What is the sum of interior angles of a pentagon?",
         "What is a polygon with 8 sides called?"
       ]
-    }
+    },
+    "hint": "Recall that Polygon refers to: A plane figure with at least three straight sides and angles."
   },
   "cylinder": {
     "id": "cylinder",
@@ -694,13 +713,14 @@
         "A piston in an engine"
       ],
       "commonMistakes": "Using the diameter instead of the radius in the volume formula.",
-      "funFact": "Cylinders are incredibly strong structures — the cylindrical shape of columns can hold enormous weight.",
+      "funFact": "Cylinders are incredibly strong structures \u2014 the cylindrical shape of columns can hold enormous weight.",
       "relatedLesson": "3D Shapes and Volume",
       "practiceQuestions": [
         "Find the volume of a cylinder with radius 3cm and height 10cm.",
         "What is the surface area of a cylinder with r=5 and h=8?"
       ]
-    }
+    },
+    "hint": "Recall that Cylinder refers to: A three-dimensional solid with two parallel circular bases connected by a curved lateral surface."
   },
   "coordinate": {
     "id": "coordinate",
@@ -712,7 +732,7 @@
       "I am used to locate a point on a grid or in space.",
       "On a 2D plane, I come in ordered pairs like (x, y).",
       "The origin of my system is at point (0, 0).",
-      "René Descartes invented the system I belong to, called the Cartesian system."
+      "Ren\u00e9 Descartes invented the system I belong to, called the Cartesian system."
     ],
     "hints": [
       "Geometry category topic.",
@@ -725,14 +745,15 @@
         "(3, 4) means 3 units right, 4 units up.",
         "(-2, 0) is on the x-axis."
       ],
-      "commonMistakes": "Swapping x and y values — always read (horizontal, vertical).",
+      "commonMistakes": "Swapping x and y values \u2014 always read (horizontal, vertical).",
       "funFact": "Legend says Descartes invented his coordinate system while watching a fly on his ceiling, wondering how to describe its position.",
       "relatedLesson": "Coordinates and Graphs",
       "practiceQuestions": [
         "Plot the point (4, -2) on a coordinate grid.",
         "What coordinate is at the origin?"
       ]
-    }
+    },
+    "hint": "Recall that Coordinate refers to: A pair (or set) of numbers used to indicate the position of a point on a graph or in space."
   },
   "sphere": {
     "id": "sphere",
@@ -742,7 +763,7 @@
     "clues": [
       "I am the 3D version of a circle.",
       "Every point on my surface is equidistant from my centre.",
-      "My volume is calculated as (4/3) × pi × radius cubed.",
+      "My volume is calculated as (4/3) \u00d7 pi \u00d7 radius cubed.",
       "A ball, globe, and bubble are all examples of me.",
       "I have no edges, no vertices, and only one curved surface."
     ],
@@ -759,13 +780,14 @@
         "A soap bubble"
       ],
       "commonMistakes": "Confusing a sphere (solid) with a circle (flat 2D). Using area formula instead of volume formula.",
-      "funFact": "Of all 3D shapes, a sphere has the smallest surface area for a given volume — which is why planets are spherical.",
+      "funFact": "Of all 3D shapes, a sphere has the smallest surface area for a given volume \u2014 which is why planets are spherical.",
       "relatedLesson": "3D Shapes and Volume",
       "practiceQuestions": [
         "Find the volume of a sphere with radius 6cm.",
         "What is the surface area of a sphere (formula)?"
       ]
-    }
+    },
+    "hint": "Recall that Sphere refers to: A perfectly round geometrical object in three-dimensional space that is the set of all points equidistant from a given centre."
   },
   "variable": {
     "id": "variable",
@@ -791,13 +813,14 @@
         "In x + 2 = 5, x is the variable."
       ],
       "commonMistakes": "Treating variables as constants. Forgetting that different variables represent different values.",
-      "funFact": "René Descartes introduced the convention of using x, y, z for variables and a, b, c for constants.",
+      "funFact": "Ren\u00e9 Descartes introduced the convention of using x, y, z for variables and a, b, c for constants.",
       "relatedLesson": "Equations and Formulae",
       "practiceQuestions": [
         "Identify the variable in the expression 3a - 7.",
         "Can a variable take multiple values in a function?"
       ]
-    }
+    },
+    "hint": "Recall that Variable refers to: A symbol (usually a letter) standing for an unknown numerical value in an equation or algebraic expression."
   },
   "expression": {
     "id": "expression",
@@ -817,10 +840,10 @@
       "Starts with 'E'."
     ],
     "educationalInfo": {
-      "definition": "A mathematical phrase containing numbers, variables, and operators — but no equality sign.",
+      "definition": "A mathematical phrase containing numbers, variables, and operators \u2014 but no equality sign.",
       "examples": [
         "2x + 5",
-        "x² - y"
+        "x\u00b2 - y"
       ],
       "commonMistakes": "Confusing an expression with an equation (equations have '=', expressions do not).",
       "funFact": "Expressions are the algebraic equivalent of a sentence fragment, while equations are complete sentences.",
@@ -829,7 +852,8 @@
         "Simplify the expression: 2x + 3x - 4.",
         "Is '5x + 3 = 13' an expression or an equation?"
       ]
-    }
+    },
+    "hint": "Recall that Expression refers to: A mathematical phrase containing numbers, variables, and operators \u2014 but no equality sign."
   },
   "linear_equation": {
     "id": "linear_equation",
@@ -861,7 +885,8 @@
         "Solve for x: 3x - 4 = 11.",
         "Does the point (2, 5) lie on the line y = 2x + 1?"
       ]
-    }
+    },
+    "hint": "Recall that Linear Equation refers to: An equation between two variables that gives a straight line when plotted on a graph."
   },
   "quadratic_equation": {
     "id": "quadratic_equation",
@@ -872,7 +897,7 @@
       "I am an algebraic relation.",
       "My graph forms a U-shaped curve called a parabola.",
       "The highest exponent of my variable is exactly 2.",
-      "My standard form is ax² + bx + c = 0.",
+      "My standard form is ax\u00b2 + bx + c = 0.",
       "My solutions can be found using factorisation, completing the square, or the quadratic formula."
     ],
     "hints": [
@@ -881,19 +906,20 @@
       "Starts with 'Q'."
     ],
     "educationalInfo": {
-      "definition": "Any equation that can be rearranged in standard form as ax² + bx + c = 0, where a ≠ 0.",
+      "definition": "Any equation that can be rearranged in standard form as ax\u00b2 + bx + c = 0, where a \u2260 0.",
       "examples": [
-        "x² - 5x + 6 = 0",
-        "y = 2x² + 3"
+        "x\u00b2 - 5x + 6 = 0",
+        "y = 2x\u00b2 + 3"
       ],
-      "commonMistakes": "Forgetting the ± sign when taking square roots. Missing the quadratic term when rearranging.",
-      "funFact": "The path of any thrown object — a basketball or a stone — is a parabola described by a quadratic equation.",
+      "commonMistakes": "Forgetting the \u00b1 sign when taking square roots. Missing the quadratic term when rearranging.",
+      "funFact": "The path of any thrown object \u2014 a basketball or a stone \u2014 is a parabola described by a quadratic equation.",
       "relatedLesson": "Quadratic Equations",
       "practiceQuestions": [
-        "Find the roots of x² - 9 = 0.",
-        "How many solutions does x² - 4x + 4 = 0 have?"
+        "Find the roots of x\u00b2 - 9 = 0.",
+        "How many solutions does x\u00b2 - 4x + 4 = 0 have?"
       ]
-    }
+    },
+    "hint": "Recall that Quadratic Equation refers to: Any equation that can be rearranged in standard form as ax\u00b2 + bx + c = 0, where a \u2260 0."
   },
   "inequality": {
     "id": "inequality",
@@ -905,7 +931,7 @@
       "I show that one value is larger or smaller than another.",
       "I use symbols that resemble arrowheads or wedges.",
       "When you multiply both sides by a negative number, you must flip my symbol.",
-      "Examples of my symbols are <, >, ≤, and ≥."
+      "Examples of my symbols are <, >, \u2264, and \u2265."
     ],
     "hints": [
       "Algebra category topic.",
@@ -916,16 +942,17 @@
       "definition": "A mathematical statement indicating that one expression is greater than, less than, or not equal to another.",
       "examples": [
         "2x + 1 > 5",
-        "y ≤ 3"
+        "y \u2264 3"
       ],
       "commonMistakes": "Forgetting to flip the inequality sign when dividing or multiplying by a negative number.",
       "funFact": "The '<' and '>' symbols were introduced by mathematician Thomas Harriot in 1631.",
       "relatedLesson": "Inequalities",
       "practiceQuestions": [
         "Solve for x: -2x > 8.",
-        "Represent x ≥ 3 on a number line."
+        "Represent x \u2265 3 on a number line."
       ]
-    }
+    },
+    "hint": "Recall that Inequality refers to: A mathematical statement indicating that one expression is greater than, less than, or not equal to another."
   },
   "ratio": {
     "id": "ratio",
@@ -956,7 +983,8 @@
         "Scale 1:1000 on a map"
       ],
       "commonMistakes": "Adding ratios together directly or reversing the order of terms."
-    }
+    },
+    "hint": "Recall that Ratio refers to: The quantitative relation between two amounts showing the number of times one value contains or is contained within the other."
   },
   "sequence": {
     "id": "sequence",
@@ -988,7 +1016,8 @@
         "Find the 7th term of the arithmetic sequence 4, 7, 10...",
         "What type of sequence is 2, 4, 8, 16?"
       ]
-    }
+    },
+    "hint": "Recall that Sequence refers to: An ordered list of numbers (terms) following a defined rule or pattern."
   },
   "function": {
     "id": "function",
@@ -999,7 +1028,7 @@
       "I am a special rule that maps each input to exactly one output.",
       "I am often written using f(x) notation.",
       "I can be pictured as a machine: input goes in, output comes out.",
-      "On a graph, I pass the vertical line test — any vertical line crosses me at most once.",
+      "On a graph, I pass the vertical line test \u2014 any vertical line crosses me at most once.",
       "f(x) = 2x + 3 means for any x, my output is double x plus 3."
     ],
     "hints": [
@@ -1010,17 +1039,18 @@
     "educationalInfo": {
       "definition": "A rule that assigns exactly one output value to each input value.",
       "examples": [
-        "f(x) = x² maps 3 to 9, -2 to 4.",
+        "f(x) = x\u00b2 maps 3 to 9, -2 to 4.",
         "g(x) = 2x + 1 maps 5 to 11."
       ],
       "commonMistakes": "Thinking a relation where one input gives multiple outputs is a function (it is not).",
-      "funFact": "Functions are the backbone of all computer programming — every program is ultimately a chain of functions.",
+      "funFact": "Functions are the backbone of all computer programming \u2014 every program is ultimately a chain of functions.",
       "relatedLesson": "Functions and Graphs",
       "practiceQuestions": [
         "If f(x) = 3x - 2, find f(4).",
-        "Is y = ±√x a function? Why or why not?"
+        "Is y = \u00b1\u221ax a function? Why or why not?"
       ]
-    }
+    },
+    "hint": "Recall that Function refers to: A rule that assigns exactly one output value to each input value."
   },
   "gradient": {
     "id": "gradient",
@@ -1046,13 +1076,14 @@
         "y = 3x + 1 has gradient 3."
       ],
       "commonMistakes": "Dividing run by rise instead of rise by run.",
-      "funFact": "Road gradients are expressed as percentages — a '10% gradient' means you rise 10m for every 100m you travel forward.",
+      "funFact": "Road gradients are expressed as percentages \u2014 a '10% gradient' means you rise 10m for every 100m you travel forward.",
       "relatedLesson": "Straight Line Graphs",
       "practiceQuestions": [
         "Find the gradient of the line through (1,2) and (3,6).",
         "What is the gradient of y = -5x + 7?"
       ]
-    }
+    },
+    "hint": "Recall that Gradient refers to: The steepness or slope of a line, measured as the ratio of vertical change (rise) to horizontal change (run)."
   },
   "matrix": {
     "id": "matrix",
@@ -1062,7 +1093,7 @@
     "clues": [
       "I am a rectangular arrangement of numbers.",
       "I organise my elements into rows and columns.",
-      "My size is described by rows × columns (e.g. a 2×3 has 2 rows and 3 columns).",
+      "My size is described by rows \u00d7 columns (e.g. a 2\u00d73 has 2 rows and 3 columns).",
       "Two of me can be multiplied only when the columns of the first equal the rows of the second.",
       "I am used in computer graphics, machine learning, and physics simulations."
     ],
@@ -1074,7 +1105,7 @@
     "educationalInfo": {
       "definition": "A rectangular array of numbers arranged in rows and columns, used to represent linear transformations.",
       "examples": [
-        "[[1,2],[3,4]] is a 2×2 matrix.",
+        "[[1,2],[3,4]] is a 2\u00d72 matrix.",
         "An identity matrix has 1s on the diagonal and 0s elsewhere."
       ],
       "commonMistakes": "Trying to add matrices of different dimensions. Swapping rows and columns (that gives the transpose).",
@@ -1082,9 +1113,10 @@
       "relatedLesson": "Matrices",
       "practiceQuestions": [
         "What is the order of a matrix with 3 rows and 2 columns?",
-        "Can you add a 2×3 matrix to a 3×2 matrix?"
+        "Can you add a 2\u00d73 matrix to a 3\u00d72 matrix?"
       ]
-    }
+    },
+    "hint": "Recall that Matrix refers to: A rectangular array of numbers arranged in rows and columns, used to represent linear transformations."
   },
   "mean": {
     "id": "mean",
@@ -1116,7 +1148,8 @@
         "Find the mean of {5, 8, 11, 16}.",
         "If the sum of 5 numbers is 100, what is their mean?"
       ]
-    }
+    },
+    "hint": "Recall that Mean refers to: The average value of a set of numbers, calculated by dividing the sum of the values by their count."
   },
   "median": {
     "id": "median",
@@ -1142,13 +1175,14 @@
         "Median of {2, 4, 6, 8} is (4+6)/2 = 5."
       ],
       "commonMistakes": "Forgetting to sort the numbers before picking the middle value.",
-      "funFact": "Unlike the mean, the median is robust to outliers — which is why median house prices are reported instead of average prices.",
+      "funFact": "Unlike the mean, the median is robust to outliers \u2014 which is why median house prices are reported instead of average prices.",
       "relatedLesson": "Statistics",
       "practiceQuestions": [
         "Find the median of {12, 3, 8, 15, 6}.",
         "What is the median of {1, 2, 9, 10}?"
       ]
-    }
+    },
+    "hint": "Recall that Median refers to: The middle number in a sorted, ascending or descending list of numbers."
   },
   "mode": {
     "id": "mode",
@@ -1174,13 +1208,14 @@
         "Mode of {blue, red, blue, green} is blue."
       ],
       "commonMistakes": "Thinking a dataset must have exactly one mode. Confusing frequency with the value itself.",
-      "funFact": "The word mode comes from the French 'la mode', meaning fashion — i.e., what is most popular.",
+      "funFact": "The word mode comes from the French 'la mode', meaning fashion \u2014 i.e., what is most popular.",
       "relatedLesson": "Statistics",
       "practiceQuestions": [
         "What is the mode of {5, 7, 5, 8, 7, 5}?",
         "Can a set of numbers have no mode?"
       ]
-    }
+    },
+    "hint": "Recall that Mode refers to: The value that appears most frequently in a data set."
   },
   "range": {
     "id": "range",
@@ -1212,7 +1247,8 @@
         "Find the range of {8, 3, 15, 6, 11}.",
         "If range is 12 and the minimum is 5, what is the maximum?"
       ]
-    }
+    },
+    "hint": "Recall that Range refers to: The difference between the largest and smallest values in a dataset, measuring spread."
   },
   "probability": {
     "id": "probability",
@@ -1244,7 +1280,8 @@
         "What is the probability of rolling an even number on a die?",
         "If a bag has 3 red and 7 blue marbles, what is the probability of picking red?"
       ]
-    }
+    },
+    "hint": "Recall that Probability refers to: The branch of mathematics concerning numerical descriptions of how likely an event is to occur."
   },
   "venn_diagram": {
     "id": "venn_diagram",
@@ -1273,10 +1310,11 @@
       "funFact": "The rectangular bounding box representing the universal set is mathematically required but often omitted in popular memes.",
       "relatedLesson": "Sets and Venn Diagrams",
       "practiceQuestions": [
-        "If set A has 5 items, B has 4, and they overlap by 2, what is |A ∪ B|?",
+        "If set A has 5 items, B has 4, and they overlap by 2, what is |A \u222a B|?",
         "What does the overlapping area in a Venn diagram represent?"
       ]
-    }
+    },
+    "hint": "Recall that Venn Diagram refers to: An illustration using overlapping circles to show relationships among groups of things."
   },
   "set": {
     "id": "set",
@@ -1288,7 +1326,7 @@
       "My members are called elements.",
       "I am written using curly braces with elements separated by commas.",
       "The size of me is called my cardinality.",
-      "The empty version of me is written as {} or the symbol ∅."
+      "The empty version of me is written as {} or the symbol \u2205."
     ],
     "hints": [
       "Statistics category topic.",
@@ -1301,14 +1339,15 @@
         "{1, 2, 3} is a set of three integers.",
         "{a, e, i, o, u} is the set of vowels."
       ],
-      "commonMistakes": "Allowing duplicate elements — a set can only contain each element once.",
+      "commonMistakes": "Allowing duplicate elements \u2014 a set can only contain each element once.",
       "funFact": "Set theory, developed by Georg Cantor in the 1870s, is the foundation of all modern mathematics.",
       "relatedLesson": "Sets and Venn Diagrams",
       "practiceQuestions": [
         "What is the union of {1,2,3} and {3,4,5}?",
         "What is the intersection of {a,b,c} and {b,c,d}?"
       ]
-    }
+    },
+    "hint": "Recall that Set refers to: A well-defined collection of distinct objects, considered as an object in its own right."
   },
   "standard_deviation": {
     "id": "standard_deviation",
@@ -1320,7 +1359,7 @@
       "A small value of me means data points are clustered close to the average.",
       "A large value of me means data is more dispersed.",
       "I am the square root of the variance.",
-      "I am symbolised by the Greek letter sigma (σ)."
+      "I am symbolised by the Greek letter sigma (\u03c3)."
     ],
     "hints": [
       "Statistics category topic.",
@@ -1335,12 +1374,13 @@
       ],
       "commonMistakes": "Confusing standard deviation with range. Forgetting to take the square root of variance.",
       "funFact": "In a normal distribution, about 68% of data falls within 1 standard deviation of the mean, and 95% within 2.",
-      "relatedLesson": "Statistics — Spread",
+      "relatedLesson": "Statistics \u2014 Spread",
       "practiceQuestions": [
         "If variance = 25, what is the standard deviation?",
         "Which dataset has greater spread: {5,5,5} or {2,5,8}?"
       ]
-    }
+    },
+    "hint": "Recall that Standard Deviation refers to: A measure of the amount of variation or dispersion of a set of values from their mean."
   },
   "normal_distribution": {
     "id": "normal_distribution",
@@ -1372,7 +1412,8 @@
         "In a normal distribution, what percentage of data lies within 1 SD of the mean?",
         "If mean = 50 and SD = 10, between what values does 95% of data fall?"
       ]
-    }
+    },
+    "hint": "Recall that Normal Distribution refers to: A probability distribution that is symmetric about the mean, forming a bell-shaped curve."
   },
   "scatter_graph": {
     "id": "scatter_graph",
@@ -1397,14 +1438,15 @@
         "Plotting height vs weight for a class of students.",
         "Ice cream sales vs temperature."
       ],
-      "commonMistakes": "Confusing correlation with causation — just because two things correlate does not mean one causes the other.",
+      "commonMistakes": "Confusing correlation with causation \u2014 just because two things correlate does not mean one causes the other.",
       "funFact": "Scatter graphs were first used by Francis Galton in the 1880s to study the relationship between parents' and children's heights.",
       "relatedLesson": "Data Representation",
       "practiceQuestions": [
         "What does a scatter graph with all points on a perfect line indicate?",
         "Describe the correlation if dots fall from top-left to bottom-right."
       ]
-    }
+    },
+    "hint": "Recall that Scatter Graph refers to: A graph using dots to represent values for two different variables, showing possible correlations."
   },
   "sine": {
     "id": "sine",
@@ -1424,10 +1466,10 @@
       "Starts with 'S'."
     ],
     "educationalInfo": {
-      "definition": "The trigonometric function equal to opposite ÷ hypotenuse for an acute angle in a right triangle.",
+      "definition": "The trigonometric function equal to opposite \u00f7 hypotenuse for an acute angle in a right triangle.",
       "examples": [
-        "sin(30°) = 0.5",
-        "sin(90°) = 1"
+        "sin(30\u00b0) = 0.5",
+        "sin(90\u00b0) = 1"
       ],
       "commonMistakes": "Dividing adjacent by hypotenuse instead of opposite by hypotenuse. Forgetting Degree mode on calculator.",
       "funFact": "The word sine originates from a Latin mistranslation of the Arabic word 'jaib', meaning pocket or fold.",
@@ -1436,7 +1478,8 @@
         "What is the value of sin(0)?",
         "If opposite = 5 and hypotenuse = 10, find sin of the angle."
       ]
-    }
+    },
+    "hint": "Recall that Sine refers to: The trigonometric function equal to opposite \u00f7 hypotenuse for an acute angle in a right triangle."
   },
   "cosine": {
     "id": "cosine",
@@ -1456,19 +1499,20 @@
       "Starts with 'C'."
     ],
     "educationalInfo": {
-      "definition": "The trigonometric function equal to adjacent ÷ hypotenuse for an acute angle in a right triangle.",
+      "definition": "The trigonometric function equal to adjacent \u00f7 hypotenuse for an acute angle in a right triangle.",
       "examples": [
-        "cos(60°) = 0.5",
-        "cos(0°) = 1"
+        "cos(60\u00b0) = 0.5",
+        "cos(0\u00b0) = 1"
       ],
       "commonMistakes": "Using the opposite side instead of the adjacent side in calculations.",
-      "funFact": "The cosine of an angle is identical to the sine of its complementary angle — hence the 'co-' prefix.",
+      "funFact": "The cosine of an angle is identical to the sine of its complementary angle \u2014 hence the 'co-' prefix.",
       "relatedLesson": "Trigonometry Basics",
       "practiceQuestions": [
-        "What is the value of cos(90°)?",
+        "What is the value of cos(90\u00b0)?",
         "If adjacent = 4 and hypotenuse = 5, find the cosine."
       ]
-    }
+    },
+    "hint": "Recall that Cosine refers to: The trigonometric function equal to adjacent \u00f7 hypotenuse for an acute angle in a right triangle."
   },
   "tangent": {
     "id": "tangent",
@@ -1488,19 +1532,20 @@
       "Starts with 'T'."
     ],
     "educationalInfo": {
-      "definition": "A trigonometric function representing opposite ÷ adjacent in a right triangle.",
+      "definition": "A trigonometric function representing opposite \u00f7 adjacent in a right triangle.",
       "examples": [
-        "tan(45°) = 1",
-        "tan(30°) = 1/√3"
+        "tan(45\u00b0) = 1",
+        "tan(30\u00b0) = 1/\u221a3"
       ],
       "commonMistakes": "Inverting the ratio (dividing adjacent by opposite gives cotangent, not tangent).",
-      "funFact": "At 90°, tangent is undefined because cosine is 0 — its graph shoots off to infinity.",
+      "funFact": "At 90\u00b0, tangent is undefined because cosine is 0 \u2014 its graph shoots off to infinity.",
       "relatedLesson": "Trigonometry Basics",
       "practiceQuestions": [
-        "What is tan(0°)?",
+        "What is tan(0\u00b0)?",
         "Find tan if opposite = 8 and adjacent = 8."
       ]
-    }
+    },
+    "hint": "Recall that Tangent refers to: A trigonometric function representing opposite \u00f7 adjacent in a right triangle."
   },
   "hypotenuse": {
     "id": "hypotenuse",
@@ -1511,7 +1556,7 @@
       "I am a physical component of a right triangle.",
       "I am always the longest side of the triangle.",
       "I am always positioned directly opposite the 90-degree right angle.",
-      "In Pythagoras' formula a² + b² = c², I am represented by the letter c.",
+      "In Pythagoras' formula a\u00b2 + b\u00b2 = c\u00b2, I am represented by the letter c.",
       "I serve as the denominator in both sine and cosine calculations."
     ],
     "hints": [
@@ -1530,9 +1575,10 @@
       "relatedLesson": "Pythagoras' Theorem",
       "practiceQuestions": [
         "In a right triangle with legs 5 and 12, what is the hypotenuse?",
-        "Which side is the hypotenuse in a triangle with angles 40°, 50°, 90°?"
+        "Which side is the hypotenuse in a triangle with angles 40\u00b0, 50\u00b0, 90\u00b0?"
       ]
-    }
+    },
+    "hint": "Recall that Hypotenuse refers to: The longest side of a right-angled triangle, opposite the right angle."
   },
   "angle_of_elevation": {
     "id": "angle_of_elevation",
@@ -1561,10 +1607,11 @@
       "funFact": "Surveyors use an instrument called a clinometer or theodolite to measure angles of elevation.",
       "relatedLesson": "Applications of Trigonometry",
       "practiceQuestions": [
-        "If you stand 10m away from a tree and look up at 45°, how tall is the tree?",
+        "If you stand 10m away from a tree and look up at 45\u00b0, how tall is the tree?",
         "Explain the difference between angle of elevation and depression."
       ]
-    }
+    },
+    "hint": "Recall that Angle of Elevation refers to: The angle formed by the line of sight and the horizontal plane for an object above the horizontal."
   },
   "vector": {
     "id": "vector",
@@ -1587,7 +1634,7 @@
       "definition": "A quantity that has both magnitude (size) and direction, represented as an arrow.",
       "examples": [
         "Velocity (50 km/h north)",
-        "Force (10 N at 30° above horizontal)"
+        "Force (10 N at 30\u00b0 above horizontal)"
       ],
       "commonMistakes": "Confusing vector with scalar. Adding vectors by adding only magnitudes (direction must be considered).",
       "funFact": "GPS navigation constantly uses vector mathematics to calculate the direction and distance to your destination.",
@@ -1596,7 +1643,8 @@
         "What is the resultant of vectors (3,4) and (-1,2)?",
         "Give two examples of scalar quantities and two of vector quantities."
       ]
-    }
+    },
+    "hint": "Recall that Vector refers to: A quantity that has both magnitude (size) and direction, represented as an arrow."
   },
   "square_root": {
     "id": "square_root",
@@ -1606,24 +1654,25 @@
     "clues": [
       "I am an inverse mathematical operation.",
       "I ask: 'What number multiplied by itself equals the given value?'",
-      "I am written with a radical symbol √. The square root of 25 is 5.",
+      "I am written with a radical symbol \u221a. The square root of 25 is 5.",
       "Finding the side length of a square room if you know its area is 25 sq meters.",
-      "The square root (√) of a number is a value that, when multiplied by itself, gives the original number."
+      "The square root (\u221a) of a number is a value that, when multiplied by itself, gives the original number."
     ],
     "hints": [
-      "Radical symbol √.",
+      "Radical symbol \u221a.",
       "Inverse of square.",
-      "√16 = 4."
+      "\u221a16 = 4."
     ],
     "educationalInfo": {
-      "definition": "The square root (√) of a number is a value that, when multiplied by itself, yields the original number.",
+      "definition": "The square root (\u221a) of a number is a value that, when multiplied by itself, yields the original number.",
       "examples": [
-        "√9 = 3",
-        "√16 = 4"
+        "\u221a9 = 3",
+        "\u221a16 = 4"
       ],
       "commonMistakes": "Dividing by 2 instead of finding the square root.",
-      "funFact": "Square root of 2 (√2 ≈ 1.414) was the first irrational number discovered!"
-    }
+      "funFact": "Square root of 2 (\u221a2 \u2248 1.414) was the first irrational number discovered!"
+    },
+    "hint": "Recall that Square Root refers to: The square root (\u221a) of a number is a value that, when multiplied by itself, yields the original number."
   },
   "cube_root": {
     "id": "cube_root",
@@ -1633,24 +1682,25 @@
     "clues": [
       "I am an inverse operation used in 3D geometry.",
       "I ask: 'What number multiplied by itself three times equals the given value?'",
-      "I am written with a radical symbol with a small 3 (∛). The cube root of 8 is 2.",
+      "I am written with a radical symbol with a small 3 (\u221b). The cube root of 8 is 2.",
       "Finding the side length of a cube box if you know its volume is 8 cubic meters.",
-      "The cube root (∛) of a number is a value that, when multiplied by itself three times, gives the original number."
+      "The cube root (\u221b) of a number is a value that, when multiplied by itself three times, gives the original number."
     ],
     "hints": [
-      "Symbol ∛.",
+      "Symbol \u221b.",
       "Inverse of cube.",
-      "∛8 = 2."
+      "\u221b8 = 2."
     ],
     "educationalInfo": {
-      "definition": "The cube root (∛) of a number is a value that, when multiplied by itself twice, yields the target number.",
+      "definition": "The cube root (\u221b) of a number is a value that, when multiplied by itself twice, yields the target number.",
       "examples": [
-        "∛8 = 2",
-        "∛64 = 4"
+        "\u221b8 = 2",
+        "\u221b64 = 4"
       ],
       "commonMistakes": "Confusing square root and cube root.",
       "funFact": "The cube root of a volume gives the side length of a 3D cube!"
-    }
+    },
+    "hint": "Recall that Cube Root refers to: The cube root (\u221b) of a number is a value that, when multiplied by itself twice, yields the target number."
   },
   "square": {
     "id": "square",
@@ -1672,18 +1722,19 @@
     "educationalInfo": {
       "definition": "A number multiplied by itself, equivalent to raising a number to the power of 2.",
       "examples": [
-        "5² = 25",
-        "(-3)² = 9",
-        "0.5² = 0.25"
+        "5\u00b2 = 25",
+        "(-3)\u00b2 = 9",
+        "0.5\u00b2 = 0.25"
       ],
-      "commonMistakes": "Thinking (-3)² = -9. (It equals +9 because negative × negative = positive.)",
+      "commonMistakes": "Thinking (-3)\u00b2 = -9. (It equals +9 because negative \u00d7 negative = positive.)",
       "funFact": "The numbers 1, 4, 9, 16, 25... are called perfect squares because they are squares of whole numbers.",
       "relatedLesson": "Powers and Roots",
       "practiceQuestions": [
-        "What is 12²?",
+        "What is 12\u00b2?",
         "Is 50 a perfect square?"
       ]
-    }
+    },
+    "hint": "Recall that Square (Power) refers to: A number multiplied by itself, equivalent to raising a number to the power of 2."
   },
   "cube": {
     "id": "cube",
@@ -1705,18 +1756,19 @@
     "educationalInfo": {
       "definition": "A number raised to the power of 3, equivalent to multiplying it by itself three times.",
       "examples": [
-        "2³ = 8",
-        "4³ = 64",
-        "(-2)³ = -8"
+        "2\u00b3 = 8",
+        "4\u00b3 = 64",
+        "(-2)\u00b3 = -8"
       ],
-      "commonMistakes": "Confusing 3² (9) with 2³ (8). Forgetting that negative cubes stay negative.",
-      "funFact": "The numbers 1, 8, 27, 64, 125... are called perfect cubes. Ramanujan noticed that 1729 = 1³ + 12³ = 9³ + 10³.",
+      "commonMistakes": "Confusing 3\u00b2 (9) with 2\u00b3 (8). Forgetting that negative cubes stay negative.",
+      "funFact": "The numbers 1, 8, 27, 64, 125... are called perfect cubes. Ramanujan noticed that 1729 = 1\u00b3 + 12\u00b3 = 9\u00b3 + 10\u00b3.",
       "relatedLesson": "Powers and Roots",
       "practiceQuestions": [
-        "What is 5³?",
-        "Calculate (-3)³."
+        "What is 5\u00b3?",
+        "Calculate (-3)\u00b3."
       ]
-    }
+    },
+    "hint": "Recall that Cube (Power) refers to: A number raised to the power of 3, equivalent to multiplying it by itself three times."
   },
   "addition": {
     "id": "addition",
@@ -1807,9 +1859,9 @@
     "clues": [
       "I am the inverse operation of addition.",
       "I find the difference between two quantities.",
-      "My symbol is the minus sign (−).",
+      "My symbol is the minus sign (\u2212).",
       "The result of my operation is called the difference.",
-      "10 − 3 = 7 is a simple example of me."
+      "10 \u2212 3 = 7 is a simple example of me."
     ],
     "hints": [
       "Number category topic.",
@@ -1819,14 +1871,14 @@
     "educationalInfo": {
       "definition": "The arithmetic operation of finding the difference between two numbers by removing one quantity from another.",
       "examples": [
-        "15 − 7 = 8",
-        "100 − 43 = 57"
+        "15 \u2212 7 = 8",
+        "100 \u2212 43 = 57"
       ],
       "commonMistakes": "Borrowing errors in column subtraction. Subtracting in the wrong order (larger minus smaller in each column).",
-      "funFact": "Subtraction was known to ancient Egyptians and Babylonians — carved into clay tablets over 4000 years ago.",
+      "funFact": "Subtraction was known to ancient Egyptians and Babylonians \u2014 carved into clay tablets over 4000 years ago.",
       "relatedLesson": "Subtraction",
       "practiceQuestions": [
-        "What is 73 − 28?",
+        "What is 73 \u2212 28?",
         "Subtract 456 from 1000."
       ]
     },
@@ -1847,9 +1899,9 @@
     "clues": [
       "I am a shortcut for repeated addition.",
       "I scale one number by another.",
-      "My symbol is × or a dot.",
+      "My symbol is \u00d7 or a dot.",
       "The result of my operation is called the product.",
-      "6 × 7 = 42 is a famous example that students memorise."
+      "6 \u00d7 7 = 42 is a famous example that students memorise."
     ],
     "hints": [
       "Number category topic.",
@@ -1859,22 +1911,22 @@
     "educationalInfo": {
       "definition": "An arithmetic operation that scales one number by another, equivalent to repeated addition.",
       "examples": [
-        "4 × 5 = 20 (adding 4 five times)",
-        "12 × 12 = 144"
+        "4 \u00d7 5 = 20 (adding 4 five times)",
+        "12 \u00d7 12 = 144"
       ],
       "commonMistakes": "Errors in the times tables. Forgetting to multiply every partial product in long multiplication.",
-      "funFact": "The × symbol was introduced by William Oughtred in 1631 — before that, multiplication was written out in words.",
+      "funFact": "The \u00d7 symbol was introduced by William Oughtred in 1631 \u2014 before that, multiplication was written out in words.",
       "relatedLesson": "Multiplication",
       "practiceQuestions": [
-        "What is 8 × 9?",
-        "Multiply 24 × 15."
+        "What is 8 \u00d7 9?",
+        "Multiply 24 \u00d7 15."
       ]
     },
     "thoughts": [
       "I like equal groups.",
       "I help count faster.",
-      "I use the × sign.",
-      "5 × 3 = 15 is my work.",
+      "I use the \u00d7 sign.",
+      "5 \u00d7 3 = 15 is my work.",
       "I save you from adding again and again."
     ],
     "hint": "Think about equal groups."
@@ -1889,7 +1941,7 @@
       "I multiply digit by digit, keeping track of place values.",
       "I generate partial products that are then summed.",
       "I am essential when multiplying two multi-digit numbers.",
-      "Multiplying 47 × 23 using me gives 1081."
+      "Multiplying 47 \u00d7 23 using me gives 1081."
     ],
     "hints": [
       "Number category topic.",
@@ -1899,15 +1951,15 @@
     "educationalInfo": {
       "definition": "A written method for multiplying multi-digit numbers by computing partial products aligned by place value.",
       "examples": [
-        "47 × 23: (47×3) + (47×20) = 141 + 940 = 1081",
-        "125 × 14 = 1750"
+        "47 \u00d7 23: (47\u00d73) + (47\u00d720) = 141 + 940 = 1081",
+        "125 \u00d7 14 = 1750"
       ],
       "commonMistakes": "Forgetting to shift the second partial product left by one place. Errors in individual digit products.",
       "funFact": "The long multiplication algorithm dates back to medieval Islamic mathematics and was formalized by al-Khwarizmi.",
       "relatedLesson": "Column Multiplication",
       "practiceQuestions": [
-        "Calculate 36 × 24 using column multiplication.",
-        "Multiply 125 × 32."
+        "Calculate 36 \u00d7 24 using column multiplication.",
+        "Multiply 125 \u00d7 32."
       ]
     },
     "thoughts": [
@@ -1928,7 +1980,7 @@
       "I cover two closely related number operations.",
       "One of me is the largest number that divides two numbers exactly.",
       "The other of me is the smallest number divisible by both.",
-      "We are connected by the formula: HCF(a,b) × LCM(a,b) = a × b.",
+      "We are connected by the formula: HCF(a,b) \u00d7 LCM(a,b) = a \u00d7 b.",
       "For 12 and 18, my two values are 6 and 36."
     ],
     "hints": [
@@ -1943,11 +1995,11 @@
         "HCF(8,12)=4, LCM(8,12)=24"
       ],
       "commonMistakes": "Confusing HCF with LCM. Using the wrong method (listing vs prime factorisation).",
-      "funFact": "HCF × LCM = product of the two numbers. This elegant relationship helps quickly find one if you know the other.",
+      "funFact": "HCF \u00d7 LCM = product of the two numbers. This elegant relationship helps quickly find one if you know the other.",
       "relatedLesson": "HCF and LCM",
       "practiceQuestions": [
         "Find HCF and LCM of 15 and 20.",
-        "If HCF(a,b)=6 and LCM(a,b)=72, find a×b."
+        "If HCF(a,b)=6 and LCM(a,b)=72, find a\u00d7b."
       ]
     },
     "thoughts": [
@@ -1969,7 +2021,7 @@
       "I express any composite number as a product of prime numbers only.",
       "I use a factor tree or repeated division to find my result.",
       "Every whole number greater than 1 has exactly one version of me (Fundamental Theorem of Arithmetic).",
-      "The prime factorisation of 60 is 2² × 3 × 5."
+      "The prime factorisation of 60 is 2\u00b2 \u00d7 3 \u00d7 5."
     ],
     "hints": [
       "Number category topic.",
@@ -1979,11 +2031,11 @@
     "educationalInfo": {
       "definition": "The process of expressing a composite number as a product of its prime factors.",
       "examples": [
-        "60 = 2 × 2 × 3 × 5 = 2² × 3 × 5",
-        "84 = 2² × 3 × 7"
+        "60 = 2 \u00d7 2 \u00d7 3 \u00d7 5 = 2\u00b2 \u00d7 3 \u00d7 5",
+        "84 = 2\u00b2 \u00d7 3 \u00d7 7"
       ],
       "commonMistakes": "Stopping the factor tree too early at a composite number. Including 1 as a prime factor.",
-      "funFact": "The Fundamental Theorem of Arithmetic guarantees every integer > 1 has a unique prime factorisation — one of the most elegant results in mathematics.",
+      "funFact": "The Fundamental Theorem of Arithmetic guarantees every integer > 1 has a unique prime factorisation \u2014 one of the most elegant results in mathematics.",
       "relatedLesson": "Prime Factorisation",
       "practiceQuestions": [
         "Write 90 as a product of prime factors.",
@@ -1994,7 +2046,7 @@
       "I break numbers into smaller numbers.",
       "My small numbers are all prime.",
       "A factor tree helps me.",
-      "12 becomes 2 × 2 × 3.",
+      "12 becomes 2 \u00d7 2 \u00d7 3.",
       "I show how a number is made."
     ],
     "hint": "Only prime numbers can stay."
@@ -2022,8 +2074,8 @@
         "3.746 rounded to 1 d.p. = 3.7",
         "5872 rounded to nearest 100 = 5900"
       ],
-      "commonMistakes": "Rounding 4.45 to 1 d.p. incorrectly — check the second decimal carefully. Rounding intermediate steps in calculations.",
-      "funFact": "GPS systems must round satellite signals to nanoseconds — tiny rounding errors can place you hundreds of metres in the wrong location.",
+      "commonMistakes": "Rounding 4.45 to 1 d.p. incorrectly \u2014 check the second decimal carefully. Rounding intermediate steps in calculations.",
+      "funFact": "GPS systems must round satellite signals to nanoseconds \u2014 tiny rounding errors can place you hundreds of metres in the wrong location.",
       "relatedLesson": "Rounding and Estimation",
       "practiceQuestions": [
         "Round 4.567 to 2 decimal places.",
@@ -2065,10 +2117,11 @@
       "definition": "The elementary branch of mathematics that deals with calculations involving numbers using basic operations.",
       "examples": [
         "15 + 25 = 40",
-        "100 ÷ 4 = 25"
+        "100 \u00f7 4 = 25"
       ],
       "commonMistakes": "Not paying attention to operational order (BODMAS/PEMDAS) in long calculations."
-    }
+    },
+    "hint": "Recall that Arithmetic refers to: The elementary branch of mathematics that deals with calculations involving numbers using basic operations."
   },
   "profit_loss": {
     "id": "profit_loss",
@@ -2095,11 +2148,12 @@
     "educationalInfo": {
       "definition": "Financial metric showing gain (Profit = SP - CP) or loss (Loss = CP - SP) incurred in commercial transactions.",
       "examples": [
-        "Cost Price = $10, Selling Price = $15 → Profit = $5",
-        "Cost Price = $20, Selling Price = $18 → Loss = $2"
+        "Cost Price = $10, Selling Price = $15 \u2192 Profit = $5",
+        "Cost Price = $20, Selling Price = $18 \u2192 Loss = $2"
       ],
       "commonMistakes": "Calculating Profit% on Selling Price instead of Cost Price."
-    }
+    },
+    "hint": "Recall that Profit & Loss refers to: Financial metric showing gain (Profit = SP - CP) or loss (Loss = CP - SP) incurred in commercial transactions."
   },
   "gst": {
     "id": "gst",
@@ -2129,7 +2183,8 @@
         "18% GST on a $100 product adds $18 to total bill ($118 total)"
       ],
       "commonMistakes": "Confusing exclusive GST (tax added on top) with inclusive GST (tax already included in price)."
-    }
+    },
+    "hint": "Recall that GST refers to: Goods and Services Tax (GST) is an indirect tax levied on the supply of goods and services."
   },
   "banking": {
     "id": "banking",
@@ -2159,7 +2214,8 @@
         "Depositing $100 every month for 12 months at 6% per annum interest"
       ],
       "commonMistakes": "Calculating interest as if the full total was deposited on day one."
-    }
+    },
+    "hint": "Recall that Recurring Deposit (RD) refers to: A banking scheme where an individual deposits a fixed monthly amount for a specific period and earns compounding interest."
   },
   "shares_dividends": {
     "id": "shares_dividends",
@@ -2189,7 +2245,8 @@
         "Owning 100 shares of a company paying $2 dividend per share = $200 income"
       ],
       "commonMistakes": "Confusing Nominal Value (Face Value) of a share with Market Value."
-    }
+    },
+    "hint": "Recall that Shares & Dividends refers to: Shares represent units of ownership in a corporation; Dividends are profit distributions paid by companies to shareholders."
   },
   "speed_distance_time": {
     "id": "speed_distance_time",
@@ -2201,25 +2258,26 @@
       "Cars, trains and planes all use me.",
       "Three quantities are connected in me.",
       "If you know any two, you can find the third.",
-      "I use the formula Speed = Distance ÷ Time."
+      "I use the formula Speed = Distance \u00f7 Time."
     ],
     "thoughts": [
       "I describe how people and vehicles travel.",
       "Cars, trains and planes all use me.",
       "Three quantities are connected in me.",
       "If you know any two, you can find the third.",
-      "I use the formula Speed = Distance ÷ Time."
+      "I use the formula Speed = Distance \u00f7 Time."
     ],
     "hints": [
       "Think about travelling."
     ],
     "educationalInfo": {
-      "definition": "The kinematic relationship relating motion: Speed = Distance / Time, Distance = Speed × Time, Time = Distance / Speed.",
+      "definition": "The kinematic relationship relating motion: Speed = Distance / Time, Distance = Speed \u00d7 Time, Time = Distance / Speed.",
       "examples": [
         "Traveling 120 km in 2 hours = Speed of 60 km/h"
       ],
       "commonMistakes": "Inconsistent units (e.g., mixing km/h with seconds without conversion)."
-    }
+    },
+    "hint": "Recall that Speed, Distance & Time refers to: The kinematic relationship relating motion: Speed = Distance / Time, Distance = Speed \u00d7 Time, Time = Distance / Speed."
   },
   "standard_form": {
     "id": "standard_form",
@@ -2246,7 +2304,8 @@
       ],
       "commonMistakes": "Confusing scientific standard form with elementary standard form.",
       "funFact": "Standard form is the most compact way to write numbers!"
-    }
+    },
+    "hint": "Recall that Standard Form refers to: Standard form is the standard way of writing numbers using digits (e."
   },
   "number_bases": {
     "id": "number_bases",
@@ -2273,11 +2332,12 @@
     "educationalInfo": {
       "definition": "Positional numeral systems defined by a base number of unique digits (Base-2 Binary, Base-8 Octal, Base-10 Decimal, Base-16 Hexadecimal).",
       "examples": [
-        "Binary 1011₂ = Decimal 11",
-        "Hexadecimal 1A₁₆ = Decimal 26"
+        "Binary 1011\u2082 = Decimal 11",
+        "Hexadecimal 1A\u2081\u2086 = Decimal 26"
       ],
       "commonMistakes": "Using digits equal to or greater than the base (e.g., using digit '2' in Base-2)."
-    }
+    },
+    "hint": "Recall that Number Bases refers to: Positional numeral systems defined by a base number of unique digits (Base-2 Binary, Base-8 Octal, Base-10 Decimal, Base-16 Hexadecimal)."
   },
   "angles": {
     "id": "angles",
@@ -2287,7 +2347,7 @@
     "clues": [
       "I measure the rotation between two rays sharing a common endpoint.",
       "My unit is the degree, and a full rotation equals 360 of them.",
-      "I am acute when less than 90°, obtuse between 90° and 180°.",
+      "I am acute when less than 90\u00b0, obtuse between 90\u00b0 and 180\u00b0.",
       "Vertically opposite versions of me are always equal.",
       "Alternate angles between parallel lines are always equal."
     ],
@@ -2299,18 +2359,19 @@
     "educationalInfo": {
       "definition": "A measure of the turn between two rays sharing a common vertex, measured in degrees.",
       "examples": [
-        "Right angle = 90°",
-        "Straight line = 180°",
-        "Full turn = 360°"
+        "Right angle = 90\u00b0",
+        "Straight line = 180\u00b0",
+        "Full turn = 360\u00b0"
       ],
       "commonMistakes": "Confusing co-interior angles (supplementary) with alternate angles (equal). Measuring with a protractor from the wrong baseline.",
-      "funFact": "The Babylonians chose 360° for a full circle because 360 has many divisors — making it easy to divide into equal arcs.",
+      "funFact": "The Babylonians chose 360\u00b0 for a full circle because 360 has many divisors \u2014 making it easy to divide into equal arcs.",
       "relatedLesson": "Angles",
       "practiceQuestions": [
-        "Find the missing angle on a straight line if one angle is 73°.",
-        "Two parallel lines are cut by a transversal. Find all 8 angles if one is 55°."
+        "Find the missing angle on a straight line if one angle is 73\u00b0.",
+        "Two parallel lines are cut by a transversal. Find all 8 angles if one is 55\u00b0."
       ]
-    }
+    },
+    "hint": "Recall that Angles refers to: A measure of the turn between two rays sharing a common vertex, measured in degrees."
   },
   "triangles": {
     "id": "triangles",
@@ -2319,7 +2380,7 @@
     "subject": "Geometry",
     "clues": [
       "I am the simplest polygon, with exactly three sides.",
-      "The sum of my interior angles is always exactly 180°.",
+      "The sum of my interior angles is always exactly 180\u00b0.",
       "I can be classified as equilateral, isosceles, or scalene.",
       "My exterior angle equals the sum of the two non-adjacent interior angles.",
       "The area of me is half times base times height."
@@ -2330,19 +2391,20 @@
       "Starts with 'T'."
     ],
     "educationalInfo": {
-      "definition": "A three-sided polygon whose interior angles always sum to 180°.",
+      "definition": "A three-sided polygon whose interior angles always sum to 180\u00b0.",
       "examples": [
-        "Equilateral: 3 equal sides, each angle = 60°",
+        "Equilateral: 3 equal sides, each angle = 60\u00b0",
         "Isosceles: 2 equal sides, 2 equal base angles"
       ],
       "commonMistakes": "Assuming all triangles have a right angle. Forgetting the exterior angle theorem.",
-      "funFact": "Any triangle can tile a flat plane without gaps — a fact used in architecture and Islamic geometric art.",
+      "funFact": "Any triangle can tile a flat plane without gaps \u2014 a fact used in architecture and Islamic geometric art.",
       "relatedLesson": "Triangles and Angles",
       "practiceQuestions": [
-        "Two angles of a triangle are 48° and 73°. Find the third.",
-        "Can a triangle have angles 90°, 91°, and -1°?"
+        "Two angles of a triangle are 48\u00b0 and 73\u00b0. Find the third.",
+        "Can a triangle have angles 90\u00b0, 91\u00b0, and -1\u00b0?"
       ]
-    }
+    },
+    "hint": "Recall that Triangles refers to: A three-sided polygon whose interior angles always sum to 180\u00b0."
   },
   "congruence": {
     "id": "congruence",
@@ -2362,20 +2424,21 @@
       "Starts with 'C'."
     ],
     "educationalInfo": {
-      "definition": "Two figures are congruent if they have exactly the same shape and size — one can be superimposed on the other.",
+      "definition": "Two figures are congruent if they have exactly the same shape and size \u2014 one can be superimposed on the other.",
       "examples": [
         "SSS: all three sides equal",
         "SAS: two sides and the included angle equal",
         "RHS: right angle, hypotenuse, and one side equal"
       ],
       "commonMistakes": "Confusing congruence (same size) with similarity (same shape, different size). Using SSA as a congruence condition (it is not reliable).",
-      "funFact": "Mass production relies on congruence — every bolt of a given specification is congruent to every other bolt of that size.",
+      "funFact": "Mass production relies on congruence \u2014 every bolt of a given specification is congruent to every other bolt of that size.",
       "relatedLesson": "Congruence",
       "practiceQuestions": [
         "State the congruence condition for two triangles with equal hypotenuse, right angle, and one leg.",
-        "Can two triangles with angles 40°, 60°, 80° be congruent?"
+        "Can two triangles with angles 40\u00b0, 60\u00b0, 80\u00b0 be congruent?"
       ]
-    }
+    },
+    "hint": "Recall that Congruence refers to: Two figures are congruent if they have exactly the same shape and size \u2014 one can be superimposed on the other."
   },
   "similarity": {
     "id": "similarity",
@@ -2401,13 +2464,14 @@
         "All circles are similar to each other."
       ],
       "commonMistakes": "Using the scale factor directly for area (must square it) or volume (must cube it).",
-      "funFact": "A map is a similarity transformation of real geography — every road, lake, and mountain is a scaled-down replica.",
+      "funFact": "A map is a similarity transformation of real geography \u2014 every road, lake, and mountain is a scaled-down replica.",
       "relatedLesson": "Similarity",
       "practiceQuestions": [
         "Two similar triangles have sides in ratio 3:5. Find the ratio of their areas.",
         "A model car is built at 1:20 scale. If the real car is 4.2m long, how long is the model?"
       ]
-    }
+    },
+    "hint": "Recall that Similarity refers to: Two shapes are similar if they have the same angles and corresponding sides are in proportion."
   },
   "polygons": {
     "id": "polygons",
@@ -2416,10 +2480,10 @@
     "subject": "Geometry",
     "clues": [
       "I am a closed 2D shape made of straight sides.",
-      "My interior angles sum to (n−2) × 180°.",
+      "My interior angles sum to (n\u22122) \u00d7 180\u00b0.",
       "A regular version of me has all sides and angles equal.",
       "A hexagon, octagon, and decagon are all examples of me.",
-      "My exterior angles always sum to exactly 360°."
+      "My exterior angles always sum to exactly 360\u00b0."
     ],
     "hints": [
       "Geometry category topic.",
@@ -2429,17 +2493,18 @@
     "educationalInfo": {
       "definition": "A closed plane figure bounded by three or more straight sides.",
       "examples": [
-        "Pentagon: 5 sides, interior sum 540°",
-        "Hexagon: 6 sides, interior sum 720°"
+        "Pentagon: 5 sides, interior sum 540\u00b0",
+        "Hexagon: 6 sides, interior sum 720\u00b0"
       ],
       "commonMistakes": "Using the wrong formula for the sum of interior angles. Confusing interior with exterior angles.",
-      "funFact": "Honeybees instinctively build hexagonal cells — the regular hexagon packs the most area with the least wax.",
+      "funFact": "Honeybees instinctively build hexagonal cells \u2014 the regular hexagon packs the most area with the least wax.",
       "relatedLesson": "Polygons and Angles",
       "practiceQuestions": [
         "Find the sum of interior angles of an octagon.",
-        "Each interior angle of a regular polygon is 150°. How many sides does it have?"
+        "Each interior angle of a regular polygon is 150\u00b0. How many sides does it have?"
       ]
-    }
+    },
+    "hint": "Recall that Polygons refers to: A closed plane figure bounded by three or more straight sides."
   },
   "circle_theorems": {
     "id": "circle_theorems",
@@ -2450,7 +2515,7 @@
       "I am a collection of rules about angles formed inside and around circles.",
       "One of my rules says the angle at the centre is twice the angle at the circumference.",
       "Another of my rules says angles in the same segment are equal.",
-      "I state that opposite angles of a cyclic quadrilateral add up to 180°.",
+      "I state that opposite angles of a cyclic quadrilateral add up to 180\u00b0.",
       "A tangent from an external point creates a right angle with the radius."
     ],
     "hints": [
@@ -2461,18 +2526,19 @@
     "educationalInfo": {
       "definition": "A set of theorems describing angle and chord relationships in and around circles.",
       "examples": [
-        "Angle at centre = 2 × angle at circumference",
-        "Angle in a semicircle = 90°",
-        "Opposite angles of cyclic quad sum to 180°"
+        "Angle at centre = 2 \u00d7 angle at circumference",
+        "Angle in a semicircle = 90\u00b0",
+        "Opposite angles of cyclic quad sum to 180\u00b0"
       ],
       "commonMistakes": "Confusing the inscribed angle theorem with the tangent-radius theorem. Misidentifying the arc the angle stands on.",
-      "funFact": "Euclid proved all of these theorems in his Elements around 300 BC — and they still appear on every major exam.",
+      "funFact": "Euclid proved all of these theorems in his Elements around 300 BC \u2014 and they still appear on every major exam.",
       "relatedLesson": "Circle Theorems",
       "practiceQuestions": [
-        "An angle at the centre of a circle is 84°. Find the angle at the circumference subtended by the same arc.",
-        "Prove that the angle in a semicircle is 90°."
+        "An angle at the centre of a circle is 84\u00b0. Find the angle at the circumference subtended by the same arc.",
+        "Prove that the angle in a semicircle is 90\u00b0."
       ]
-    }
+    },
+    "hint": "Recall that Circle Theorems refers to: A set of theorems describing angle and chord relationships in and around circles."
   },
   "herons_formula": {
     "id": "herons_formula",
@@ -2483,7 +2549,7 @@
       "I calculate the area of a triangle from its three side lengths alone.",
       "I do not require the height of the triangle.",
       "My formula uses the semi-perimeter, s = (a + b + c) / 2.",
-      "My full formula is Area = √(s(s−a)(s−b)(s−c)).",
+      "My full formula is Area = \u221a(s(s\u2212a)(s\u2212b)(s\u2212c)).",
       "I was discovered by Hero of Alexandria around 60 AD."
     ],
     "hints": [
@@ -2492,19 +2558,20 @@
       "Starts with 'H'."
     ],
     "educationalInfo": {
-      "definition": "A formula for the area of a triangle with sides a, b, c: Area = √(s(s−a)(s−b)(s−c)) where s = (a+b+c)/2.",
+      "definition": "A formula for the area of a triangle with sides a, b, c: Area = \u221a(s(s\u2212a)(s\u2212b)(s\u2212c)) where s = (a+b+c)/2.",
       "examples": [
-        "Triangle with sides 3, 4, 5: s=6, Area=√(6×3×2×1)=6",
-        "Triangle with sides 5, 6, 7: s=9, Area=√(9×4×3×2)=6√6"
+        "Triangle with sides 3, 4, 5: s=6, Area=\u221a(6\u00d73\u00d72\u00d71)=6",
+        "Triangle with sides 5, 6, 7: s=9, Area=\u221a(9\u00d74\u00d73\u00d72)=6\u221a6"
       ],
       "commonMistakes": "Forgetting to compute s first. Arithmetic errors inside the square root.",
-      "funFact": "Heron's formula is especially useful in surveying — land parcels are often irregular triangles with known side lengths but unknown heights.",
+      "funFact": "Heron's formula is especially useful in surveying \u2014 land parcels are often irregular triangles with known side lengths but unknown heights.",
       "relatedLesson": "Heron's Formula",
       "practiceQuestions": [
         "Find the area of a triangle with sides 7, 8, and 9.",
         "Use Heron's formula to check the area of a right triangle with legs 5 and 12."
       ]
-    }
+    },
+    "hint": "Recall that Heron's Formula refers to: A formula for the area of a triangle with sides a, b, c: Area = \u221a(s(s\u2212a)(s\u2212b)(s\u2212c)) where s = (a+b+c)/2."
   },
   "circular_measure": {
     "id": "circular_measure",
@@ -2514,9 +2581,9 @@
     "clues": [
       "I express angles in a unit other than degrees.",
       "My unit is the radian, defined as the angle subtended at the centre by an arc equal to the radius.",
-      "A full circle contains exactly 2π of my units.",
-      "180° equals π of my units.",
-      "Arc length = radius × angle in my units; sector area = ½r²θ."
+      "A full circle contains exactly 2\u03c0 of my units.",
+      "180\u00b0 equals \u03c0 of my units.",
+      "Arc length = radius \u00d7 angle in my units; sector area = \u00bdr\u00b2\u03b8."
     ],
     "hints": [
       "Geometry category topic.",
@@ -2526,18 +2593,19 @@
     "educationalInfo": {
       "definition": "Measurement of angles in radians, where 1 radian is the angle subtended at the centre of a circle by an arc equal in length to the radius.",
       "examples": [
-        "π/2 radians = 90°",
-        "Arc length = rθ",
-        "Sector area = ½r²θ"
+        "\u03c0/2 radians = 90\u00b0",
+        "Arc length = r\u03b8",
+        "Sector area = \u00bdr\u00b2\u03b8"
       ],
       "commonMistakes": "Forgetting to convert degrees to radians before using arc/sector formulae. Using degrees in radian formulas.",
-      "funFact": "Radians make calculus formulas for trigonometry clean — without them, derivatives of sin and cos would have extra π/180 factors.",
+      "funFact": "Radians make calculus formulas for trigonometry clean \u2014 without them, derivatives of sin and cos would have extra \u03c0/180 factors.",
       "relatedLesson": "Circular Measure",
       "practiceQuestions": [
-        "Convert 120° to radians.",
-        "Find the arc length of a sector with radius 5 cm and angle π/3 rad."
+        "Convert 120\u00b0 to radians.",
+        "Find the arc length of a sector with radius 5 cm and angle \u03c0/3 rad."
       ]
-    }
+    },
+    "hint": "Recall that Circular Measure refers to: Measurement of angles in radians, where 1 radian is the angle subtended at the centre of a circle by an arc equal in length to the radius."
   },
   "transformations": {
     "id": "transformations",
@@ -2559,17 +2627,18 @@
     "educationalInfo": {
       "definition": "A transformation changes the position, orientation, or size of a shape. Types: translation, reflection, rotation, enlargement.",
       "examples": [
-        "Translation by (3,−2): every point moves 3 right, 2 down.",
-        "Rotation 90° clockwise about origin: (x,y)→(y,−x)"
+        "Translation by (3,\u22122): every point moves 3 right, 2 down.",
+        "Rotation 90\u00b0 clockwise about origin: (x,y)\u2192(y,\u2212x)"
       ],
       "commonMistakes": "Applying the wrong rotation rule. Forgetting that enlargement also has a centre, not just a scale factor.",
-      "funFact": "The symmetric patterns in Islamic geometric art use all four transformations — created without modern algebra purely by geometric intuition.",
+      "funFact": "The symmetric patterns in Islamic geometric art use all four transformations \u2014 created without modern algebra purely by geometric intuition.",
       "relatedLesson": "Transformations",
       "practiceQuestions": [
         "Reflect the point (3,4) in the x-axis.",
         "Describe fully the transformation that maps triangle A to triangle B."
       ]
-    }
+    },
+    "hint": "Recall that Transformations refers to: A transformation changes the position, orientation, or size of a shape."
   },
   "simultaneous_equations": {
     "id": "simultaneous_equations",
@@ -2581,7 +2650,7 @@
       "My solution is the set of values that satisfies every equation simultaneously.",
       "I can be solved by substitution or by elimination.",
       "Graphically, my solution is the point where two lines intersect.",
-      "For 2x + y = 7 and x − y = 2, my solution is x=3, y=1."
+      "For 2x + y = 7 and x \u2212 y = 2, my solution is x=3, y=1."
     ],
     "hints": [
       "Algebra category topic.",
@@ -2591,17 +2660,18 @@
     "educationalInfo": {
       "definition": "A set of equations with multiple unknowns that must be solved together to find a common solution.",
       "examples": [
-        "2x+y=7, x−y=2 → x=3, y=1",
-        "3x+2y=12, x+4y=10 → x=2.8, y=1.8"
+        "2x+y=7, x\u2212y=2 \u2192 x=3, y=1",
+        "3x+2y=12, x+4y=10 \u2192 x=2.8, y=1.8"
       ],
       "commonMistakes": "Sign errors when subtracting equations. Substituting back into only one equation without checking the other.",
       "funFact": "Ancient Chinese mathematicians solved systems of linear equations in their book 'The Nine Chapters on the Mathematical Art' around 200 BC.",
       "relatedLesson": "Simultaneous Equations",
       "practiceQuestions": [
-        "Solve: 3x + 2y = 16 and x − y = 1.",
-        "Solve by substitution: y = 2x − 3 and 4x + y = 9."
+        "Solve: 3x + 2y = 16 and x \u2212 y = 1.",
+        "Solve by substitution: y = 2x \u2212 3 and 4x + y = 9."
       ]
-    }
+    },
+    "hint": "Recall that Simultaneous Equations refers to: A set of equations with multiple unknowns that must be solved together to find a common solution."
   },
   "indices": {
     "id": "indices",
@@ -2610,10 +2680,10 @@
     "subject": "Algebra",
     "clues": [
       "I govern the laws of exponents and powers.",
-      "My first law: aᵐ × aⁿ = aᵐ⁺ⁿ.",
-      "My second law: aᵐ ÷ aⁿ = aᵐ⁻ⁿ.",
-      "A negative me means a reciprocal: a⁻ⁿ = 1/aⁿ.",
-      "A fractional me means a root: a^(1/n) = ⁿ√a."
+      "My first law: a\u1d50 \u00d7 a\u207f = a\u1d50\u207a\u207f.",
+      "My second law: a\u1d50 \u00f7 a\u207f = a\u1d50\u207b\u207f.",
+      "A negative me means a reciprocal: a\u207b\u207f = 1/a\u207f.",
+      "A fractional me means a root: a^(1/n) = \u207f\u221aa."
     ],
     "hints": [
       "Algebra category topic.",
@@ -2623,18 +2693,19 @@
     "educationalInfo": {
       "definition": "The laws governing exponents (powers), including multiplication, division, power of a power, negative, and fractional exponents.",
       "examples": [
-        "2³ × 2⁴ = 2⁷ = 128",
-        "x⁻² = 1/x²",
+        "2\u00b3 \u00d7 2\u2074 = 2\u2077 = 128",
+        "x\u207b\u00b2 = 1/x\u00b2",
         "27^(1/3) = 3"
       ],
-      "commonMistakes": "Adding bases instead of exponents when multiplying. Applying power rules to sums (e.g. (a+b)² ≠ a²+b²).",
-      "funFact": "Fractional indices elegantly unify powers and roots — the same notation covers both with a single rule.",
+      "commonMistakes": "Adding bases instead of exponents when multiplying. Applying power rules to sums (e.g. (a+b)\u00b2 \u2260 a\u00b2+b\u00b2).",
+      "funFact": "Fractional indices elegantly unify powers and roots \u2014 the same notation covers both with a single rule.",
       "relatedLesson": "Indices (Laws of Exponents)",
       "practiceQuestions": [
-        "Simplify: x³ × x⁴ ÷ x².",
+        "Simplify: x\u00b3 \u00d7 x\u2074 \u00f7 x\u00b2.",
         "Evaluate 8^(2/3)."
       ]
-    }
+    },
+    "hint": "Recall that Indices refers to: The laws governing exponents (powers), including multiplication, division, power of a power, negative, and fractional exponents."
   },
   "surds": {
     "id": "surds",
@@ -2644,8 +2715,8 @@
     "clues": [
       "I am an irrational number expressed as a root that cannot be simplified to a whole number.",
       "I appear when square roots of non-perfect-square numbers are not simplified away.",
-      "√2, √3, and √5 are examples of me.",
-      "I can be simplified: √12 = 2√3.",
+      "\u221a2, \u221a3, and \u221a5 are examples of me.",
+      "I can be simplified: \u221a12 = 2\u221a3.",
       "Rationalising the denominator removes me from the bottom of a fraction."
     ],
     "hints": [
@@ -2654,20 +2725,21 @@
       "Starts with 'S'."
     ],
     "educationalInfo": {
-      "definition": "An irrational number in root form that cannot be expressed as a simple fraction, e.g. √2, ∛5.",
+      "definition": "An irrational number in root form that cannot be expressed as a simple fraction, e.g. \u221a2, \u221b5.",
       "examples": [
-        "√18 = 3√2",
-        "1/√3 = √3/3 (rationalised)",
-        "(√5+√2)(√5−√2) = 3"
+        "\u221a18 = 3\u221a2",
+        "1/\u221a3 = \u221a3/3 (rationalised)",
+        "(\u221a5+\u221a2)(\u221a5\u2212\u221a2) = 3"
       ],
-      "commonMistakes": "Thinking √(a+b) = √a + √b. Forgetting to rationalise the denominator when required.",
-      "funFact": "The irrationality of √2 caused a crisis in ancient Greek mathematics — legend says the discoverer was thrown overboard at sea.",
+      "commonMistakes": "Thinking \u221a(a+b) = \u221aa + \u221ab. Forgetting to rationalise the denominator when required.",
+      "funFact": "The irrationality of \u221a2 caused a crisis in ancient Greek mathematics \u2014 legend says the discoverer was thrown overboard at sea.",
       "relatedLesson": "Surds and Indices",
       "practiceQuestions": [
-        "Simplify √75.",
-        "Rationalise the denominator: 5/√3."
+        "Simplify \u221a75.",
+        "Rationalise the denominator: 5/\u221a3."
       ]
-    }
+    },
+    "hint": "Recall that Surds refers to: An irrational number in root form that cannot be expressed as a simple fraction, e."
   },
   "quadratic_formula": {
     "id": "quadratic_formula",
@@ -2676,10 +2748,10 @@
     "subject": "Algebra",
     "clues": [
       "I am a universal formula for solving any quadratic equation.",
-      "My formula is x = (−b ± √(b²−4ac)) / 2a.",
-      "The expression b²−4ac inside me is called the discriminant.",
+      "My formula is x = (\u2212b \u00b1 \u221a(b\u00b2\u22124ac)) / 2a.",
+      "The expression b\u00b2\u22124ac inside me is called the discriminant.",
       "If my discriminant is negative, the quadratic has no real solutions.",
-      "I was derived by completing the square on the general quadratic ax²+bx+c=0."
+      "I was derived by completing the square on the general quadratic ax\u00b2+bx+c=0."
     ],
     "hints": [
       "Algebra category topic.",
@@ -2687,19 +2759,20 @@
       "Starts with 'Q'."
     ],
     "educationalInfo": {
-      "definition": "The formula x = (−b ± √(b²−4ac)) / 2a solves any quadratic equation ax² + bx + c = 0.",
+      "definition": "The formula x = (\u2212b \u00b1 \u221a(b\u00b2\u22124ac)) / 2a solves any quadratic equation ax\u00b2 + bx + c = 0.",
       "examples": [
-        "x²−5x+6=0: x=(5±√1)/2 → x=3 or x=2",
+        "x\u00b2\u22125x+6=0: x=(5\u00b1\u221a1)/2 \u2192 x=3 or x=2",
         "Discriminant > 0: two real roots; = 0: one root; < 0: no real roots"
       ],
-      "commonMistakes": "Forgetting the ± giving only one root. Errors substituting negative b (double negation).",
+      "commonMistakes": "Forgetting the \u00b1 giving only one root. Errors substituting negative b (double negation).",
       "funFact": "The quadratic formula was known to Babylonian mathematicians 3700 years ago, though not in algebraic notation.",
       "relatedLesson": "Quadratic Formula",
       "practiceQuestions": [
-        "Solve 2x²+3x−2=0 using the quadratic formula.",
-        "Determine the nature of the roots of x²+x+1=0."
+        "Solve 2x\u00b2+3x\u22122=0 using the quadratic formula.",
+        "Determine the nature of the roots of x\u00b2+x+1=0."
       ]
-    }
+    },
+    "hint": "Recall that Quadratic Formula refers to: The formula x = (\u2212b \u00b1 \u221a(b\u00b2\u22124ac)) / 2a solves any quadratic equation ax\u00b2 + bx + c = 0."
   },
   "polynomial_factorization": {
     "id": "polynomial_factorization",
@@ -2710,8 +2783,8 @@
       "I reverse the process of expanding brackets.",
       "I express a polynomial as a product of simpler factors.",
       "For quadratics, I find two binomials whose product gives the original expression.",
-      "The AC method or inspection helps me factor ax²+bx+c.",
-      "x²−5x+6 factors into (x−2)(x−3) using me."
+      "The AC method or inspection helps me factor ax\u00b2+bx+c.",
+      "x\u00b2\u22125x+6 factors into (x\u22122)(x\u22123) using me."
     ],
     "hints": [
       "Algebra category topic.",
@@ -2721,18 +2794,19 @@
     "educationalInfo": {
       "definition": "Expressing a polynomial as a product of lower-degree polynomials (factors).",
       "examples": [
-        "x²−5x+6 = (x−2)(x−3)",
-        "2x²+7x+3 = (2x+1)(x+3)",
-        "x²−9 = (x+3)(x−3)"
+        "x\u00b2\u22125x+6 = (x\u22122)(x\u22123)",
+        "2x\u00b2+7x+3 = (2x+1)(x+3)",
+        "x\u00b2\u22129 = (x+3)(x\u22123)"
       ],
       "commonMistakes": "Sign errors in the factor pairs. Forgetting to take out common factors first.",
       "funFact": "Polynomial factorization is the algebraic equivalent of prime factorization for numbers.",
       "relatedLesson": "Polynomial Factorization",
       "practiceQuestions": [
-        "Factorise x²+5x+6.",
-        "Factorise 3x²−10x+3."
+        "Factorise x\u00b2+5x+6.",
+        "Factorise 3x\u00b2\u221210x+3."
       ]
-    }
+    },
+    "hint": "Recall that Polynomial Factorization refers to: Expressing a polynomial as a product of lower-degree polynomials (factors)."
   },
   "polynomial_multiplication": {
     "id": "polynomial_multiplication",
@@ -2743,7 +2817,7 @@
       "I expand the product of two or more polynomial expressions.",
       "I use the distributive law to multiply every term in one polynomial by every term in another.",
       "For two binomials, the FOIL method (First, Outer, Inner, Last) guides me.",
-      "(x+3)(x+4) becomes x²+7x+12 through me.",
+      "(x+3)(x+4) becomes x\u00b2+7x+12 through me.",
       "I produce a polynomial of degree equal to the sum of the degrees of the factors."
     ],
     "hints": [
@@ -2754,17 +2828,18 @@
     "educationalInfo": {
       "definition": "Expanding the product of polynomials by applying the distributive law to every pair of terms.",
       "examples": [
-        "(x+2)(x+5) = x²+7x+10",
-        "(2x+1)(3x−4) = 6x²−5x−4"
+        "(x+2)(x+5) = x\u00b2+7x+10",
+        "(2x+1)(3x\u22124) = 6x\u00b2\u22125x\u22124"
       ],
       "commonMistakes": "Missing terms when multiplying longer polynomials. Sign errors with negatives in the expansion.",
-      "funFact": "Multiplying polynomials is analogous to multiplying multi-digit numbers — the same distributive principle applies.",
+      "funFact": "Multiplying polynomials is analogous to multiplying multi-digit numbers \u2014 the same distributive principle applies.",
       "relatedLesson": "Polynomial Multiplication",
       "practiceQuestions": [
-        "Expand (x+3)(x−5).",
-        "Expand and simplify (2x+1)(x²−3x+4)."
+        "Expand (x+3)(x\u22125).",
+        "Expand and simplify (2x+1)(x\u00b2\u22123x+4)."
       ]
-    }
+    },
+    "hint": "Recall that Polynomial Multiplication refers to: Expanding the product of polynomials by applying the distributive law to every pair of terms."
   },
   "dot_products": {
     "id": "dot_products",
@@ -2774,9 +2849,9 @@
     "clues": [
       "I am an operation that takes two vectors and produces a scalar.",
       "I am calculated by multiplying corresponding components and summing the results.",
-      "For vectors a and b, I equal |a||b|cos(θ) where θ is the angle between them.",
+      "For vectors a and b, I equal |a||b|cos(\u03b8) where \u03b8 is the angle between them.",
       "If my result is zero, the two vectors are perpendicular.",
-      "a·b = a₁b₁ + a₂b₂ (+ a₃b₃ in 3D) defines me."
+      "a\u00b7b = a\u2081b\u2081 + a\u2082b\u2082 (+ a\u2083b\u2083 in 3D) defines me."
     ],
     "hints": [
       "Advanced Mathematics topic.",
@@ -2784,19 +2859,20 @@
       "Starts with 'D'."
     ],
     "educationalInfo": {
-      "definition": "The dot product of two vectors a and b is a·b = |a||b|cosθ = a₁b₁ + a₂b₂ + a₃b₃.",
+      "definition": "The dot product of two vectors a and b is a\u00b7b = |a||b|cos\u03b8 = a\u2081b\u2081 + a\u2082b\u2082 + a\u2083b\u2083.",
       "examples": [
-        "(2,3)·(4,1) = 8+3 = 11",
-        "(1,0,0)·(0,1,0) = 0 (perpendicular)"
+        "(2,3)\u00b7(4,1) = 8+3 = 11",
+        "(1,0,0)\u00b7(0,1,0) = 0 (perpendicular)"
       ],
-      "commonMistakes": "Confusing dot product (scalar) with cross product (vector). Forgetting cosθ in the geometric definition.",
-      "funFact": "Dot products are fundamental in machine learning — neural network computations are essentially sequences of dot products.",
+      "commonMistakes": "Confusing dot product (scalar) with cross product (vector). Forgetting cos\u03b8 in the geometric definition.",
+      "funFact": "Dot products are fundamental in machine learning \u2014 neural network computations are essentially sequences of dot products.",
       "relatedLesson": "Vectors and Dot Products",
       "practiceQuestions": [
-        "Find (3,4)·(1,2).",
-        "Are vectors (2,−1) and (1,2) perpendicular? Show using dot product."
+        "Find (3,4)\u00b7(1,2).",
+        "Are vectors (2,\u22121) and (1,2) perpendicular? Show using dot product."
       ]
-    }
+    },
+    "hint": "Recall that Dot Products refers to: The dot product of two vectors a and b is a\u00b7b = |a||b|cos\u03b8 = a\u2081b\u2081 + a\u2082b\u2082 + a\u2083b\u2083."
   },
   "linear_algebra": {
     "id": "linear_algebra",
@@ -2822,14 +2898,15 @@
         "Eigenvalues and eigenvectors",
         "Matrix inverses"
       ],
-      "commonMistakes": "Treating matrix multiplication as commutative (AB ≠ BA in general). Errors in Gaussian elimination steps.",
+      "commonMistakes": "Treating matrix multiplication as commutative (AB \u2260 BA in general). Errors in Gaussian elimination steps.",
       "funFact": "Google's PageRank algorithm is a linear algebra problem involving a matrix of over a trillion entries.",
       "relatedLesson": "Linear Algebra",
       "practiceQuestions": [
-        "Solve the system: x+y=5, 2x−y=1 using matrix methods.",
+        "Solve the system: x+y=5, 2x\u2212y=1 using matrix methods.",
         "What is the rank of the identity matrix?"
       ]
-    }
+    },
+    "hint": "Recall that Linear Algebra refers to: The branch of mathematics dealing with vector spaces, linear transformations, matrices, and systems of linear equations."
   },
   "logarithms": {
     "id": "logarithms",
@@ -2838,10 +2915,10 @@
     "subject": "Advanced Mathematics",
     "clues": [
       "I am the inverse of exponentiation.",
-      "logₐ(b) = c means aᶜ = b.",
-      "log(a×b) = log(a) + log(b) is one of my key laws.",
+      "log\u2090(b) = c means a\u1d9c = b.",
+      "log(a\u00d7b) = log(a) + log(b) is one of my key laws.",
       "I can convert exponential equations into linear ones.",
-      "log₁₀(1000) = 3 because 10³ = 1000."
+      "log\u2081\u2080(1000) = 3 because 10\u00b3 = 1000."
     ],
     "hints": [
       "Advanced Mathematics topic.",
@@ -2849,20 +2926,21 @@
       "Starts with 'L'."
     ],
     "educationalInfo": {
-      "definition": "The logarithm logₐ(x) answers: 'To what power must a be raised to get x?' It is the inverse of aˣ.",
+      "definition": "The logarithm log\u2090(x) answers: 'To what power must a be raised to get x?' It is the inverse of a\u02e3.",
       "examples": [
-        "log₂(8) = 3",
+        "log\u2082(8) = 3",
         "log(100) = 2",
-        "ln(e²) = 2"
+        "ln(e\u00b2) = 2"
       ],
       "commonMistakes": "Thinking log(a+b) = log(a) + log(b) (incorrect). Confusing natural log (ln) with log base 10.",
-      "funFact": "John Napier invented logarithms in 1614 to simplify the astronomical calculations navigators needed — multiplications became additions.",
+      "funFact": "John Napier invented logarithms in 1614 to simplify the astronomical calculations navigators needed \u2014 multiplications became additions.",
       "relatedLesson": "Logarithms",
       "practiceQuestions": [
-        "Solve 2ˣ = 32.",
-        "Simplify log 8 + log 125 − log 10."
+        "Solve 2\u02e3 = 32.",
+        "Simplify log 8 + log 125 \u2212 log 10."
       ]
-    }
+    },
+    "hint": "Recall that Logarithms refers to: The logarithm log\u2090(x) answers: 'To what power must a be raised to get x?' It is the inverse of a\u02e3."
   },
   "binomial_theorem": {
     "id": "binomial_theorem",
@@ -2870,10 +2948,10 @@
     "name": "Binomial Theorem",
     "subject": "Advanced Mathematics",
     "clues": [
-      "I expand expressions of the form (a + b)ⁿ for any positive integer n.",
+      "I expand expressions of the form (a + b)\u207f for any positive integer n.",
       "My coefficients come from Pascal's Triangle.",
-      "The general term of my expansion is ⁿCᵣ × aⁿ⁻ʳ × bʳ.",
-      "(a+b)² = a² + 2ab + b² is the simplest case of me.",
+      "The general term of my expansion is \u207fC\u1d63 \u00d7 a\u207f\u207b\u02b3 \u00d7 b\u02b3.",
+      "(a+b)\u00b2 = a\u00b2 + 2ab + b\u00b2 is the simplest case of me.",
       "I am used in probability, combinatorics, and approximation theory."
     ],
     "hints": [
@@ -2882,19 +2960,20 @@
       "Starts with 'B'."
     ],
     "educationalInfo": {
-      "definition": "The Binomial Theorem states: (a+b)ⁿ = Σ(r=0 to n) ⁿCᵣ aⁿ⁻ʳ bʳ.",
+      "definition": "The Binomial Theorem states: (a+b)\u207f = \u03a3(r=0 to n) \u207fC\u1d63 a\u207f\u207b\u02b3 b\u02b3.",
       "examples": [
-        "(x+1)³ = x³+3x²+3x+1",
-        "(1+x)⁴ = 1+4x+6x²+4x³+x⁴"
+        "(x+1)\u00b3 = x\u00b3+3x\u00b2+3x+1",
+        "(1+x)\u2074 = 1+4x+6x\u00b2+4x\u00b3+x\u2074"
       ],
-      "commonMistakes": "Errors in computing ⁿCᵣ. Using the wrong term number for the general term.",
+      "commonMistakes": "Errors in computing \u207fC\u1d63. Using the wrong term number for the general term.",
       "funFact": "Pascal's Triangle, which gives Binomial coefficients, was known to Chinese mathematician Jia Xian 500 years before Pascal.",
       "relatedLesson": "Binomial Theorem",
       "practiceQuestions": [
-        "Expand (2x+3)³.",
-        "Find the coefficient of x² in (1+x)⁵."
+        "Expand (2x+3)\u00b3.",
+        "Find the coefficient of x\u00b2 in (1+x)\u2075."
       ]
-    }
+    },
+    "hint": "Recall that Binomial Theorem refers to: The Binomial Theorem states: (a+b)\u207f = \u03a3(r=0 to n) \u207fC\u1d63 a\u207f\u207b\u02b3 b\u02b3."
   },
   "complex_numbers": {
     "id": "complex_numbers",
@@ -2903,10 +2982,10 @@
     "subject": "Advanced Mathematics",
     "clues": [
       "I extend the real number system to include the square root of negative one.",
-      "My imaginary unit is denoted i, where i² = −1.",
+      "My imaginary unit is denoted i, where i\u00b2 = \u22121.",
       "I am written in the form a + bi, where a is the real part and b is the imaginary part.",
       "On an Argand diagram, my real part is plotted on the x-axis and imaginary part on the y-axis.",
-      "Multiplying me by my conjugate (a−bi) always gives a real number: a²+b²."
+      "Multiplying me by my conjugate (a\u2212bi) always gives a real number: a\u00b2+b\u00b2."
     ],
     "hints": [
       "Advanced Mathematics topic.",
@@ -2914,20 +2993,21 @@
       "Starts with 'C'."
     ],
     "educationalInfo": {
-      "definition": "A complex number has the form a + bi where a, b ∈ ℝ and i = √(−1).",
+      "definition": "A complex number has the form a + bi where a, b \u2208 \u211d and i = \u221a(\u22121).",
       "examples": [
-        "(3+2i) + (1−i) = 4+i",
-        "(2+i)(2−i) = 5",
-        "Modulus of 3+4i = √(9+16) = 5"
+        "(3+2i) + (1\u2212i) = 4+i",
+        "(2+i)(2\u2212i) = 5",
+        "Modulus of 3+4i = \u221a(9+16) = 5"
       ],
-      "commonMistakes": "Forgetting i² = −1 when multiplying. Dividing without multiplying by the conjugate.",
-      "funFact": "Euler's formula eⁱᵖⁱ + 1 = 0 is often called the most beautiful equation in mathematics — it links five fundamental constants.",
+      "commonMistakes": "Forgetting i\u00b2 = \u22121 when multiplying. Dividing without multiplying by the conjugate.",
+      "funFact": "Euler's formula e\u2071\u1d56\u2071 + 1 = 0 is often called the most beautiful equation in mathematics \u2014 it links five fundamental constants.",
       "relatedLesson": "Complex Numbers",
       "practiceQuestions": [
-        "Simplify (3+4i)(2−i).",
-        "Find the modulus of −5+12i."
+        "Simplify (3+4i)(2\u2212i).",
+        "Find the modulus of \u22125+12i."
       ]
-    }
+    },
+    "hint": "Recall that Complex Numbers refers to: A complex number has the form a + bi where a, b \u2208 \u211d and i = \u221a(\u22121)."
   },
   "permutations_combinations": {
     "id": "permutations_combinations",
@@ -2936,8 +3016,8 @@
     "subject": "Advanced Mathematics",
     "clues": [
       "I count the number of ways to arrange or select objects.",
-      "When order matters, I use permutations: nPr = n!/(n−r)!.",
-      "When order does not matter, I use combinations: nCr = n!/(r!(n−r)!).",
+      "When order matters, I use permutations: nPr = n!/(n\u2212r)!.",
+      "When order does not matter, I use combinations: nCr = n!/(r!(n\u2212r)!).",
       "Choosing 3 books from 5 regardless of order uses nCr.",
       "Arranging 4 people in 4 seats uses 4! = 24 permutations."
     ],
@@ -2947,20 +3027,21 @@
       "Starts with 'P'."
     ],
     "educationalInfo": {
-      "definition": "Permutation counts ordered arrangements; combination counts unordered selections. nPr = n!/(n−r)!, nCr = n!/(r!(n−r)!).",
+      "definition": "Permutation counts ordered arrangements; combination counts unordered selections. nPr = n!/(n\u2212r)!, nCr = n!/(r!(n\u2212r)!).",
       "examples": [
         "5P2 = 20",
         "5C2 = 10",
         "Number of ways to deal 5 cards from 52: 52C5 = 2,598,960"
       ],
       "commonMistakes": "Using permutation when order doesn't matter. Forgetting that 0! = 1.",
-      "funFact": "The number of possible chess games after 40 moves exceeds 10¹²⁰ — far more than atoms in the observable universe.",
+      "funFact": "The number of possible chess games after 40 moves exceeds 10\u00b9\u00b2\u2070 \u2014 far more than atoms in the observable universe.",
       "relatedLesson": "Permutations and Combinations",
       "practiceQuestions": [
         "In how many ways can 3 students be chosen from 8?",
         "How many 4-letter arrangements can be made from the letters of MATHS?"
       ]
-    }
+    },
+    "hint": "Recall that Permutations & Combinations refers to: Permutation counts ordered arrangements; combination counts unordered selections."
   },
   "coordinate_geometry": {
     "id": "coordinate_geometry",
@@ -2970,9 +3051,9 @@
     "clues": [
       "I study geometric figures using algebraic equations and a coordinate plane.",
       "I calculate distances, midpoints, and gradients between points.",
-      "The distance between (x₁,y₁) and (x₂,y₂) is √((x₂−x₁)²+(y₂−y₁)²).",
+      "The distance between (x\u2081,y\u2081) and (x\u2082,y\u2082) is \u221a((x\u2082\u2212x\u2081)\u00b2+(y\u2082\u2212y\u2081)\u00b2).",
       "I can determine whether lines are parallel, perpendicular, or intersecting.",
-      "René Descartes invented my coordinate framework in the 17th century."
+      "Ren\u00e9 Descartes invented my coordinate framework in the 17th century."
     ],
     "hints": [
       "Coordinate & Calculus topic.",
@@ -2982,17 +3063,18 @@
     "educationalInfo": {
       "definition": "The study of geometry using a coordinate system to describe and analyse shapes algebraically.",
       "examples": [
-        "Distance = √((3−1)²+(5−1)²) = √20",
+        "Distance = \u221a((3\u22121)\u00b2+(5\u22121)\u00b2) = \u221a20",
         "Midpoint of (2,4) and (6,8) = (4,6)"
       ],
       "commonMistakes": "Forgetting to square before adding in the distance formula. Confusing gradient with y-intercept.",
-      "funFact": "Coordinate geometry bridges algebra and geometry — Descartes said it came to him in a dream while watching a fly on his ceiling.",
+      "funFact": "Coordinate geometry bridges algebra and geometry \u2014 Descartes said it came to him in a dream while watching a fly on his ceiling.",
       "relatedLesson": "Coordinate Geometry",
       "practiceQuestions": [
         "Find the distance between (1,2) and (4,6).",
-        "Find the midpoint of the segment joining (−3,5) and (7,−1)."
+        "Find the midpoint of the segment joining (\u22123,5) and (7,\u22121)."
       ]
-    }
+    },
+    "hint": "Recall that Coordinate Geometry refers to: The study of geometry using a coordinate system to describe and analyse shapes algebraically."
   },
   "line_equation": {
     "id": "line_equation",
@@ -3004,7 +3086,7 @@
       "My most common form is y = mx + c, where m is gradient and c is y-intercept.",
       "Given two points, I can always be determined uniquely.",
       "Two lines with equal gradients are parallel.",
-      "Two lines with gradients m₁ and m₂ are perpendicular if m₁ × m₂ = −1."
+      "Two lines with gradients m\u2081 and m\u2082 are perpendicular if m\u2081 \u00d7 m\u2082 = \u22121."
     ],
     "hints": [
       "Coordinate & Calculus topic.",
@@ -3015,16 +3097,17 @@
       "definition": "The equation of a straight line, typically written as y = mx + c (gradient-intercept form) or ax + by + c = 0.",
       "examples": [
         "Through (0,2) with gradient 3: y = 3x+2",
-        "Through (1,1) and (3,5): gradient=2, y=2x−1"
+        "Through (1,1) and (3,5): gradient=2, y=2x\u22121"
       ],
       "commonMistakes": "Mixing up gradient with y-intercept. Computing gradient as run/rise instead of rise/run.",
-      "funFact": "Every straight line can be expressed in the form ax+by=c — even vertical lines (x=k) just have b=0.",
+      "funFact": "Every straight line can be expressed in the form ax+by=c \u2014 even vertical lines (x=k) just have b=0.",
       "relatedLesson": "Straight Line Graphs",
       "practiceQuestions": [
         "Find the equation of the line through (2,5) with gradient 3.",
-        "Find the gradient of the line perpendicular to y = 4x − 7."
+        "Find the gradient of the line perpendicular to y = 4x \u2212 7."
       ]
-    }
+    },
+    "hint": "Recall that Line Equation refers to: The equation of a straight line, typically written as y = mx + c (gradient-intercept form) or ax + by + c = 0."
   },
   "section_formula": {
     "id": "section_formula",
@@ -3033,7 +3116,7 @@
     "subject": "Coordinate & Calculus",
     "clues": [
       "I find the coordinates of a point that divides a line segment in a given ratio.",
-      "For internal division in ratio m:n, I give x = (mx₂+nx₁)/(m+n).",
+      "For internal division in ratio m:n, I give x = (mx\u2082+nx\u2081)/(m+n).",
       "The midpoint formula is my special case when m = n = 1.",
       "I can also handle external division, where the point lies outside the segment.",
       "If P divides AB in ratio 2:3, I calculate exactly where P lies."
@@ -3044,19 +3127,20 @@
       "Starts with 'S'."
     ],
     "educationalInfo": {
-      "definition": "The section formula gives the coordinates of a point dividing a segment joining (x₁,y₁) and (x₂,y₂) in ratio m:n.",
+      "definition": "The section formula gives the coordinates of a point dividing a segment joining (x\u2081,y\u2081) and (x\u2082,y\u2082) in ratio m:n.",
       "examples": [
-        "P divides (1,2) to (7,8) in 2:1: x=(2×7+1×1)/3=5, y=(2×8+1×2)/3=6",
-        "Midpoint: m=n=1 gives ((x₁+x₂)/2,(y₁+y₂)/2)"
+        "P divides (1,2) to (7,8) in 2:1: x=(2\u00d77+1\u00d71)/3=5, y=(2\u00d78+1\u00d72)/3=6",
+        "Midpoint: m=n=1 gives ((x\u2081+x\u2082)/2,(y\u2081+y\u2082)/2)"
       ],
       "commonMistakes": "Swapping m and n. Confusing internal and external division.",
       "funFact": "The section formula generalises to 3D and is used in computer graphics for interpolating between keyframes in animation.",
       "relatedLesson": "Section Formula",
       "practiceQuestions": [
-        "Find the point dividing (2,−3) and (8,9) in ratio 1:2.",
+        "Find the point dividing (2,\u22123) and (8,9) in ratio 1:2.",
         "Find the centroid of the triangle with vertices (1,2),(3,6),(5,0)."
       ]
-    }
+    },
+    "hint": "Recall that Section Formula refers to: The section formula gives the coordinates of a point dividing a segment joining (x\u2081,y\u2081) and (x\u2082,y\u2082) in ratio m:n."
   },
   "conic_sections": {
     "id": "conic_sections",
@@ -3068,7 +3152,7 @@
       "My four main members are circle, ellipse, parabola, and hyperbola.",
       "A circle is my special case when the slice is perfectly horizontal.",
       "A parabola is the path of a projectile under gravity.",
-      "My general second-degree equation is ax²+bxy+cy²+dx+ey+f=0."
+      "My general second-degree equation is ax\u00b2+bxy+cy\u00b2+dx+ey+f=0."
     ],
     "hints": [
       "Coordinate & Calculus topic.",
@@ -3078,18 +3162,19 @@
     "educationalInfo": {
       "definition": "Curves formed by the intersection of a plane with a right circular cone: circle, ellipse, parabola, hyperbola.",
       "examples": [
-        "Circle: x²+y²=r²",
-        "Parabola: y=ax²",
-        "Ellipse: x²/a²+y²/b²=1"
+        "Circle: x\u00b2+y\u00b2=r\u00b2",
+        "Parabola: y=ax\u00b2",
+        "Ellipse: x\u00b2/a\u00b2+y\u00b2/b\u00b2=1"
       ],
       "commonMistakes": "Misidentifying conic type from its equation. Forgetting to complete the square to find centre/vertex.",
-      "funFact": "Planets orbit the Sun in ellipses — discovered by Kepler in 1609 using conic section mathematics developed by Apollonius 1800 years earlier.",
+      "funFact": "Planets orbit the Sun in ellipses \u2014 discovered by Kepler in 1609 using conic section mathematics developed by Apollonius 1800 years earlier.",
       "relatedLesson": "Conic Sections",
       "practiceQuestions": [
-        "Identify the conic: x²+y²−6x+4y=3.",
-        "Sketch the parabola y=x²−4x+3."
+        "Identify the conic: x\u00b2+y\u00b2\u22126x+4y=3.",
+        "Sketch the parabola y=x\u00b2\u22124x+3."
       ]
-    }
+    },
+    "hint": "Recall that Conic Sections refers to: Curves formed by the intersection of a plane with a right circular cone: circle, ellipse, parabola, hyperbola."
   },
   "limits": {
     "id": "limits",
@@ -3099,9 +3184,9 @@
     "clues": [
       "I describe the value a function approaches as the input gets close to a specific value.",
       "I am the foundation of calculus.",
-      "lim(x→2) of x² = 4 is a simple example of me.",
+      "lim(x\u21922) of x\u00b2 = 4 is a simple example of me.",
       "I can handle cases where the function is undefined at the exact point.",
-      "L'Hôpital's Rule helps evaluate me in 0/0 or ∞/∞ indeterminate forms."
+      "L'H\u00f4pital's Rule helps evaluate me in 0/0 or \u221e/\u221e indeterminate forms."
     ],
     "hints": [
       "Coordinate & Calculus topic.",
@@ -3109,19 +3194,20 @@
       "Starts with 'L'."
     ],
     "educationalInfo": {
-      "definition": "lim(x→a) f(x) = L means f(x) can be made arbitrarily close to L by taking x sufficiently close to a.",
+      "definition": "lim(x\u2192a) f(x) = L means f(x) can be made arbitrarily close to L by taking x sufficiently close to a.",
       "examples": [
-        "lim(x→3)(x²−9)/(x−3) = 6",
-        "lim(x→0) sinx/x = 1"
+        "lim(x\u21923)(x\u00b2\u22129)/(x\u22123) = 6",
+        "lim(x\u21920) sinx/x = 1"
       ],
-      "commonMistakes": "Assuming the limit equals the function value (it may not exist or differ). Mis-applying L'Hôpital when form isn't 0/0 or ∞/∞.",
-      "funFact": "Newton and Leibniz both invented calculus independently — the limit concept was only rigorously formalised by Cauchy and Weierstrass 150 years later.",
+      "commonMistakes": "Assuming the limit equals the function value (it may not exist or differ). Mis-applying L'H\u00f4pital when form isn't 0/0 or \u221e/\u221e.",
+      "funFact": "Newton and Leibniz both invented calculus independently \u2014 the limit concept was only rigorously formalised by Cauchy and Weierstrass 150 years later.",
       "relatedLesson": "Limits",
       "practiceQuestions": [
-        "Evaluate lim(x→2)(x²−4)/(x−2).",
-        "Find lim(x→∞)(3x+1)/(x+2)."
+        "Evaluate lim(x\u21922)(x\u00b2\u22124)/(x\u22122).",
+        "Find lim(x\u2192\u221e)(3x+1)/(x+2)."
       ]
-    }
+    },
+    "hint": "Recall that Limits refers to: lim(x\u2192a) f(x) = L means f(x) can be made arbitrarily close to L by taking x sufficiently close to a."
   },
   "differentiation": {
     "id": "differentiation",
@@ -3131,7 +3217,7 @@
     "clues": [
       "I find the instantaneous rate of change of a function.",
       "I produce the derivative, often written as dy/dx or f'(x).",
-      "The power rule: d/dx(xⁿ) = nxⁿ⁻¹ is my simplest rule.",
+      "The power rule: d/dx(x\u207f) = nx\u207f\u207b\u00b9 is my simplest rule.",
       "I find the gradient of a tangent to a curve at any point.",
       "Setting my result equal to zero locates maxima and minima of a curve."
     ],
@@ -3143,17 +3229,18 @@
     "educationalInfo": {
       "definition": "The process of finding the derivative of a function, representing its instantaneous rate of change.",
       "examples": [
-        "d/dx(x³) = 3x²",
-        "d/dx(5x²−3x+1) = 10x−3"
+        "d/dx(x\u00b3) = 3x\u00b2",
+        "d/dx(5x\u00b2\u22123x+1) = 10x\u22123"
       ],
       "commonMistakes": "Forgetting to bring the power down as a coefficient. Not reducing the power by 1.",
-      "funFact": "Isaac Newton developed differentiation to explain planetary motion — he called it 'the method of fluxions'.",
+      "funFact": "Isaac Newton developed differentiation to explain planetary motion \u2014 he called it 'the method of fluxions'.",
       "relatedLesson": "Differentiation",
       "practiceQuestions": [
-        "Differentiate y = 4x³ − 2x + 7.",
-        "Find the gradient of y = x² − 3x at x = 2."
+        "Differentiate y = 4x\u00b3 \u2212 2x + 7.",
+        "Find the gradient of y = x\u00b2 \u2212 3x at x = 2."
       ]
-    }
+    },
+    "hint": "Focus on calculating the rate of change or slope of a curve (dy/dx)."
   },
   "integration": {
     "id": "integration",
@@ -3163,7 +3250,7 @@
     "clues": [
       "I am the reverse process of differentiation.",
       "I find the area under a curve between two limits.",
-      "My power rule: ∫xⁿ dx = xⁿ⁺¹/(n+1) + C.",
+      "My power rule: \u222bx\u207f dx = x\u207f\u207a\u00b9/(n+1) + C.",
       "The constant C in my indefinite form is called the constant of integration.",
       "The definite form of me uses limits a and b to give a numerical area."
     ],
@@ -3173,19 +3260,20 @@
       "Starts with 'I'."
     ],
     "educationalInfo": {
-      "definition": "Integration is the reverse of differentiation. Indefinite: ∫f(x)dx = F(x)+C. Definite: ∫[a,b]f(x)dx = F(b)−F(a).",
+      "definition": "Integration is the reverse of differentiation. Indefinite: \u222bf(x)dx = F(x)+C. Definite: \u222b[a,b]f(x)dx = F(b)\u2212F(a).",
       "examples": [
-        "∫3x²dx = x³+C",
-        "∫[0,2]x²dx = [x³/3]₀² = 8/3"
+        "\u222b3x\u00b2dx = x\u00b3+C",
+        "\u222b[0,2]x\u00b2dx = [x\u00b3/3]\u2080\u00b2 = 8/3"
       ],
       "commonMistakes": "Forgetting +C in indefinite integration. Using wrong limits in definite integration.",
-      "funFact": "Archimedes calculated the area of a parabolic segment using exhaustion — a precursor to integration — 2000 years before Newton.",
+      "funFact": "Archimedes calculated the area of a parabolic segment using exhaustion \u2014 a precursor to integration \u2014 2000 years before Newton.",
       "relatedLesson": "Integration",
       "practiceQuestions": [
-        "Integrate 6x² + 4x − 1.",
-        "Evaluate ∫[1,3] 2x dx."
+        "Integrate 6x\u00b2 + 4x \u2212 1.",
+        "Evaluate \u222b[1,3] 2x dx."
       ]
-    }
+    },
+    "hint": "Focus on finding the area under a curve or the anti-derivative."
   },
   "differential_equations": {
     "id": "differential_equations",
@@ -3194,7 +3282,7 @@
     "subject": "Coordinate & Calculus",
     "clues": [
       "I am an equation involving a function and its derivatives.",
-      "My simplest type is separable — variables can be separated to opposite sides.",
+      "My simplest type is separable \u2014 variables can be separated to opposite sides.",
       "dy/dx = ky describes exponential growth or decay.",
       "I model physical systems: heat flow, population growth, electrical circuits.",
       "Newton's law of cooling is a classic example of me."
@@ -3207,8 +3295,8 @@
     "educationalInfo": {
       "definition": "An equation relating a function with one or more of its derivatives.",
       "examples": [
-        "dy/dx = 3x²: integrate both sides → y = x³ + C",
-        "dy/dx = ky → y = Aeᵏˣ"
+        "dy/dx = 3x\u00b2: integrate both sides \u2192 y = x\u00b3 + C",
+        "dy/dx = ky \u2192 y = Ae\u1d4f\u02e3"
       ],
       "commonMistakes": "Forgetting the constant of integration. Not applying the initial condition to find the specific solution.",
       "funFact": "Maxwell's equations, which describe all electromagnetic phenomena, are a system of differential equations discovered in 1865.",
@@ -3217,7 +3305,8 @@
         "Solve dy/dx = 4x, given y=3 when x=0.",
         "Solve the separable equation dy/dx = y."
       ]
-    }
+    },
+    "hint": "Recall that Differential Equations refers to: An equation relating a function with one or more of its derivatives."
   },
   "inverse_trigonometry": {
     "id": "inverse_trigonometry",
@@ -3226,10 +3315,10 @@
     "subject": "Coordinate & Calculus",
     "clues": [
       "I find the angle when given a trigonometric ratio.",
-      "sin⁻¹(0.5) = 30° is a simple example of me.",
-      "My notation uses a superscript −1 or the prefix 'arc'.",
+      "sin\u207b\u00b9(0.5) = 30\u00b0 is a simple example of me.",
+      "My notation uses a superscript \u22121 or the prefix 'arc'.",
       "I have restricted domains to ensure single-valued outputs.",
-      "arctan(1) = 45° because tan(45°) = 1."
+      "arctan(1) = 45\u00b0 because tan(45\u00b0) = 1."
     ],
     "hints": [
       "Coordinate & Calculus topic.",
@@ -3239,18 +3328,19 @@
     "educationalInfo": {
       "definition": "Inverse trigonometric functions find the angle whose sine, cosine, or tangent equals a given value.",
       "examples": [
-        "arcsin(1/2) = 30°",
-        "arccos(0) = 90°",
-        "arctan(√3) = 60°"
+        "arcsin(1/2) = 30\u00b0",
+        "arccos(0) = 90\u00b0",
+        "arctan(\u221a3) = 60\u00b0"
       ],
-      "commonMistakes": "Ignoring restricted domains — arcsin only gives values in [−90°,90°]. Calculator mode (deg vs rad).",
-      "funFact": "Inverse trig functions are used in robotics to calculate joint angles from end-effector positions — inverse kinematics.",
+      "commonMistakes": "Ignoring restricted domains \u2014 arcsin only gives values in [\u221290\u00b0,90\u00b0]. Calculator mode (deg vs rad).",
+      "funFact": "Inverse trig functions are used in robotics to calculate joint angles from end-effector positions \u2014 inverse kinematics.",
       "relatedLesson": "Inverse Trigonometry",
       "practiceQuestions": [
         "Find arctan(1).",
-        "Solve: sin x = 0.866 for 0° ≤ x ≤ 360°."
+        "Solve: sin x = 0.866 for 0\u00b0 \u2264 x \u2264 360\u00b0."
       ]
-    }
+    },
+    "hint": "Recall that Inverse Trigonometry refers to: Inverse trigonometric functions find the angle whose sine, cosine, or tangent equals a given value."
   },
   "trigonometry": {
     "id": "trigonometry",
@@ -3274,16 +3364,17 @@
       "examples": [
         "sin=opp/hyp, cos=adj/hyp, tan=opp/adj",
         "Sine rule: a/sinA = b/sinB",
-        "Cosine rule: a²=b²+c²−2bc cosA"
+        "Cosine rule: a\u00b2=b\u00b2+c\u00b2\u22122bc cosA"
       ],
       "commonMistakes": "Using SOH-CAH-TOA in non-right triangles without switching to sine/cosine rules.",
       "funFact": "Ancient Babylonian astronomers used trigonometry-like tables 3700 years ago to track the planets.",
       "relatedLesson": "Trigonometry",
       "practiceQuestions": [
-        "In a right triangle with hypotenuse 10 and angle 30°, find the opposite side.",
-        "Use the cosine rule to find side a if b=5, c=7, A=60°."
+        "In a right triangle with hypotenuse 10 and angle 30\u00b0, find the opposite side.",
+        "Use the cosine rule to find side a if b=5, c=7, A=60\u00b0."
       ]
-    }
+    },
+    "hint": "Recall that Trigonometry refers to: The branch of mathematics studying relationships between angles and lengths of triangles."
   },
   "statistics": {
     "id": "statistics",
@@ -3309,13 +3400,14 @@
         "Standard deviation measures spread around the mean"
       ],
       "commonMistakes": "Using mean when data is skewed (median is better). Confusing frequency with relative frequency.",
-      "funFact": "Florence Nightingale pioneered the use of statistics in healthcare — her polar-area diagrams saved thousands of lives in the Crimean War.",
+      "funFact": "Florence Nightingale pioneered the use of statistics in healthcare \u2014 her polar-area diagrams saved thousands of lives in the Crimean War.",
       "relatedLesson": "Statistics",
       "practiceQuestions": [
         "What is the difference between mean and median?",
         "Draw and interpret a back-to-back stem and leaf diagram."
       ]
-    }
+    },
+    "hint": "Recall that Statistics refers to: The discipline of collecting, organising, analysing, and interpreting numerical data to draw conclusions."
   },
   "variation": {
     "id": "variation",
@@ -3324,9 +3416,9 @@
     "subject": "Data & Logic",
     "clues": [
       "I describe how two quantities change in relation to each other.",
-      "In my direct form, y ∝ x means y = kx for a constant k.",
-      "In my inverse form, y ∝ 1/x means y = k/x.",
-      "I can also involve powers: y ∝ x² means y = kx².",
+      "In my direct form, y \u221d x means y = kx for a constant k.",
+      "In my inverse form, y \u221d 1/x means y = k/x.",
+      "I can also involve powers: y \u221d x\u00b2 means y = kx\u00b2.",
       "If y = 12 when x = 3 in direct variation, then k = 4, so y = 4x."
     ],
     "hints": [
@@ -3337,17 +3429,18 @@
     "educationalInfo": {
       "definition": "Direct variation: y = kx. Inverse variation: y = k/x. Joint variation: y = kxz. k is the constant of proportionality.",
       "examples": [
-        "y ∝ x: y=8 when x=2 → k=4, so y=4x",
-        "y ∝ 1/x: y=6 when x=2 → k=12, so y=12/x"
+        "y \u221d x: y=8 when x=2 \u2192 k=4, so y=4x",
+        "y \u221d 1/x: y=6 when x=2 \u2192 k=12, so y=12/x"
       ],
       "commonMistakes": "Forgetting to find k before writing the equation. Confusing direct with inverse variation.",
-      "funFact": "Boyle's Law (pressure × volume = constant) is a perfect example of inverse variation in physics.",
+      "funFact": "Boyle's Law (pressure \u00d7 volume = constant) is a perfect example of inverse variation in physics.",
       "relatedLesson": "Variation",
       "practiceQuestions": [
         "y varies directly as x. If y=15 when x=5, find y when x=8.",
-        "y is inversely proportional to x². If y=4 when x=3, find y when x=6."
+        "y is inversely proportional to x\u00b2. If y=4 when x=3, find y when x=6."
       ]
-    }
+    },
+    "hint": "Recall that Variation refers to: Direct variation: y = kx."
   },
   "vocabulary": {
     "id": "vocabulary",
@@ -3355,11 +3448,11 @@
     "name": "Vocabulary",
     "subject": "Data & Logic",
     "clues": [
-      "I represent the mathematical language itself — the meaning of the words we use.",
+      "I represent the mathematical language itself \u2014 the meaning of the words we use.",
       "I help students understand exam questions that use words like 'factorise', 'evaluate', or 'hence'.",
       "Without me, a student may know a method but misread what is being asked.",
       "I include terms like 'ascending', 'integer', 'consecutive', and 'congruent'.",
-      "Mathematical literacy — understanding my terms — is as important as numerical skill."
+      "Mathematical literacy \u2014 understanding my terms \u2014 is as important as numerical skill."
     ],
     "hints": [
       "Data & Logic topic.",
@@ -3374,13 +3467,14 @@
         "'Verify' = check an answer is correct"
       ],
       "commonMistakes": "Misreading 'factorise' as 'expand'. Confusing 'prove' with 'show' or 'verify'.",
-      "funFact": "The word 'algebra' comes from the Arabic 'al-jabr' — from al-Khwarizmi's 9th-century book on balancing equations.",
+      "funFact": "The word 'algebra' comes from the Arabic 'al-jabr' \u2014 from al-Khwarizmi's 9th-century book on balancing equations.",
       "relatedLesson": "Mathematical Vocabulary",
       "practiceQuestions": [
         "What does 'simplify' mean in a maths context?",
         "Explain the difference between 'solve' and 'evaluate'."
       ]
-    }
+    },
+    "hint": "Recall that Vocabulary refers to: Mathematical vocabulary: the precise definitions of terms and command words used in mathematics."
   },
   "algebraic_fraction": {
     "conceptId": "algebraic_fraction",
@@ -3411,7 +3505,8 @@
         "Add: 1/x + 2/y."
       ]
     },
-    "id": "algebraic_fraction"
+    "id": "algebraic_fraction",
+    "hint": "Recall that Algebraic Fractions refers to: A fraction whose numerator and/or denominator are algebraic expressions."
   },
   "even_numbers": {
     "id": "even_numbers",
@@ -3440,7 +3535,8 @@
       ],
       "commonMistakes": "Thinking 0 is not an even number (0 is even!).",
       "funFact": "Adding two even numbers always gives another even number!"
-    }
+    },
+    "hint": "Recall that even numbers are integers perfectly divisible by 2 with no remainder (ending in 0, 2, 4, 6, 8)."
   },
   "odd_numbers": {
     "id": "odd_numbers",
@@ -3469,7 +3565,8 @@
       ],
       "commonMistakes": "Thinking odd numbers cannot be prime numbers.",
       "funFact": "Multiplying any odd number by another odd number always yields an odd number!"
-    }
+    },
+    "hint": "Recall that odd numbers leave a remainder of 1 when divided by 2 (ending in 1, 3, 5, 7, 9)."
   },
   "prime_numbers": {
     "id": "prime_numbers",
@@ -3499,7 +3596,8 @@
       ],
       "commonMistakes": "Believing 1 is a prime number or that all odd numbers are prime.",
       "funFact": "Modern internet security and encryption rely on giant prime numbers!"
-    }
+    },
+    "hint": "Focus on whole numbers greater than 1 with exactly two divisors: 1 and the number itself."
   },
   "composite_numbers": {
     "id": "composite_numbers",
@@ -3529,7 +3627,8 @@
       ],
       "commonMistakes": "Thinking 1 is composite (1 is neither prime nor composite).",
       "funFact": "Every composite number can be written as a unique product of prime numbers!"
-    }
+    },
+    "hint": "Think of numbers greater than 1 with three or more positive factors."
   },
   "factor": {
     "id": "factor",
@@ -3555,7 +3654,8 @@
       ],
       "commonMistakes": "Confusing factors (smaller) with multiples (larger).",
       "funFact": "Number 1 is a factor of every single whole number!"
-    }
+    },
+    "hint": "Focus on numbers that divide evenly into another number with zero remainder."
   },
   "multiple": {
     "id": "multiple",
@@ -3581,7 +3681,8 @@
       ],
       "commonMistakes": "Thinking a number has a limited count of multiples.",
       "funFact": "Every number has an infinite number of multiples!"
-    }
+    },
+    "hint": "Think of numbers in the multiplication table of a given number."
   },
   "divisible_by_2": {
     "id": "divisible_by_2",
@@ -3609,7 +3710,8 @@
       ],
       "commonMistakes": "Checking the first digit instead of the last digit.",
       "funFact": "This is the fastest divisibility test in mathematics!"
-    }
+    },
+    "hint": "Recall that Divisible by 2 refers to: A number is divisible by 2 if its last digit is an even number (0, 2, 4, 6, 8)."
   },
   "divisible_by_3": {
     "id": "divisible_by_3",
@@ -3620,7 +3722,7 @@
       "I am a magic rule where you ADD UP all the digits of a number!",
       "If the sum of all digits can be divided by 3, the whole big number passes!",
       "For 123, 1+2+3 = 6, and 6 is in the 3 times table, so 123 passes!",
-      "You don't need long division—just add the digits together!",
+      "You don't need long division\u2014just add the digits together!",
       "I am the rule where a number is divisible by 3 if the sum of its digits is a multiple of 3!"
     ],
     "hints": [
@@ -3636,7 +3738,8 @@
       ],
       "commonMistakes": "Thinking odd ending numbers are automatically divisible by 3.",
       "funFact": "Summing digits works because 10 = 9 + 1, and 9 is divisible by 3!"
-    }
+    },
+    "hint": "Recall that Divisible by 3 refers to: A number is divisible by 3 if the sum of its digits is divisible by 3."
   },
   "divisible_by_5": {
     "id": "divisible_by_5",
@@ -3664,7 +3767,8 @@
       ],
       "commonMistakes": "Thinking numbers ending in 5 are the only ones (0 also counts!).",
       "funFact": "Every multiple of 10 is automatically divisible by 5!"
-    }
+    },
+    "hint": "Recall that Divisible by 5 refers to: A number is divisible by 5 if its last digit is either 0 or 5."
   },
   "divisible_by_9": {
     "id": "divisible_by_9",
@@ -3673,7 +3777,7 @@
     "subject": "Arithmetic",
     "clues": [
       "I am a digit-sum magic rule just like the rule for 3, but for a bigger number!",
-      "Add all the digits together—if the total sum is in the 9 times table, it passes!",
+      "Add all the digits together\u2014if the total sum is in the 9 times table, it passes!",
       "For 729, 7+2+9 = 18, and 18 can be divided by 9, so 729 passes!",
       "It works for huge numbers like 9,999 or 1,800 without doing long division!",
       "I am the rule where a number is divisible by 9 if the sum of its digits is a multiple of 9!"
@@ -3691,7 +3795,8 @@
       ],
       "commonMistakes": "Confusing divisible by 3 with divisible by 9.",
       "funFact": "Every number divisible by 9 is also divisible by 3!"
-    }
+    },
+    "hint": "Recall that Divisible by 9 refers to: A number is divisible by 9 if the sum of its digits is divisible by 9."
   },
   "ones_place": {
     "id": "ones_place",
@@ -3717,7 +3822,8 @@
       ],
       "commonMistakes": "Reading place values from left to right instead of right to left.",
       "funFact": "Ones place is the starting anchor for all place value calculations!"
-    }
+    },
+    "hint": "Look at the last digit on the far right of an integer (the 1s column)."
   },
   "tens_place": {
     "id": "tens_place",
@@ -3743,7 +3849,8 @@
       ],
       "commonMistakes": "Forgetting that digit 5 in tens place means 50.",
       "funFact": "Our decimal system is built around powers of 10!"
-    }
+    },
+    "hint": "Look at the second digit from the right (representing groups of 10)."
   },
   "hundreds_place": {
     "id": "hundreds_place",
@@ -3769,7 +3876,8 @@
       ],
       "commonMistakes": "Confusing hundreds with hundredths.",
       "funFact": "1 hundred equals 10 tens or 100 ones!"
-    }
+    },
+    "hint": "Recall that Hundreds refers to: The hundreds place represents groups of one hundred (10^2 = 100)."
   },
   "thousands_place": {
     "id": "thousands_place",
@@ -3795,7 +3903,8 @@
       ],
       "commonMistakes": "Miscounting positions when zeros are present.",
       "funFact": "1 thousand equals 10 hundreds or 1,000 ones!"
-    }
+    },
+    "hint": "Look at the 4th digit from the right, representing 1,000s."
   },
   "greater_than": {
     "id": "greater_than",
@@ -3822,7 +3931,8 @@
       ],
       "commonMistakes": "Confusing > (greater than) with < (less than).",
       "funFact": "Think of > as an arrow pointing to the smaller number!"
-    }
+    },
+    "hint": "Recall that the symbol > points to the smaller number and opens wide toward the larger value."
   },
   "less_than": {
     "id": "less_than",
@@ -3833,7 +3943,7 @@
       "I am a mathematical comparison concept used between numbers.",
       "I state that the first number is SMALLER in value than the second number.",
       "My symbol '<' points its narrow sharp tip toward the left number!",
-      "Comparing ₹50 in your pocket to a toy that costs ₹100.",
+      "Comparing \u20b950 in your pocket to a toy that costs \u20b9100.",
       "The 'Less Than' symbol (<) indicates that the value on the left is strictly smaller than the value on the right."
     ],
     "hints": [
@@ -3849,7 +3959,8 @@
       ],
       "commonMistakes": "Confusing < with >.",
       "funFact": "The symbol '<' actually resembles an 'L' for 'Less'!"
-    }
+    },
+    "hint": "Recall that the symbol < points left toward the smaller value."
   },
   "equal_to": {
     "id": "equal_to",
@@ -3876,7 +3987,8 @@
       ],
       "commonMistakes": "Thinking '=' means 'calculate the answer' rather than 'balanced equivalence'.",
       "funFact": "The '=' symbol was invented in 1557 by Robert Recorde because no two things could be more equal than parallel lines!"
-    }
+    },
+    "hint": "Think of two mathematical expressions that have identical quantitative values (=)."
   },
   "ascending_order": {
     "id": "ascending_order",
@@ -3902,7 +4014,8 @@
       ],
       "commonMistakes": "Mixing up ascending (increasing) and descending (decreasing).",
       "funFact": "'Ascend' means to go up or climb!"
-    }
+    },
+    "hint": "Arrange numbers from smallest to largest value."
   },
   "proper_fraction": {
     "id": "proper_fraction",
@@ -3930,7 +4043,8 @@
       ],
       "commonMistakes": "Thinking fractions are always proper.",
       "funFact": "Proper fractions represent a true part of a single whole!"
-    }
+    },
+    "hint": "Focus on fractions where the numerator is smaller than the denominator (e.g. 3/4)."
   },
   "improper_fraction": {
     "id": "improper_fraction",
@@ -3958,7 +4072,8 @@
       ],
       "commonMistakes": "Thinking improper fractions are 'wrong' (they are completely valid!).",
       "funFact": "Every improper fraction can be rewritten as a mixed fraction!"
-    }
+    },
+    "hint": "Focus on fractions where the numerator is greater than or equal to the denominator (e.g. 7/4)."
   },
   "mixed_fraction": {
     "id": "mixed_fraction",
@@ -3985,7 +4100,8 @@
       ],
       "commonMistakes": "Multiplying the whole number and fraction instead of adding them.",
       "funFact": "2 1/2 is equal to the improper fraction 5/2!"
-    }
+    },
+    "hint": "Think of a combination of a whole number and a proper fraction (e.g. 2 1/2)."
   },
   "equivalent_fraction": {
     "id": "equivalent_fraction",
@@ -4011,7 +4127,8 @@
       ],
       "commonMistakes": "Adding the same number to top and bottom (you must multiply or divide!).",
       "funFact": "There are infinitely many equivalent fractions for any single fraction!"
-    }
+    },
+    "hint": "Recall fractions that have equal value even though their numerators and denominators differ (e.g. 1/2 = 2/4)."
   },
   "tenths": {
     "id": "tenths",
@@ -4037,7 +4154,8 @@
       ],
       "commonMistakes": "Confusing tens (left of dot) with tenths (right of dot).",
       "funFact": "10 tenths make 1 whole unit!"
-    }
+    },
+    "hint": "Look at the first digit immediately to the right of the decimal point (1/10th)."
   },
   "hundredths": {
     "id": "hundredths",
@@ -4048,7 +4166,7 @@
       "I am a decimal place value position used when measuring smaller precision.",
       "I sit at the SECOND position to the right of the decimal point.",
       "My value represents dividing 1 whole into 100 equal parts (1/100 = 0.01).",
-      "In money prices like ₹12.75, my position holds the 5 paise.",
+      "In money prices like \u20b912.75, my position holds the 5 paise.",
       "The hundredths place is the second position to the right of the decimal point, representing 1/100th units."
     ],
     "hints": [
@@ -4063,7 +4181,8 @@
       ],
       "commonMistakes": "Thinking 0.05 is bigger than 0.5.",
       "funFact": "10 hundredths equal 1 tenth!"
-    }
+    },
+    "hint": "Look at the second digit to the right of the decimal point (1/100th)."
   },
   "thousandths": {
     "id": "thousandths",
@@ -4089,7 +4208,8 @@
       ],
       "commonMistakes": "Miscounting decimal places.",
       "funFact": "1,000 thousandths make 1 whole unit!"
-    }
+    },
+    "hint": "Look at the third digit to the right of the decimal point (1/1000th)."
   },
   "decimal_number_concept": {
     "id": "decimal_number_concept",
@@ -4100,7 +4220,7 @@
       "I am a full numerical format used to show precise quantities.",
       "Unlike individual place value names, I am the ENTIRE number format that uses a dot separator!",
       "I combine whole numbers on the left of a dot with fractional place values on the right.",
-      "You see me on digital thermometers showing 98.6°F.",
+      "You see me on digital thermometers showing 98.6\u00b0F.",
       "A decimal number is a number expressed in base-10 system using a decimal point to separate whole and fractional parts."
     ],
     "hints": [
@@ -4116,7 +4236,8 @@
       ],
       "commonMistakes": "Ignoring the position of the decimal point.",
       "funFact": "Decimals allow us to write any fraction using standard place value digits!"
-    }
+    },
+    "hint": "Think of quantities written with a decimal point to represent fractional parts of 1."
   },
   "fraction_form": {
     "id": "fraction_form",
@@ -4143,7 +4264,8 @@
       ],
       "commonMistakes": "Thinking top and bottom can be added directly when adding fractions.",
       "funFact": "Fraction lines were introduced by Indian mathematicians!"
-    }
+    },
+    "hint": "Recall that Fraction refers to: A fraction expresses a part of a whole as a numerator divided by a denominator."
   },
   "decimal_form": {
     "id": "decimal_form",
@@ -4170,7 +4292,8 @@
       ],
       "commonMistakes": "Adding decimal trailing zeros incorrectly.",
       "funFact": "Decimals make calculating with fractions much faster on computers!"
-    }
+    },
+    "hint": "Recall that Decimal refers to: A decimal represents fractional quantities using place values of base 10."
   },
   "percentage_form": {
     "id": "percentage_form",
@@ -4197,7 +4320,8 @@
       ],
       "commonMistakes": "Thinking percentages cannot be greater than 100% (they can!).",
       "funFact": "The word 'percent' comes from Latin 'per centum', meaning 'by the hundred'!"
-    }
+    },
+    "hint": "Recall that percent means per 100 \u2014 a ratio expressed out of 100."
   },
   "ratio_form": {
     "id": "ratio_form",
@@ -4224,7 +4348,8 @@
       ],
       "commonMistakes": "Reversing the order of quantities in a ratio.",
       "funFact": "Ratios are used in baking recipes to scale ingredients perfectly!"
-    }
+    },
+    "hint": "Think about comparing two quantities by division (written a:b or a/b)."
   },
   "arithmetic_pattern": {
     "id": "arithmetic_pattern",
@@ -4250,7 +4375,8 @@
       ],
       "commonMistakes": "Multiplying instead of adding.",
       "funFact": "House numbers on a street often follow an arithmetic pattern of +2!"
-    }
+    },
+    "hint": "Recall that Arithmetic Pattern refers to: An arithmetic pattern (sequence) is a list of numbers where each term increases or decreases by a constant common difference."
   },
   "geometric_pattern": {
     "id": "geometric_pattern",
@@ -4266,17 +4392,18 @@
     ],
     "hints": [
       "Multiplies by a constant factor.",
-      "×3 each step.",
+      "\u00d73 each step.",
       "Grows very rapidly."
     ],
     "educationalInfo": {
       "definition": "A geometric pattern is a sequence where each term is multiplied by a constant ratio to get the next term.",
       "examples": [
-        "1, 2, 4, 8, 16 (×2)"
+        "1, 2, 4, 8, 16 (\u00d72)"
       ],
       "commonMistakes": "Adding instead of multiplying.",
-      "funFact": "Cell division in biology follows a geometric pattern of ×2!"
-    }
+      "funFact": "Cell division in biology follows a geometric pattern of \u00d72!"
+    },
+    "hint": "Recall that Geometric Pattern refers to: A geometric pattern is a sequence where each term is multiplied by a constant ratio to get the next term."
   },
   "square_numbers": {
     "id": "square_numbers",
@@ -4291,12 +4418,12 @@
       "Square numbers are the product of an integer multiplied by itself (n^2: 1, 4, 9, 16, 25...)."
     ],
     "hints": [
-      "Multiplied by itself (n²).",
+      "Multiplied by itself (n\u00b2).",
       "1, 4, 9, 16, 25...",
       "Forms a square grid."
     ],
     "educationalInfo": {
-      "definition": "A square number is the result of multiplying an integer by itself (n × n = n²).",
+      "definition": "A square number is the result of multiplying an integer by itself (n \u00d7 n = n\u00b2).",
       "examples": [
         "1",
         "4",
@@ -4304,9 +4431,10 @@
         "16",
         "25"
       ],
-      "commonMistakes": "Confusing n × 2 with n × n (e.g. 5² is 25, not 10).",
-      "funFact": "The sum of odd numbers 1 + 3 + 5 + 7 = 16 (4²)!"
-    }
+      "commonMistakes": "Confusing n \u00d7 2 with n \u00d7 n (e.g. 5\u00b2 is 25, not 10).",
+      "funFact": "The sum of odd numbers 1 + 3 + 5 + 7 = 16 (4\u00b2)!"
+    },
+    "hint": "Focus on numbers obtained by multiplying an integer by itself (1, 4, 9, 16, 25, 36...)."
   },
   "cube_numbers": {
     "id": "cube_numbers",
@@ -4321,12 +4449,12 @@
       "Cube numbers are the product of an integer multiplied by itself twice (n^3: 1, 8, 27, 64...)."
     ],
     "hints": [
-      "Multiplied by itself 3 times (n³).",
+      "Multiplied by itself 3 times (n\u00b3).",
       "1, 8, 27, 64...",
       "3D solid cube volume."
     ],
     "educationalInfo": {
-      "definition": "A cube number is the result of multiplying an integer by itself twice (n × n × n = n³).",
+      "definition": "A cube number is the result of multiplying an integer by itself twice (n \u00d7 n \u00d7 n = n\u00b3).",
       "examples": [
         "1",
         "8",
@@ -4334,9 +4462,10 @@
         "64",
         "125"
       ],
-      "commonMistakes": "Confusing n × 3 with n³.",
-      "funFact": "A Rubik's cube has 3×3×3 = 27 small cubelets!"
-    }
+      "commonMistakes": "Confusing n \u00d7 3 with n\u00b3.",
+      "funFact": "A Rubik's cube has 3\u00d73\u00d73 = 27 small cubelets!"
+    },
+    "hint": "Focus on numbers formed by multiplying an integer by itself three times (1, 8, 27, 64...)."
   },
   "addition_op": {
     "id": "addition_op",
@@ -4362,7 +4491,8 @@
       ],
       "commonMistakes": "Forgetting to carry over in multi-digit addition.",
       "funFact": "Addition is commutative: a + b = b + a!"
-    }
+    },
+    "hint": "Combine two or more quantities together to find their total sum (+)."
   },
   "subtraction_op": {
     "id": "subtraction_op",
@@ -4373,7 +4503,7 @@
       "I am a fundamental mathematical operation.",
       "I take away a quantity from a starting amount to find how much is left!",
       "My result is called the 'difference'. My operator symbol is '-'.",
-      "Spending ₹40 from your ₹100 pocket money to see how much cash remains.",
+      "Spending \u20b940 from your \u20b9100 pocket money to see how much cash remains.",
       "Subtraction is the operation of taking one number away from another to find the difference (-)."
     ],
     "hints": [
@@ -4388,7 +4518,8 @@
       ],
       "commonMistakes": "Reversing the order of numbers.",
       "funFact": "Subtraction is the inverse operation of addition!"
-    }
+    },
+    "hint": "Take away one quantity from another to find the remaining difference (-)."
   },
   "multiplication_op": {
     "id": "multiplication_op",
@@ -4403,18 +4534,19 @@
       "Multiplication is the operation of repeated addition, scaling one number by another to find the product (x)."
     ],
     "hints": [
-      "Symbol ×.",
+      "Symbol \u00d7.",
       "Repeated addition.",
       "Result is product."
     ],
     "educationalInfo": {
       "definition": "Multiplication is repeated addition of a number a specified number of times.",
       "examples": [
-        "3 × 4 = 12"
+        "3 \u00d7 4 = 12"
       ],
       "commonMistakes": "Confusing multiplication with addition.",
-      "funFact": "Multiplication is also commutative: a × b = b × a!"
-    }
+      "funFact": "Multiplication is also commutative: a \u00d7 b = b \u00d7 a!"
+    },
+    "hint": "Perform repeated addition of equal groups (\u00d7)."
   },
   "division_op": {
     "id": "division_op",
@@ -4424,23 +4556,24 @@
     "clues": [
       "I am a fundamental mathematical operation.",
       "I split a total amount into equal shares or groups!",
-      "My result is called the 'quotient'. My operator symbol is '÷' or '/'.",
+      "My result is called the 'quotient'. My operator symbol is '\u00f7' or '/'.",
       "Sharing 12 cookies equally among 3 friends.",
-      "Division is the operation of splitting a number into equal groups or parts to find the quotient (÷)."
+      "Division is the operation of splitting a number into equal groups or parts to find the quotient (\u00f7)."
     ],
     "hints": [
-      "Symbol ÷.",
+      "Symbol \u00f7.",
       "Splits into equal groups.",
       "Result is quotient."
     ],
     "educationalInfo": {
       "definition": "Division is splitting a number into equal parts or groups.",
       "examples": [
-        "15 ÷ 3 = 5"
+        "15 \u00f7 3 = 5"
       ],
       "commonMistakes": "Dividing by zero (which is undefined!).",
       "funFact": "Division is the inverse operation of multiplication!"
-    }
+    },
+    "hint": "Split a number into equal groups or equal parts (\u00f7)."
   },
   "round_to_nearest_10": {
     "id": "round_to_nearest_10",
@@ -4462,12 +4595,13 @@
     "educationalInfo": {
       "definition": "Rounding to the nearest 10 replaces a number with the closest multiple of 10.",
       "examples": [
-        "34 → 30",
-        "36 → 40"
+        "34 \u2192 30",
+        "36 \u2192 40"
       ],
       "commonMistakes": "Rounding down when ones digit is 5.",
       "funFact": "Number 5 sits exactly in the middle, so standard rule is to round UP!"
-    }
+    },
+    "hint": "Recall that Round to Nearest 10 refers to: Rounding to the nearest 10 replaces a number with the closest multiple of 10."
   },
   "round_to_nearest_100": {
     "id": "round_to_nearest_100",
@@ -4478,7 +4612,7 @@
       "I am an estimation technique for larger numbers.",
       "I look at the tens digit of a number to replace it with the closest multiple of 100!",
       "If the tens digit is 5 or more, round up; if less, round down. My answer ends with 2 zeros.",
-      "Approximating a price of ₹430 as about ₹400.",
+      "Approximating a price of \u20b9430 as about \u20b9400.",
       "Rounding to the nearest 100 adjusts a number to its closest multiple of 100 based on the tens digit."
     ],
     "hints": [
@@ -4489,12 +4623,13 @@
     "educationalInfo": {
       "definition": "Rounding to the nearest 100 replaces a number with the closest multiple of 100.",
       "examples": [
-        "240 → 200",
-        "280 → 300"
+        "240 \u2192 200",
+        "280 \u2192 300"
       ],
       "commonMistakes": "Checking the wrong digit position.",
       "funFact": "Used in quick budgeting for large store purchases!"
-    }
+    },
+    "hint": "Recall that Round to Nearest 100 refers to: Rounding to the nearest 100 replaces a number with the closest multiple of 100."
   },
   "estimate_sum": {
     "id": "estimate_sum",
@@ -4505,7 +4640,7 @@
       "I am a mental math strategy for combining numbers quickly.",
       "I round numbers first and then ADD them to find an approximate total!",
       "I give a quick approximate total sum without performing exact column addition.",
-      "Checking if ₹48 + ₹93 will cost roughly ₹140 at a store counter.",
+      "Checking if \u20b948 + \u20b993 will cost roughly \u20b9140 at a store counter.",
       "Estimating a sum means rounding the numbers before adding them to find a quick approximate total."
     ],
     "hints": [
@@ -4516,11 +4651,12 @@
     "educationalInfo": {
       "definition": "Estimating a sum involves rounding the numbers first to quickly find an approximate sum.",
       "examples": [
-        "49 + 22 ≈ 50 + 20 = 70"
+        "49 + 22 \u2248 50 + 20 = 70"
       ],
       "commonMistakes": "Calculating the exact sum first then rounding.",
       "funFact": "Estimating helps catch calculation errors on tests!"
-    }
+    },
+    "hint": "Recall that Estimate Sum refers to: Estimating a sum involves rounding the numbers first to quickly find an approximate sum."
   },
   "estimate_difference": {
     "id": "estimate_difference",
@@ -4531,7 +4667,7 @@
       "I am a mental math strategy for comparing numbers quickly.",
       "I round numbers first and then SUBTRACT them to find an approximate gap!",
       "I give a quick approximate difference without performing exact column subtraction.",
-      "Estimating how much more ₹88 costs than ₹29 (roughly ₹90 - ₹30 = ₹60).",
+      "Estimating how much more \u20b988 costs than \u20b929 (roughly \u20b990 - \u20b930 = \u20b960).",
       "Estimating a difference means rounding the numbers before subtracting them to find a quick approximate gap."
     ],
     "hints": [
@@ -4542,11 +4678,12 @@
     "educationalInfo": {
       "definition": "Estimating a difference involves rounding numbers first before subtracting to find a rough result.",
       "examples": [
-        "91 - 38 ≈ 90 - 40 = 50"
+        "91 - 38 \u2248 90 - 40 = 50"
       ],
       "commonMistakes": "Forgetting to round both numbers.",
       "funFact": "Estimation is used daily in financial management!"
-    }
+    },
+    "hint": "Recall that Estimate Difference refers to: Estimating a difference involves rounding numbers first before subtracting to find a rough result."
   },
   "square_power": {
     "id": "square_power",
@@ -4561,19 +4698,20 @@
       "A square is a number raised to the power of 2 (multiplying a number by itself)."
     ],
     "hints": [
-      "Exponent 2 (n²).",
-      "Side length × side length.",
-      "e.g. 5² = 25."
+      "Exponent 2 (n\u00b2).",
+      "Side length \u00d7 side length.",
+      "e.g. 5\u00b2 = 25."
     ],
     "educationalInfo": {
-      "definition": "A square power (n²) is the product of multiplying a number by itself.",
+      "definition": "A square power (n\u00b2) is the product of multiplying a number by itself.",
       "examples": [
-        "4² = 16",
-        "6² = 36"
+        "4\u00b2 = 16",
+        "6\u00b2 = 36"
       ],
-      "commonMistakes": "Multiplying by 2 instead of by itself (5² is 25, not 10).",
-      "funFact": "The area of a square of side length s is s²!"
-    }
+      "commonMistakes": "Multiplying by 2 instead of by itself (5\u00b2 is 25, not 10).",
+      "funFact": "The area of a square of side length s is s\u00b2!"
+    },
+    "hint": "Recall that Square refers to: A square power (n\u00b2) is the product of multiplying a number by itself."
   },
   "cube_power": {
     "id": "cube_power",
@@ -4588,19 +4726,20 @@
       "A cube is a number raised to the power of 3 (multiplying a number by itself three times)."
     ],
     "hints": [
-      "Exponent 3 (n³).",
+      "Exponent 3 (n\u00b3).",
       "3D Volume.",
-      "e.g. 2³ = 8."
+      "e.g. 2\u00b3 = 8."
     ],
     "educationalInfo": {
-      "definition": "A cube power (n³) is the result of multiplying a number by itself twice.",
+      "definition": "A cube power (n\u00b3) is the result of multiplying a number by itself twice.",
       "examples": [
-        "2³ = 8",
-        "3³ = 27"
+        "2\u00b3 = 8",
+        "3\u00b3 = 27"
       ],
       "commonMistakes": "Multiplying by 3 instead of cubing.",
-      "funFact": "The volume of a 3D cube of side length s is s³!"
-    }
+      "funFact": "The volume of a 3D cube of side length s is s\u00b3!"
+    },
+    "hint": "Recall that Cube refers to: A cube power (n\u00b3) is the result of multiplying a number by itself twice."
   },
   "roman_numerals": {
     "id": "roman_numerals",
@@ -4628,7 +4767,8 @@
       ],
       "commonMistakes": "Writing IIII instead of IV for 4.",
       "funFact": "Roman numerals do not have a symbol for zero!"
-    }
+    },
+    "hint": "Recall that Roman Numerals refers to: Roman numerals use combinations of letters from the Latin alphabet (I, V, X, L, C, D, M) to represent values."
   },
   "hindu_arabic_numerals": {
     "id": "hindu_arabic_numerals",
@@ -4640,7 +4780,7 @@
       "I am the standard 10-digit base-10 system used everywhere today!",
       "I use ten symbols (0, 1, 2, 3, 4, 5, 6, 7, 8, 9) and include the revolutionary concept of Zero.",
       "Used on modern phone keypads, computer keyboards, and textbooks.",
-      "Hindu-Arabic Numerals is the global positional base-10 system using digits 0–9."
+      "Hindu-Arabic Numerals is the global positional base-10 system using digits 0\u20139."
     ],
     "hints": [
       "Uses 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.",
@@ -4648,14 +4788,15 @@
       "Invented in ancient India."
     ],
     "educationalInfo": {
-      "definition": "The Hindu-Arabic numeral system is the base-10 positional decimal system using digits 0–9.",
+      "definition": "The Hindu-Arabic numeral system is the base-10 positional decimal system using digits 0\u20139.",
       "examples": [
         "123",
         "999"
       ],
       "commonMistakes": "Calling them Arabic-only numerals (they originated in India!).",
       "funFact": "This system replaced Roman numerals because it made complex arithmetic much easier!"
-    }
+    },
+    "hint": "Recall that Hindu-Arabic Numerals refers to: The Hindu-Arabic numeral system is the base-10 positional decimal system using digits 0\u20139."
   },
   "expanded_form": {
     "id": "expanded_form",
@@ -4666,7 +4807,7 @@
       "I am a method of writing out a whole number.",
       "I stretch out a number to show the exact value of every individual digit added together!",
       "I use plus signs (+) between hundreds, tens, and ones (e.g. 300 + 50 + 4).",
-      "Breaking down ₹354 into ₹300 + ₹50 + ₹4 to show place values.",
+      "Breaking down \u20b9354 into \u20b9300 + \u20b950 + \u20b94 to show place values.",
       "Expanded form is writing a number as the sum of the values of each of its digits."
     ],
     "hints": [
@@ -4681,6 +4822,7 @@
       ],
       "commonMistakes": "Omitting zeros when expanding numbers like 405 (400 + 5).",
       "funFact": "Expanded form helps students master place value mental math!"
-    }
+    },
+    "hint": "Recall that Expanded Form refers to: Expanded form represents a number as the sum of each digit multiplied by its place value."
   }
 }
