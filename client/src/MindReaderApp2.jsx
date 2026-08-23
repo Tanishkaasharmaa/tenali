@@ -440,55 +440,116 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
   // Kingdom Level Boundaries Map (guarantees complete independence for every kingdom)
   const WORLD_LEVEL_RANGES = {
-    'number_kingdom': [1, 15],
-    'arithmetic_kingdom': [11, 20],
-    'geometry_kingdom': [21, 30],
-    'algebra_kingdom': [31, 40],
-    'advanced_math_kingdom': [41, 50],
-    'coordinate_calculus_kingdom': [51, 60],
-    'data_logic_kingdom': [61, 66]
+    'number_kingdom': [1, 12],
+    'arithmetic_kingdom': [1, 12],
+    'geometry_kingdom': [1, 12],
+    'algebra_kingdom': [1, 12],
+    'advanced_mathematics': [1, 12],
+    'coordinate_calculus': [1, 12],
+    'data_logic': [1, 12]
   };
 
-  const LEVEL_NAMES_MAP = {
-    1: "The Number Village (Number Sets)",
-    2: "The Hall of Hidden Properties (Even, Odd, Prime, Composite)",
-    3: "The Factor Forge (Factors, Multiples, HCF, LCM)",
-    4: "The Divisibility Temple (Divisibility Rules)",
-    5: "The Place Value Palace (Place Values)",
-    6: "The Comparison Bridge (Number Comparison)",
-    7: "The Fraction Forest (Fraction Types)",
-    8: "The Decimal Dock (Decimal Places)",
-    9: "The Ratio Market (Representations)",
-    10: "The Roman Ruins (Roman & Ancient Numerals)",
-    11: "The Pattern Peaks (Sequences & Patterns)",
-    12: "The Operation Oasis (Arithmetic Operations)",
-    13: "The Estimation Enclave (Rounding & Estimation)",
-    14: "The Power Peak (Powers & Roots)",
-    15: "The King's Trial (Number Kingdom Boss)"
+  const FALLBACK_LEVEL_NAMES = {
+    "number_kingdom_1": "The Number Village (Number Sets)",
+    "number_kingdom_2": "The Hall of Hidden Properties",
+    "number_kingdom_3": "The Factor Forge",
+    "number_kingdom_4": "The Divisibility Temple",
+    "number_kingdom_5": "The Place Value Palace",
+    "number_kingdom_6": "The Comparison Bridge",
+    "number_kingdom_7": "The Fraction Forest",
+    "number_kingdom_8": "The Decimal Dock",
+    "number_kingdom_9": "The Representation Market",
+    "number_kingdom_10": "The Ancient Numeral Vault",
+    "number_kingdom_11": "The Power & Root Chamber",
+    "number_kingdom_12": "The Number Sovereign (Kingdom Boss)",
+    "arithmetic_kingdom_1": "The Basic Operation Bazaar",
+    "arithmetic_kingdom_2": "The Laws of Calculation",
+    "arithmetic_kingdom_3": "The Unitary Station",
+    "arithmetic_kingdom_4": "The Percent Citadel",
+    "arithmetic_kingdom_5": "The Ratio Realm",
+    "arithmetic_kingdom_6": "The Interest Exchange",
+    "arithmetic_kingdom_7": "The Merchant's Guild (Profit & Loss)",
+    "arithmetic_kingdom_8": "The Velocity Valley (Speed & Distance)",
+    "arithmetic_kingdom_9": "The Work & Time Workshop",
+    "arithmetic_kingdom_10": "The Treasury of Taxes (GST & Finance)",
+    "arithmetic_kingdom_11": "The Stock & Share Market",
+    "arithmetic_kingdom_12": "The Commercial Master (Arithmetic Boss)",
+    "geometry_kingdom_1": "The Angle Assembly",
+    "geometry_kingdom_2": "The Angle Relationship Courtyard",
+    "geometry_kingdom_3": "The Triangle Sanctuary",
+    "geometry_kingdom_4": "The Four-Sided Fortress",
+    "geometry_kingdom_5": "The Polygon Pavilion",
+    "geometry_kingdom_6": "The Circular Sanctum",
+    "geometry_kingdom_7": "The Boundary & Region Realm",
+    "geometry_kingdom_8": "The 3D Solid Stronghold",
+    "geometry_kingdom_9": "The Volume & Surface Vault",
+    "geometry_kingdom_10": "The Pythagorean Peak",
+    "geometry_kingdom_11": "The Symmetry & Transformation Mirror",
+    "geometry_kingdom_12": "The Geometry Architect (Kingdom Boss)",
+    "algebra_kingdom_1": "The Variable Village",
+    "algebra_kingdom_2": "The Expression Expanse",
+    "algebra_kingdom_3": "The Combining Terms Compound",
+    "algebra_kingdom_4": "The Linear Balancing Scale",
+    "algebra_kingdom_5": "The Variable Isolation Island",
+    "algebra_kingdom_6": "The Identity Academy",
+    "algebra_kingdom_7": "The Factoring Forge",
+    "algebra_kingdom_8": "The Inequality Incline",
+    "algebra_kingdom_9": "The Radical & Surd Ridge",
+    "algebra_kingdom_10": "The Simultaneous System Station",
+    "algebra_kingdom_11": "The Quadratic Apex",
+    "algebra_kingdom_12": "The Algebraic Overlord (Kingdom Boss)",
+    "advanced_mathematics_1": "The Arithmetic Sequence Steps",
+    "advanced_mathematics_2": "The Geometric Progression Growth",
+    "advanced_mathematics_3": "The Set Theory Sanctuary",
+    "advanced_mathematics_4": "The Set Operation Oasis",
+    "advanced_mathematics_5": "The Matrix Grid Foundations",
+    "advanced_mathematics_6": "The Matrix Multiplication Manor",
+    "advanced_mathematics_7": "The Determinant Domain",
+    "advanced_mathematics_8": "The Complex Number Citadel",
+    "advanced_mathematics_9": "The Combinatorics Chamber",
+    "advanced_mathematics_10": "The Binomial Expansion Bridge",
+    "advanced_mathematics_11": "The Vector Space Peak",
+    "advanced_mathematics_12": "The Advanced Math Titan (Kingdom Boss)",
+    "coordinate_calculus_1": "The Cartesian Plane",
+    "coordinate_calculus_2": "The Distance & Midpoint Crossing",
+    "coordinate_calculus_3": "The Straight Line Station",
+    "coordinate_calculus_4": "The Conic Section Curve",
+    "coordinate_calculus_5": "The Limit & Continuity Gate",
+    "coordinate_calculus_6": "The Derivative Threshold",
+    "coordinate_calculus_7": "The Differentiation Rules Realm",
+    "coordinate_calculus_8": "The Critical Point Peak (Maxima & Minima)",
+    "coordinate_calculus_9": "The Integration Incline",
+    "coordinate_calculus_10": "The Area Under Curve Vault",
+    "coordinate_calculus_11": "The Differential Equation Dungeon",
+    "coordinate_calculus_12": "The Calculus Pinnacle (Kingdom Boss)",
+    "data_logic_1": "The Central Tendency Town",
+    "data_logic_2": "The Data Representation Gallery",
+    "data_logic_3": "The Frequency Distribution Forge",
+    "data_logic_4": "The Probability Portal",
+    "data_logic_5": "The Venn Diagram Region",
+    "data_logic_6": "The Logical Proposition Palace",
+    "data_logic_7": "The Compound Logic Citadel",
+    "data_logic_8": "The Combined Probability Peak",
+    "data_logic_9": "The Deductive Reasoning Realm",
+    "data_logic_10": "The Data Sufficiency Sanctuary",
+    "data_logic_11": "The Pattern & Matrix Puzzle Chamber",
+    "data_logic_12": "The Logic & Analytics Grandmaster (Kingdom Boss)"
   };
 
   const getKingdomLevelNumbers = (w) => {
-    if (!w) return Array.from({ length: 10 }, (_, i) => i + 1);
+    if (!w) return Array.from({ length: 12 }, (_, i) => i + 1);
 
-    // 1. Check w.levels if levelNum values are distinct per kingdom
     if (Array.isArray(w.levels) && w.levels.length > 0) {
-      const nums = w.levels.map(l => typeof l === 'number' ? l : (l.levelNum || l.id));
-      if (nums.some(n => n > 10) || w.worldId === 'number_kingdom') {
-        return nums;
-      }
+      return w.levels.map(l => typeof l === 'number' ? l : (l.levelNum || l.id));
     }
 
-    // 2. Check w.levelRange if explicit
     if (Array.isArray(w.levelRange) && w.levelRange.length === 2) {
       const [s, e] = w.levelRange;
-      if (s !== 1 || e !== 10 || w.worldId === 'number_kingdom') {
-        const nums = [];
-        for (let i = s; i <= e; i++) nums.push(i);
-        return nums;
-      }
+      const nums = [];
+      for (let i = s; i <= e; i++) nums.push(i);
+      return nums;
     }
 
-    // 3. Fallback to predefined distinct range map for each kingdom
     if (w.worldId && WORLD_LEVEL_RANGES[w.worldId]) {
       const [s, e] = WORLD_LEVEL_RANGES[w.worldId];
       const nums = [];
@@ -496,17 +557,17 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
       return nums;
     }
 
-    return Array.from({ length: 10 }, (_, i) => i + 1);
+    return Array.from({ length: 12 }, (_, i) => i + 1);
   };
 
   const getLevelStars = (worldId, lvlNum, progressMap) => {
     if (!progressMap) return 0;
-    // Check scoped key first (e.g. 'arithmetic_kingdom_11' or 'arithmetic_kingdom_1')
+    // 1. Primary check: scoped key (e.g. 'arithmetic_kingdom_1')
     if (worldId && progressMap[`${worldId}_${lvlNum}`] !== undefined) {
       return progressMap[`${worldId}_${lvlNum}`];
     }
-    // Check global level index (e.g. 11 for arithmetic kingdom)
-    if (progressMap[lvlNum] !== undefined) {
+    // 2. Fallback ONLY for number_kingdom for legacy numeric keys
+    if (worldId === 'number_kingdom' && progressMap[lvlNum] !== undefined) {
       return progressMap[lvlNum];
     }
     return 0;
@@ -536,8 +597,8 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
       const currentStars = getLevelStars(activeWorld.worldId, num, levelProgress);
       isPrevUnlockedAndCompleted = unlocked && currentStars > 0;
 
-      const levelName = (activeWorld.levels && activeWorld.levels[idx]?.levelName)
-        || LEVEL_NAMES_MAP[num]
+      const levelName = (activeWorld.levels && (activeWorld.levels[idx]?.levelName || activeWorld.levels.find(l => l.levelNum === num)?.levelName))
+        || FALLBACK_LEVEL_NAMES[`${activeWorld.worldId}_${num}`]
         || `Level ${idx + 1}`;
 
       list.push({
@@ -815,10 +876,15 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
         if (data.correct) {
           setScene('celebrating');
-          // Unlock level locally
-          const updatedStars = Math.max(levelProgress[levelNum] || 0, data.starsEarned || 1);
+          // Unlock level locally with kingdom-scoped progress key
+          const activeWId = activeWorldId || (worlds[activeWorldIndex] ? worlds[activeWorldIndex].worldId : 'number_kingdom');
+          const scopedKey = `${activeWId}_${levelNum}`;
+          const prevStars = getLevelStars(activeWId, levelNum, levelProgress);
+          const updatedStars = Math.max(prevStars, data.starsEarned || 1);
+
           const nextProgress = {
             ...levelProgress,
+            [scopedKey]: updatedStars,
             [levelNum]: updatedStars
           };
           setLevelProgress(nextProgress);
@@ -1138,8 +1204,12 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
               padding: '0 10px'
             }}>
               {worlds.map((w, idx) => {
-                const starsCount = getKingdomStarsCount(w);
-                const kingdomProgress = getHighestCompletedLevelForWorld(w);
+                const clientStars = getKingdomStarsCount(w);
+                const starsCount = Math.max(w.stars || 0, clientStars);
+                const totalLevels = w.totalLevelsCount || 12;
+                const clientCompleted = getKingdomLevelNumbers(w).filter(lvl => getLevelStars(w.worldId, lvl, levelProgress) > 0).length;
+                const completedLevels = Math.max(w.completedLevelsCount || 0, clientCompleted);
+                const percent = Math.min(100, Math.round((completedLevels / totalLevels) * 100));
 
                 return (
                   <div
@@ -1155,7 +1225,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       textAlign: 'center',
-                      height: '130px',
+                      height: '150px',
                       cursor: 'pointer',
                       transition: 'transform 0.2s, border-color 0.2s, box-shadow 0.2s',
                       boxSizing: 'border-box'
@@ -1171,12 +1241,12 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                       background: 'rgba(255, 255, 255, 0.08)',
                       border: '1px solid rgba(255, 255, 255, 0.05)',
                       borderRadius: '12px',
-                      padding: '8px 12px',
+                      padding: '6px 10px',
                       fontSize: '0.9rem',
                       fontWeight: '700',
                       color: 'var(--clr-text)',
                       width: '100%',
-                      height: '56px',
+                      height: '46px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -1189,21 +1259,28 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                       {w.worldName}
                     </div>
 
-                    {/* Subtext: Level X ⭐ Stars or Yet to start */}
-                    {kingdomProgress.hasStarted ? (
-                      <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', height: '24px' }}>
+                    {/* Progress Metrics: X / 12 Levels & ⭐ Stars */}
+                    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem', color: 'var(--clr-text-soft)', width: '100%' }}>
                         <span style={{ color: 'var(--clr-accent)', fontWeight: '700' }}>
-                          Level {kingdomProgress.relativeLevel}
+                          {completedLevels} / {totalLevels} Levels
                         </span>
                         <span style={{ color: '#f1c40f', fontWeight: '700' }}>
-                          ⭐ {starsCount}
+                          ⭐ {starsCount} / 36
                         </span>
                       </div>
-                    ) : (
-                      <div style={{ color: 'var(--clr-text-soft)', fontSize: '0.82rem', fontStyle: 'italic', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        Yet to start
+
+                      {/* Animated Kingdom Progress Bar */}
+                      <div style={{ width: '100%', height: '8px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div style={{
+                          width: `${percent}%`,
+                          height: '100%',
+                          background: 'linear-gradient(90deg, var(--clr-accent, #e8864a) 0%, #f1c40f 100%)',
+                          borderRadius: '4px',
+                          transition: 'width 0.4s ease'
+                        }} />
                       </div>
-                    )}
+                    </div>
                   </div>
                 );
               })}
@@ -1216,10 +1293,41 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
       {/* ─── PHASE 3: LEVEL SELECTION TRACK (CANDY CRUSH STYLE) ──────────────────── */}
       {phase === 'levels' && (
-        <div className="gm-container" style={{ minHeight: 'auto', gap: '15px', width: '100%', maxWidth: '400px', margin: '0 auto', overflow: 'visible' }}>
-          <h4 style={{ margin: '5px 0 10px 0', color: 'var(--clr-text)', fontFamily: 'var(--font-display)', fontSize: '1.6rem', textAlign: 'center' }}>
-            {worlds[activeWorldIndex]?.worldName}
-          </h4>
+        <div className="gm-container" style={{ minHeight: 'auto', gap: '15px', width: '100%', maxWidth: '560px', margin: '0 auto', overflow: 'visible' }}>
+          {(() => {
+            const activeW = worlds[activeWorldIndex];
+            const clientStars = activeW ? getKingdomStarsCount(activeW) : 0;
+            const starsCount = Math.max(activeW?.stars || 0, clientStars);
+            const clientCompleted = activeW ? getKingdomLevelNumbers(activeW).filter(lvl => getLevelStars(activeW.worldId, lvl, levelProgress) > 0).length : 0;
+            const completedLevels = Math.max(activeW?.completedLevelsCount || 0, clientCompleted);
+            const totalLevels = activeW?.totalLevelsCount || 12;
+            const percent = Math.min(100, Math.round((completedLevels / totalLevels) * 100));
+
+            return (
+              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+                <h4 style={{ margin: 0, color: 'var(--clr-text)', fontFamily: 'var(--font-display)', fontSize: '1.6rem', textAlign: 'center' }}>
+                  {activeW?.worldName}
+                </h4>
+                <div style={{ display: 'flex', gap: '14px', alignItems: 'center', fontSize: '0.86rem', color: 'var(--clr-text-soft)' }}>
+                  <span style={{ color: 'var(--clr-accent)', fontWeight: '700' }}>
+                    🚩 {completedLevels} / {totalLevels} Levels
+                  </span>
+                  <span style={{ color: '#f1c40f', fontWeight: '700' }}>
+                    ⭐ {starsCount} / 36 Stars
+                  </span>
+                </div>
+                <div style={{ width: '80%', height: '8px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '4px', overflow: 'hidden', margin: '4px 0 10px 0' }}>
+                  <div style={{
+                    width: `${percent}%`,
+                    height: '100%',
+                    background: 'linear-gradient(90deg, var(--clr-accent, #e8864a) 0%, #f1c40f 100%)',
+                    borderRadius: '4px',
+                    transition: 'width 0.4s ease'
+                  }} />
+                </div>
+              </div>
+            );
+          })()}
 
           {(() => {
             const levelsList = getLevelsForActiveWorld();
@@ -1324,7 +1432,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: labelSide === 'left' ? 'flex-end' : 'flex-start',
-                          width: '150px',
+                          width: '180px',
                           pointerEvents: 'none',
                           zIndex: 10
                         }}
@@ -1333,16 +1441,21 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                           className={`gm-node-label ${node.unlocked ? '' : 'locked'}`}
                           style={{
                             margin: 0,
-                            fontSize: '0.86rem',
+                            fontSize: '0.84rem',
                             fontWeight: '700',
-                            lineHeight: '1.3',
-                            color: node.unlocked ? '#ffffff' : 'rgba(255, 255, 255, 0.45)',
+                            lineHeight: '1.25',
+                            color: node.unlocked ? '#ffffff' : 'rgba(255, 255, 255, 0.5)',
+                            background: node.unlocked ? 'rgba(24, 18, 14, 0.94)' : 'rgba(20, 16, 12, 0.85)',
+                            border: node.unlocked ? '1px solid rgba(232, 134, 74, 0.5)' : '1px solid rgba(255, 255, 255, 0.1)',
+                            borderRadius: '8px',
+                            padding: '4px 10px',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.7)',
                             whiteSpace: 'normal',
                             wordBreak: 'break-word',
-                            textShadow: '0 2px 6px rgba(0, 0, 0, 0.9)'
+                            textShadow: '0 1px 4px rgba(0, 0, 0, 0.9)'
                           }}
                         >
-                          {(node.levelName || `Level ${node.relativeNum || node.levelNum}`).replace(/\s*\([^)]*\)/g, '').trim()}
+                          {(node.levelName || `Level ${node.relativeNum || node.levelNum}`)}
                         </div>
                         {node.unlocked && (
                           <div style={{ display: 'flex', gap: '2px', color: '#f1c40f', fontSize: '0.75rem', marginTop: '3px' }}>

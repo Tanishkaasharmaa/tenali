@@ -11,7 +11,7 @@
     "themeColor": "#e8864a",
     "levelRange": [
       1,
-      10
+      12
     ]
   },
   {
@@ -20,13 +20,13 @@
     "name": "Arithmetic Kingdom",
     "worldName": "Arithmetic Kingdom",
     "icon": "🧮",
-    "description": "Apply numbers to the real world — percentages, ratios, profit and loss, finance, and measurement.",
+    "description": "Apply numbers to the real world: percentages, ratios, profit and loss, finance, and measurement.",
     "unlockRequirements": "Complete the Number Kingdom Boss to unlock",
     "requiredUnlockXP": 500,
     "themeColor": "#f4a261",
     "levelRange": [
-      11,
-      20
+      1,
+      12
     ]
   },
   {
@@ -40,8 +40,8 @@
     "requiredUnlockXP": 1000,
     "themeColor": "#2a9d8f",
     "levelRange": [
-      21,
-      30
+      1,
+      12
     ]
   },
   {
@@ -50,13 +50,13 @@
     "name": "Algebra Kingdom",
     "worldName": "Algebra Kingdom",
     "icon": "🔠",
-    "description": "Where letters hold secrets — equations, inequalities, surds, and polynomials.",
+    "description": "Where letters hold secrets: equations, inequalities, surds, and polynomials.",
     "unlockRequirements": "Complete the Geometry Kingdom Boss to unlock",
     "requiredUnlockXP": 1500,
     "themeColor": "#3b82f6",
     "levelRange": [
-      31,
-      40
+      1,
+      12
     ]
   },
   {
@@ -70,8 +70,8 @@
     "requiredUnlockXP": 2000,
     "themeColor": "#7c3aed",
     "levelRange": [
-      41,
-      50
+      1,
+      12
     ]
   },
   {
@@ -80,13 +80,13 @@
     "name": "Coordinate & Calculus",
     "worldName": "Coordinate & Calculus",
     "icon": "📈",
-    "description": "Lines, curves, limits, derivatives, and integrals — mathematics in motion.",
+    "description": "Lines, curves, limits, derivatives, and integrals: mathematics in motion.",
     "unlockRequirements": "Complete the Advanced Mathematics Boss to unlock",
     "requiredUnlockXP": 2500,
     "themeColor": "#0ea5e9",
     "levelRange": [
-      51,
-      60
+      1,
+      12
     ]
   },
   {
@@ -95,13 +95,13 @@
     "name": "Data & Logic",
     "worldName": "Data & Logic",
     "icon": "📊",
-    "description": "Statistics, sets, logic, and language — the final frontier of mathematical reasoning.",
+    "description": "Statistics, sets, logic, and language: the final frontier of mathematical reasoning.",
     "unlockRequirements": "Complete the Coordinate & Calculus Boss to unlock",
     "requiredUnlockXP": 3000,
     "themeColor": "#a855f7",
     "levelRange": [
-      61,
-      66
+      1,
+      12
     ]
   }
 ]

@@ -9778,9 +9778,10 @@ function getRandomizedLevelsConfig(seedString) {
 const guessMindSessions = new Map();
 
 class GuessMindSession {
-  constructor(gameId, levelNum, selectedConcept) {
+  constructor(gameId, levelNum, selectedConcept, worldId = 'number_kingdom') {
     this.gameId = gameId;
     this.levelNum = levelNum;
+    this.worldId = worldId;
     this.selectedConcept = selectedConcept; // full concept object
     this.clueIndex = 0; // starts at Clue 1 (index 0)
     this.hintsRemaining = 3;
@@ -10144,40 +10145,41 @@ app.get('/api/mindreader/worlds', async (req, res) => {
       levelProgressList = user.levelProgress || [];
     }
 
-    // Map worlds and add aggregate star counts
+    // Map worlds and add aggregate star counts & kingdom progress
     const worlds = worldsConfig.map((w, idx) => {
-      const prevWorld = idx > 0 ? worldsConfig[idx - 1] : null;
-      let prevWorldCompleted = false;
-      if (prevWorld) {
-        const prevWorldLevelNums = activeLevelsConfig.filter(lvl => lvl.worldId === prevWorld.worldId).map(lvl => lvl.levelNum);
-        const prevWorldCompletedLevels = levelProgressList.filter(lp => prevWorldLevelNums.includes(lp.levelNum) && lp.starsEarned > 0);
-        prevWorldCompleted = prevWorldCompletedLevels.length >= prevWorldLevelNums.length || prevWorldCompletedLevels.some(lp => {
-          const lvlObj = activeLevelsConfig.find(l => l.levelNum === lp.levelNum && l.worldId === prevWorld.worldId);
-          return lvlObj && lvlObj.isBoss;
-        });
-      }
-
       const isUnlocked = true; // Force unlock every kingdom
 
       // levels in this world
       const levelsInWorld = activeLevelsConfig.filter(lvl => lvl.worldId === w.worldId);
       const levelNums = levelsInWorld.map(lvl => lvl.levelNum);
-      const stars = levelProgressList
-        .filter(lp => levelNums.includes(lp.levelNum))
-        .reduce((sum, lp) => sum + (lp.starsEarned || 0), 0);
+
+      // Scoped progress for this specific world
+      const worldProgressEntries = levelProgressList.filter(lp => {
+        if (lp.worldId) {
+          return lp.worldId === w.worldId;
+        }
+        return w.worldId === 'number_kingdom' && levelNums.includes(lp.levelNum);
+      });
+
+      const stars = worldProgressEntries.reduce((sum, lp) => sum + (lp.starsEarned || 0), 0);
+      const completedLevelsCount = worldProgressEntries.filter(lp => (lp.starsEarned || 0) > 0).length;
+      const totalLevelsCount = levelsInWorld.length || 12;
+      const completionPercentage = Math.min(100, Math.round((completedLevelsCount / totalLevelsCount) * 100));
 
       const levelsWithConceptNames = levelsInWorld.map(lvl => {
         const concept = conceptsConfig[lvl.conceptId];
         return {
           levelNum: lvl.levelNum,
+          levelName: lvl.levelName || `Level ${lvl.levelNum}`,
           conceptId: lvl.conceptId,
           conceptName: concept ? concept.name : lvl.conceptId,
+          options: lvl.options || [],
           difficultyTier: lvl.difficultyTier || 'easy'
         };
       });
 
       const minLevel = levelNums.length > 0 ? Math.min(...levelNums) : 1;
-      const maxLevel = levelNums.length > 0 ? Math.max(...levelNums) : 10;
+      const maxLevel = levelNums.length > 0 ? Math.max(...levelNums) : 12;
 
       const worldConcepts = levelsInWorld.map(lvl => {
         const c = conceptsConfig[lvl.conceptId];
@@ -10196,21 +10198,21 @@ app.get('/api/mindreader/worlds', async (req, res) => {
         concepts: worldConcepts,
         unlocked: isUnlocked,
         stars,
+        completedLevelsCount,
+        totalLevelsCount,
+        completionPercentage,
         levels: levelsWithConceptNames
       };
 
-      console.log(`[MindReader Worlds Debug] worldId=${w.worldId}, requiredUnlockXP=${w.requiredUnlockXP}, isUnlocked=${isUnlocked}, res.unlocked=${resWorld.unlocked}`);
-
       return resWorld;
     });
-
-    console.log(`[MindReader Worlds Debug] Sending worlds response. Total worlds: ${worlds.length}, Unlocked count: ${worlds.filter(w => w.unlocked).length}`);
 
     res.json({
       xp,
       worlds,
       levelProgress: levelProgressList.reduce((acc, lp) => {
-        acc[lp.levelNum] = lp.starsEarned;
+        const key = lp.worldId ? `${lp.worldId}_${lp.levelNum}` : `${lp.levelNum}`;
+        acc[key] = lp.starsEarned;
         return acc;
       }, {})
     });
@@ -10285,7 +10287,7 @@ app.post('/api/mindreader/start', express.json(), async (req, res) => {
     }
 
     const gameId = 'sess_gm_' + crypto.randomUUID().replace(/-/g, '');
-    const session = new GuessMindSession(gameId, parseInt(levelNum, 10), concept);
+    const session = new GuessMindSession(gameId, parseInt(levelNum, 10), concept, targetWorldId);
     guessMindSessions.set(gameId, session);
 
     console.log(`[GuessMind] Session ${gameId} started for level ${levelNum} (${levelName}) with secret concept "${concept.name}"`);
@@ -10447,20 +10449,19 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
 
     // Calculate dynamic XP based on World/Kingdom Difficulty
     let baseXp = 100;
-    const currentLevel = levelsConfig.find(l => l.levelNum === session.levelNum);
-    const worldId = currentLevel ? currentLevel.worldId : 'number_kingdom';
-    switch (worldId) {
+    const targetWorldId = session.worldId || 'number_kingdom';
+    switch (targetWorldId) {
       case 'number_kingdom': baseXp = 100; break;
       case 'arithmetic_kingdom': baseXp = 120; break;
       case 'geometry_kingdom': baseXp = 140; break;
       case 'algebra_kingdom': baseXp = 160; break;
-      case 'advanced_math': baseXp = 180; break;
+      case 'advanced_mathematics': baseXp = 180; break;
       case 'coordinate_calculus': baseXp = 200; break;
       case 'data_logic': baseXp = 220; break;
       default: baseXp = 100; break;
     }
 
-    const isReplay = user && user.levelProgress.some(lp => lp.levelNum === session.levelNum);
+    const isReplay = user && user.levelProgress.some(lp => (lp.worldId ? lp.worldId === targetWorldId : targetWorldId === 'number_kingdom') && lp.levelNum === session.levelNum);
     const resolvedBaseXp = isReplay ? Math.round(baseXp * 0.3) : baseXp;
 
     // No-Hint bonus
@@ -10508,15 +10509,21 @@ app.post('/api/mindreader/submit-guess', express.json(), async (req, res) => {
     user.mrr = Math.max(1000, (user.mrr || 1000) + mrrChange);
     user.xp = (user.xp || 0) + xpEarned;
 
-    // Update levelProgress
-    const prevRecord = user.levelProgress.find(lp => lp.levelNum === session.levelNum);
+    // Update levelProgress with worldId scope
+    const targetWorldId = session.worldId || 'number_kingdom';
+    const prevRecord = user.levelProgress.find(lp => {
+      if (lp.worldId) return lp.worldId === targetWorldId && lp.levelNum === session.levelNum;
+      return lp.levelNum === session.levelNum;
+    });
     if (prevRecord) {
       if (starsEarned > prevRecord.starsEarned) {
         prevRecord.starsEarned = starsEarned;
       }
+      prevRecord.worldId = targetWorldId;
       prevRecord.completedAt = new Date();
     } else {
       user.levelProgress.push({
+        worldId: targetWorldId,
         levelNum: session.levelNum,
         conceptId: concept.conceptId,
         starsEarned
