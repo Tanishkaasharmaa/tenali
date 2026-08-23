@@ -1340,7 +1340,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
                   // Gentle curve offset (+38px, -38px)
                   const offsetSign = index % 4 === 1 ? '38px' : index % 4 === 3 ? '-38px' : '0px';
-                  const isActive = node.levelNum === levelNum || node.isCurrent;
+                  const isActive = node.unlocked && node.isCurrent;
                   const isCompleted = node.stars > 0;
                   const isNodeOnRight = index % 4 === 1;
                   const labelSide = isNodeOnRight ? 'left' : 'right';
@@ -1348,7 +1348,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                   return (
                     <div
                       key={node.levelNum}
-                      className={`gm-level-node-wrapper ${node.isCurrent ? 'active-target-level' : ''}`}
+                      className={`gm-level-node-wrapper ${node.unlocked && node.isCurrent ? 'active-target-level' : ''}`}
                       style={{
                         position: 'absolute',
                         top: `${index * 100}px`,
