@@ -405,7 +405,7 @@
     "options": [
       "Cost Price",
       "Selling Price",
-      "Profit Percentage",
+      "Profit & Loss",
       "Loss Percentage"
     ],
     "conceptPool": [
@@ -428,7 +428,7 @@
       "Speed",
       "Distance",
       "Time Taken",
-      "Average Speed"
+      "Speed, Distance & Time"
     ],
     "conceptPool": [
       "speed",
@@ -471,7 +471,7 @@
     "options": [
       "Gross Amount",
       "Net Price",
-      "GST Rate",
+      "Goods & Services Tax (GST)",
       "Tax Deducted"
     ],
     "conceptPool": [
@@ -493,7 +493,7 @@
     "options": [
       "Face Value",
       "Market Value",
-      "Dividend Rate",
+      "Shares & Dividends",
       "Annual Yield"
     ],
     "conceptPool": [
@@ -511,12 +511,12 @@
     "levelNumber": 12,
     "worldId": "arithmetic_kingdom",
     "levelName": "The Commercial Master (Arithmetic Boss)",
-    "conceptId": "percentage",
+    "conceptId": "profit_loss",
     "options": [
       "Percentage",
       "Simple Interest",
-      "Profit Percentage",
-      "Average Speed"
+      "Profit & Loss",
+      "Speed, Distance & Time"
     ],
     "conceptPool": [
       "percentage",
