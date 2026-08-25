@@ -247,18 +247,18 @@
     "levelNumber": 12,
     "worldId": "number_kingdom",
     "levelName": "The Number Sovereign (Kingdom Boss)",
-    "conceptId": "prime_numbers",
+    "conceptId": "perfect_number",
     "options": [
-      "Prime Numbers",
-      "HCF (GCD)",
-      "Equivalent Fraction",
-      "Decimal Number"
+      "Perfect Number",
+      "Co-prime Numbers",
+      "Irrational Number",
+      "Real Numbers"
     ],
     "conceptPool": [
-      "prime_numbers",
-      "hcf",
-      "equivalent_fraction",
-      "decimal_numbers"
+      "perfect_number",
+      "coprime_numbers",
+      "irrational_number",
+      "real_numbers"
     ],
     "isBoss": true,
     "difficultyTier": "boss"
@@ -511,18 +511,18 @@
     "levelNumber": 12,
     "worldId": "arithmetic_kingdom",
     "levelName": "The Commercial Master (Arithmetic Boss)",
-    "conceptId": "profit_loss",
+    "conceptId": "compound_interest",
     "options": [
-      "Percentage",
-      "Simple Interest",
-      "Profit & Loss",
-      "Speed, Distance & Time"
+      "Compound Interest",
+      "Discount & Markup",
+      "Work and Time",
+      "Mixture & Alligation"
     ],
     "conceptPool": [
-      "percentage",
-      "simple_interest",
-      "profit_loss",
-      "speed_distance_time"
+      "compound_interest",
+      "discount_markup",
+      "work_and_time",
+      "mixture_alligation"
     ],
     "isBoss": true,
     "difficultyTier": "boss"
@@ -775,18 +775,18 @@
     "levelNumber": 12,
     "worldId": "geometry_kingdom",
     "levelName": "The Geometry Architect (Kingdom Boss)",
-    "conceptId": "hypotenuse",
+    "conceptId": "euler_characteristic",
     "options": [
-      "Hypotenuse",
-      "Volume",
-      "Rhombus",
-      "Supplementary Angles"
+      "Euler Characteristic",
+      "Inradius & Circumradius",
+      "Tessellation",
+      "Fractal Geometry"
     ],
     "conceptPool": [
-      "hypotenuse",
-      "volume",
-      "rhombus",
-      "supplementary_angles"
+      "euler_characteristic",
+      "inradius_circumradius",
+      "tessellation",
+      "fractal_geometry"
     ],
     "isBoss": true,
     "difficultyTier": "boss"
@@ -1039,18 +1039,18 @@
     "levelNumber": 12,
     "worldId": "algebra_kingdom",
     "levelName": "The Algebraic Overlord (Kingdom Boss)",
-    "conceptId": "discriminant",
+    "conceptId": "vieta_formulas",
     "options": [
-      "Discriminant",
-      "Surd",
-      "Difference of Squares",
-      "System of Equations"
+      "Vieta Formulas",
+      "Synthetic Division",
+      "Logarithmic Equation",
+      "Exponential Growth"
     ],
     "conceptPool": [
-      "discriminant",
-      "surd",
-      "difference_of_squares",
-      "system_of_equations"
+      "vieta_formulas",
+      "synthetic_division",
+      "logarithmic_equation",
+      "exponential_growth"
     ],
     "isBoss": true,
     "difficultyTier": "boss"
@@ -1303,18 +1303,18 @@
     "levelNumber": 12,
     "worldId": "advanced_mathematics",
     "levelName": "The Advanced Math Titan (Kingdom Boss)",
-    "conceptId": "matrix_multiplication",
+    "conceptId": "eigenvalue",
     "options": [
-      "Matrix Multiplication",
-      "Determinant",
-      "Complex Conjugate",
-      "Permutation (nPr)"
+      "Eigenvalue",
+      "Eigenvector",
+      "Cayley-Hamilton Theorem",
+      "De Moivre's Theorem"
     ],
     "conceptPool": [
-      "matrix_multiplication",
-      "determinant",
-      "complex_conjugate",
-      "permutation"
+      "eigenvalue",
+      "eigenvector",
+      "cayley_hamilton_theorem",
+      "de_moivre_theorem"
     ],
     "isBoss": true,
     "difficultyTier": "boss"
@@ -1567,18 +1567,18 @@
     "levelNumber": 12,
     "worldId": "coordinate_calculus",
     "levelName": "The Calculus Pinnacle (Kingdom Boss)",
-    "conceptId": "chain_rule",
+    "conceptId": "lhopital_rule",
     "options": [
-      "Chain Rule",
-      "Definite Integral",
-      "Critical Point",
-      "Differential Equations"
+      "L'Hôpital's Rule",
+      "Taylor Series",
+      "Partial Derivative",
+      "Improper Integral"
     ],
     "conceptPool": [
-      "chain_rule",
-      "definite_integral",
-      "critical_point",
-      "differential_equations"
+      "lhopital_rule",
+      "taylor_series",
+      "partial_derivative",
+      "improper_integral"
     ],
     "isBoss": true,
     "difficultyTier": "boss"
@@ -1831,18 +1831,18 @@
     "levelNumber": 12,
     "worldId": "data_logic",
     "levelName": "The Logic & Analytics Grandmaster (Kingdom Boss)",
-    "conceptId": "conditional_probability",
+    "conceptId": "bayes_theorem",
     "options": [
-      "Conditional Probability",
-      "Deductive Reasoning",
-      "Median",
-      "Venn Diagrams"
+      "Bayes' Theorem",
+      "Chi-Square Test",
+      "Z-Score",
+      "Markov Chain"
     ],
     "conceptPool": [
-      "conditional_probability",
-      "deductive_reasoning",
-      "median",
-      "venn_diagrams"
+      "bayes_theorem",
+      "chi_square_test",
+      "z_score",
+      "markov_chain"
     ],
     "isBoss": true,
     "difficultyTier": "boss"

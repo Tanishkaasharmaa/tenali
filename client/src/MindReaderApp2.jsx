@@ -273,10 +273,10 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
         // clue delivered — back to listening
         setScene('talking');
       }
-    }, 32);
+    }, 30);
 
     return () => clearInterval(interval);
-  }, [clue]);
+  }, [clue, localClueIndex]);
 
   const syncGlobalXp = (newXp) => {
     try {
@@ -698,6 +698,12 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
     setErrorMsg('');
     setWrongGuessFeedback('');
     setGuessSearchQuery('');
+    setClue('');
+    setDisplayedClue('');
+    setIsWriting(false);
+    if (!prevConceptId) {
+      setCurrentConceptId(null);
+    }
     try {
       localStorage.setItem('tenali-guess-mind-last-level', lvl);
     } catch (e) {}
@@ -707,9 +713,8 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
       if (token) headers['Authorization'] = `Bearer ${token}`;
 
       const bodyData = { levelNum: lvl, worldId: activeWorldId };
-      const conceptToPass = prevConceptId || currentConceptId;
-      if (conceptToPass) {
-        bodyData.previousConceptId = conceptToPass;
+      if (prevConceptId) {
+        bodyData.previousConceptId = prevConceptId;
       }
 
       const res = await fetch(`${API}/api/mindreader/start`, {
