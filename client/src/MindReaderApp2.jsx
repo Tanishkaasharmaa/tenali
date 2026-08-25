@@ -239,6 +239,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
   // Game session state
   const [gameId, setGameId] = useState(null);
+  const [currentConceptId, setCurrentConceptId] = useState(null);
   const [clue, setClue] = useState('');
   const [clueIndex, setClueIndex] = useState(0);
   const [cluesExhausted, setCluesExhausted] = useState(false);
@@ -692,7 +693,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
   };
 
   // Start Level API
-  const handleStartLevel = async (lvl) => {
+  const handleStartLevel = async (lvl, prevConceptId = null) => {
     setLoading(true);
     setErrorMsg('');
     setWrongGuessFeedback('');
@@ -705,16 +706,25 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
       const headers = { 'Content-Type': 'application/json' };
       if (token) headers['Authorization'] = `Bearer ${token}`;
 
+      const bodyData = { levelNum: lvl, worldId: activeWorldId };
+      const conceptToPass = prevConceptId || currentConceptId;
+      if (conceptToPass) {
+        bodyData.previousConceptId = conceptToPass;
+      }
+
       const res = await fetch(`${API}/api/mindreader/start`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ levelNum: lvl, worldId: activeWorldId })
+        body: JSON.stringify(bodyData)
       });
 
       if (res.ok) {
         const data = await res.json();
         setGameId(data.gameId);
         setLevelNum(data.levelNum);
+        if (data.conceptId) {
+          setCurrentConceptId(data.conceptId);
+        }
         setDifficultyTier(data.difficultyTier || 'easy');
         if (data.worldId) {
           setActiveWorldId(data.worldId);
@@ -1792,7 +1802,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                 boxSizing: 'border-box'
               }}
               onClick={() => {
-                handleStartLevel(levelNum);
+                handleStartLevel(levelNum, currentConceptId);
               }}
             >
               Retry
@@ -1869,7 +1879,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                   boxSizing: 'border-box'
                 }}
                 onClick={() => {
-                  handleStartLevel(levelNum);
+                  handleStartLevel(levelNum, currentConceptId);
                 }}
               >
                 Try Again
