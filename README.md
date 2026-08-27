@@ -80,12 +80,12 @@ It is built to run on a single VPS — `tenali.fun` — with one Node process se
 <p align="center">
   <table>
     <tr>
-      <td align="center"><b>1025</b><br/><sub>commits</sub></td>
+      <td align="center"><b>1029</b><br/><sub>commits</sub></td>
       <td align="center"><b>80</b><br/><sub>PRs merged</sub></td>
       <td align="center"><b>27</b><br/><sub>GitHub contributors</sub></td>
-      <td align="center"><b>⭐ 6</b><br/><sub>stars</sub></td>
-      <td align="center"><b>🍴 67</b><br/><sub>forks</sub></td>
-      <td align="center"><b>🐛 57</b><br/><sub>open issues</sub></td>
+      <td align="center"><b>⭐ 0</b><br/><sub>stars</sub></td>
+      <td align="center"><b>🍴 0</b><br/><sub>forks</sub></td>
+      <td align="center"><b>🐛 0</b><br/><sub>open issues</sub></td>
     </tr>
   </table>
 </p>
@@ -600,7 +600,7 @@ tenali.fun (DNS → <production IP — redacted from public docs>)
 <!-- live-snapshot:start -->
 | 🏆 Commits | 🔀 Merged PRs | 👥 Contributors | 🧩 Puzzles | 📚 Vocab | 🌍 GK |
 |----------:|------------:|--------------:|---------:|-------:|----:|
-| **1025** | **80** | **27** | **69** | **7,662** | **991** |
+| **1029** | **80** | **27** | **69** | **7,662** | **991** |
 <!-- live-snapshot:end -->
 
 ### 🥇 Leaderboard
@@ -612,7 +612,7 @@ _Live data — last regenerated 2026-08-27 · auto-refreshed by [`github-actions
 |--:|:-------------|:-------------|----------:|-----:|:--------|
 | 🥇 | **S. R. S. Iyengar**<br/><sub>↳ also commits as <b>sudarshan</b></sub> | [sudarshansudarshan](https://github.com/sudarshansudarshan) | **281** | 0  | Lead Architect · Curriculum Author · 69 puzzle families |
 | 🥈 | **Mudit Agrawal** | [muditagrawal2007](https://github.com/muditagrawal2007) | **193** | 25  | Maintainer · Battle Arena · Linear Algebra · Sudoku · Playground |
-| 🥉 | **tanishkaasharmaa**<br/><sub>↳ also commits as <b>Tanishkaasharmaa</b></sub> | [tanishkaasharmaa](https://github.com/tanishkaasharmaa) | **133** | 0  | — |
+| 🥉 | **tanishkaasharmaa**<br/><sub>↳ also commits as <b>Tanishkaasharmaa</b></sub> | [tanishkaasharmaa](https://github.com/tanishkaasharmaa) | **135** | 0  | — |
 | 4. | **Jinal Gupta** | [jgupta05072003-code](https://github.com/jgupta05072003-code) | **93** | 0  | Upstream Repo Maintainer & PR Reviewer |
 | 5. | **Lakshmi Varshini Nandula ** | [varshini-nandula](https://github.com/varshini-nandula) | **43** | 1  | Profile Showcase & Offline Storage |
 | 6. | **Sameer Mishra** | [24F3005086](https://github.com/24F3005086) | **36** | 4  | i18n · Accessibility · Concept Labs |
@@ -624,7 +624,7 @@ _Live data — last regenerated 2026-08-27 · auto-refreshed by [`github-actions
 | 12. | **Ahana Banerjee** | [ahana4banerjee](https://github.com/ahana4banerjee) | **20** | 2  | Goal Practice & Learning Journey |
 | 13. | **harshyy07** | [harshyy07](https://github.com/harshyy07) | **16** | 1  | — |
 | 14. | **Shubh Dixit**<br/><sub>↳ also commits as <b>Shubh dixit</b></sub> | [Shubhdix9](https://github.com/Shubhdix9) | **16** | 2  | Premium UI Suite + Word Games |
-| 15. | **kratikavarshney-16**<br/><sub>↳ also commits as <b>Kratikavarshney-16</b></sub> | [kratikavarshney-16](https://github.com/kratikavarshney-16) | **10** | 0  | — |
+| 15. | **kratikavarshney-16**<br/><sub>↳ also commits as <b>Kratikavarshney-16</b></sub> | [kratikavarshney-16](https://github.com/kratikavarshney-16) | **12** | 0  | — |
 | 16. | **shreejal-bangera**<br/><sub>↳ also commits as <b>Shreejal Bangera</b></sub> | [shreejal-bangera](https://github.com/shreejal-bangera) | **8** | 0  | — |
 | 17. | **SemiColonSlayer** | [sharonyamita-spec](https://github.com/sharonyamita-spec) | **6** | 1  | Math Detective Agency |
 | 18. | **PANDRAJU POORVI PRAVALLIKA** | [poorvipravallika06](https://github.com/poorvipravallika06) | **6** | 1  | HCF/LCM Interactive Module |

@@ -19,9 +19,23 @@
 ---
 
 <!-- live-changelog:start -->
-### 📊 Total: 1025 commits · 58 active days · 31 unique authors
+### 📊 Total: 1029 commits · 60 active days · 31 unique authors
 
 > **📖 How to read this:** Each entry shows a clickable SHA, the author, and a one-line subject. Sub-bullets show the **exact files touched** with per-file `+additions −deletions`, the **total line stats**, and (when present) the **commit body** explaining what & why.
+
+#### 📅 2026-08-27  <sub>(2 commits)</sub>
+
+- 🔀 [`bcf7b260`](https://github.com/Tanishkaasharmaa/tenali/commit/bcf7b260428f880301e5f76a36a0331152a186ad) — **Tanishkaasharmaa** — pull changes from tanishka branch into main and resolve conflict
+- 📌 [`d9af18a2`](https://github.com/Tanishkaasharmaa/tenali/commit/d9af18a25fe21c57933cbafc3481d7f0e56e2ad8) — **Tanishkaasharmaa** — Merge remote-tracking branch 'upstream/main' into tanishka
+
+#### 📅 2026-08-25  <sub>(2 commits)</sub>
+
+- 📌 [`76c8b0e7`](https://github.com/Tanishkaasharmaa/tenali/commit/76c8b0e7d7300395a58b10468e4f74bd2e7d5041) — **Kratikavarshney-16** — question
+    - 📁 **3 files:** `client/src/MindReaderApp2.jsx` `+10 −5`, `server/data/concepts.json` `+2780 −1702`, `server/data/levels.json` `+63 −63`
+    - 📊 **`+2853 −1770`** · 3 files
+- 📌 [`ccbc7d87`](https://github.com/Tanishkaasharmaa/tenali/commit/ccbc7d876a4b0bc84c5d9612461fb2d606222fd2) — **Kratikavarshney-16** — questions change
+    - 📁 **3 files:** `client/src/MindReaderApp2.jsx` `+14 −4`, `server/data/concepts.json` `+4550 −2252`, `server/index.js` `+25 −4`
+    - 📊 **`+4589 −2260`** · 3 files
 
 #### 📅 2026-08-24  <sub>(5 commits)</sub>
 
