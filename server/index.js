@@ -9792,6 +9792,8 @@ function getRandomizedLevelsConfig(seedString) {
 
 // In-memory guess mind sessions
 const guessMindSessions = new Map();
+// Track last played concept index per level so replaying always advances to a different predefined question set
+const levelLastConceptIndexMap = new Map();
 
 class GuessMindSession {
   constructor(gameId, levelNum, selectedConcept, worldId = 'number_kingdom') {
@@ -10240,7 +10242,7 @@ app.get('/api/mindreader/worlds', async (req, res) => {
 
 app.post('/api/mindreader/start', express.json(), async (req, res) => {
   try {
-    const { levelNum, worldId: requestedWorldId } = req.body;
+    const { levelNum, worldId: requestedWorldId, previousConceptId } = req.body;
     if (!levelNum) {
       return res.status(400).json({ error: 'Missing levelNum' });
     }
@@ -10282,9 +10284,27 @@ app.post('/api/mindreader/start', express.json(), async (req, res) => {
     let levelName = levelObj ? (levelObj.levelName || `Level ${levelNum}`) : `Level ${levelNum}`;
 
     if (levelObj && levelObj.conceptPool && levelObj.conceptPool.length > 0) {
-      const shuffleSeed = (user ? user.username : 'guest') + '_' + targetWorldId + '_' + levelNum + '_' + Date.now();
-      const randomIndex = Math.floor(Math.random() * levelObj.conceptPool.length);
-      selectedConceptId = levelObj.conceptPool[randomIndex];
+      const userIdentifier = user ? user.username : (req.ip || 'guest');
+      const trackerKey = `${userIdentifier}_${targetWorldId}_${parseInt(levelNum, 10)}`;
+      const lastIdx = levelLastConceptIndexMap.get(trackerKey);
+
+      let prevConcept = previousConceptId;
+      if (!prevConcept && lastIdx !== undefined && lastIdx < levelObj.conceptPool.length) {
+        prevConcept = levelObj.conceptPool[lastIdx];
+      }
+
+      let selectedIndex = 0;
+      if (prevConcept && levelObj.conceptPool.includes(prevConcept)) {
+        const prevIdx = levelObj.conceptPool.indexOf(prevConcept);
+        selectedIndex = (prevIdx + 1) % levelObj.conceptPool.length;
+      } else if (lastIdx !== undefined) {
+        selectedIndex = (lastIdx + 1) % levelObj.conceptPool.length;
+      } else {
+        selectedIndex = 0;
+      }
+
+      selectedConceptId = levelObj.conceptPool[selectedIndex];
+      levelLastConceptIndexMap.set(trackerKey, selectedIndex);
       levelOptions = levelObj.options || [];
     } else {
       // Fallback for general world levels
@@ -10318,6 +10338,7 @@ app.post('/api/mindreader/start', express.json(), async (req, res) => {
       gameId,
       levelNum: parseInt(levelNum, 10),
       levelName,
+      conceptId: selectedConceptId,
       options: levelOptions,
       worldId: targetWorldId,
       clue: firstClue,

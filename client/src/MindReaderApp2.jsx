@@ -239,6 +239,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
 
   // Game session state
   const [gameId, setGameId] = useState(null);
+  const [currentConceptId, setCurrentConceptId] = useState(null);
   const [clue, setClue] = useState('');
   const [clueIndex, setClueIndex] = useState(0);
   const [cluesExhausted, setCluesExhausted] = useState(false);
@@ -272,10 +273,10 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
         // clue delivered — back to listening
         setScene('talking');
       }
-    }, 32);
+    }, 30);
 
     return () => clearInterval(interval);
-  }, [clue]);
+  }, [clue, localClueIndex]);
 
   const syncGlobalXp = (newXp) => {
     try {
@@ -692,11 +693,17 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
   };
 
   // Start Level API
-  const handleStartLevel = async (lvl) => {
+  const handleStartLevel = async (lvl, prevConceptId = null) => {
     setLoading(true);
     setErrorMsg('');
     setWrongGuessFeedback('');
     setGuessSearchQuery('');
+    setClue('');
+    setDisplayedClue('');
+    setIsWriting(false);
+    if (!prevConceptId) {
+      setCurrentConceptId(null);
+    }
     try {
       localStorage.setItem('tenali-guess-mind-last-level', lvl);
     } catch (e) {}
@@ -705,16 +712,24 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
       const headers = { 'Content-Type': 'application/json' };
       if (token) headers['Authorization'] = `Bearer ${token}`;
 
+      const bodyData = { levelNum: lvl, worldId: activeWorldId };
+      if (prevConceptId) {
+        bodyData.previousConceptId = prevConceptId;
+      }
+
       const res = await fetch(`${API}/api/mindreader/start`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ levelNum: lvl, worldId: activeWorldId })
+        body: JSON.stringify(bodyData)
       });
 
       if (res.ok) {
         const data = await res.json();
         setGameId(data.gameId);
         setLevelNum(data.levelNum);
+        if (data.conceptId) {
+          setCurrentConceptId(data.conceptId);
+        }
         setDifficultyTier(data.difficultyTier || 'easy');
         if (data.worldId) {
           setActiveWorldId(data.worldId);
@@ -1792,7 +1807,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                 boxSizing: 'border-box'
               }}
               onClick={() => {
-                handleStartLevel(levelNum);
+                handleStartLevel(levelNum, currentConceptId);
               }}
             >
               Retry
@@ -1869,7 +1884,7 @@ export default function MindReaderApp2({ onBack, onSwitchMode }) {
                   boxSizing: 'border-box'
                 }}
                 onClick={() => {
-                  handleStartLevel(levelNum);
+                  handleStartLevel(levelNum, currentConceptId);
                 }}
               >
                 Try Again
