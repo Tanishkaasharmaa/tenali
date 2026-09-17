@@ -3,14 +3,12 @@ node_modules
 client/dist
 server.log
 feature.md
-implementation_plan.md
-implementationplan.md
-implementationplan2.md
-implementationplan
+feature*.md
+implementation_plan*.md
+implementationplan*.md
 feature
 feature2
-feature2.md
-docs/
+
 server/in_memory_users_db.json
 server/lil/learning_journey/in_memory_journey_progress.json
 server/dictionaryCache
@@ -21,6 +19,8 @@ PR_DRAFT.md
 # local scratch / debug throwaways
 scratch/
 server/_probe*.js
+.env
+*.env
 
 # Backup snapshots — never commit these; use git history instead
 *.bak
