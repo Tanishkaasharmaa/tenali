@@ -19,9 +19,13 @@
 ---
 
 <!-- live-changelog:start -->
-### 📊 Total: 1050 commits · 77 active days · 42 unique authors
+### 📊 Total: 1198 commits · 81 active days · 45 unique authors
 
 > **📖 How to read this:** Each entry shows a clickable SHA, the author, and a one-line subject. Sub-bullets show the **exact files touched** with per-file `+additions −deletions`, the **total line stats**, and (when present) the **commit body** explaining what & why.
+
+#### 📅 2026-09-18  <sub>(1 commit)</sub>
+
+- 📌 [`5ee7172e`](https://github.com/vicharanashala/tenali/commit/5ee7172e795c1d605df9aaaa597facef5b390b03) — **Tanishkaasharmaa** — Merge remote-tracking branch 'upstream/main'
 
 #### 📅 2026-09-16  <sub>(1 commit)</sub>
 
@@ -250,13 +254,24 @@
     - 📊 **`+148 −0`** · 1 file
 - 📌 [`c1400d19`](https://github.com/vicharanashala/tenali/commit/c1400d19a3d18cd0a24e244625243049e11f21b6) — **priyanshu7725** — Merge remote-tracking branch 'upstream/main' into feature/monster-misconceptions
 
-#### 📅 2026-08-27  <sub>(1 commit)</sub>
+#### 📅 2026-08-27  <sub>(3 commits)</sub>
 
 - ✨ [`a79b2635`](https://github.com/vicharanashala/tenali/commit/a79b2635ab933034833f37a7e1e546031e993bbd) — **tanvishdesai** — complete extraction of all topic routes into router files
     - 📁 **17 files:** `server/index.js` `+1005 −10518`, `server/lib/question-banks.js` `+5 −0`, `server/lib/sudoku.js` `+52 −0`, `server/routes/__tests__/apiContract.test.js` `+2 −15`, `server/routes/advanced.js` `+252 −0`, `server/routes/algebra.js` `+1319 −1`, `server/routes/arithmetic.js` `+528 −0`, `server/routes/financial.js` `+137 −0` *(+9 more in [`a79b2635`](https://github.com/vicharanashala/tenali/commit/a79b2635ab933034833f37a7e1e546031e993bbd))*
     - 📊 **`+8166 −10537`** · 17 files
+- 🔀 [`bcf7b260`](https://github.com/vicharanashala/tenali/commit/bcf7b260428f880301e5f76a36a0331152a186ad) — **Tanishkaasharmaa** — pull changes from tanishka branch into main and resolve conflict
+- 📌 [`d9af18a2`](https://github.com/vicharanashala/tenali/commit/d9af18a25fe21c57933cbafc3481d7f0e56e2ad8) — **Tanishkaasharmaa** — Merge remote-tracking branch 'upstream/main' into tanishka
 
-#### 📅 2026-08-24  <sub>(2 commits)</sub>
+#### 📅 2026-08-25  <sub>(2 commits)</sub>
+
+- 📌 [`76c8b0e7`](https://github.com/vicharanashala/tenali/commit/76c8b0e7d7300395a58b10468e4f74bd2e7d5041) — **Kratikavarshney-16** — question
+    - 📁 **3 files:** `client/src/MindReaderApp2.jsx` `+10 −5`, `server/data/concepts.json` `+2780 −1702`, `server/data/levels.json` `+63 −63`
+    - 📊 **`+2853 −1770`** · 3 files
+- 📌 [`ccbc7d87`](https://github.com/vicharanashala/tenali/commit/ccbc7d876a4b0bc84c5d9612461fb2d606222fd2) — **Kratikavarshney-16** — questions change
+    - 📁 **3 files:** `client/src/MindReaderApp2.jsx` `+14 −4`, `server/data/concepts.json` `+4550 −2252`, `server/index.js` `+25 −4`
+    - 📊 **`+4589 −2260`** · 3 files
+
+#### 📅 2026-08-24  <sub>(7 commits)</sub>
 
 - ♻️ [`4b2510f0`](https://github.com/vicharanashala/tenali/commit/4b2510f05049cef8ffef06fb174903429b3aee5a) — **tanvishdesai** — remove dead inline handlers superseded by router files
     - 📁 **1 file:** `server/index.js` `+15 −2135`
@@ -264,9 +279,22 @@
 - ✨ [`59d602f3`](https://github.com/vicharanashala/tenali/commit/59d602f395652463d6a520a3c4bae3e48c1c48d7) — **tanvishdesai** — extract 43 topic routes into grouped router files (Phase 2)
     - 📁 **9 files:** `server/index.js` `+68 −233`, `server/routes/advanced.js` `+464 −0`, `server/routes/algebra.js` `+62 −0`, `server/routes/arithmetic.js` `+281 −0`, `server/routes/calculus.js` `+310 −0`, `server/routes/financial.js` `+269 −0`, `server/routes/geometry.js` `+386 −0`, `server/routes/misc.js` `+396 −0` *(+1 more in [`59d602f3`](https://github.com/vicharanashala/tenali/commit/59d602f395652463d6a520a3c4bae3e48c1c48d7))*
     - 📊 **`+2395 −233`** · 9 files
+- 📌 [`45a0bbf0`](https://github.com/vicharanashala/tenali/commit/45a0bbf0561a1540aab985ee4b7831ff027d3ff7) — **Tanishkaasharmaa** — Merge branch 'tanishka'
+- 🐛 [`9d7c90f9`](https://github.com/vicharanashala/tenali/commit/9d7c90f9abe56086dd10470b58fe8472d203b747) — **Tanishkaasharmaa** — align 4-option level candidate pools across all 84 levels for infinite replayability
+    - 📁 **1 file:** `server/data/levels.json` `+7 −7`
+    - 📊 **`+7 −7`** · 1 file
+- 📌 [`4287ef2c`](https://github.com/vicharanashala/tenali/commit/4287ef2cabc2348671d26beaeb6be2e50b1075f3) — **Tanishkaasharmaa** — Merge branch 'tanishka'
+- 🐛 [`e54d526f`](https://github.com/vicharanashala/tenali/commit/e54d526fa04b7f0a4a765f4157c649bdda882abf) — **Tanishkaasharmaa** — ensure locked level nodes never receive active glowing target highlights
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+2 −2`
+    - 📊 **`+2 −2`** · 1 file
+- 🔀 [`518d8498`](https://github.com/vicharanashala/tenali/commit/518d8498f42650e1c0bff624ad59c9299c1f5774) — **Tanishkaasharmaa** — integrate origin/main with tanishka feature updates
 
-#### 📅 2026-08-23  <sub>(3 commits)</sub>
+#### 📅 2026-08-23  <sub>(5 commits)</sub>
 
+- 🔀 [`885298f7`](https://github.com/vicharanashala/tenali/commit/885298f737e55dc33287cc870d9dfa0fe37107a5) — **Tanishkaasharmaa** — pull latest changes from upstream/main and resolve conflicts
+- ✨ [`4cff29ba`](https://github.com/vicharanashala/tenali/commit/4cff29ba3e06b8bcc9d63e1ca478b2e3062529c7) — **Tanishkaasharmaa** — expand 84 curriculum levels across 7 kingdoms, topic level names, em-dash cleanup, and kingdom progress scoping
+    - 📁 **5 files:** `client/src/MindReaderApp2.jsx` `+181 −68`, `server/data/concepts.json` `+7022 −602`, `server/data/levels.json` `+1215 −243`, `server/data/worlds.json` `+17 −17`, `server/index.js` `+37 −30`
+    - 📊 **`+8472 −960`** · 5 files
 - 📌 [`4e3690ab`](https://github.com/vicharanashala/tenali/commit/4e3690abbd8e4434f78ea29ef1607c5588f063d0) — **AYUSHKOCHHAR** — Revert unrelated changes in lab and language apps
     - 📁 **10 files:** `client/src/App.css` `+57 −92`, `client/src/App.jsx` `+3 −3`, `client/src/BearingsLabApp.jsx` `+2 −2`, `client/src/ProbLabApp.jsx` `+1 −1`, `client/src/PythagLabApp.jsx` `+1 −1`, `client/src/VisualMathLabRedux.jsx` `+1 −1`, `client/src/detective-app.jsx` `+6 −6`, `client/src/language/CrosswordApp.jsx` `+4 −4` *(+2 more in [`4e3690ab`](https://github.com/vicharanashala/tenali/commit/4e3690abbd8e4434f78ea29ef1607c5588f063d0))*
     - 📊 **`+84 −119`** · 10 files
@@ -337,11 +365,38 @@
     - 📁 **2 files:** `client/src/treasurehunt/TreasureHuntApp.jsx` `+121 −12`, `client/src/treasurehunt/treasurehunt.css` `+102 −14`
     - 📊 **`+223 −26`** · 2 files
 
-#### 📅 2026-08-13  <sub>(6 commits)</sub>
+#### 📅 2026-08-13  <sub>(15 commits)</sub>
 
 - 🐛 [`14d8e77d`](https://github.com/vicharanashala/tenali/commit/14d8e77de192bc8e6d95d0dfae4a3df30ac47e0c) — **Athira** — improve angles learning visual alignment
     - 📁 **1 file:** `client/src/components/LearningVisual.jsx` `+38 −30`
     - 📊 **`+38 −30`** · 1 file
+- 💄 [`27a67bc1`](https://github.com/vicharanashala/tenali/commit/27a67bc1e26e471dc255851c00d7e9d0327cfd06) — **Tanishkaasharmaa** — match --clr-card background color with main app background #302723
+    - 📁 **1 file:** `client/src/App.css` `+1 −1`
+    - 📊 **`+1 −1`** · 1 file
+- ✨ [`8a120d97`](https://github.com/vicharanashala/tenali/commit/8a120d9772530d8c9151c86712f5c7dfab632e77) — **Tanishkaasharmaa** — display remaining hint count badge on hint button and mute scratch sound
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+22 −3`, `client/src/ScratchCardModal.jsx` `+0 −1`
+    - 📊 **`+22 −4`** · 2 files
+- ✨ [`3720d9bf`](https://github.com/vicharanashala/tenali/commit/3720d9bf3cd37d8611d10a80c1c6e4432907b5c1) — **Tanishkaasharmaa** — design and add educational hints for all 152 concepts in concepts.json
+    - 📁 **1 file:** `server/data/concepts.json` `+684 −542`
+    - 📊 **`+684 −542`** · 1 file
+- 🐛 [`f3528e0e`](https://github.com/vicharanashala/tenali/commit/f3528e0e7cf987ba6ccf87a59af6cdbb9a5b2090) — **Tanishkaasharmaa** — replace black #0e0e11 background override with warm brown #302723
+    - 📁 **1 file:** `client/src/MindReader2.css` `+4 −3`
+    - 📊 **`+4 −3`** · 1 file
+- 💄 [`9d217db8`](https://github.com/vicharanashala/tenali/commit/9d217db878f164fd6ea562c3c33828ffd9cf75aa) — **Tanishkaasharmaa** — update Read Tenali Mind background and container colors to match main app palette #302723
+    - 📁 **2 files:** `client/src/MindReader2.css` `+12 −12`, `client/src/MindReaderApp2.jsx` `+1 −1`
+    - 📊 **`+13 −13`** · 2 files
+- 🐛 [`e971195b`](https://github.com/vicharanashala/tenali/commit/e971195bc916eabb804841901c8da49fac7759ac) — **Tanishkaasharmaa** — remove switch mode button from setup screen and equalize Prev/Next button sizes
+    - 📁 **2 files:** `client/src/MindReader2.css` `+4 −1`, `client/src/MindReaderApp2.jsx` `+0 −21`
+    - 📊 **`+4 −22`** · 2 files
+- 🐛 [`eb248095`](https://github.com/vicharanashala/tenali/commit/eb248095a4a96a5ac945e66b75173dec2c0f8b46) — **Tanishkaasharmaa** — scale avatar image to fill circle container edge-to-edge
+    - 📁 **3 files:** `client/src/MindReaderApp2.jsx` `+2 −2`, `client/src/StudentAvatar.jsx` `+1 −0`, `client/src/TenaliAvatar.jsx` `+1 −0`
+    - 📊 **`+4 −2`** · 3 files
+- 🐛 [`3b892868`](https://github.com/vicharanashala/tenali/commit/3b892868f47db7fb0bd3668080b2d1b43fa7d7e5) — **Tanishkaasharmaa** — add image scaling, circular masking, and remove background checkerboard
+    - 📁 **2 files:** `client/src/StudentAvatar.jsx` `+26 −2`, `client/src/TenaliAvatar.jsx` `+25 −2`
+    - 📊 **`+51 −4`** · 2 files
+- 🐛 [`9f35ca76`](https://github.com/vicharanashala/tenali/commit/9f35ca760645df94f1561bdcf54a50db5e1b50f0) — **Tanishkaasharmaa** — fix avatar import paths and integrate illustrated PNG assets
+    - 📁 **5 files:** `client/src/StudentAvatar.jsx` `+15 −0`, `client/src/TenaliAvatar.jsx` `+37 −16`, `client/src/assets/avatarAssets.js` `+1 −0`, `client/src/assets/avatars/README.md` `+43 −0`, `client/src/avatarAssets.js` `+138 −0`
+    - 📊 **`+234 −16`** · 5 files
 - 📌 [`6a5cf3e6`](https://github.com/vicharanashala/tenali/commit/6a5cf3e6d948e5a3387d48f9ee2193114d02b36c) — **jgupta05072003-code** — 🔀 PR [#158](https://github.com/vicharanashala/tenali/pull/158) from `vicharanashala` — add-contributor-onboarding-rules
 - 📌 [`115a5405`](https://github.com/vicharanashala/tenali/commit/115a5405ab52c8eae0ebedf056501b848b085f24) — **Jinal Gupta** — Clarify onboarding PRs must target the Ideas/ folder
     - 📁 **1 file:** `README.md` `+2 −0`
@@ -359,11 +414,55 @@
 - 🔀 [`d98dd737`](https://github.com/vicharanashala/tenali/commit/d98dd737f980ba6c55154562e30ef2a6361f45fa) — **disha01bansal** — sync feature branch with upstream main
 - 📌 [`176ec5b2`](https://github.com/vicharanashala/tenali/commit/176ec5b2718cdb393d459576fab309c4e2ac4d12) — **disha01bansal** — Merge remote-tracking branch 'upstream/main' into feature/treasure-hunt
 
-#### 📅 2026-08-11  <sub>(1 commit)</sub>
+#### 📅 2026-08-11  <sub>(17 commits)</sub>
 
 - 🐛 [`c8aa0202`](https://github.com/vicharanashala/tenali/commit/c8aa020229a1ed420af303275c562d7f4a16c62c) — **Athira** — resolve auth server syntax error
     - 📁 **1 file:** `server/auth.js` `+19 −7`
     - 📊 **`+19 −7`** · 1 file
+- 💄 [`a6f5300d`](https://github.com/vicharanashala/tenali/commit/a6f5300d3a0328553b14763bbc1b829aa04ad045) — **Tanishkaasharmaa** — remove top-right hint button pill from top bar
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+1 −12`
+    - 📊 **`+1 −12`** · 1 file
+- ✨ [`7ded37c0`](https://github.com/vicharanashala/tenali/commit/7ded37c01929584b01f800a498b02c071fb9037f) — **Tanishkaasharmaa** — add interactive e-commerce style ScratchCardModal and circular hint button
+    - 📁 **3 files:** `client/src/MindReader2.css` `+41 −0`, `client/src/MindReaderApp2.jsx` `+24 −1`, `client/src/ScratchCardModal.jsx` `+345 −0`
+    - 📊 **`+410 −1`** · 3 files
+- ✨ [`f6de0a41`](https://github.com/vicharanashala/tenali/commit/f6de0a410c64227aeec98da2a4fbe4d8da7b7a14) — **Tanishkaasharmaa** — commit all updates including server auth hook guard, avatar expressions, and layout styles
+    - 📁 **6 files:** `client/src/CandidateCard.jsx` `+9 −56`, `client/src/MindReader2.css` `+2603 −2196`, `client/src/MindReaderApp2.jsx` `+180 −264`, `client/src/StudentAvatar.jsx` `+293 −83`, `client/src/TenaliAvatar.jsx` `+23 −0`, `server/auth.js` `+1 −1`
+    - 📊 **`+3109 −2600`** · 6 files
+- 📌 [`9f04a12a`](https://github.com/vicharanashala/tenali/commit/9f04a12ac7a1a4f7369f5c62c5554cfce4c921cb) — **Tanishkaasharmaa** — expand quiz round container to 100% full page width
+    - 📁 **2 files:** `client/src/MindReader2.css` `+2 −2`, `client/src/MindReaderApp2.jsx` `+1 −1`
+    - 📊 **`+3 −3`** · 2 files
+- 💄 [`1bf73f71`](https://github.com/vicharanashala/tenali/commit/1bf73f71e63084dee2dc8a8f883c80f4c5c63101) — **Tanishkaasharmaa** — unify page, arena, avatar frames, and mind clouds to lighter brown shade #302723
+    - 📁 **5 files:** `client/src/App.css` `+1 −1`, `client/src/CandidateCard.jsx` `+2 −2`, `client/src/MindReader2.css` `+9 −9`, `client/src/MindReaderApp2.jsx` `+1 −1`, `client/src/index.css` `+2 −2`
+    - 📊 **`+15 −15`** · 5 files
+- 💄 [`20fc25e1`](https://github.com/vicharanashala/tenali/commit/20fc25e18139ee252fd7c41a2d8af0bb798304c5) — **Tanishkaasharmaa** — apply warm lighter brown background shade #28211b across the entire page
+    - 📁 **4 files:** `client/src/App.css` `+1 −1`, `client/src/MindReader2.css` `+2 −2`, `client/src/MindReaderApp2.jsx` `+1 −1`, `client/src/index.css` `+3 −0`
+    - 📊 **`+7 −4`** · 4 files
+- 💄 [`898dbcc6`](https://github.com/vicharanashala/tenali/commit/898dbcc609ca322c882989026c34acc5966023df) — **Tanishkaasharmaa** — remove sound options selector pill bar from UI while keeping pencil and crystal sounds active
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+24 −79`
+    - 📊 **`+24 −79`** · 1 file
+- ✨ [`914d298b`](https://github.com/vicharanashala/tenali/commit/914d298b6f5ba91212783534109d5aba45f4e1b3) — **Tanishkaasharmaa** — set default pen sound to pencil and choice sound to crystal
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+1 −1`, `client/src/audioContext.js` `+1 −1`
+    - 📊 **`+2 −2`** · 2 files
+- 🐛 [`b667c7bf`](https://github.com/vicharanashala/tenali/commit/b667c7bfc3b334bb766b5c1b7008734c3dc6fb99) — **Tanishkaasharmaa** — declare sharedAudioContext module variable and auto-unlock Web Audio API on pointer interaction
+    - 📁 **1 file:** `client/src/audioContext.js` `+24 −3`
+    - 📊 **`+24 −3`** · 1 file
+- ✨ [`2e9da326`](https://github.com/vicharanashala/tenali/commit/2e9da32618ef90aaf494abf4273627bc7f0bb9f0) — **Tanishkaasharmaa** — add clue arrival chime and customizable sound profile options for pen scratch and button choices
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+99 −25`, `client/src/audioContext.js` `+100 −36`
+    - 📊 **`+199 −61`** · 2 files
+- 🐛 [`2fbaad79`](https://github.com/vicharanashala/tenali/commit/2fbaad79a09f25a831278fde11f6ec5a547ca489) — **Tanishkaasharmaa** — resolve TDZ ReferenceError on clue state and ensure Mind Reader renders smoothly
+    - 📁 **3 files:** `client/src/MindReader2.css` `+15 −0`, `client/src/MindReaderApp2.jsx` `+40 −1`, `client/src/audioContext.js` `+30 −0`
+    - 📊 **`+85 −1`** · 3 files
+- 📌 [`f17adf53`](https://github.com/vicharanashala/tenali/commit/f17adf53f1f4772779779d68e601b2a6b0317276) — **Tanishkaasharmaa** — redesign round screen to symmetrical 2-row mirrored layout with puffy cloud styling
+    - 📁 **3 files:** `client/src/MindReader2.css` `+265 −0`, `client/src/MindReaderApp2.jsx` `+108 −66`, `feature2.md` `+1 −0`
+    - 📊 **`+374 −66`** · 3 files
+- 🐛 [`3638adcc`](https://github.com/vicharanashala/tenali/commit/3638adcc6a3c81e079c384f1e309ebaf89b1ceba) — **Tanishkaasharmaa** — add missing closing brace on UserSchema pre-save hook
+    - 📁 **1 file:** `server/auth.js` `+1 −0`
+    - 📊 **`+1 −0`** · 1 file
+- 📌 [`c0b32f10`](https://github.com/vicharanashala/tenali/commit/c0b32f10a8b92e0917e09e2602f18a5167b8eb95) — **Tanishkaasharmaa** — Merge branch 'main' into tanishka
+- 📌 [`68eb01f5`](https://github.com/vicharanashala/tenali/commit/68eb01f52d045682fc8e42950d31361e6c4de381) — **Tanishkaasharmaa** — Merge remote-tracking branch 'upstream/main'
+- 📌 [`22302a4c`](https://github.com/vicharanashala/tenali/commit/22302a4c2ba056283bab269868c29e7691dbe940) — **Tanishkaasharmaa** — candidate card padding and arena layout adjustments
+    - 📁 **2 files:** `client/src/CandidateCard.jsx` `+13 −10`, `client/src/MindReader2.css` `+9 −6`
+    - 📊 **`+22 −16`** · 2 files
 
 #### 📅 2026-08-08  <sub>(1 commit)</sub>
 
@@ -427,9 +526,33 @@
     - 📁 **6 files:** `client/src/monsters/CureFlow.jsx` `+9 −7`, `client/src/monsters/GuidedSolver.jsx` `+9 −9`, `client/src/monsters/HallPanel.jsx` `+3 −3`, `client/src/monsters/MonsterCard.jsx` `+7 −6`, `client/src/monsters/MonsterDetail.jsx` `+10 −9`, `client/src/monsters/MonsterToast.jsx` `+12 −7`
     - 📊 **`+50 −41`** · 6 files
 
-#### 📅 2026-08-05  <sub>(4 commits)</sub>
+#### 📅 2026-08-05  <sub>(12 commits)</sub>
 
+- 🐛 [`da9dd757`](https://github.com/vicharanashala/tenali/commit/da9dd757439cd46216f993bb5e7fb18624b03823) — **Tanishkaasharmaa** — convert arena layout to rock-solid CSS Grid preventing options box collapse
+    - 📁 **2 files:** `client/src/MindReader2.css` `+27 −48`, `client/src/SpeechBubble.jsx` `+9 −35`
+    - 📊 **`+36 −83`** · 2 files
+- 📌 [`2ad284fc`](https://github.com/vicharanashala/tenali/commit/2ad284fc1faab48e5bc4a02b90175342784cae31) — **Tanishkaasharmaa** — replicate exact quiz design with scalloped cloud speech bubbles, scholar Tenali skin, and golden avatar frames
+    - 📁 **4 files:** `client/src/CandidateCard.jsx` `+20 −21`, `client/src/MindReader2.css` `+79 −52`, `client/src/MindReaderApp2.jsx` `+2 −2`, `client/src/SpeechBubble.jsx` `+36 −9`
+    - 📊 **`+137 −84`** · 4 files
 - 📌 [`f8026169`](https://github.com/vicharanashala/tenali/commit/f8026169b8acbd7d3a2bbad12671ccd59b666b1d) — **harshyy07** — Merge branch 'main' into feat-hints
+- 📌 [`baa43092`](https://github.com/vicharanashala/tenali/commit/baa430923f96ff1e06187c828d8a35622bd5d643) — **Tanishkaasharmaa** — replicate quiz 3-column symmetrical arena layout
+    - 📁 **3 files:** `client/src/MindReader2.css` `+55 −40`, `client/src/MindReaderApp2.jsx` `+75 −57`, `client/src/SpeechBubble.jsx` `+4 −35`
+    - 📊 **`+134 −132`** · 3 files
+- 🐛 [`a0f70726`](https://github.com/vicharanashala/tenali/commit/a0f70726c2cbfcbdd5d2cc1b90f8ae484ff72e38) — **Tanishkaasharmaa** — stop option cards from overflowing the right cloud box
+    - 📁 **1 file:** `client/src/MindReader2.css` `+7 −4`
+    - 📊 **`+7 −4`** · 1 file
+- 📌 [`3dfdec76`](https://github.com/vicharanashala/tenali/commit/3dfdec762a5f8957be3e6ebcf240a541710b8538) — **Tanishkaasharmaa** — symmetrical arena layout with equal-sized clouds and edge-anchored avatars
+    - 📁 **1 file:** `client/src/MindReader2.css` `+27 −21`
+    - 📊 **`+27 −21`** · 1 file
+- 📌 [`336c22a4`](https://github.com/vicharanashala/tenali/commit/336c22a4220c4c541a3c94775be902a8c92ecd43) — **Tanishkaasharmaa** — make playing screen symmetrical
+    - 📁 **3 files:** `client/src/MindReader2.css` `+25 −10`, `client/src/MindReaderApp2.jsx` `+5 −4`, `client/src/StudentAvatar.jsx` `+2 −2`
+    - 📊 **`+32 −16`** · 3 files
+- 📌 [`1df5cfdc`](https://github.com/vicharanashala/tenali/commit/1df5cfdc65b6afa1005c0c69c75350d5e03c9b10) — **Tanishkaasharmaa** — remove Tenali's Mind, Round X/5, Your Thoughts, and Listen labels from playing screen
+    - 📁 **1 file:** `client/src/SpeechBubble.jsx` `+1 −42`
+    - 📊 **`+1 −42`** · 1 file
+- 🐛 [`3e30c9c2`](https://github.com/vicharanashala/tenali/commit/3e30c9c28cae249471fdac0638c29d9125d1a918) — **Tanishkaasharmaa** — add missing useState declarations and extract TenaliAvatar component
+    - 📁 **7 files:** `client/src/App.jsx` `+13 −210`, `client/src/CandidateCard.jsx` `+77 −0`, `client/src/MindReader2.css` `+1868 −1603`, `client/src/MindReaderApp2.jsx` `+100 −110`, `client/src/SpeechBubble.jsx` `+95 −0`, `client/src/StudentAvatar.jsx` `+124 −0`, `client/src/TenaliAvatar.jsx` `+214 −0`
+    - 📊 **`+2491 −1923`** · 7 files
 - 📌 [`fcf92744`](https://github.com/vicharanashala/tenali/commit/fcf92744bfab006cd2463fb1b54b9fc446421891) — **Shreejal Bangera** — Modified interaction in level 5,6,7 and improved overall quiz flow
     - 📁 **1 file:** `client/src/vachana/exercises/ReadingTraps.jsx` `+270 −145`
     - 📊 **`+270 −145`** · 1 file
@@ -449,7 +572,7 @@
     - 📁 **1 file:** `client/src/vachana/exercises/ReadingTraps.jsx` `+822 −143`
     - 📊 **`+822 −143`** · 1 file
 
-#### 📅 2026-08-03  <sub>(39 commits)</sub>
+#### 📅 2026-08-03  <sub>(40 commits)</sub>
 
 - ✨ [`a4ea7c80`](https://github.com/vicharanashala/tenali/commit/a4ea7c8017ea4f58a43fb72f6693ae1f5d43ba16) — **Athira** — add Angles-only Learn-Test prototype with visual learning
     - 📁 **3 files:** `client/src/App.jsx` `+57 −27`, `client/src/components/LearningVisual.jsx` `+157 −0`, `client/src/data/learnContent/angles.json` `+18 −13`
@@ -467,6 +590,9 @@
     - 📁 **96 files:** `client/src/App.css` `+145 −0`, `client/src/App.jsx` `+257 −0`, `client/src/data/learnContent.js` `+42 −0`, `client/src/data/learnContent/addition.json` `+30 −0`, `client/src/data/learnContent/algebra.json` `+30 −0`, `client/src/data/learnContent/angles.json` `+30 −0`, `client/src/data/learnContent/banking.json` `+30 −0`, `client/src/data/learnContent/bases.json` `+30 −0` *(+88 more in [`fdae9251`](https://github.com/vicharanashala/tenali/commit/fdae925176cbe74ca783bc6653794f042c4eeabd))*
     - 📊 **`+5480 −0`** · 96 files
 - 📌 [`5ecb94c1`](https://github.com/vicharanashala/tenali/commit/5ecb94c1ef5c002f317f319fba9e07655f43a837) — **jgupta05072003-code** — 🔀 PR [#36](https://github.com/vicharanashala/tenali/pull/36) from `SaniyaJos` — feat/contrast-challenge-enhancement
+- ✨ [`5e0ce937`](https://github.com/vicharanashala/tenali/commit/5e0ce937440af93c4144c419f23569930bf9cf73) — **Tanishkaasharmaa** — scale level-wise clue difficulty and simplify level 1 clues
+    - 📁 **4 files:** `client/src/MindReaderApp2.jsx` `+30 −26`, `server/data/concepts.json` `+118 −118`, `server/data/levels.json` `+142 −71`, `server/index.js` `+4 −2`
+    - 📊 **`+294 −217`** · 4 files
 - 📌 [`270bb2b6`](https://github.com/vicharanashala/tenali/commit/270bb2b66f9d793af35a85364d20dd8a5037785e) — **harshyy07** — Merge branch 'main' into feat-hints
 - 📌 [`67da084a`](https://github.com/vicharanashala/tenali/commit/67da084abc99e4f062fa86c61982e1573fb8cb99) — **harshyy07** — Merge upstream main, resolving README.md stats conflict
 - ✨ [`cbb2bc03`](https://github.com/vicharanashala/tenali/commit/cbb2bc03ef0dabaa8b21cf005728e99ed3712409) — **Mudit Agrawal** — deep per-commit details — files + stats + body
@@ -629,7 +755,7 @@
     - 📁 **2 files:** `docs/templates/0000-rfc-template.md` `+3 −3`, `docs/templates/feat-issue-temp.md` `+1 −1`
     - 📊 **`+4 −4`** · 2 files
 
-#### 📅 2026-07-28  <sub>(16 commits)</sub>
+#### 📅 2026-07-28  <sub>(17 commits)</sub>
 
 - 📌 [`d5f3dd7b`](https://github.com/vicharanashala/tenali/commit/d5f3dd7b5391c81e348ea04a958148ec6cb0cd93) — **jgupta05072003-code** — 🔀 PR [#106](https://github.com/vicharanashala/tenali/pull/106) from `vicharanashala` — fix/translation-api-resilience
 - 📌 [`c748a8dd`](https://github.com/vicharanashala/tenali/commit/c748a8ddfc2ea5dbb18f02eea1aa56dff834be77) — **jgupta05072003-code** — 🔀 PR [#105](https://github.com/vicharanashala/tenali/pull/105) from `vicharanashala` — fix/vite-base-env
@@ -639,6 +765,9 @@
 - 🐛 [`756a1de9`](https://github.com/vicharanashala/tenali/commit/756a1de947743bb68ec039a53e308bf49d78c901) — **Jinal Gupta** — read Vite base path from VITE_BASE_PATH env
     - 📁 **1 file:** `client/vite.config.js` `+5 −2`
     - 📊 **`+5 −2`** · 1 file
+- 📌 [`5eb4f062`](https://github.com/vicharanashala/tenali/commit/5eb4f062a35028ade90544fbbdaf818ef439ee68) — **Tanishkaasharmaa** — Redesign 5-round mystery deduction clues for all Number Kingdom levels
+    - 📁 **2 files:** `implementationplan2.md` `+312 −314`, `server/data/concepts.json` `+297 −297`
+    - 📊 **`+609 −611`** · 2 files
 - ✨ [`5a357544`](https://github.com/vicharanashala/tenali/commit/5a35754431ca93d67d95ed14ff6525e440d1ebdd) — **SaniyaJos** — style card headers, align module title, add mission icon, and remove start/done buttons
     - 📁 **2 files:** `client/public/contrast/mission.svg` `+9 −0`, `client/src/ContrastChallengeApp.jsx` `+1279 −341`
     - 📊 **`+1288 −341`** · 2 files
@@ -674,7 +803,7 @@
     - 📁 **1 file:** `client/src/monsters/CHANGELOG.md` `+29 −0`
     - 📊 **`+29 −0`** · 1 file
 
-#### 📅 2026-07-27  <sub>(26 commits)</sub>
+#### 📅 2026-07-27  <sub>(40 commits)</sub>
 
 - 📌 [`4f9b1af1`](https://github.com/vicharanashala/tenali/commit/4f9b1af10eed2ba70c61650c7c12e073543dfcf4) — **Shreejal Bangera** — minor UI changes
     - 📁 **1 file:** `client/src/vachana/exercises/ReadingTraps.jsx` `+5 −5`
@@ -683,6 +812,35 @@
 - 🐛 [`c81c73cc`](https://github.com/vicharanashala/tenali/commit/c81c73cc9b583b0552cbfa74da7fc4925079a930) — **priyanshu7725** — correct decimal drifter step progression and add css transitions
     - 📁 **1 file:** `client/src/monsters/GuidedSolver.jsx` `+33 −6`
     - 📊 **`+33 −6`** · 1 file
+- 🐛 [`ceb18d70`](https://github.com/vicharanashala/tenali/commit/ceb18d701d911494c938fb5041a1928cbaf5eba1) — **Tanishkaasharmaa** — resolve conflict markers and update server package dependencies post-upstream sync
+    - 📁 **3 files:** `client/package-lock.json` `+17 −56`, `server/index.js` `+0 −8`, `server/package-lock.json` `+1 −0`
+    - 📊 **`+18 −64`** · 3 files
+- 📌 [`94ebb89d`](https://github.com/vicharanashala/tenali/commit/94ebb89d9db6b0071b01a96ea46d99bfe71759f2) — **Tanishkaasharmaa** — Merge branch 'main' into tanishka
+- 📌 [`b0460d71`](https://github.com/vicharanashala/tenali/commit/b0460d71cc9ec60e93d0e305bdb84bb124568ef7) — **Tanishkaasharmaa** — Merge upstream/main into main
+- ✨ [`b562148c`](https://github.com/vicharanashala/tenali/commit/b562148c41f59658a174a55ebc0d2764caa1cd9f) — **Tanishkaasharmaa** — make top round stepper R1-R5 interactive to switch clues and review candidate choices
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+37 −23`
+    - 📊 **`+37 −23`** · 1 file
+- ✨ [`108fc858`](https://github.com/vicharanashala/tenali/commit/108fc85833b4ff79e933860ccbb9cb272b3cb914) — **Tanishkaasharmaa** — fix final guess submission, clean level titles on map track, and level node circle styling
+    - 📁 **5 files:** `client/src/MindReader2.css` `+11 −9`, `client/src/MindReaderApp2.jsx` `+61 −19`, `implementationplan2.md` `+1 −0`, `server/data/levels.json` `+72 −9`, `server/index.js` `+14 −4`
+    - 📊 **`+159 −41`** · 5 files
+- ✨ [`6c833737`](https://github.com/vicharanashala/tenali/commit/6c8337378ff354731cbcf373bf262632d4040879) — **Tanishkaasharmaa** — configure 12 thematic level names for Number Kingdom shown on level map page
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+3 −3`, `server/data/levels.json` `+30 −93`
+    - 📊 **`+33 −96`** · 2 files
+- ✨ [`272ce558`](https://github.com/vicharanashala/tenali/commit/272ce558905d02bdc411a4aad53f0e9a5acbc9b4) — **Tanishkaasharmaa** — change Enter the Kingdoms to Start Game, remove emojis and symbol arrows from all buttons
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+17 −17`
+    - 📊 **`+17 −17`** · 1 file
+- ✨ [`29e2dd91`](https://github.com/vicharanashala/tenali/commit/29e2dd91ba820469318132782331838205fcfdc5) — **Tanishkaasharmaa** — Option 1 candidate selection star evaluation, hover tooltip for 3-star tip, replace Map button with Retry
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+63 −29`, `server/index.js` `+23 −4`
+    - 📊 **`+86 −33`** · 2 files
+- ✨ [`23137a81`](https://github.com/vicharanashala/tenali/commit/23137a81138a373b30fa027d54508dacb87d6017) — **Tanishkaasharmaa** — evaluate stars by hint usage & pure deduction, remove speed bonus
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+0 −9`, `server/index.js` `+5 −9`
+    - 📊 **`+5 −18`** · 2 files
+- ✨ [`e2ab9c4c`](https://github.com/vicharanashala/tenali/commit/e2ab9c4c86a86b5bf0ba81345d33f01a2e7da418) — **Tanishkaasharmaa** — implement 15-level question bank curriculum, quiz UI styling, and smooth level transitions
+    - 📁 **4 files:** `client/src/MindReaderApp2.jsx` `+84 −61`, `server/data/concepts.json` `+1366 −124`, `server/data/levels.json` `+238 −18`, `server/test_guess_mind.js` `+13 −17`
+    - 📊 **`+1701 −220`** · 4 files
+- 📌 [`e403d289`](https://github.com/vicharanashala/tenali/commit/e403d289a14490a1b96b619865b140ebfe79ebb1) — **Tanishkaasharmaa** — Refine quiz page UI header, layout, and clue box styling
+    - 📁 **5 files:** `client/src/MindReaderApp2.jsx` `+285 −236`, `implementationplan2.md` `+267 −339`, `server/data/concepts.json` `+116 −0`, `server/data/levels.json` `+9 −1`, `server/index.js` `+25 −15`
+    - 📊 **`+702 −591`** · 5 files
 - 📌 [`7e9db00c`](https://github.com/vicharanashala/tenali/commit/7e9db00c273cc4953658fb7f1fe50dc1e8e3358c) — **muditagrawal2007** — 🔀 PR [#103](https://github.com/vicharanashala/tenali/pull/103) from `muditagrawal2007` — merge-newf-into-main
 - 🔀 [`8b505d31`](https://github.com/vicharanashala/tenali/commit/8b505d312e42bb2c84b3959cb1eccfc85f42a3aa) — **muditagrawal2007** — sync new_f into main — LA quiz length-bias fix + conflict resolution
 - 🐛 [`ac8d48b0`](https://github.com/vicharanashala/tenali/commit/ac8d48b0f619a4074106f7cb0d4d44c6f410408b) — **muditagrawal2007** — strip trailing noise from MCQ options + use middle-dot padding
@@ -742,6 +900,72 @@
 - 🐛 [`f2bab068`](https://github.com/vicharanashala/tenali/commit/f2bab068e77b33405cefed6549f25bd85515ef20) — **muditagrawal2007** — resolve React hook violations in 3 components
     - 📁 **3 files:** `client/src/CoordGeomDiscoveryApp.jsx` `+36 −27`, `client/src/GeometryApp.jsx` `+96 −24`, `client/src/VisualMathLabRedux.jsx` `+19 −16`
     - 📊 **`+151 −67`** · 3 files
+- 📌 [`57f19024`](https://github.com/vicharanashala/tenali/commit/57f19024f1e414eafd632d248468ad19e738fa56) — **Tanishkaasharmaa** — Enhance result page with sequential sound XP breakdown, confetti fanfare audio, and side-by-side buttons
+    - 📁 **3 files:** `client/src/MindReader2.css` `+94 −0`, `client/src/MindReaderApp2.jsx` `+210 −96`, `feature2.md` `+24 −12`
+    - 📊 **`+328 −108`** · 3 files
+- 📌 [`60212ee4`](https://github.com/vicharanashala/tenali/commit/60212ee46a036443666ffbac75fd162856a886cc) — **Tanishkaasharmaa** — Align level nodes on SVG line path with absolute side labels and star ratings
+    - 📁 **2 files:** `client/src/MindReader2.css` `+13 −24`, `client/src/MindReaderApp2.jsx` `+34 −17`
+    - 📊 **`+47 −41`** · 2 files
+- 📌 [`fcd748fe`](https://github.com/vicharanashala/tenali/commit/fcd748fec5202bc495b0be29c0775a5033f196f4) — **Tanishkaasharmaa** — Add interactive hover tooltip badges (Level 1, Level 2, etc.) to all level map nodes
+    - 📁 **3 files:** `client/src/MindReader2.css` `+28 −0`, `client/src/MindReaderApp2.jsx` `+6 −0`, `feature2.md` `+1 −1`
+    - 📊 **`+35 −1`** · 3 files
+
+#### 📅 2026-07-26  <sub>(12 commits)</sub>
+
+- 📌 [`b9577c01`](https://github.com/vicharanashala/tenali/commit/b9577c01359da1c8d526ba78a8e25ff0037db92c) — **Tanishkaasharmaa** — Remove Highest Level Completed header on levels page and auto-scroll map to active level node
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+33 −11`, `feature2.md` `+12 −3`
+    - 📊 **`+45 −14`** · 2 files
+- 📌 [`8e6f8a7f`](https://github.com/vicharanashala/tenali/commit/8e6f8a7f2a4ab7a7ed221435b91a112ddc4fbc5e) — **Tanishkaasharmaa** — Extend container background height to fit content naturally and eliminate scrollbar
+    - 📁 **1 file:** `client/src/MindReader2.css` `+5 −3`
+    - 📊 **`+5 −3`** · 1 file
+- 📌 [`8c83697f`](https://github.com/vicharanashala/tenali/commit/8c83697fd6cd56dc62dbc95322a29eb4a5cd0b74) — **Tanishkaasharmaa** — Enforce identical dimensions and flex alignment for all Kingdom title text boxes and card containers
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+14 −8`, `feature2.md` `+1 −1`
+    - 📊 **`+15 −9`** · 2 files
+- 📌 [`d432c67b`](https://github.com/vicharanashala/tenali/commit/d432c67b59903f5529fb050dceb3c98ff71274a6) — **Tanishkaasharmaa** — Fix level progress bug: make all kingdoms 100% independent with distinct level boundaries
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+78 −75`, `feature2.md` `+1 −1`
+    - 📊 **`+79 −76`** · 2 files
+- 📌 [`833561cb`](https://github.com/vicharanashala/tenali/commit/833561cbacf5042ce58228158d1347a71da008c8) — **Tanishkaasharmaa** — Production-level relative level and stars computation per kingdom
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+38 −8`, `feature2.md` `+4 −4`
+    - 📊 **`+42 −12`** · 2 files
+- 📌 [`6bdb66ff`](https://github.com/vicharanashala/tenali/commit/6bdb66ffa33a95e886eba91d78eb2c08a92fdf51) — **Tanishkaasharmaa** — Update Kingdom cards to show Level X and stars on right for started kingdoms, and Yet to start for unstarted kingdoms
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+34 −18`, `feature2.md` `+8 −6`
+    - 📊 **`+42 −24`** · 2 files
+- 📌 [`80b2f3af`](https://github.com/vicharanashala/tenali/commit/80b2f3af15ccdbd9d30a235dc8960c8e5df55bf1) — **Tanishkaasharmaa** — Minimalize text layout in Kingdom cards on Worlds selection page
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+20 −33`, `feature2.md` `+7 −8`
+    - 📊 **`+27 −41`** · 2 files
+- 📌 [`bd28daeb`](https://github.com/vicharanashala/tenali/commit/bd28daeb8705210bb739ac8cfe2a916af093461a) — **Tanishkaasharmaa** — Position Home button on left, XP on right, and remove separate HUD box on home page
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+44 −22`, `feature2.md` `+3 −2`
+    - 📊 **`+47 −24`** · 2 files
+- 📌 [`cb703dc7`](https://github.com/vicharanashala/tenali/commit/cb703dc77c39f7e9656ebc6b32737a5cf9f9f195) — **Tanishkaasharmaa** — Restore previous clean minimal Home Page UI as requested by user
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+25 −130`, `feature2.md` `+0 −21`
+    - 📊 **`+25 −151`** · 2 files
+- 📌 [`0c10c906`](https://github.com/vicharanashala/tenali/commit/0c10c906ec7001c956f62040c7aea5f7c7039bd1) — **Tanishkaasharmaa** — Refine Read Tenali Mind home page into premium glassmorphic hero card with feature grid and dual CTAs
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+130 −25`, `feature2.md` `+21 −0`
+    - 📊 **`+151 −25`** · 2 files
+- 📌 [`bfa282c2`](https://github.com/vicharanashala/tenali/commit/bfa282c2f7515f3a2d41dd4d07c0d47a789d230d) — **Tanishkaasharmaa** — Refine and minimalize UI layout across all pages of Read Tenali Mind game
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+31 −3`
+    - 📊 **`+31 −3`** · 1 file
+- 📌 [`8ede402e`](https://github.com/vicharanashala/tenali/commit/8ede402eee3d585c23d1fdc2ef3a647f01de2653) — **Tanishkaasharmaa** — Update Mind Reader HUD headers, Kingdom highest level display, and feature2.md
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+33 −3`, `feature2.md` `+29 −17`
+    - 📊 **`+62 −20`** · 2 files
+
+#### 📅 2026-07-25  <sub>(5 commits)</sub>
+
+- ✨ [`2073637e`](https://github.com/vicharanashala/tenali/commit/2073637e200144bc1814d58eb181e1de4a9d7d31) — **Tanishkaasharmaa** — Force unlock all kingdoms and show them as a grid of cards matching layout specs
+    - 📁 **3 files:** `client/src/MindReader2.css` `+7 −0`, `client/src/MindReaderApp2.jsx` `+70 −75`, `server/index.js` `+1 −1`
+    - 📊 **`+78 −76`** · 3 files
+- ✨ [`2863fcb6`](https://github.com/vicharanashala/tenali/commit/2863fcb60eefc367772d8bed588b1ac081cbdce7) — **Tanishkaasharmaa** — Set Classic Glider sound permanently and clean up preview panel
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+1 −12`, `client/src/audioContext.js` `+29 −2`
+    - 📊 **`+30 −14`** · 2 files
+- ✨ [`0634ad7a`](https://github.com/vicharanashala/tenali/commit/0634ad7acef61d7fdefaff92aca1f5308bdc1c57) — **Tanishkaasharmaa** — Add Whoosh 2 as active sound and create test preview panel on setup page
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+13 −1`, `client/src/audioContext.js` `+47 −8`
+    - 📊 **`+60 −9`** · 2 files
+- ✨ [`de7c688c`](https://github.com/vicharanashala/tenali/commit/de7c688c6fcecd1a5086962fe23b82d735b8477d) — **Tanishkaasharmaa** — Add synthetic flying swoop sound effect for level transition
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+2 −0`, `client/src/audioContext.js` `+11 −0`
+    - 📊 **`+13 −0`** · 2 files
+- ✨ [`6d9d9854`](https://github.com/vicharanashala/tenali/commit/6d9d98543ea19c3e67b8bc8128c5a3a6184d25f6) — **Tanishkaasharmaa** — Add flying paper plane animation on level transition on map page
+    - 📁 **3 files:** `client/src/App.jsx` `+2 −85`, `client/src/MindReader2.css` `+21 −0`, `client/src/MindReaderApp2.jsx` `+82 −8`
+    - 📊 **`+105 −93`** · 3 files
 
 #### 📅 2026-07-24  <sub>(5 commits)</sub>
 
@@ -755,7 +979,7 @@
 - 🔀 [`20573832`](https://github.com/vicharanashala/tenali/commit/205738326afa2327e1bb5eb1c437d8d4813a694a) — **muditagrawal2007** — resolve conflicts from origin/main sync
 - ✨ [`82f3d624`](https://github.com/vicharanashala/tenali/commit/82f3d624340373b24f82eba9e89ff9f8593eded0) — **muditagrawal2007** — sync origin/main, secure proctor endpoints with admin-only access, add BattleApp features
 
-#### 📅 2026-07-23  <sub>(20 commits)</sub>
+#### 📅 2026-07-23  <sub>(25 commits)</sub>
 
 - 📌 [`7b1a0dfe`](https://github.com/vicharanashala/tenali/commit/7b1a0dfe639b5a0074ec569963ce2aef33bf293a) — **jgupta05072003-code** — 🔀 PR [#96](https://github.com/vicharanashala/tenali/pull/96) from `vicharanashala` — fix/duplicate-jwt-secret-merge
 - 🐛 [`83bd400f`](https://github.com/vicharanashala/tenali/commit/83bd400fa52fc57cded76a3734e38c69f694b68b) — **Jinal Gupta** — remove duplicate JWT_SECRET declarations that break the build
@@ -781,6 +1005,9 @@
 - 📌 [`2fe75688`](https://github.com/vicharanashala/tenali/commit/2fe75688ec04f13958bde5ec62e43692b8695484) — **muditagrawal2007** — Fix CoordGeomDiscoveryApp component lint issues
     - 📁 **5 files:** `check_errors.sh` `+12 −0`, `client/src/App.jsx` `+4 −1`, `client/src/VisualMathLabRedux.jsx` `+7 −3`, `server/auth.js` `+9 −1`, `server/index.js` `+53 −4`
     - 📊 **`+85 −9`** · 5 files
+- ✨ [`ff9cd6da`](https://github.com/vicharanashala/tenali/commit/ff9cd6dad7f864a16acdfcd2accabd84bba86891) — **Tanishkaasharmaa** — serpentine level track, seeded random concept selection and sequential unlocking fix
+    - 📁 **5 files:** `client/src/MindReader2.css` `+6 −0`, `client/src/MindReaderApp2.jsx` `+621 −70`, `server/auth.js` `+1 −0`, `server/index.js` `+148 −42`, `server/test_guess_mind.js` `+12 −9`
+    - 📊 **`+788 −121`** · 5 files
 - 📌 [`6054ee44`](https://github.com/vicharanashala/tenali/commit/6054ee4445ab33e6086fd0d05af0d5644473fc4d) — **jgupta05072003-code** — 🔀 PR [#83](https://github.com/vicharanashala/tenali/pull/83) from `vicharanashala` — fix/summership-repo-cleanup
 - 🔧 [`b562d857`](https://github.com/vicharanashala/tenali/commit/b562d857d13bfc1a129d0577de1da461522d249e) — **Jinal Gupta** — remove committed debug/scratch junk files
     - 📁 **18 files:** `.gitignore` `+4 −0`, `pr_body.md` `+0 −22`, `scratch/generate_puzzles.js` `+0 −228`, `scratch/scratch/find_addition.js` `+0 −8`, `scratch/scratch/find_button_styles.js` `+0 −8`, `scratch/scratch/find_missing_revealed.js` `+0 −22`, `scratch/scratch/find_revealed_in_addition.js` `+0 −9`, `scratch/scratch/find_submitans.js` `+0 −9` *(+10 more in [`b562d857`](https://github.com/vicharanashala/tenali/commit/b562d857d13bfc1a129d0577de1da461522d249e))*
@@ -791,16 +1018,29 @@
     - 📁 **2 files:** `CLAUDE.md` `+1 −1`, `server/auth.js` `+22 −7`
     - 📊 **`+23 −8`** · 2 files
 - 📌 [`be1a974a`](https://github.com/vicharanashala/tenali/commit/be1a974ad72e2fc03c0c74449484cfd0f70ae444) — **muditagrawal2007** — Merge branch 'vicharanashala:main' into new_f
+- 🧪 [`03eaa363`](https://github.com/vicharanashala/tenali/commit/03eaa36383e0e0a14fd353c02510028c2328f11b) — **Tanishkaasharmaa** — update test_adventure.js and test_guess_mind.js assertions to align with updated worlds, levels, and concepts metadata
+    - 📁 **2 files:** `server/test_adventure.js` `+9 −9`, `server/test_guess_mind.js` `+4 −4`
+    - 📊 **`+13 −13`** · 2 files
+- 💄 [`fd85c528`](https://github.com/vicharanashala/tenali/commit/fd85c52863eb41f691ce1084965a75f20bd48711) — **Tanishkaasharmaa** — restore scratchpad notes and guest mode progress mapping
+    - 📁 **2 files:** `client/src/MindReader2.css` `+69 −18`, `client/src/MindReaderApp2.jsx` `+74 −248`
+    - 📊 **`+143 −266`** · 2 files
+- 📌 [`afabaca2`](https://github.com/vicharanashala/tenali/commit/afabaca2cc439dffa01e93f04f629bc69cb9eb63) — **Tanishkaasharmaa** — Merge branch 'kratika' into tanishka, resolving conflicts in worlds.json, levels.json, concepts.json, and index.js
 - 📌 [`3ef48c55`](https://github.com/vicharanashala/tenali/commit/3ef48c55e929e3d5d7cde41cebe94387e881d491) — **jgupta05072003-code** — 🔀 PR [#80](https://github.com/vicharanashala/tenali/pull/80) from `vicharanashala` — fix/summership-base-aware-routing
 - 🐛 [`bf8c3477`](https://github.com/vicharanashala/tenali/commit/bf8c347791a1cf6ddb312240bbd6649ff607928d) — **Jinal Gupta** — base-path-aware routing so /summership routes work
     - 📁 **1 file:** `client/src/App.jsx` `+83 −69`
     - 📊 **`+83 −69`** · 1 file
+- 📌 [`a2c4c1e2`](https://github.com/vicharanashala/tenali/commit/a2c4c1e2cb1e4d4481381ee7baff418bd31d488f) — **Kratikavarshney-16** — Add level selection UI
+    - 📁 **11 files:** `client/src/MindReaderApp2.jsx` `+251 −132`, `client/src/adventure/components/GameplayView.jsx` `+4 −1`, `client/src/adventure/components/LevelPathView.jsx` `+1 −1`, `client/src/adventure/context/AdventureContext.jsx` `+6 −0`, `client/src/adventure/context/adventureReducer.js` `+20 −15`, `server/adventure/adventureProgressService.js` `+10 −9`, `server/adventure/adventureService.js` `+3 −8`, `server/data/concepts.json` `+280 −0` *(+3 more in [`a2c4c1e2`](https://github.com/vicharanashala/tenali/commit/a2c4c1e2cb1e4d4481381ee7baff418bd31d488f))*
+    - 📊 **`+651 −190`** · 11 files
 
-#### 📅 2026-07-22  <sub>(40 commits)</sub>
+#### 📅 2026-07-22  <sub>(44 commits)</sub>
 
 - 📌 [`d248b044`](https://github.com/vicharanashala/tenali/commit/d248b04444275b5c94c499d9ce97148ebe126b12) — **muditagrawal2007** — auto-fix lint issues
     - 📁 **1 file:** `client/src/vachana/exercises/NoiseFilter.jsx` `+38 −69`
     - 📊 **`+38 −69`** · 1 file
+- 📌 [`092c378f`](https://github.com/vicharanashala/tenali/commit/092c378f053bda597d7025fd417d4c08b8827050) — **Kratikavarshney-16** — Sync
+    - 📁 **22 files:** `client/package-lock.json` `+48 −13`, `client/src/App.jsx` `+11 −0`, `client/src/adventure/adapters/LocalStorageAdapter.js` `+87 −14`, `client/src/adventure/adventure.css` `+71 −0`, `client/src/adventure/components/GameplayView.jsx` `+78 −20`, `client/src/adventure/components/GuessModal.jsx` `+74 −48`, `client/src/adventure/components/HomeView.jsx` `+12 −12`, `client/src/adventure/components/LevelPathView.jsx` `+50 −23` *(+14 more in [`092c378f`](https://github.com/vicharanashala/tenali/commit/092c378f053bda597d7025fd417d4c08b8827050))*
+    - 📊 **`+3250 −596`** · 22 files
 - 📌 [`67092bed`](https://github.com/vicharanashala/tenali/commit/67092bed38e270f5cb4ea6387bf981476a3b02b0) — **muditagrawal2007** — fix lint issues
     - 📁 **1 file:** `client/src/bkt.js` `+1 −0`
     - 📊 **`+1 −0`** · 1 file
@@ -912,8 +1152,17 @@
     - 📁 **19 files:** `client/package-lock.json` `+86 −0`, `client/package.json` `+1 −0`, `client/public/models/face_expression_model-weights_manifest.json` `+1 −0`, `client/src/App.jsx` `+202 −20`, `client/src/BattleApp.jsx` `+845 −0`, `client/src/LocalCompilerApp.jsx` `+711 −0`, `client/src/PlaygroundApp.jsx` `+38 −1`, `client/src/SudokuApp.jsx` `+256 −0` *(+11 more in [`db24b60d`](https://github.com/vicharanashala/tenali/commit/db24b60d4f7fce80226e71f0b63b64de80702fd7))*
     - 📊 **`+4397 −34`** · 19 files
 - 📌 [`8aca1f76`](https://github.com/vicharanashala/tenali/commit/8aca1f7688d12917e62ba58db6e061f56d86eb5a) — **muditagrawal2007** — Merge branch 'vicharanashala:main' into new_f
+- 💄 [`b85dd52a`](https://github.com/vicharanashala/tenali/commit/b85dd52a748217a92bf46ed32e8d8bdb7acebfa5) — **Tanishkaasharmaa** — implement responsive levels selection grid UI matching design reference
+    - 📁 **3 files:** `client/src/MindReader2.css` `+96 −0`, `client/src/MindReaderApp2.jsx` `+41 −94`, `server/index.js` `+11 −1`
+    - 📊 **`+148 −95`** · 3 files
+- ✨ [`70a92bcc`](https://github.com/vicharanashala/tenali/commit/70a92bccb69079335dc42c22ad2b5c50146ca1a6) — **Tanishkaasharmaa** — design 10-level winding path levels select map and update milestones roadmap
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+38 −23`, `implementationplan2.md` `+8 −8`
+    - 📊 **`+46 −31`** · 2 files
+- ✨ [`f022cb3a`](https://github.com/vicharanashala/tenali/commit/f022cb3a2020ae1e2399431b8c38509579c71005) — **Tanishkaasharmaa** — expand kingdoms to 7, levels to 66, update concepts database, and set default starting world
+    - 📁 **8 files:** `client/src/App.jsx` `+0 −10`, `client/src/MindReaderApp2.jsx` `+2 −2`, `implementationplan2.md` `+112 −10`, `server/data/concepts.json` `+1974 −104`, `server/data/levels.json` `+72 −29`, `server/data/worlds.json` `+31 −17`, `server/index.js` `+2 −2`, `server/test_guess_mind.js` `+9 −9`
+    - 📊 **`+2202 −183`** · 8 files
 
-#### 📅 2026-07-21  <sub>(15 commits)</sub>
+#### 📅 2026-07-21  <sub>(21 commits)</sub>
 
 - 📝 [`27e480e5`](https://github.com/vicharanashala/tenali/commit/27e480e573bbf5f67ad07ec65df17cbdae94f03c) — **priyanshu7725** — changelog v0.1.1 - Guided Solver copy reframing
     - 📁 **1 file:** `client/src/monsters/CHANGELOG.md` `+25 −0`
@@ -930,6 +1179,20 @@
 - 🐛 [`60dd8d81`](https://github.com/vicharanashala/tenali/commit/60dd8d81808a65a2243298782aad86a9c9fdf013) — **priyanshu7725** — import getCureHistory in CureFlow and fix CSS stroke-width in MonsterAvatar
     - 📁 **2 files:** `client/src/monsters/CureFlow.jsx` `+48 −3`, `client/src/monsters/MonsterAvatar.jsx` `+1 −1`
     - 📊 **`+49 −4`** · 2 files
+- 📌 [`0e5efee4`](https://github.com/vicharanashala/tenali/commit/0e5efee46ca18507c2b20eaa9088ee315670cbc3) — **Kratikavarshney-16** — Adventure Game progress before switching to Kiro
+    - 📁 **5 files:** `server/adventure/adventureConfig.js` `+1 −1`, `server/adventure/adventureKB.js` `+20 −9`, `server/data/concepts.json` `+721 −296`, `server/data/levels.json` `+54 −29`, `server/data/worlds.json` `+34 −14`
+    - 📊 **`+830 −349`** · 5 files
+- 📌 [`274387c8`](https://github.com/vicharanashala/tenali/commit/274387c8ef39834bf596db4f2ede2ee53a8e5058) — **Kratikavarshney-16** — Merge origin/main into kratika using main's version for conflicts
+- 📌 [`245e415e`](https://github.com/vicharanashala/tenali/commit/245e415eb765452f75b4c9bd4e17cc502b381197) — **Kratikavarshney-16** — Save current work before syncing with main
+    - 📁 **28 files:** `client/src/adventure/AdventureApp.jsx` `+79 −0`, `client/src/adventure/adapters/LocalStorageAdapter.js` `+53 −0`, `client/src/adventure/adventure.css` `+1121 −0`, `client/src/adventure/components/GameplayView.jsx` `+69 −0`, `client/src/adventure/components/GuessModal.jsx` `+93 −0`, `client/src/adventure/components/HomeView.jsx` `+55 −0`, `client/src/adventure/components/KingdomView.jsx` `+71 −0`, `client/src/adventure/components/LevelPathView.jsx` `+88 −0` *(+20 more in [`245e415e`](https://github.com/vicharanashala/tenali/commit/245e415eb765452f75b4c9bd4e17cc502b381197))*
+    - 📊 **`+3700 −0`** · 28 files
+- 📌 [`22e76f4f`](https://github.com/vicharanashala/tenali/commit/22e76f4f6e65b6111e019ab2c9b2cf0811d93544) — **Tanishkaasharmaa** — Fix build errors, CSS comments, and duplicate imports/brackets in App.jsx and server
+    - 📁 **5 files:** `client/package-lock.json` `+504 −0`, `client/src/App.css` `+3 −6`, `client/src/App.jsx` `+0 −1`, `client/src/MindReader2.css` `+1 −0`, `server/index.js` `+0 −1`
+    - 📊 **`+508 −8`** · 5 files
+- 📌 [`194bc524`](https://github.com/vicharanashala/tenali/commit/194bc52429c47ca7b0e7a0ab900918a6395a8d71) — **Tanishkaasharmaa** — Fix duplicate proxy keys in client/vite.config.js
+    - 📁 **1 file:** `client/vite.config.js` `+0 −7`
+    - 📊 **`+0 −7`** · 1 file
+- 📌 [`6120d605`](https://github.com/vicharanashala/tenali/commit/6120d60540b4cdf71616bb81fe14b7c9f9474068) — **Tanishkaasharmaa** — Merge remote-tracking branch 'upstream/main' into tanishka-sync-test
 - 📌 [`14cfd2ad`](https://github.com/vicharanashala/tenali/commit/14cfd2ad3c1c2ea140200ebd86b06dbaa5ada572) — **jgupta05072003-code** — 🔀 PR [#79](https://github.com/vicharanashala/tenali/pull/79) from `vicharanashala` — fix/chartjs-dependency
 - 🐛 [`5885fe94`](https://github.com/vicharanashala/tenali/commit/5885fe94becccb54be99e04c0e243555ee0ba4b2) — **Jinal Gupta** — add missing chart.js peer dependency for user progress tracking
     - 📁 **2 files:** `client/package-lock.json` `+6 −531`, `client/package.json` `+1 −0`
@@ -949,7 +1212,7 @@
     - 📁 **2 files:** `client/package-lock.json` `+95 −0`, `client/package.json` `+1 −0`
     - 📊 **`+96 −0`** · 2 files
 
-#### 📅 2026-07-20  <sub>(34 commits)</sub>
+#### 📅 2026-07-20  <sub>(50 commits)</sub>
 
 - ✨ [`cd026f37`](https://github.com/vicharanashala/tenali/commit/cd026f37d4b4af3185f226595d6de2004edea1df) — **S Hamsalekha** — Add support for tracking  user progress .
     - 📁 **3 files:** `client/package-lock.json` `+65 −23`, `client/package.json` `+1 −0`, `client/src/App.jsx` `+368 −1`
@@ -967,6 +1230,9 @@
     - 📁 **1 file:** `client/src/App.css` `+1 −2`
     - 📊 **`+1 −2`** · 1 file
 - 📌 [`f60d4349`](https://github.com/vicharanashala/tenali/commit/f60d434987f77c3ecb4416d0fa6fd97a35a87870) — **harshyy07** — Merge origin/main into feat-hints: resolve CSS, App.jsx, main.jsx conflicts cleanly
+- 📌 [`efd7a408`](https://github.com/vicharanashala/tenali/commit/efd7a408a032ca61d57b3db099a6101ff28a67fc) — **Tanishkaasharmaa** — Milestone 3 (UI Polish): Set gameplay container background to transparent to inherit the parent card's light brown background color seamlessly
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+1 −1`
+    - 📊 **`+1 −1`** · 1 file
 - 📌 [`bed204df`](https://github.com/vicharanashala/tenali/commit/bed204dffd1d86125dc3895dfbcb6385054070a5) — **24F3005086** — Resolve merge conflicts
 - 📌 [`4ee9e0b4`](https://github.com/vicharanashala/tenali/commit/4ee9e0b4e8ae8c81476e704d08367d9225e96f76) — **24F3005086** — Merge remote-tracking branch 'origin/main' into feature/i18n
 - 📌 [`fb24b992`](https://github.com/vicharanashala/tenali/commit/fb24b99293f66911aa9f9aaabeb43d04b6f2387c) — **jgupta05072003-code** — 🔀 PR [#49](https://github.com/vicharanashala/tenali/pull/49) from `24F3005086` — feature/bkt-prereqs
@@ -981,11 +1247,56 @@
 - 📌 [`74e57a42`](https://github.com/vicharanashala/tenali/commit/74e57a4263b6406c6cf6828c88e386f907da2cd6) — **SaniyaJos** — fixed radius vs diameter challenge
     - 📁 **1 file:** `client/src/ContrastChallengeApp.jsx` `+2 −2`
     - 📊 **`+2 −2`** · 1 file
+- 📌 [`96a08480`](https://github.com/vicharanashala/tenali/commit/96a08480f4cb264b0c0a7abba1b3dd1a3deffeba) — **Tanishkaasharmaa** — Milestone 3 (UI Polish): Remove hardcoded dark container class overrides. Let page layout inherit the active light or dark theme background dynamically
+    - 📁 **2 files:** `client/src/MindReader2.css` `+21 −27`, `client/src/MindReaderApp2.jsx` `+1 −1`
+    - 📊 **`+22 −28`** · 2 files
+- 📌 [`8ae16944`](https://github.com/vicharanashala/tenali/commit/8ae169445d6a5abfc6f609143be07c889597c572) — **Tanishkaasharmaa** — Milestone 3 (UI Polish): Replace all raw styling color hex and font strings with Tenali project CSS variables
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+60 −60`
+    - 📊 **`+60 −60`** · 1 file
+- 📌 [`aeed0bb5`](https://github.com/vicharanashala/tenali/commit/aeed0bb55fd3b9fb6782b16af4cc0e01100fce88) — **Tanishkaasharmaa** — Milestone 3 (UI Polish): Clean and streamline the GameOver / Correct Guess results UI. Remove avatar and speech bubble redundancy, organize outcomes as elegant serif layouts, and style rewards as outline pill tags
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+73 −44`
+    - 📊 **`+73 −44`** · 1 file
+- 📌 [`da57c3ba`](https://github.com/vicharanashala/tenali/commit/da57c3baaef4704ac4b206cf906525a30d65a5eb) — **Tanishkaasharmaa** — Milestone 3 (UI Polish): Remove prompt tip text, align top bar content, adjust input border colors, and narrow snake path coordinates for cleaner layout
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+23 −26`
+    - 📊 **`+23 −26`** · 1 file
+- 📌 [`0a65f1a7`](https://github.com/vicharanashala/tenali/commit/0a65f1a7959a42ce4bb338713850161ad96e7489) — **Tanishkaasharmaa** — Milestone 3 (UI Map): Spread levels across relative track coordinate box and render winding SVG dotted connector path
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+80 −26`
+    - 📊 **`+80 −26`** · 1 file
+- 📌 [`01673ff0`](https://github.com/vicharanashala/tenali/commit/01673ff033f80a8af045bf3282c8635b4d066be9) — **Tanishkaasharmaa** — Milestone 3 (Map): Convert level track to a scroll-free snake path starting at the top (Level 1) and ending at the bottom (Level 5)
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+29 −25`
+    - 📊 **`+29 −25`** · 1 file
+- 📌 [`08022022`](https://github.com/vicharanashala/tenali/commit/08022022b62421d5b832f1e281ce6e32d6089804) — **Tanishkaasharmaa** — Milestone 2 (UI Polish): Implement robust inline styles to ensure buttons use transparent outline style, inputs have dark charcoal backgrounds, and titles render in serif font
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+90 −30`
+    - 📊 **`+90 −30`** · 1 file
+- 📌 [`62f9f93c`](https://github.com/vicharanashala/tenali/commit/62f9f93c38ce94cee29c2e1721a9da1896378ea2) — **Tanishkaasharmaa** — Milestone 2 (Word Creator Theme): Restructure gameplay board with clean top navigation, serif typography headers, large centered clue text, and footer nav clue stepping
+    - 📁 **2 files:** `client/src/MindReader2.css` `+105 −0`, `client/src/MindReaderApp2.jsx` `+77 −58`
+    - 📊 **`+182 −58`** · 2 files
+- 📌 [`1cfb78b2`](https://github.com/vicharanashala/tenali/commit/1cfb78b22f8585179434fe13123c29d1614b60d5) — **Tanishkaasharmaa** — Milestone 2 (UI Cleanup): Hide XP/Level HUD during gameplay, add Hint and Quit buttons to a clean top-bar box, and reduce action bar to Make Guess and Next Clue
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+26 −12`
+    - 📊 **`+26 −12`** · 1 file
+- 📌 [`3a97dab5`](https://github.com/vicharanashala/tenali/commit/3a97dab5af6e7f9613ad8e89ea622fd53a5f6296) — **Tanishkaasharmaa** — Milestone 2 (UI): Remove Tenali Raman avatar from gameplay playing screen to save vertical height
+    - 📁 **2 files:** `client/src/MindReader2.css` `+81 −0`, `client/src/MindReaderApp2.jsx` `+2 −6`
+    - 📊 **`+83 −6`** · 2 files
 - ✨ [`7669413d`](https://github.com/vicharanashala/tenali/commit/7669413df6aa796ac1bd894bc0cb79834b2257c4) — **priyanshu7725** — add MonsterDetail component and supporting UI for monitoring and curing monster breaches
     - 📁 **4 files:** `client/src/monsters/CureFlow.jsx` `+1 −1`, `client/src/monsters/HallPanel.jsx` `+0 −7`, `client/src/monsters/MonsterDetail.jsx` `+6 −35`, `client/src/monsters/__tests__/hallPanel.test.cjs` `+3 −7`
     - 📊 **`+10 −50`** · 4 files
+- 📌 [`1b145b94`](https://github.com/vicharanashala/tenali/commit/1b145b94a52dc5d20720e0fb1e815ea9369da746) — **Tanishkaasharmaa** — Milestone 2 (Lobby & UI Optimization): Reduce intro screen text, convert thought fields to a 2x2 grid, and restrict layout dimensions to fit within single viewport
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+114 −134`
+    - 📊 **`+114 −134`** · 1 file
+- 📌 [`308d6e7d`](https://github.com/vicharanashala/tenali/commit/308d6e7d74fa2df9e4c2dca5d4ccce7000e52462) — **Tanishkaasharmaa** — Milestone 2: Refactor gameplay board to place clues inside Tenali mind cloud, add 4 thought inputs, and enable free-text guess input
+    - 📁 **3 files:** `client/src/MindReaderApp2.jsx` `+56 −109`, `feature2.md` `+30 −18`, `implementationplan2.md` `+14 −15`
+    - 📊 **`+100 −142`** · 3 files
 - 📌 [`aacee659`](https://github.com/vicharanashala/tenali/commit/aacee659eb5c2095cc77432b455c7819fb7fa9c5) — **jgupta05072003-code** — 🔀 PR [#46](https://github.com/vicharanashala/tenali/pull/46) from `patnaikArpita` — main
 - 📌 [`aa167530`](https://github.com/vicharanashala/tenali/commit/aa1675307824ff393b72fd337a452de99c330bfc) — **jgupta05072003-code** — 🔀 PR [#65](https://github.com/vicharanashala/tenali/pull/65) from `vicharanashala` — fix/module-theming
+- 📌 [`426acec4`](https://github.com/vicharanashala/tenali/commit/426acec4cab5d40ae21ba4ffa6b68cd35275567a) — **Tanishkaasharmaa** — Milestone 2 (Frontend UI): Implement GuessMindApp sequential screens and stylesheet classes
+    - 📁 **2 files:** `client/src/MindReader2.css` `+366 −0`, `client/src/MindReaderApp2.jsx` `+515 −938`
+    - 📊 **`+881 −938`** · 2 files
+- 📌 [`eb0d4459`](https://github.com/vicharanashala/tenali/commit/eb0d4459fffb6840d3290a3116a6bc74c0048a24) — **Tanishkaasharmaa** — Milestone 2 (Backend): Implement guess_mind routes and integration test script
+    - 📁 **2 files:** `server/index.js` `+311 −0`, `server/test_guess_mind.js` `+119 −0`
+    - 📊 **`+430 −0`** · 2 files
+- 📌 [`252dc440`](https://github.com/vicharanashala/tenali/commit/252dc440db2de19834f66022a9844dd679ce7913) — **Tanishkaasharmaa** — Milestone 1: Core infrastructure, JSON data files, schema extensions, and menu updates
+    - 📁 **22 files:** `client/src/App.jsx` `+46 −86`, `feature2.md` `+194 −227`, `implementationplan2.md` `+256 −171`, `server/auth.js` `+11 −0`, `server/data/concepts.json` `+677 −0`, `server/data/levels.json` `+31 −0`, `server/data/worlds.json` `+37 −0`, `server/index.js` `+43 −0` *(+14 more in [`252dc440`](https://github.com/vicharanashala/tenali/commit/252dc440db2de19834f66022a9844dd679ce7913))*
+    - 📊 **`+4453 −484`** · 22 files
 - 📌 [`96983bba`](https://github.com/vicharanashala/tenali/commit/96983bba9f773af9d398f438d7831b8b911af4aa) — **Anshul Kanodia** — 🔀 PR [#8](https://github.com/vicharanashala/tenali/pull/8) from `patnaikArpita` — Re-added-geometry-game-20July
 - 📌 [`5aa05b48`](https://github.com/vicharanashala/tenali/commit/5aa05b48f3bfe779c6d4fce28c4ed2fbf02932be) — **AnshulKanodia** — added MVP , enchancements , suggestion
     - 📁 **3 files:** `client/src/App.jsx` `+76 −23`, `client/src/GeometryApp.jsx` `+1692 −0`, `client/src/geometry.json` `+422 −0`
@@ -1042,7 +1353,7 @@
     - 📁 **6 files:** `client/src/locales/bn.json` `+218 −0`, `client/src/locales/en.json` `+230 −0`, `client/src/locales/hi.json` `+242 −0`, `client/src/locales/mr.json` `+218 −0`, `client/src/locales/ta.json` `+218 −0`, `client/src/locales/te.json` `+218 −0`
     - 📊 **`+1344 −0`** · 6 files
 
-#### 📅 2026-07-18  <sub>(18 commits)</sub>
+#### 📅 2026-07-18  <sub>(32 commits)</sub>
 
 - ✨ [`f3232157`](https://github.com/vicharanashala/tenali/commit/f3232157dcc43a535c08143d797f2b955c199096) — **SaniyaJos** — enhance contrast challenge with discovery steps and unified flow
     - 📁 **1 file:** `client/src/ContrastChallengeApp.jsx` `+6636 −1156`
@@ -1081,10 +1392,50 @@
 - 🔧 [`50a1790f`](https://github.com/vicharanashala/tenali/commit/50a1790f7d7475f31e342c56f3c4f8ccfeaf71e2) — **priyanshu7725** — updated CHANGELOG.md
     - 📁 **1 file:** `client/src/monsters/CHANGELOG.md` `+0 −18`
     - 📊 **`+0 −18`** · 1 file
+- 💄 [`be8d0b42`](https://github.com/vicharanashala/tenali/commit/be8d0b42001ebdd858d7b778912f8d87b18da140) — **Tanishkaasharmaa** — interchange positions of gameplay panels and point thought dots downwards
+    - 📁 **2 files:** `client/src/MindReader2.css` `+4 −4`, `client/src/MindReaderApp2.jsx` `+41 −40`
+    - 📊 **`+45 −44`** · 2 files
 - 📌 [`4bfa35f5`](https://github.com/vicharanashala/tenali/commit/4bfa35f5cb7b6961afb7b89129444d1bd57f4a83) — **muditagrawal2007** — Merge branch 'vicharanashala:main' into new_f
+- 💄 [`fb1ed65f`](https://github.com/vicharanashala/tenali/commit/fb1ed65fce08cfb1f3ca08bc81076e4276898a9c) — **Tanishkaasharmaa** — shrink Tenali avatar to horizontal layout and allocate more grid space to Mind Cloud and Possible Topics
+    - 📁 **2 files:** `client/src/MindReader2.css` `+3 −3`, `client/src/MindReaderApp2.jsx` `+7 −5`
+    - 📊 **`+10 −8`** · 2 files
+- ✨ [`76b1d269`](https://github.com/vicharanashala/tenali/commit/76b1d269b3a79226e76d1a15f9369971aaecd5fd) — **Tanishkaasharmaa** — separate possible topics box and style conversation history as floating mind cloud
+    - 📁 **2 files:** `client/src/MindReader2.css` `+46 −0`, `client/src/MindReaderApp2.jsx` `+45 −37`
+    - 📊 **`+91 −37`** · 2 files
+- 💄 [`441100b7`](https://github.com/vicharanashala/tenali/commit/441100b7e7b869496570a0032eead3defa9a394d) — **Tanishkaasharmaa** — balance transcript height and compactify possible concepts pool layout
+    - 📁 **2 files:** `client/src/MindReader2.css` `+1 −1`, `client/src/MindReaderApp2.jsx` `+11 −9`
+    - 📊 **`+12 −10`** · 2 files
+- ✨ [`7fa5dacd`](https://github.com/vicharanashala/tenali/commit/7fa5dacdf83128410784a03a7e5eb919f5d933e2) — **Tanishkaasharmaa** — display active topics dictionary board below gameplay conversation history
+    - 📁 **2 files:** `client/src/MindReaderApp2.jsx` `+32 −2`, `server/test_reverse_mindreader.js` `+1 −1`
+    - 📊 **`+33 −3`** · 2 files
+- ✨ [`e0a96439`](https://github.com/vicharanashala/tenali/commit/e0a964398b73711e69e09e0e67d349ce5e1619f2) — **Tanishkaasharmaa** — remove focus mode and daily pack topic selectors
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+0 −20`
+    - 📊 **`+0 −20`** · 1 file
 - ✨ [`b1b2c528`](https://github.com/vicharanashala/tenali/commit/b1b2c528a2ffa55588d075fb2fe2a44addc44852) — **priyanshu7725** — expand Bracketeer to support linear and double-bracket distribution
     - 📁 **3 files:** `client/src/monsters/CureFlow.jsx` `+7 −1`, `client/src/monsters/__tests__/classifier.test.js` `+9 −0`, `client/src/monsters/classifier.js` `+90 −26`
     - 📊 **`+106 −27`** · 3 files
+- ✨ [`9081eabe`](https://github.com/vicharanashala/tenali/commit/9081eabe968c4d6574355d697c9443284f68df3b) — **Tanishkaasharmaa** — redesign setup lobby screen into structured two-column dashboard layout
+    - 📁 **2 files:** `client/src/MindReader2.css` `+79 −0`, `client/src/MindReaderApp2.jsx` `+185 −169`
+    - 📊 **`+264 −169`** · 2 files
+- 🔧 [`41b192f4`](https://github.com/vicharanashala/tenali/commit/41b192f4a5e8af2f4936b441e04040ed27c3ada6) — **Kratikavarshney-16** — update package-lock.json after restoring dependencies
+    - 📁 **1 file:** `client/package-lock.json` `+48 −12`
+    - 📊 **`+48 −12`** · 1 file
+- 🐛 [`6c6d4e41`](https://github.com/vicharanashala/tenali/commit/6c6d4e417f2edfadb7f8521e785ae678c833a937) — **Tanishkaasharmaa** — update filteredConcepts to use CONCEPTS_DATA
+    - 📁 **1 file:** `client/src/MindReaderApp2.jsx` `+1 −1`
+    - 📊 **`+1 −1`** · 1 file
+- ✨ [`c5dbf191`](https://github.com/vicharanashala/tenali/commit/c5dbf1914e6efd4a99d2343b2963e7bca4aefc38) — **Tanishkaasharmaa** — implement interactive curriculum topic selectors and decouple difficulty levels
+    - 📁 **3 files:** `client/src/MindReaderApp2.jsx` `+217 −37`, `server/index.js` `+12 −3`, `server/test_reverse_mindreader.js` `+4 −4`
+    - 📊 **`+233 −44`** · 3 files
+- ✨ [`1ff15cdd`](https://github.com/vicharanashala/tenali/commit/1ff15cddd72372696aa33bb52d18b2c9a50155f6) — **Tanishkaasharmaa** — implement Easy/Medium/Hard difficulties and simplify questions
+    - 📁 **5 files:** `client/src/App.jsx` `+2 −2`, `client/src/MindReaderApp2.jsx` `+77 −29`, `server/index.js` `+43 −6`, `server/mindReaderKB2.js` `+25 −25`, `server/test_reverse_mindreader.js` `+45 −40`
+    - 📊 **`+192 −102`** · 5 files
+- ✨ [`efbf9738`](https://github.com/vicharanashala/tenali/commit/efbf97387ab43c7414e2c6566f598b3874d024a1) — **Tanishkaasharmaa** — implement win streak multipliers and auto-unlocking cosmetics
+    - 📁 **4 files:** `client/src/MindReaderApp2.jsx` `+10 −1`, `server/auth.js` `+1 −0`, `server/index.js` `+39 −2`, `server/test_reverse_mindreader.js` `+23 −6`
+    - 📊 **`+73 −9`** · 4 files
+- ✨ [`0b4f1f6e`](https://github.com/vicharanashala/tenali/commit/0b4f1f6e57fe8d668ae5c3b9529a4f7ff74c9caa) — **Tanishkaasharmaa** — implement Phase 8 Telemetry & Analytics for Reverse Mind Reader
+    - 📁 **4 files:** `feature2.md` `+1 −1`, `server/auth.js` `+4 −0`, `server/index.js` `+14 −1`, `server/test_reverse_mindreader.js` `+22 −4`
+    - 📊 **`+41 −6`** · 4 files
+- 📌 [`2c7eddde`](https://github.com/vicharanashala/tenali/commit/2c7edddeb462470b7838d1241adfa0cf13ed1e1d) — **Kratikavarshney-16** — Merge remote-tracking branch 'origin/main' into kratika
 - ✨ [`9b143ea8`](https://github.com/vicharanashala/tenali/commit/9b143ea89faddc15f34396feb8c29e90ce1ce8ae) — **priyanshu7725** — implement monster misconceptions framework
     - 📁 **5 files:** `client/src/App.jsx` `+106 −87`, `client/src/components/OnboardingTour.jsx` `+6 −1`, `client/src/monsters/__tests__/classifier.test.js` `+2 −2`, `client/src/monsters/__tests__/fetchInterceptor.test.js` `+24 −4`, `client/src/monsters/fetchInterceptor.js` `+9 −2`
     - 📊 **`+147 −96`** · 5 files
@@ -1095,7 +1446,7 @@
     - 📁 **1 file:** `client/src/vachana/exercises/ReadingTraps.jsx` `+184 −0`
     - 📊 **`+184 −0`** · 1 file
 
-#### 📅 2026-07-17  <sub>(65 commits)</sub>
+#### 📅 2026-07-17  <sub>(71 commits)</sub>
 
 - ✨ [`f91a8578`](https://github.com/vicharanashala/tenali/commit/f91a8578a14b87b20d13fb6f99015446c66e0326) — **priyanshu7725** — add Monster collection system including UI components, API interceptors, and progress tracking
     - 📁 **11 files:** `client/src/App.jsx` `+1598 −1594`, `client/src/monsters/CHANGELOG.md` `+70 −0`, `client/src/monsters/CureFlow.jsx` `+127 −18`, `client/src/monsters/HallPanel.jsx` `+11 −9`, `client/src/monsters/MonsterAvatar.jsx` `+265 −0`, `client/src/monsters/MonsterCard.jsx` `+13 −6`, `client/src/monsters/MonsterDetail.jsx` `+49 −17`, `client/src/monsters/MonsterToast.jsx` `+4 −20` *(+3 more in [`f91a8578`](https://github.com/vicharanashala/tenali/commit/f91a8578a14b87b20d13fb6f99015446c66e0326))*
@@ -1169,12 +1520,18 @@
 - 📌 [`809bbd87`](https://github.com/vicharanashala/tenali/commit/809bbd87e2aaad40d2c77fc889d05b6c934df5cb) — **Dipto Subhro** — Remove Open Level text indicator from dashboard level cards
     - 📁 **1 file:** `client/src/vachana/exercises/NoiseFilter.jsx` `+1 −4`
     - 📊 **`+1 −4`** · 1 file
+- 📌 [`51e53e9d`](https://github.com/vicharanashala/tenali/commit/51e53e9d3e5a540bc42761186c4b81c595df8a8a) — **Tanishkaasharmaa** — Implement Dual Mind Reader Mode Selector, Hamburger Submenu, and Frontend UI (Phase 5)
+    - 📁 **4 files:** `client/src/App.jsx` `+143 −15`, `client/src/MindReader2.css` `+635 −0`, `client/src/MindReaderApp2.jsx` `+821 −0`, `feature2.md` `+4 −4`
+    - 📊 **`+1603 −19`** · 4 files
 - 📌 [`f46e1956`](https://github.com/vicharanashala/tenali/commit/f46e19560d85aa8046e43418cf58ae522eece3c2) — **Dipto Subhro** — Redirect level clicks to a dedicated stages sub-view with back navigation
     - 📁 **1 file:** `client/src/vachana/exercises/NoiseFilter.jsx` `+108 −67`
     - 📊 **`+108 −67`** · 1 file
 - 📌 [`192ccc33`](https://github.com/vicharanashala/tenali/commit/192ccc3396eee7d8ff9bd4ccb401b3f6bc02ccd5) — **Dipto Subhro** — Remove Active label from Noise Filter levels
     - 📁 **1 file:** `client/src/vachana/exercises/NoiseFilter.jsx` `+0 −1`
     - 📊 **`+0 −1`** · 1 file
+- 📌 [`3302efc8`](https://github.com/vicharanashala/tenali/commit/3302efc89c7585e2375117cbda169d6fd5ef2d2e) — **Tanishkaasharmaa** — Implement backend APIs, caching and knowledge base for Reverse Mind Reader MVP
+    - 📁 **5 files:** `feature2.md` `+261 −0`, `implementationplan2.md` `+199 −0`, `server/index.js` `+242 −0`, `server/mindReaderKB2.js` `+985 −0`, `server/test_reverse_mindreader.js` `+216 −0`
+    - 📊 **`+1903 −0`** · 5 files
 - 📌 [`1ed0ea77`](https://github.com/vicharanashala/tenali/commit/1ed0ea776c5b9b8e321405eef1da5eedc7200f5e) — **Dipto Subhro** — Make level cards on Noise Filter dashboard collapsible
     - 📁 **1 file:** `client/src/vachana/exercises/NoiseFilter.jsx` `+53 −41`
     - 📊 **`+53 −41`** · 1 file
@@ -1235,6 +1592,13 @@
 - ✨ [`408e5c76`](https://github.com/vicharanashala/tenali/commit/408e5c76d47e2930bbb8e6bdb4851be841089499) — **muditagrawal2007** — complete proctoring suite — Dashboard, FloatingVideo, PiP, CSS, lint fixes
     - 📁 **14 files:** `client/public/models/tiny_face_detector_model-weights_manifest.json` `+1 −0`, `client/src/App.css` `+215 −43`, `client/src/proctor/FloatingVideo.jsx` `+190 −197`, `client/src/proctor/ProctorContext.jsx` `+3 −1`, `client/src/proctor/ProctorDashboard.jsx` `+170 −37`, `client/src/proctor/ProctorPanel.jsx` `+88 −41`, `client/src/proctor/proctorEvents.js` `+92 −8`, `client/src/proctor/useAntiCheat.js` `+37 −1` *(+6 more in [`408e5c76`](https://github.com/vicharanashala/tenali/commit/408e5c76d47e2930bbb8e6bdb4851be841089499))*
     - 📊 **`+1314 −338`** · 14 files
+- 🐛 [`01231900`](https://github.com/vicharanashala/tenali/commit/01231900b64f68b7af8fec88e9960cfc1ea5acd6) — **Tanishkaasharmaa** — remove duplicate global jwt require
+    - 📁 **1 file:** `server/index.js` `+0 −1`
+    - 📊 **`+0 −1`** · 1 file
+- 🔧 [`d0485e43`](https://github.com/vicharanashala/tenali/commit/d0485e43bda0dd3ff2d702e60d3c7d9280d84c6d) — **Tanishkaasharmaa** — remove unused framer-motion import and update lockfile
+    - 📁 **2 files:** `client/package-lock.json` `+12 −23`, `client/src/App.jsx` `+0 −1`
+    - 📊 **`+12 −24`** · 2 files
+- 📌 [`be3a50a1`](https://github.com/vicharanashala/tenali/commit/be3a50a18349a2192c5d4268076f74a0cfba9136) — **Tanishkaasharmaa** — Merge remote-tracking branch 'upstream/main'
 - 📌 [`ceea26b6`](https://github.com/vicharanashala/tenali/commit/ceea26b65c92b62c79929b79a3185831d735fb58) — **muditagrawal2007** — Rewrite proctoring to match vibe architecture
     - 📁 **5 files:** `client/src/proctor/FloatingVideo.jsx` `+194 −406`, `client/src/proctor/ProctorPanel.jsx` `+110 −49`, `client/src/proctor/useBlurDetector.js` `+16 −25`, `client/src/proctor/useCamera.js` `+23 −34`, `client/src/proctor/useVoiceDetection.js` `+9 −18`
     - 📊 **`+352 −532`** · 5 files
@@ -1265,6 +1629,9 @@
 - 🐛 [`57e653ae`](https://github.com/vicharanashala/tenali/commit/57e653aea6fb95fa676fb825aed30d550dd170a5) — **Jinal Gupta** — strip stray UTF-8 BOM from App.css breaking production build
     - 📁 **1 file:** `client/src/App.css` `+1 −1`
     - 📊 **`+1 −1`** · 1 file
+- 📌 [`3fe82206`](https://github.com/vicharanashala/tenali/commit/3fe822060b8ea28f92859befd302fdd76a0d3e11) — **Kratikavarshney-16** — Add You Guess challenge mode to Tenali Mind Reader
+    - 📁 **7 files:** `client/src/App.css` `+3436 −3371`, `client/src/App.jsx` `+715 −38`, `server/challengeConfig.js` `+45 −0`, `server/challengeService.js` `+289 −0`, `server/index.js` `+93 −0`, `server/mindReaderEvents.js` `+15 −0`, `server/test_challenge.js` `+182 −0`
+    - 📊 **`+4775 −3409`** · 7 files
 - 📌 [`746d96fc`](https://github.com/vicharanashala/tenali/commit/746d96fc6b807e205ca34b761cc6933f39aa15cf) — **jgupta05072003-code** — 🔀 PR [#54](https://github.com/vicharanashala/tenali/pull/54) from `sharonyamita-spec` — feature/math-detective-agency
 - 📌 [`3b992825`](https://github.com/vicharanashala/tenali/commit/3b992825667d4226d1d66a38c0076c755bdc5745) — **Sharonya Banerjee** — Merge upstream/main into feature/math-detective-agency, resolve client/package-lock.json conflict
 - 📌 [`cde80697`](https://github.com/vicharanashala/tenali/commit/cde80697ab8d4bcb2049a999a47d76ffb54dc902) — **jgupta05072003-code** — 🔀 PR [#9](https://github.com/vicharanashala/tenali/pull/9) from `Ritish007-svg` — feature/level-wise-explanation
@@ -1535,7 +1902,7 @@
     - 📊 **`+0 −3`** · 1 file
 - 📌 [`fc9dd2a3`](https://github.com/vicharanashala/tenali/commit/fc9dd2a3e0cba32e95b24bd430b85c305fcb7bde) — **varshini-nandula** — Merge branch 'upstream/main' into feat/profile-achievement-showcase
 
-#### 📅 2026-07-14  <sub>(57 commits)</sub>
+#### 📅 2026-07-14  <sub>(59 commits)</sub>
 
 - 🐛 [`79a9c716`](https://github.com/vicharanashala/tenali/commit/79a9c71679fb90ce18709b112ebc8274948d242c) — **KCDharshan9** — resolve submit button issue in addition app
     - 📁 **1 file:** `client/src/App.jsx` `+1 −0`
@@ -1544,6 +1911,9 @@
 - 📌 [`34f729b6`](https://github.com/vicharanashala/tenali/commit/34f729b6ff879be0aa3fa513592150168abeac4e) — **muditagrawal2007** — added the column addtion
     - 📁 **4 files:** `client/src/App.jsx` `+335 −0`, `client/vite.config.js` `+2 −0`, `server/explanations.js` `+22 −0`, `server/index.js` `+75 −0`
     - 📊 **`+434 −0`** · 4 files
+- 📌 [`cb4f8f16`](https://github.com/vicharanashala/tenali/commit/cb4f8f165f0bd493db47ee0e905fd26928ad5eb3) — **Tanishkaasharmaa** — update mind reader result colors to match orange theme
+    - 📁 **2 files:** `client/src/App.css` `+2 −2`, `client/src/App.jsx` `+9 −9`
+    - 📊 **`+11 −11`** · 2 files
 - ✨ [`ddd92b37`](https://github.com/vicharanashala/tenali/commit/ddd92b37dc043b8894edcb5b31b5b706fe0794b5) — **Dipto Subhro** — add narration settings menu with custom gradient gear icon and voice selection
     - 📁 **8 files:** `client/public/settings_icon.svg` `+29 −0`, `client/src/App.jsx` `+179 −11`, `client/src/main.jsx` `+10 −3`, `client/src/narration/AudioCatalog.js` `+132 −0`, `client/src/narration/NarrationButton.jsx` `+81 −0`, `client/src/narration/NarrationContext.jsx` `+435 −0`, `client/src/narration/NarrationSettings.jsx` `+197 −0`, `client/src/narration/generate_mock_audio.js` `+146 −0`
     - 📊 **`+1209 −14`** · 8 files
@@ -1654,15 +2024,45 @@
     - 📊 **`+3191 −3941`** · 26 files
 - 📌 [`c30b976b`](https://github.com/vicharanashala/tenali/commit/c30b976ba54ce0080a4302cf0620e6f87770083a) — **Vaibhav** — Merge upstream/main into feature branch
 - 📌 [`9b865779`](https://github.com/vicharanashala/tenali/commit/9b865779f3a54c63c684c737fce0acbe80a9026f) — **Ahana Banerjee** — Merge remote-tracking branch 'origin/main' into feature/AL-learning-checkpoints
+- ✨ [`84120c24`](https://github.com/vicharanashala/tenali/commit/84120c246dee5e6176bd3a9a67996d162c28335d) — **Tanishkaasharmaa** — expand math concepts, add progress-based expressions, and fix cheat detection pipeline
+    - 📁 **3 files:** `client/src/App.jsx` `+158 −55`, `feature.md` `+1 −1`, `server/index.js` `+3 −1`
+    - 📊 **`+162 −57`** · 3 files
 
-#### 📅 2026-07-13  <sub>(44 commits)</sub>
+#### 📅 2026-07-13  <sub>(57 commits)</sub>
 
 - ✨ [`4f4a40f8`](https://github.com/vicharanashala/tenali/commit/4f4a40f8cb94a570eec5390a0a4b9615897d0341) — **Vaibhav** — implement adaptive placement check, MCQ auto-submit, and guided exploration
     - 📁 **3 files:** `CHANGELOG.md` `+27 −0`, `client/src/App.jsx` `+2198 −180`, `client/src/vocabCorpus.js` `+782 −0`
     - 📊 **`+3007 −180`** · 3 files
+- ✨ [`74c1830f`](https://github.com/vicharanashala/tenali/commit/74c1830f55e5f6514852afb87c65bb7d40869d99) — **Tanishkaasharmaa** — implement Phase 5 Rich Results Screen and post-mortem explainability review
+    - 📁 **1 file:** `client/src/App.jsx` `+259 −24`
+    - 📊 **`+259 −24`** · 1 file
+- ✨ [`ee83b82f`](https://github.com/vicharanashala/tenali/commit/ee83b82ff9fc3c819fbf46ea98520d6238d4523f) — **Tanishkaasharmaa** — implement Phase 4 Royal Gamble Cinematic Moment with sequence and overlay
+    - 📁 **2 files:** `client/src/App.css` `+68 −1`, `client/src/App.jsx` `+113 −1`
+    - 📊 **`+181 −2`** · 2 files
+- ✨ [`c6d65864`](https://github.com/vicharanashala/tenali/commit/c6d658644fa5ccd95d3e6918846ec6879225eaf5) — **Tanishkaasharmaa** — drive Risk Meter visually using concept elimination progress
+    - 📁 **1 file:** `client/src/App.jsx` `+25 −12`
+    - 📊 **`+25 −12`** · 1 file
+- ✨ [`4a5b6255`](https://github.com/vicharanashala/tenali/commit/4a5b625563932ff5b30f7ea4842743397f0cdf3a) — **Tanishkaasharmaa** — implement Phase 3 Risk Meter with glowing slider
+    - 📁 **3 files:** `.gitignore` `+3 −0`, `client/src/App.css` `+3625 −3528`, `client/src/App.jsx` `+36 −0`
+    - 📊 **`+3664 −3528`** · 3 files
+- ✨ [`69d8b581`](https://github.com/vicharanashala/tenali/commit/69d8b5811dd8b97ffbfde47961090f05450c2c21) — **Tanishkaasharmaa** — design side-by-side box layout for Tenali Raman and thought cloud on the setup/home screen
+    - 📁 **2 files:** `client/src/App.css` `+76 −0`, `client/src/App.jsx` `+24 −0`
+    - 📊 **`+100 −0`** · 2 files
+- ✨ [`3cb909be`](https://github.com/vicharanashala/tenali/commit/3cb909be6b300713afb39bd08f2ce70beaf1d6fe) — **Tanishkaasharmaa** — position mind cloud above avatar, remove confidence meter from bubble, and polish gameover screens to hide the answer
+    - 📁 **1 file:** `client/src/App.jsx` `+25 −47`
+    - 📊 **`+25 −47`** · 1 file
+- ✨ [`1d9a4527`](https://github.com/vicharanashala/tenali/commit/1d9a4527bf14256460cb66684dbbd9fdbda3fb71) — **Tanishkaasharmaa** — add UX delay to let avatar expressions linger and remove question text from thought cloud
+    - 📁 **1 file:** `client/src/App.jsx` `+15 −5`
+    - 📊 **`+15 −5`** · 1 file
+- ✨ [`a51877d0`](https://github.com/vicharanashala/tenali/commit/a51877d07986f8b60e5055166c73459130fd6c23) — **Tanishkaasharmaa** — add writing and smirk expressions, refine play HUD and cloud dialogue layout
+    - 📁 **2 files:** `client/src/App.css` `+17 −0`, `client/src/App.jsx` `+166 −84`
+    - 📊 **`+183 −84`** · 2 files
 - 💄 [`e8c1b77e`](https://github.com/vicharanashala/tenali/commit/e8c1b77ea729f78e9f3d9b5580134db3cbf86c8d) — **Shubh dixit** — remove addition, mensuration, and coordinate geometry from hamburger menu
     - 📁 **1 file:** `client/src/App.jsx` `+0 −13`
     - 📊 **`+0 −13`** · 1 file
+- ✨ [`37b3beb3`](https://github.com/vicharanashala/tenali/commit/37b3beb3b978dc51d13ebcc618cf1471f3db1567) — **Tanishkaasharmaa** — implement visual feedback loops, board shake, and shield shattering for incorrect guesses
+    - 📁 **2 files:** `client/src/App.css` `+38 −0`, `client/src/App.jsx` `+64 −10`
+    - 📊 **`+102 −10`** · 2 files
 - ✨ [`354f05f0`](https://github.com/vicharanashala/tenali/commit/354f05f094674ba7b89d3f4ea50416be86bb1f2e) — **varshini-nandula** — sort badges showcase by category priority and fix hooks ordering rules
     - 📁 **1 file:** `client/src/App.jsx` `+109 −67`
     - 📊 **`+109 −67`** · 1 file
@@ -1670,10 +2070,22 @@
 - 🐛 [`23a7be59`](https://github.com/vicharanashala/tenali/commit/23a7be597a4cea5dc1805449a4e448539c9a71bf) — **Shubh dixit** — fix addition screen crash and remove extra modes
     - 📁 **1 file:** `client/src/App.jsx` `+4 −20`
     - 📊 **`+4 −20`** · 1 file
+- 📌 [`5cd5d360`](https://github.com/vicharanashala/tenali/commit/5cd5d360981ef2dd438c082ae3950757a42292bd) — **Kratikavarshney-16** — Improve Mind Reader inference engine accuracy
+    - 📁 **2 files:** `server/mindReaderEngine.js` `+582 −254`, `server/test_mindreader.js` `+321 −6`
+    - 📊 **`+903 −260`** · 2 files
+- 🐛 [`70340983`](https://github.com/vicharanashala/tenali/commit/70340983d6e1fa2b28d5cad47edab70cf217addf) — **Tanishkaasharmaa** — update pre-game instructions, compact layout, and top HUD pills
+    - 📁 **1 file:** `client/src/App.jsx` `+11 −28`
+    - 📊 **`+11 −28`** · 1 file
+- ✨ [`c60837ca`](https://github.com/vicharanashala/tenali/commit/c60837ca9cbf33b46dd7e14ba6a3dac552cda3e4) — **Tanishkaasharmaa** — implement Phase 1 pre-game anticipation experience
+    - 📁 **3 files:** `client/src/App.css` `+26 −0`, `client/src/App.jsx` `+114 −41`, `feature.md` `+246 −0`
+    - 📊 **`+386 −41`** · 3 files
 - 🔧 [`a6763361`](https://github.com/vicharanashala/tenali/commit/a67633616d5053f35f76000a97e07beab037dda5) — **SaniyaJos** — apply copilot suggestions
     - 📁 **2 files:** `client/src/App.jsx` `+1 −1`, `client/vite.config.js` `+0 −2`
     - 📊 **`+1 −3`** · 2 files
 - 📌 [`07c39890`](https://github.com/vicharanashala/tenali/commit/07c39890795fbf34e01cf9bd0e85dbcf5e0af9b8) — **SaniyaJos** — Merge branch 'main' of https://github.com/vicharanashala/tenali into feat/contrast-challenge-enhancement
+- 📌 [`0b7b6e2a`](https://github.com/vicharanashala/tenali/commit/0b7b6e2ad124a62878ac1deca4c742f17f55c00c) — **Kratikavarshney-16** — Improve Mind Reader inference engine and question selection
+    - 📁 **5 files:** `client/package-lock.json` `+0 −9`, `server/index.js` `+11 −136`, `server/mindReaderEngine.js` `+480 −0`, `server/mindReaderKB.js` `+46 −46`, `server/test_mindreader.js` `+395 −167`
+    - 📊 **`+932 −358`** · 5 files
 - 📌 [`80d52fc4`](https://github.com/vicharanashala/tenali/commit/80d52fc41b777489ad3c4fff74624ec943f84799) — **jgupta05072003-code** — 🔀 PR [#35](https://github.com/vicharanashala/tenali/pull/35) from `KrishnaG-101` — language_integration
 - 🐛 [`21e10b43`](https://github.com/vicharanashala/tenali/commit/21e10b43614f3e96fe1d61bcb5f66ffd8c839ae4) — **Ahana Banerjee** — hide the Guided Learning Journey banner from the Goal Selection view
     - 📁 **1 file:** `client/src/App.jsx` `+38 −45`
@@ -1766,12 +2178,16 @@
     - 📁 **7 files:** `client/src/App.css` `+33 −0`, `client/src/App.jsx` `+622 −7`, `server/auth.js` `+2 −1`, `server/index.js` `+90 −1`, `server/lil/learning_journey/controllers.js` `+279 −0`, `server/lil/learning_journey/journeyData.js` `+149 −0`, `server/lil/learning_journey/models.js` `+35 −0`
     - 📊 **`+1210 −9`** · 7 files
 
-#### 📅 2026-07-12  <sub>(2 commits)</sub>
+#### 📅 2026-07-12  <sub>(4 commits)</sub>
 
 - 📌 [`4c5096b9`](https://github.com/vicharanashala/tenali/commit/4c5096b9bcf4bf55bceddff875510331ac952dce) — **Ahana Banerjee** — Merge remote-tracking branch 'origin/main' into feature/AN-goal-based-practice-sessions
 - ✨ [`db31c33b`](https://github.com/vicharanashala/tenali/commit/db31c33b3b9884fe8d65db7f25d4b68dbb6834e1) — **Krishna Gelra** — modular language puzzles framework & word creator
     - 📁 **10 files:** `.gitignore` `+3 −0`, `client/src/App.jsx` `+31 −6`, `client/src/language/LanguageDashboard.jsx` `+68 −0`, `client/src/language/WordCreatorApp.jsx` `+765 −0`, `client/vite.config.js` `+2 −0`, `scratch/generate_puzzles.js` `+228 −0`, `server/index.js` `+7 −0`, `server/routes/wordCreator.js` `+131 −0` *(+2 more in [`db31c33b`](https://github.com/vicharanashala/tenali/commit/db31c33b3b9884fe8d65db7f25d4b68dbb6834e1))*
     - 📊 **`+25537 −6`** · 10 files
+- 📌 [`36c9844a`](https://github.com/vicharanashala/tenali/commit/36c9844a121d87dc25ef61ed7305d8a0d7c0169a) — **Tanishkaasharmaa** — Merge branch 'vicharanashala:main' into main
+- 📌 [`b92b4e73`](https://github.com/vicharanashala/tenali/commit/b92b4e73c1780d444b4ba24e84d8d7dc71766412) — **Tanishkaasharmaa** — Update application files and add innovations roadmap documentation
+    - 📁 **6 files:** `client/package-lock.json` `+9 −0`, `client/src/App.css` `+536 −218`, `client/src/App.jsx` `+11525 −6001`, `innovations_and_roadmap.md` `+723 −0`, `server/auth.js` `+1 −1`, `server/index.js` `+940 −937`
+    - 📊 **`+13734 −7157`** · 6 files
 
 #### 📅 2026-07-11  <sub>(11 commits)</sub>
 
@@ -1805,7 +2221,7 @@
     - 📁 **1 file:** `docs/feature_walkthrough/learning-transfer-challenges-walkthrough.md` `+0 −247`
     - 📊 **`+0 −247`** · 1 file
 
-#### 📅 2026-07-10  <sub>(23 commits)</sub>
+#### 📅 2026-07-10  <sub>(25 commits)</sub>
 
 - 📌 [`97ed83da`](https://github.com/vicharanashala/tenali/commit/97ed83dacba6a2110595c28437337ee60361b4e4) — **Vaibhav** — Fix PR #18 review findings: simplify word problem, resolve ESLint warnings, and update pedagogical references
     - 📁 **2 files:** `client/src/App.jsx` `+77 −8`, `exercise-references.md` `+5 −5`
@@ -1825,6 +2241,12 @@
 - ✨ [`3506c26b`](https://github.com/vicharanashala/tenali/commit/3506c26b7e754f4dfbb3227fb2e490392a5d65a9) — **Vaibhav** — add 5 new literacy exercises to Vachana module
     - 📁 **2 files:** `CHANGELOG.md` `+43 −0`, `client/src/App.jsx` `+399 −1`
     - 📊 **`+442 −1`** · 2 files
+- 💄 [`7a609452`](https://github.com/vicharanashala/tenali/commit/7a6094522ebd9705de4b49d9f27f9af9575299a9) — **Tanishkaasharmaa** — reorder play layout and remove prefix text from questions
+    - 📁 **1 file:** `client/src/App.jsx` `+43 −37`
+    - 📊 **`+43 −37`** · 1 file
+- ✨ [`a41ce6f1`](https://github.com/vicharanashala/tenali/commit/a41ce6f12b0cea6813e830da8b02c95ae0b1e91e) — **Tanishkaasharmaa** — implement avatar expressions, animation, fix cheating check, hide duplicate questions
+    - 📁 **6 files:** `client/src/App.css` `+533 −0`, `client/src/App.jsx` `+1014 −0`, `server/auth.js` `+18 −1`, `server/index.js` `+353 −0`, `server/mindReaderKB.js` `+398 −0`, `server/test_mindreader.js` `+202 −0`
+    - 📊 **`+2518 −1`** · 6 files
 - 📌 [`ea55e5a6`](https://github.com/vicharanashala/tenali/commit/ea55e5a60bb1e50a4807cf9a9593aa4414cbaebf) — **Vaibhav** — Fix PR #18 review findings: simplify word problem, resolve ESLint warnings, and update pedagogical references
     - 📁 **2 files:** `client/src/App.jsx` `+77 −8`, `exercise-references.md` `+5 −5`
     - 📊 **`+82 −13`** · 2 files
