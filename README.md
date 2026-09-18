@@ -137,12 +137,12 @@ It is built to run on a single VPS — `tenali.fun` — with one Node process se
 <p align="center">
   <table>
     <tr>
-      <td align="center"><b>1198</b><br/><sub>commits</sub></td>
+      <td align="center"><b>1199</b><br/><sub>commits</sub></td>
       <td align="center"><b>110</b><br/><sub>PRs merged</sub></td>
       <td align="center"><b>44</b><br/><sub>GitHub contributors</sub></td>
-      <td align="center"><b>⭐ 7</b><br/><sub>stars</sub></td>
-      <td align="center"><b>🍴 80</b><br/><sub>forks</sub></td>
-      <td align="center"><b>🐛 122</b><br/><sub>open issues</sub></td>
+      <td align="center"><b>⭐ 0</b><br/><sub>stars</sub></td>
+      <td align="center"><b>🍴 0</b><br/><sub>forks</sub></td>
+      <td align="center"><b>🐛 0</b><br/><sub>open issues</sub></td>
     </tr>
   </table>
 </p>
@@ -690,19 +690,19 @@ tenali.fun
 <!-- live-snapshot:start -->
 | 🏆 Commits | 🔀 Merged PRs | 👥 Contributors | 🧩 Puzzles | 📚 Vocab | 🌍 GK |
 |----------:|------------:|--------------:|---------:|-------:|----:|
-| **1198** | **110** | **44** | **93** | **7,662** | **991** |
+| **1199** | **110** | **44** | **93** | **7,662** | **991** |
 <!-- live-snapshot:end -->
 
 ### 🥇 Leaderboard
 
 <!-- live-rank:start -->
-_Live data — last regenerated 2026-09-17 · auto-refreshed by [`github-actions[bot]`](https://github.com/features/actions) on every push to `main` and every 12h._
+_Live data — last regenerated 2026-09-18 · auto-refreshed by [`github-actions[bot]`](https://github.com/features/actions) on every push to `main` and every 12h._
 
 | # | 👤 Real Name | 🔗 GitHub ID | 📝 Commits | 🔀 PRs | 🏷️ Role |
 |--:|:-------------|:-------------|----------:|-----:|:--------|
 | 🥇 | **S. R. S. Iyengar**<br/><sub>↳ also commits as <b>sudarshan</b></sub> | [sudarshansudarshan](https://github.com/sudarshansudarshan) | **281** | 0  | Lead Architect · Curriculum Author · 69 puzzle families |
 | 🥈 | **Mudit Agrawal** | [muditagrawal2007](https://github.com/muditagrawal2007) | **193** | 25  | Maintainer · Battle Arena · Linear Algebra · Sudoku · Playground |
-| 🥉 | **tanishkaasharmaa**<br/><sub>↳ also commits as <b>Tanishkaasharmaa</b></sub> | [tanishkaasharmaa](https://github.com/tanishkaasharmaa) | **136** | 0  | — |
+| 🥉 | **tanishkaasharmaa**<br/><sub>↳ also commits as <b>Tanishkaasharmaa</b></sub> | [tanishkaasharmaa](https://github.com/tanishkaasharmaa) | **137** | 0  | — |
 | 4. | **Jinal Gupta** | [jgupta05072003-code](https://github.com/jgupta05072003-code) | **127** | 0  | Upstream Repo Maintainer & PR Reviewer |
 | 5. | **Priyanshu Kumar** | [priyanshu7725](https://github.com/priyanshu7725) | **54** | 1  | — |
 | 6. | **Vaibhav Satish**<br/><sub>↳ also commits as <b>Vaibhav</b></sub> | [Vaibhav-sa30](https://github.com/Vaibhav-sa30) | **48** | 3  | Vachana Literacy Lab & Vocabulary |

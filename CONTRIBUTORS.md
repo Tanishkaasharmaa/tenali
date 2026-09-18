@@ -50,19 +50,19 @@
 <!-- live-snapshot:start -->
 | 🏆 Commits | 🔀 Merged PRs | 👥 Contributors | 🧩 Puzzles | 📚 Vocab | 🌍 GK |
 |----------:|------------:|--------------:|---------:|-------:|----:|
-| **1198** | **110** | **44** | **93** | **7,662** | **991** |
+| **1199** | **110** | **44** | **93** | **7,662** | **991** |
 <!-- live-snapshot:end -->
 
 ## 🥇 Leaderboard
 
 <!-- live-rank:start -->
-_Live data — last regenerated 2026-09-17 · auto-refreshed by [`github-actions[bot]`](https://github.com/features/actions) on every push to `main` and every 12h._
+_Live data — last regenerated 2026-09-18 · auto-refreshed by [`github-actions[bot]`](https://github.com/features/actions) on every push to `main` and every 12h._
 
 | # | 👤 Real Name | 🔗 GitHub ID | 📝 Commits | 🔀 PRs | 🏷️ Role |
 |--:|:-------------|:-------------|----------:|-----:|:--------|
 | 🥇 | **S. R. S. Iyengar**<br/><sub>↳ also commits as <b>sudarshan</b></sub> | [sudarshansudarshan](https://github.com/sudarshansudarshan) | **281** | 0  | Lead Architect · Curriculum Author · 69 puzzle families |
 | 🥈 | **Mudit Agrawal** | [muditagrawal2007](https://github.com/muditagrawal2007) | **193** | 25  | Maintainer · Battle Arena · Linear Algebra · Sudoku · Playground |
-| 🥉 | **tanishkaasharmaa**<br/><sub>↳ also commits as <b>Tanishkaasharmaa</b></sub> | [tanishkaasharmaa](https://github.com/tanishkaasharmaa) | **136** | 0  | — |
+| 🥉 | **tanishkaasharmaa**<br/><sub>↳ also commits as <b>Tanishkaasharmaa</b></sub> | [tanishkaasharmaa](https://github.com/tanishkaasharmaa) | **137** | 0  | — |
 | 4. | **Jinal Gupta** | [jgupta05072003-code](https://github.com/jgupta05072003-code) | **127** | 0  | Upstream Repo Maintainer & PR Reviewer |
 | 5. | **Priyanshu Kumar** | [priyanshu7725](https://github.com/priyanshu7725) | **54** | 1  | — |
 | 6. | **Vaibhav Satish**<br/><sub>↳ also commits as <b>Vaibhav</b></sub> | [Vaibhav-sa30](https://github.com/Vaibhav-sa30) | **48** | 3  | Vachana Literacy Lab & Vocabulary |
@@ -184,14 +184,14 @@ _Live data — last regenerated 2026-09-17 · auto-refreshed by [`github-actions
         <a href="https://github.com/tanishkaasharmaa"><img src="https://github.com/tanishkaasharmaa.png?size=120&s=120" width="120" style="border-radius:50%; border:3px solid #888888;" alt="tanishkaasharmaa"/></a>
         <br/><b>tanishkaasharmaa</b>
         <br/><a href="https://github.com/tanishkaasharmaa">@tanishkaasharmaa</a>
-        <br/><sub>🏆 136 commits · 0 PRs merged</sub>
+        <br/><sub>🏆 137 commits · 0 PRs merged</sub>
         <br/><sub>🔗 also commits as: <b>Tanishkaasharmaa</b></sub>
       </td>
       <td valign="top" width="*">
         <h4>🥉 New Contributor</h4>
         <ul>
           <li>🆕 <b>New contributor</b> — auto-added by the readme-bot</li>
-          <li>📊 <b>136 commits</b> across this repo's history</li>
+          <li>📊 <b>137 commits</b> across this repo's history</li>
           <li>🔗 <i>Add a <code>FALLBACK_PROFILES</code> entry in <code>scripts/update-readme-contributors.js</code> to enrich this card with real name, avatar, location, and curated feature list</i></li>
         </ul>
       </td>
