@@ -19,9 +19,13 @@
 ---
 
 <!-- live-changelog:start -->
-### 📊 Total: 1284 commits · 88 active days · 49 unique authors
+### 📊 Total: 1285 commits · 89 active days · 49 unique authors
 
 > **📖 How to read this:** Each entry shows a clickable SHA, the author, and a one-line subject. Sub-bullets show the **exact files touched** with per-file `+additions −deletions`, the **total line stats**, and (when present) the **commit body** explaining what & why.
+
+#### 📅 2026-10-04  <sub>(1 commit)</sub>
+
+- 📌 [`63e7df4b`](https://github.com/Tanishkaasharmaa/tenali/commit/63e7df4bf6088fa66eb6716b16927524aa17b11f) — **Tanishkaasharmaa** — Merge remote-tracking branch 'upstream/main' into main resolving merge conflicts in README.md
 
 #### 📅 2026-09-27  <sub>(2 commits)</sub>
 

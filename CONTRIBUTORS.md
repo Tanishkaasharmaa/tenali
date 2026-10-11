@@ -50,20 +50,20 @@
 <!-- live-snapshot:start -->
 | 🏆 Commits | 🔀 Merged PRs | 👥 Contributors | 🧩 Puzzles | 📚 Vocab | 🌍 GK |
 |----------:|------------:|--------------:|---------:|-------:|----:|
-| **1284** | **126** | **49** | **93** | **7,662** | **991** |
+| **1285** | **126** | **49** | **93** | **7,662** | **991** |
 <!-- live-snapshot:end -->
 
 ## 🥇 Leaderboard
 
 <!-- live-rank:start -->
-_Live data — last regenerated 2026-10-04 · auto-refreshed by [`github-actions[bot]`](https://github.com/features/actions) on every push to `main` and every 12h._
+_Live data — last regenerated 2026-10-11 · auto-refreshed by [`github-actions[bot]`](https://github.com/features/actions) on every push to `main` and every 12h._
 
 | # | 👤 Real Name | 🔗 GitHub ID | 📝 Commits | 🔀 PRs | 🏷️ Role |
 |--:|:-------------|:-------------|----------:|-----:|:--------|
 | 🥇 | **S. R. S. Iyengar**<br/><sub>↳ also commits as <b>sudarshan</b></sub> | [sudarshansudarshan](https://github.com/sudarshansudarshan) | **281** | 0  | Lead Architect · Curriculum Author · 69 puzzle families |
 | 🥈 | **Mudit Agrawal** | [muditagrawal2007](https://github.com/muditagrawal2007) | **193** | 25  | Maintainer · Battle Arena · Linear Algebra · Sudoku · Playground |
 | 🥉 | **Jinal Gupta** | [jgupta05072003-code](https://github.com/jgupta05072003-code) | **142** | 0  | Upstream Repo Maintainer & PR Reviewer |
-| 4. | **tanishkaasharmaa**<br/><sub>↳ also commits as <b>Tanishkaasharmaa</b></sub> | [tanishkaasharmaa](https://github.com/tanishkaasharmaa) | **139** | 0  | — |
+| 4. | **tanishkaasharmaa**<br/><sub>↳ also commits as <b>Tanishkaasharmaa</b></sub> | [tanishkaasharmaa](https://github.com/tanishkaasharmaa) | **140** | 0  | — |
 | 5. | **Priyanshu Kumar** | [priyanshu7725](https://github.com/priyanshu7725) | **54** | 1  | — |
 | 6. | **Vaibhav Satish**<br/><sub>↳ also commits as <b>Vaibhav</b></sub> | [Vaibhav-sa30](https://github.com/Vaibhav-sa30) | **50** | 3  | Vachana Literacy Lab & Vocabulary |
 | 7. | **Lakshmi Varshini Nandula ** | [varshini-nandula](https://github.com/varshini-nandula) | **43** | 1  | Profile Showcase & Offline Storage |
@@ -74,7 +74,7 @@ _Live data — last regenerated 2026-10-04 · auto-refreshed by [`github-actions
 | 12. | **saniyajos**<br/><sub>↳ also commits as <b>SaniyaJos</b></sub> | [saniyajos](https://github.com/saniyajos) | **22** | 0  | — |
 | 13. | **K C Dharshan** | [KCDharshan9](https://github.com/KCDharshan9) | **21** | 1  | Tap-to-Define Word Glossary |
 | 14. | **Ahana Banerjee** | [ahana4banerjee](https://github.com/ahana4banerjee) | **20** | 2  | Goal Practice & Learning Journey |
-| 15. | **harshyy07** | [harshyy07](https://github.com/harshyy07) | **16** | 1  | — |
+| 15. | **harshi** | [harshyy07](https://github.com/harshyy07) | **16** | 1  | — |
 | 16. | **Shubh Dixit**<br/><sub>↳ also commits as <b>Shubh dixit</b></sub> | [Shubhdix9](https://github.com/Shubhdix9) | **16** | 2  | Premium UI Suite + Word Games |
 | 17. | **athira**<br/><sub>↳ also commits as <b>Athira</b></sub> | [athira](https://github.com/athira) | **15** | 0  | — |
 | 18. | **jinal-gupta**<br/><sub>↳ also commits as <b>JINAL GUPTA</b></sub> | [jinal-gupta](https://github.com/jinal-gupta) | **12** | 0  | — |
@@ -216,14 +216,14 @@ _Live data — last regenerated 2026-10-04 · auto-refreshed by [`github-actions
         <a href="https://github.com/tanishkaasharmaa"><img src="https://github.com/tanishkaasharmaa.png?size=120&s=120" width="120" style="border-radius:50%; border:3px solid #888888;" alt="tanishkaasharmaa"/></a>
         <br/><b>tanishkaasharmaa</b>
         <br/><a href="https://github.com/tanishkaasharmaa">@tanishkaasharmaa</a>
-        <br/><sub>🏆 139 commits · 0 PRs merged</sub>
+        <br/><sub>🏆 140 commits · 0 PRs merged</sub>
         <br/><sub>🔗 also commits as: <b>Tanishkaasharmaa</b></sub>
       </td>
       <td valign="top" width="*">
         <h4>4. New Contributor</h4>
         <ul>
           <li>🆕 <b>New contributor</b> — auto-added by the readme-bot</li>
-          <li>📊 <b>139 commits</b> across this repo's history</li>
+          <li>📊 <b>140 commits</b> across this repo's history</li>
           <li>🔗 <i>Add a <code>FALLBACK_PROFILES</code> entry in <code>scripts/update-readme-contributors.js</code> to enrich this card with real name, avatar, location, and curated feature list</i></li>
         </ul>
       </td>
@@ -483,8 +483,8 @@ _Live data — last regenerated 2026-10-04 · auto-refreshed by [`github-actions
   <table>
     <tr>
       <td align="center" width="220">
-        <a href="https://github.com/harshyy07"><img src="https://avatars.githubusercontent.com/u/181761505?v=4&s=120" width="120" style="border-radius:50%; border:3px solid #888888;" alt="harshyy07"/></a>
-        <br/><b>harshyy07</b>
+        <a href="https://github.com/harshyy07"><img src="https://avatars.githubusercontent.com/u/181761505?v=4&s=120" width="120" style="border-radius:50%; border:3px solid #888888;" alt="harshi"/></a>
+        <br/><b>harshi</b>
         <br/><a href="https://github.com/harshyy07">@harshyy07</a>
         <br/><sub>🏆 16 commits · 1 PR merged</sub>
       </td>
